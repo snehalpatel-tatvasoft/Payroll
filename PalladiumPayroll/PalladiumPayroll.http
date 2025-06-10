@@ -1,0 +1,6 @@
+@PalladiumPayroll_HostAddress = http://localhost:5296
+
+GET {{PalladiumPayroll_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
