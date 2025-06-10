@@ -11,7 +11,9 @@ namespace PalladiumPayroll.Controllers
         IHomeService _context;
         public HomeController(IHomeService _context) 
         { 
-            this._context = _context;   
+            this._context = _context;
+            
+
         }
         [HttpGet("GetAllEmployeeList")]
         public IActionResult GetAllEmployeeList()

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PalladiumPayroll")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ef744c134f5a9be98f1332e97ef56929d2a42fa0")]
 [assembly: System.Reflection.AssemblyProductAttribute("PalladiumPayroll")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PalladiumPayroll")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

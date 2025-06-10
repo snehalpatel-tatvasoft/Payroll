@@ -15,11 +15,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Helper\\PalladiumPayroll.Helper.csproj",
+      "projectUniqueName": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Helper\\PalladiumPayroll.Helper.csproj",
       "projectName": "PalladiumPayroll.Helper",
-      "projectPath": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Helper\\PalladiumPayroll.Helper.csproj",
+      "projectPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Helper\\PalladiumPayroll.Helper.csproj",
       "packagesPath": "C:\\Users\\LPT78\\.nuget\\packages\\",
-      "outputPath": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Helper\\obj\\",
+      "outputPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Helper\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\DevExpress 24.1\\Components\\Offline Packages",

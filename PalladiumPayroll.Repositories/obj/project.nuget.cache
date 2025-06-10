@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RM6UCkJf6eE=",
+  "dgSpecHash": "q209M4wYBOI=",
   "success": true,
-  "projectFilePath": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Repositories\\PalladiumPayroll.Repositories.csproj",
+  "projectFilePath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Repositories\\PalladiumPayroll.Repositories.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\LPT78\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\LPT78\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

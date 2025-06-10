@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Premium Pay - Upgrade\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj": {}
+    "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj": {}
   },
   "projects": {
-    "D:\\Premium Pay - Upgrade\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj": {
+    "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Premium Pay - Upgrade\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj",
+        "projectUniqueName": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj",
         "projectName": "PalladiumPayroll.DTOs",
-        "projectPath": "D:\\Premium Pay - Upgrade\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj",
+        "projectPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj",
         "packagesPath": "C:\\Users\\LPT78\\.nuget\\packages\\",
-        "outputPath": "D:\\Premium Pay - Upgrade\\PalladiumProject.DTOs\\obj\\",
+        "outputPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumProject.DTOs\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\DevExpress 24.1\\Components\\Offline Packages",

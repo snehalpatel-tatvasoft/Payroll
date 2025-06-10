@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Models\\PalladiumPayroll.Models.csproj": {}
+    "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Models\\PalladiumPayroll.Models.csproj": {}
   },
   "projects": {
-    "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Models\\PalladiumPayroll.Models.csproj": {
+    "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Models\\PalladiumPayroll.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Models\\PalladiumPayroll.Models.csproj",
+        "projectUniqueName": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Models\\PalladiumPayroll.Models.csproj",
         "projectName": "PalladiumPayroll.Models",
-        "projectPath": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Models\\PalladiumPayroll.Models.csproj",
+        "projectPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Models\\PalladiumPayroll.Models.csproj",
         "packagesPath": "C:\\Users\\LPT78\\.nuget\\packages\\",
-        "outputPath": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Models\\obj\\",
+        "outputPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Models\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\DevExpress 24.1\\Components\\Offline Packages",

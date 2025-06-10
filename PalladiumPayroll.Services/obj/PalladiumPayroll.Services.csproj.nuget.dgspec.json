@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Services\\PalladiumPayroll.Services.csproj": {}
+    "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Services\\PalladiumPayroll.Services.csproj": {}
   },
   "projects": {
-    "D:\\Premium Pay - Upgrade\\PalladiumPayroll.DataContext\\PalladiumPayroll.DataContext.csproj": {
+    "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.DataContext\\PalladiumPayroll.DataContext.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.DataContext\\PalladiumPayroll.DataContext.csproj",
+        "projectUniqueName": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.DataContext\\PalladiumPayroll.DataContext.csproj",
         "projectName": "PalladiumPayroll.DataContext",
-        "projectPath": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.DataContext\\PalladiumPayroll.DataContext.csproj",
+        "projectPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.DataContext\\PalladiumPayroll.DataContext.csproj",
         "packagesPath": "C:\\Users\\LPT78\\.nuget\\packages\\",
-        "outputPath": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.DataContext\\obj\\",
+        "outputPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.DataContext\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\DevExpress 24.1\\Components\\Offline Packages",
@@ -82,14 +82,14 @@
         }
       }
     },
-    "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Repositories\\PalladiumPayroll.Repositories.csproj": {
+    "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Repositories\\PalladiumPayroll.Repositories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Repositories\\PalladiumPayroll.Repositories.csproj",
+        "projectUniqueName": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Repositories\\PalladiumPayroll.Repositories.csproj",
         "projectName": "PalladiumPayroll.Repositories",
-        "projectPath": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Repositories\\PalladiumPayroll.Repositories.csproj",
+        "projectPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Repositories\\PalladiumPayroll.Repositories.csproj",
         "packagesPath": "C:\\Users\\LPT78\\.nuget\\packages\\",
-        "outputPath": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Repositories\\obj\\",
+        "outputPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Repositories\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\DevExpress 24.1\\Components\\Offline Packages",
@@ -113,11 +113,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Premium Pay - Upgrade\\PalladiumPayroll.DataContext\\PalladiumPayroll.DataContext.csproj": {
-                "projectPath": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.DataContext\\PalladiumPayroll.DataContext.csproj"
+              "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.DataContext\\PalladiumPayroll.DataContext.csproj": {
+                "projectPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.DataContext\\PalladiumPayroll.DataContext.csproj"
               },
-              "D:\\Premium Pay - Upgrade\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj": {
-                "projectPath": "D:\\Premium Pay - Upgrade\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj"
+              "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj": {
+                "projectPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj"
               }
             }
           }
@@ -163,14 +163,14 @@
         }
       }
     },
-    "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Services\\PalladiumPayroll.Services.csproj": {
+    "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Services\\PalladiumPayroll.Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Services\\PalladiumPayroll.Services.csproj",
+        "projectUniqueName": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Services\\PalladiumPayroll.Services.csproj",
         "projectName": "PalladiumPayroll.Services",
-        "projectPath": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Services\\PalladiumPayroll.Services.csproj",
+        "projectPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Services\\PalladiumPayroll.Services.csproj",
         "packagesPath": "C:\\Users\\LPT78\\.nuget\\packages\\",
-        "outputPath": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Services\\obj\\",
+        "outputPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Services\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\DevExpress 24.1\\Components\\Offline Packages",
@@ -194,11 +194,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Repositories\\PalladiumPayroll.Repositories.csproj": {
-                "projectPath": "D:\\Premium Pay - Upgrade\\PalladiumPayroll.Repositories\\PalladiumPayroll.Repositories.csproj"
+              "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Repositories\\PalladiumPayroll.Repositories.csproj": {
+                "projectPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumPayroll.Repositories\\PalladiumPayroll.Repositories.csproj"
               },
-              "D:\\Premium Pay - Upgrade\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj": {
-                "projectPath": "D:\\Premium Pay - Upgrade\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj"
+              "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj": {
+                "projectPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj"
               }
             }
           }
@@ -238,14 +238,14 @@
         }
       }
     },
-    "D:\\Premium Pay - Upgrade\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj": {
+    "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Premium Pay - Upgrade\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj",
+        "projectUniqueName": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj",
         "projectName": "PalladiumPayroll.DTOs",
-        "projectPath": "D:\\Premium Pay - Upgrade\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj",
+        "projectPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumProject.DTOs\\PalladiumPayroll.DTOs.csproj",
         "packagesPath": "C:\\Users\\LPT78\\.nuget\\packages\\",
-        "outputPath": "D:\\Premium Pay - Upgrade\\PalladiumProject.DTOs\\obj\\",
+        "outputPath": "D:\\Premium Pay - Upgrade\\Payroll\\PalladiumProject.DTOs\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\DevExpress 24.1\\Components\\Offline Packages",
