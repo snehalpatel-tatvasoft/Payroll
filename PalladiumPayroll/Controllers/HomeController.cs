@@ -18,7 +18,7 @@ namespace PalladiumPayroll.Controllers
         [HttpGet("GetAllEmployeeList")]
         public IActionResult GetAllEmployeeList()
         {
-            //test
+            //test check
             List<Employee> empList = _context.GetAllEmployeeList();
             return Ok(empList);
         }
