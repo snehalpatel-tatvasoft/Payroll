@@ -6,7 +6,7 @@ namespace PalladiumPayroll.Helper
     {
         public static string? GetConnectionString(IConfiguration configuration)
         {
-            string _connectionString = configuration.GetConnectionString(name: "ConnectionString");
+            string _connectionString = configuration.GetConnectionString(name: "DefaultConnection");
             return _connectionString;
         }
     }
