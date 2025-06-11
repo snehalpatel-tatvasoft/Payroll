@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PalladiumPayroll.DTOs.DTOs;
+using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Home;
 
 namespace PalladiumPayroll.Controllers
@@ -8,18 +8,24 @@ namespace PalladiumPayroll.Controllers
     [Route("api/[controller]")]
     public class HomeController : Controller
     {
-        IHomeService _context;
-        public HomeController(IHomeService _context) 
-        { 
-            this._context = _context;
-        }
-        
-        [HttpGet("GetAllEmployeeList")]
-        public IActionResult GetAllEmployeeList()
+        IHomeService _homeService;
+        public HomeController(IHomeService homeService)
         {
-            //test check
-            List<Employee> empList = _context.GetAllEmployeeList();
-            return Ok(empList);
+            _homeService = homeService;
+        }
+
+        [HttpGet("GetAllEmployeeList")]
+        public async Task<IActionResult> GetAllEmployeeList(int employeeId)
+        {
+            try
+            {
+                ApiResponse<object>? apiResponse = await _homeService.GetAllEmployeeList(employeeId);
+                return Ok(apiResponse);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new ApiResponse<string>(false, ex.Message, string.Empty));
+            }
         }
     }
 }

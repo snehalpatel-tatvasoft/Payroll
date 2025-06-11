@@ -1,27 +1,19 @@
-﻿using Dapper;
-using PalladiumPayroll.DTOs.DTOs;
-using PalladiumPayroll.Repositories.Home;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PalladiumPayroll.Repositories.Home;
+using PalladiumPayroll.DTOs.Miscellaneous;
 
 namespace PalladiumPayroll.Services.Home
 {
-    public class HomeService:IHomeService
+    public class HomeService: IHomeService
     {
-        public IHomeRepository _context;
-        public HomeService(IHomeRepository _context) 
+        public IHomeRepository _homeRepository;
+        public HomeService(IHomeRepository homeRepository) 
         {
-            this._context = _context;
+            _homeRepository = homeRepository;
         }
-        public List<Employee> GetAllEmployeeList()
-        {
-            DynamicParameters DP = new DynamicParameters();
-            DP.Add("CompanyId", 1);
 
-            return _context.ExecuteStoredProcedure<Employee>("SP_FetchEmployeeList",DP);
+        public async Task<ApiResponse<object>> GetAllEmployeeList(int employeeId)
+        {
+            return await _homeRepository.GetAllEmployeeList(employeeId);
         }
     }
 }

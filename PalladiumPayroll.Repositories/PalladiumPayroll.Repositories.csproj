@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PalladiumPayroll.DataContext\PalladiumPayroll.DataContext.csproj" />
+    <ProjectReference Include="..\PalladiumPayroll.Helper\PalladiumPayroll.Helper.csproj" />
     <ProjectReference Include="..\PalladiumProject.DTOs\PalladiumPayroll.DTOs.csproj" />
   </ItemGroup>
 
