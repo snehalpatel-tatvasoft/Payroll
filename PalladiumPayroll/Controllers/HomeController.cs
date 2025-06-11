@@ -15,16 +15,15 @@ namespace PalladiumPayroll.Controllers
         }
 
         [HttpGet("GetAllEmployeeList")]
-        public async Task<IActionResult> GetAllEmployeeList(int employeeId)
+        public async Task<JsonResult> GetAllEmployeeList(int employeeId)
         {
             try
             {
-                ApiResponse<object>? apiResponse = await _homeService.GetAllEmployeeList(employeeId);
-                return Ok(apiResponse);
+                return await _homeService.GetAllEmployeeList(employeeId);
             }
             catch (Exception ex)
             {
-                return new JsonResult(new ApiResponse<string>(false, ex.Message, string.Empty));
+                return HttpStatusCodeResponse.BadRequestResponse();
             }
         }
     }

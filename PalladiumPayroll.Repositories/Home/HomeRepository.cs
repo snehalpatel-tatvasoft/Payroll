@@ -1,12 +1,12 @@
-﻿using PalladiumPayroll.DataContext;
-using Dapper;
-using Microsoft.Data.SqlClient;
-using System.Data;
+﻿using Dapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using PalladiumPayroll.Helper;
+using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
-using PalladiumPayroll.Helper;
 
 namespace PalladiumPayroll.Repositories.Home
 {
@@ -17,6 +17,7 @@ namespace PalladiumPayroll.Repositories.Home
 
         public HomeRepository(IConfiguration configuration)
         {
+            _context = new DapperContext(configuration);
             _connectionString = AppSettingsConfig.GetConnectionString(configuration);
         }
 
@@ -28,11 +29,11 @@ namespace PalladiumPayroll.Repositories.Home
             }
         }
 
-        public async Task<ApiResponse<object>> GetAllEmployeeList(int employeeId)
+        public async Task<JsonResult> GetAllEmployeeList(int employeeId)
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(_connectionString))
+                using (var conn = _context.CreateConnection())
                 {
                     DynamicParameters parameters = new();
                     parameters.Add("@params", employeeId);
@@ -40,13 +41,13 @@ namespace PalladiumPayroll.Repositories.Home
                     await conn.ExecuteAsync("sp_xyz", parameters, commandType: CommandType.StoredProcedure);
 
                     string statusMsg = string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieving);
-
-                    return new ApiResponse<object>(isSuccess: true, statusMsg, data: null);
+                    var data = "";
+                    return HttpStatusCodeResponse.SuccessResponse(data, statusMsg);
                 }
             }
             catch (Exception ex)
             {
-                return new ApiResponse<object>(isSuccess: false, string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, ex.Message), data: null);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, ex.Message));
             }
         }
     }

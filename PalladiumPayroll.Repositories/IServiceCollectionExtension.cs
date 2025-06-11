@@ -7,7 +7,7 @@ namespace PalladiumPayroll.Repositories
     {
         public static IServiceCollection AddServiceRepositories(this IServiceCollection services)
         {
-            services.AddTransient<IHomeRepository, HomeRepository>();
+            services.AddScoped<IHomeRepository, HomeRepository>();
             return services;
         }
     }

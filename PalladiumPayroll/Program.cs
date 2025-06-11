@@ -4,7 +4,6 @@ using PalladiumPayroll.Helper;
 using PalladiumPayroll.Helper.Middleware;
 using PalladiumPayroll.JWT;
 using PalladiumPayroll.Repositories;
-using PalladiumPayroll.Repositories.Home;
 using PalladiumPayroll.Services;
 
 var builder = WebApplication.CreateBuilder(args);

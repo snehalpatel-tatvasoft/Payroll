@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PalladiumPayroll.Helper.Constants
+﻿namespace PalladiumPayroll.Helper.Constants
 {
     public class AppConstants
     {
@@ -17,6 +11,7 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string Exception = "An Error Occurred While {0} {1}: {2}";
             public static readonly string UnexpectedError = "Unexpected error occurred";
             public static readonly string InvalidOrMissingRequestParameters = "Invalid or missing request parameters";
+            public static readonly string UnAuthorized = "UnAuthorized Access !!";
 
             #endregion
 

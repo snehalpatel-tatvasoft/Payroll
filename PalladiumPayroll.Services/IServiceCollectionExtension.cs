@@ -7,7 +7,7 @@ namespace PalladiumPayroll.Services
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddTransient<IHomeService, HomeService>();
+            services.AddScoped<IHomeService, HomeService>();
             return services;
         }
     }
