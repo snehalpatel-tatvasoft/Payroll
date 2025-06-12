@@ -2,11 +2,11 @@
 
 namespace PalladiumPayroll.Helper
 {
-    public class AppSettingsConfig
+    public static class AppSettingsConfig
     {
-        public static string GetConnectionString(IConfiguration configuration)
+        public static string? GetConnectionString(IConfiguration configuration)
         {
-            return configuration.GetConnectionString(name: "ConnectionString");
+            return configuration.GetConnectionString(name: "DefaultConnection");
         }
     }
 }

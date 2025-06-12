@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 
 namespace PalladiumPayroll.DTOs.Miscellaneous
@@ -19,7 +18,7 @@ namespace PalladiumPayroll.DTOs.Miscellaneous
 
         public static JsonResult SuccessResponse<T>(T data, string message)
         {
-            return GenerateResponse<T>(
+            return GenerateResponse(
                 true,
                 (int)HttpStatusCodeMessages.HttpStatus.Success,
                 message,
@@ -29,7 +28,7 @@ namespace PalladiumPayroll.DTOs.Miscellaneous
 
         public static JsonResult NotFoundResponse(string notFoundMessage)
         {
-            return GenerateResponse<string>(
+            return GenerateResponse(
                 false,
                 (int)HttpStatusCodeMessages.HttpStatus.NotFound,
                 string.Format(ResponseMessages.NotFound, notFoundMessage),
@@ -39,7 +38,7 @@ namespace PalladiumPayroll.DTOs.Miscellaneous
 
         public static JsonResult BadRequestResponse()
         {
-            return GenerateResponse<string>(
+            return GenerateResponse(
                 false,
                 (int)HttpStatusCodeMessages.HttpStatus.BadRequest,
                 ResponseMessages.UnexpectedError,
@@ -49,7 +48,7 @@ namespace PalladiumPayroll.DTOs.Miscellaneous
 
         public static JsonResult InternalServerErrorResponse(string message)
         {
-            return GenerateResponse<string>(
+            return GenerateResponse(
                 false,
                 (int)HttpStatusCodeMessages.HttpStatus.InternalServerError,
                 message,
@@ -59,7 +58,7 @@ namespace PalladiumPayroll.DTOs.Miscellaneous
 
         public static JsonResult UnAuthorizedResponse()
         {
-            return GenerateResponse<string>(
+            return GenerateResponse(
                 false,
                 (int)HttpStatusCodeMessages.HttpStatus.UnAuthorized,
                 ResponseMessages.UnAuthorized,

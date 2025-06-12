@@ -1,6 +1,6 @@
 ﻿namespace PalladiumPayroll.Helper.Constants
 {
-    public class AppConstants
+    public static class AppConstants
     {
         public static class ResponseMessages
         {
