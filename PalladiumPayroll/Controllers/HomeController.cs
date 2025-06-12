@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Home;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class HomeController : Controller
+    public class HomeController : ControllerBase
     {
-        IHomeService _homeService;
+        private readonly IHomeService _homeService;
         public HomeController(IHomeService homeService)
         {
             _homeService = homeService;
@@ -19,11 +21,12 @@ namespace PalladiumPayroll.Controllers
         {
             try
             {
-                return await _homeService.GetAllEmployeeList(employeeId);
+                var data = await _homeService.GetAllEmployeeList(employeeId);
+                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieving));
             }
             catch (Exception ex)
             {
-                return HttpStatusCodeResponse.BadRequestResponse();
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, ex.Message));
             }
         }
     }

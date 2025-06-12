@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Helper;
 using System.Data;
@@ -29,25 +30,16 @@ namespace PalladiumPayroll.Repositories.Home
             }
         }
 
-        public async Task<JsonResult> GetAllEmployeeList(int employeeId)
+        public async Task<List<Employee>> GetAllEmployeeList(int employeeId)
         {
-            try
+            using (var conn = _context.CreateConnection())
             {
-                using (var conn = _context.CreateConnection())
-                {
-                    DynamicParameters parameters = new();
-                    parameters.Add("@params", employeeId);
+                DynamicParameters parameters = new();
+                parameters.Add("@CompanyId", employeeId);
 
-                    await conn.ExecuteAsync("sp_xyz", parameters, commandType: CommandType.StoredProcedure);
+                var data = await conn.QueryAsync<Employee>("SP_FetchEmployeeList", parameters, commandType: CommandType.StoredProcedure);
 
-                    string statusMsg = string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieving);
-                    var data = "";
-                    return HttpStatusCodeResponse.SuccessResponse(data, statusMsg);
-                }
-            }
-            catch (Exception ex)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, ex.Message));
+                return data.ToList();
             }
         }
     }

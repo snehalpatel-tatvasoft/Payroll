@@ -500,3 +500,4 @@ $RECYCLE.BIN/
 /PalladiumPayroll.Repositories/obj
 /PalladiumPayroll.Models/bin
 /PalladiumPayroll.Models/obj
+/PalladiumPayroll/appsettings.json

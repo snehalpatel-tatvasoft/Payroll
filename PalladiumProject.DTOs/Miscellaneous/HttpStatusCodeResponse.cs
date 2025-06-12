@@ -4,7 +4,7 @@ using static PalladiumPayroll.Helper.Constants.AppConstants;
 
 namespace PalladiumPayroll.DTOs.Miscellaneous
 {
-    public class HttpStatusCodeResponse
+    public static class HttpStatusCodeResponse
     {
         public static JsonResult GenerateResponse<T>(bool result, int statusCode, string message, T data)
         {

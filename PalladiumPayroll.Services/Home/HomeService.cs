@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.Repositories.Home;
 
 namespace PalladiumPayroll.Services.Home
@@ -11,7 +12,7 @@ namespace PalladiumPayroll.Services.Home
             _homeRepository = homeRepository;
         }
 
-        public async Task<JsonResult> GetAllEmployeeList(int employeeId)
+        public async Task<List<Employee>> GetAllEmployeeList(int employeeId)
         {
             return await _homeRepository.GetAllEmployeeList(employeeId);
         }

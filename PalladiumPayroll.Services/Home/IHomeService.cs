@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 
 namespace PalladiumPayroll.Services.Home
 {
     public interface IHomeService
     {
-        Task<JsonResult> GetAllEmployeeList(int employeeId);
+        Task<List<Employee>> GetAllEmployeeList(int employeeId);
     }
 }
