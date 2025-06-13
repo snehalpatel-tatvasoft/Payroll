@@ -6,7 +6,7 @@ namespace PalladiumPayroll.Services.Home
 {
     public class HomeService : IHomeService
     {
-        public IHomeRepository _homeRepository;
+        private readonly IHomeRepository _homeRepository;
         public HomeService(IHomeRepository homeRepository)
         {
             _homeRepository = homeRepository;

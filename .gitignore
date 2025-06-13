@@ -483,21 +483,9 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
+# Ignore build output and VS-specific folders
 **/.vs/
-/PalladiumPayroll/.vs
-/PalladiumPayroll/obj
-/PalladiumPayroll.Services/obj
-/PalladiumPayroll.Services/bin
-/PalladiumPayroll.DataContext/bin
-/PalladiumPayroll.DataContext/obj
-/PalladiumProject.DTOs/bin
-/PalladiumProject.DTOs/obj
-/PalladiumPayroll/obj
-/PalladiumPayroll/bin
-/PalladiumPayroll.Helper/bin
-/PalladiumPayroll.Helper/obj
-/PalladiumPayroll.Repositories/bin
-/PalladiumPayroll.Repositories/obj
-/PalladiumPayroll.Models/bin
-/PalladiumPayroll.Models/obj
+**/bin/
+**/obj/
+
 /PalladiumPayroll/appsettings.json

@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 
 namespace PalladiumPayroll.DTOs.Miscellaneous
 {
     public static class HttpStatusCodeResponse
     {
-        public static JsonResult GenerateResponse<T>(bool result, int statusCode, string message, T data)
+        public static JsonResult GenerateResponse<T>(bool result, HttpStatusCode statusCode, string message, T data)
         {
             return new JsonResult(new HttpApiResponse<T>
             {
@@ -20,7 +21,7 @@ namespace PalladiumPayroll.DTOs.Miscellaneous
         {
             return GenerateResponse(
                 true,
-                (int)HttpStatusCodeMessages.HttpStatus.Success,
+                HttpStatusCode.OK,
                 message,
                 data
             );
@@ -30,7 +31,7 @@ namespace PalladiumPayroll.DTOs.Miscellaneous
         {
             return GenerateResponse(
                 false,
-                (int)HttpStatusCodeMessages.HttpStatus.NotFound,
+                HttpStatusCode.NotFound,
                 string.Format(ResponseMessages.NotFound, notFoundMessage),
                 string.Empty
             );
@@ -40,7 +41,7 @@ namespace PalladiumPayroll.DTOs.Miscellaneous
         {
             return GenerateResponse(
                 false,
-                (int)HttpStatusCodeMessages.HttpStatus.BadRequest,
+                HttpStatusCode.BadRequest,
                 ResponseMessages.UnexpectedError,
                 string.Empty
             );
@@ -50,7 +51,7 @@ namespace PalladiumPayroll.DTOs.Miscellaneous
         {
             return GenerateResponse(
                 false,
-                (int)HttpStatusCodeMessages.HttpStatus.InternalServerError,
+                HttpStatusCode.InternalServerError,
                 message,
                 string.Empty
             );
@@ -60,7 +61,7 @@ namespace PalladiumPayroll.DTOs.Miscellaneous
         {
             return GenerateResponse(
                 false,
-                (int)HttpStatusCodeMessages.HttpStatus.UnAuthorized,
+                HttpStatusCode.Unauthorized,
                 ResponseMessages.UnAuthorized,
                 string.Empty
             );

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using PalladiumPayroll.DTOs.DTOs;
+using PalladiumPayroll.Helper;
 using System.Text;
 
 namespace PalladiumPayroll.JWT
@@ -8,14 +10,15 @@ namespace PalladiumPayroll.JWT
     {
         public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
+            JwtSettings? jwtSetting = AppSettingsConfig.GetSection<JwtSettings>(configuration, "JWT");
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateAudience = true,
                 ValidateIssuer = true,
                 ValidateIssuerSigningKey = true,
-                ValidAudience = configuration["JWT:Audience"],
-                ValidIssuer = configuration["JWT:Issuer"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"])),
+                ValidAudience = jwtSetting?.Audience,
+                ValidIssuer = jwtSetting?.Issuer,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSetting.Key)),
                 ClockSkew = TimeSpan.Zero
             };
             services.AddSingleton(tokenValidationParameters);
