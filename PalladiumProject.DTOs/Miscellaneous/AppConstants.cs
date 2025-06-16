@@ -20,6 +20,12 @@
             public static readonly string Employee = "Employee";
 
             #endregion
+
+            #region Company
+
+            public static readonly string Company = "Company";
+
+            #endregion
         }
     }
 
