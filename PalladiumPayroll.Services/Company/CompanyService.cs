@@ -10,12 +10,18 @@ namespace PalladiumPayroll.Services.Company
         {
             _companyRepository = companyRepository;
         }
+
         public async Task<bool> CreateCompany(CreateCompanyRequest request)
         {
             bool response = await _companyRepository.CreateCompany(request);
             if (response)
             {
-                return true;
+                //Create user
+                bool isCreated = await _companyRepository.CreateUser(request);
+                if (isCreated)
+                {
+                    return true;
+                }
             }
             return false;
         }

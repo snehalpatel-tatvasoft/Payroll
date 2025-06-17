@@ -2,6 +2,20 @@
 {
     public static class AppConstants
     {
+        public const int DefaultPageSize = 999999999;
+
+        public const int AuthTokenExpiryInMinutes = 60;
+
+        public const int RefreshTokenExpiryInDays = 7;
+
+        public const int ResetPasswordTokenExpiryInDays = 1;
+
+        public const int EmailVerificationTokenLength = 100;
+
+        public const int ResetPasswordTokenLength = 100;
+
+        public const int PageNumber = 1;
+
         public static class ResponseMessages
         {
             #region Common
@@ -24,6 +38,32 @@
             #region Company
 
             public static readonly string Company = "Company";
+
+            #endregion
+
+            #region User
+
+            public static readonly string User = "User";
+
+            #endregion
+
+
+            #region Authorization
+
+            public const string LoginSuccessfully = "Login Successfully";
+            public const string LoginPasswordMismatch = "Password Is Incorrect";
+            public const string EmailNotExists = "Email Does Not Exists";
+            public const string EmailSentSuccessfully = "Email Successfully Sent";
+            public const string EmailSentFailure = "Cannot Send Email";
+            public const string ValidationSuccess = "You Can Reset Your Password!";
+            public const string LinkExpired = "Link Is Expired!";
+            public const string PasswordChanged = "Password Changed Successfully";
+            public const string TokenExpired = "Token Expired";
+            public const string InvalidToken = "Invalid refresh token";
+            public const string ForcePasswordReset = "You need to reset your password";
+            public const string UserInActive = "Sorry your account is InActive, you can't login!";
+            public const string PlanExpired = "Your subscription has expired. Please renew to continue using the service.";
+            public const string TokenGeneratedSuccessfully = "Token Generated Successfully";
 
             #endregion
         }

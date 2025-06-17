@@ -20,14 +20,17 @@ namespace PalladiumPayroll.Controllers
 
         [HttpPost("CreateCompany")]
         [AllowAnonymous]
-        public async Task<JsonResult> CreateCompany([FromBody] CreateCompanyRequest request)
+        public async Task<IActionResult> CreateCompany([FromBody] CreateCompanyRequest request)
         {
             try
             {
-                await _companyService.CreateCompany(request);
-                //var response = await _authService.SignUp(model);
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Company, ActionType.Saving));
-                //return HttpStatusCodeResponse.InternalServerErrorResponse("jfhdskjfhs");
+                bool res = await _companyService.CreateCompany(request);
+                if (res)
+                {
+                    return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Company, ActionType.Saving));
+                }
+
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, null));
             }
             catch (Exception ex)
             {
