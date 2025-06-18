@@ -98,10 +98,10 @@ namespace PalladiumPayroll.Repositories.Auth
                    response
                );
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log the exception
-                return HttpStatusCodeResponse.NotFoundResponse(string.Format(ResponseMessages.NotFound, ActionType.Retrieving, ResponseMessages.User, ex.Message));
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message : "An error occurred on the server");
             }
         }
     }

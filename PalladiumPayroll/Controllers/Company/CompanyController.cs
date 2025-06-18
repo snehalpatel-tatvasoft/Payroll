@@ -6,7 +6,7 @@ using PalladiumPayroll.Services.Company;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 
-namespace PalladiumPayroll.Controllers
+namespace PalladiumPayroll.Controllers.Company
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -3,7 +3,7 @@ using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
 using PalladiumPayroll.Services.Auth;
 using System.Net;
 
-namespace PalladiumPayroll.Controllers
+namespace PalladiumPayroll.Controllers.Auth
 {
     [ApiController]
     [Route("api/[controller]")]
