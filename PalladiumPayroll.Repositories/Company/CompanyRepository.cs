@@ -32,11 +32,6 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@ConfirmPassword", request.ConfirmPassword);
             parameters.Add("@Term", request.Term);
 
-            // Optional fields if they are part of the model:
-            parameters.Add("@RoleId", request.RoleId);
-            parameters.Add("@EmployeeId", request.EmployeeId);
-            parameters.Add("@EmployeeCode", request.EmployeeCode);
-            parameters.Add("@Country", request.Countries);
 
             bool result = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_createCompany", parameters);
             return result;

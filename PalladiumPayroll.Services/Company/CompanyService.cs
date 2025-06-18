@@ -18,6 +18,8 @@ namespace PalladiumPayroll.Services.Company
             {
                 //Create user
                 bool isCreated = await _companyRepository.CreateUser(request);
+
+                //company address
                 if (isCreated)
                 {
                     return true;
