@@ -47,7 +47,6 @@
 
             #endregion
 
-
             #region Authorization
 
             public const string LoginSuccessfully = "Login Successfully";
@@ -65,6 +64,10 @@
             public const string PlanExpired = "Your subscription has expired. Please renew to continue using the service.";
             public const string TokenGeneratedSuccessfully = "Token Generated Successfully";
 
+            #endregion
+
+            #region Dashboard
+            public static readonly string Dashboard = "Dashboard data";
             #endregion
         }
     }

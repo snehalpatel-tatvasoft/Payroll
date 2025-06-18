@@ -29,5 +29,19 @@ namespace PalladiumPayroll.Controllers
                 return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, ex.Message));
             }
         }
+
+        [HttpGet("GetDashboardData")]
+        public async Task<JsonResult> GetDashboardData()
+        {
+            try
+            {
+                var data = await _homeService.GetDashboardData();
+                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Dashboard, ActionType.Retrieving));
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Dashboard, ex.Message));
+            }
+        }
     }
 }
