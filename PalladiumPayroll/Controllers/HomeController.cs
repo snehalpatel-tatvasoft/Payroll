@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Home;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -17,11 +18,11 @@ namespace PalladiumPayroll.Controllers
         }
 
         [HttpGet("GetAllEmployeeList")]
-        public async Task<JsonResult> GetAllEmployeeList(int employeeId)
+        public async Task<JsonResult> GetAllEmployeeList([FromQuery]Employee employee)
         {
             try
             {
-                var data = await _homeService.GetAllEmployeeList(employeeId);
+                var data = await _homeService.GetAllEmployeeList(2);
                 return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieving));
             }
             catch (Exception ex)
