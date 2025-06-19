@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
-using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using PalladiumPayroll.Helper.Constants;
@@ -12,7 +11,6 @@ using PalladiumPayroll.Helper.JWTToken;
 using System.Net;
 using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
-using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Repositories.Auth
 {
@@ -28,8 +26,6 @@ namespace PalladiumPayroll.Repositories.Auth
 
         public async Task<JsonResult> Login(LoginRequest loginRequest)
         {
-            CommonResponse<TokenDTO>? response = new CommonResponse<TokenDTO>();
-
             try
             {
                 // Fetch user by email
@@ -43,7 +39,7 @@ namespace PalladiumPayroll.Repositories.Auth
                     return HttpStatusCodeResponse.GenerateResponse(
                         result: false,
                         statusCode: HttpStatusCode.NotFound,
-                        message: ResponseMessages.User,
+                        message: ResponseMessages.UserNotFound,
                         data: string.Empty
                     );
                 }
@@ -85,7 +81,7 @@ namespace PalladiumPayroll.Repositories.Auth
                     _configuration["Jwt:RefreshTokenKey"]!
                 );
 
-                response.data = new TokenDTO
+                var data = new
                 {
                     Token = accessToken,
                     RefreshToken = refreshToken
@@ -95,13 +91,13 @@ namespace PalladiumPayroll.Repositories.Auth
                    result: true,
                    HttpStatusCode.OK,
                    ResponseMessages.LoginSuccessfully,
-                   response
+                   data
                );
             }
             catch (Exception)
             {
                 // Log the exception
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message : "An error occurred on the server");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
             }
         }
     }

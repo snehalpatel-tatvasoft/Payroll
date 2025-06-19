@@ -16,12 +16,12 @@ namespace PalladiumPayroll.Controllers.Auth
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+        public async Task<ActionResult> Login([FromBody] LoginRequest loginRequest)
         {
             try
             {
                 JsonResult? loginResponse = await _authService.Login(loginRequest);
-                return Ok(loginResponse);
+                return loginResponse;
             }
             catch (Exception ex)
             {
