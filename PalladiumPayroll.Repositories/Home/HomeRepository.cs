@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 
 namespace PalladiumPayroll.Repositories.Home
 {
@@ -22,7 +23,7 @@ namespace PalladiumPayroll.Repositories.Home
             parameters.Add("@CompanyId", employeeId);
             var data = await _dapper.ExecuteStoredProcedure<Employee>("SP_FetchEmployeeList", parameters);
 
-            if (data.Any())
+            if (data.Count != 0)
             {
                 employee = data;
             }
@@ -44,6 +45,21 @@ namespace PalladiumPayroll.Repositories.Home
                     Employees = employeeList,
                     EmployeeCount = total
                 };
+            });
+        }
+
+        public async Task<Dashboard> GetDashboardData(int CompanyId, string UserId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", CompanyId);
+            parameters.Add("@UserId", UserId);
+
+            return  await _dapper.ExecuteStoredProcedureMultipleAsync("SP_GetDashboardData", parameters, async (multi) =>
+            {
+                var dashboard = (await multi.ReadAsync<Dashboard>()).FirstOrDefault() ?? new Dashboard();
+                dashboard.BirthdayList = (await multi.ReadAsync<EmployeeBirhday>()).ToList();
+                dashboard.PayrollCycleList = (await multi.ReadAsync<PayrollCycles>()).ToList();
+                return dashboard;
             });
         }
     }
