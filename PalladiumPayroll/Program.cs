@@ -1,7 +1,8 @@
 using AutoMapper;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.Helper;
-using PalladiumPayroll.Helper.Middleware;
+using PalladiumPayroll.Helper.Middleware.Encryption;
+using PalladiumPayroll.Helper.Middleware.Exceptions;
 using PalladiumPayroll.JWT;
 using PalladiumPayroll.Repositories;
 using PalladiumPayroll.Services;
@@ -33,15 +34,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
-app.MapControllers();
 app.UseCors(x => x
         .AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader());
 
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<EncryptionMiddleware>();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
 await app.RunAsync();
+

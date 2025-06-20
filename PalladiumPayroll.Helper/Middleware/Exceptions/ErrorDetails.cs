@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PalladiumPayroll.Helper.Middleware
+namespace PalladiumPayroll.Helper.Middleware.Exceptions
 {
     public class ErrorDetails
     {
