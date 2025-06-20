@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
-using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 namespace PalladiumPayroll.Repositories
 {
     public class CommonRepository : ICommonRepository
@@ -11,10 +10,5 @@ namespace PalladiumPayroll.Repositories
             _dapper = new DapperContext(configuration);
         }
 
-        public async Task<List<CountryDropdownResponse>> GetCountryList()
-        {
-            List<CountryDropdownResponse>? response = await _dapper.ExecuteStoredProcedure<CountryDropdownResponse>("sp_FetchCountry");
-            return response;
-        }
     }
 }

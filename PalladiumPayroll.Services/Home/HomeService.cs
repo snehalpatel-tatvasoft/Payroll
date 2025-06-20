@@ -18,11 +18,5 @@ namespace PalladiumPayroll.Services.Home
             return await _homeRepository.GetAllEmployeeList(employeeId);
         }
 
-        public async Task<Dashboard> GetDashboardData()
-        {
-            int CompanyId = 1;
-            string UserId = string.Empty;
-            return await _homeRepository.GetDashboardData(CompanyId, UserId);
-        }
     }
 }

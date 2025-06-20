@@ -1,5 +1,4 @@
-﻿using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
-using PalladiumPayroll.Repositories.Company;
+﻿using PalladiumPayroll.Repositories.Company;
 
 namespace PalladiumPayroll.Services.Company
 {
@@ -11,21 +10,5 @@ namespace PalladiumPayroll.Services.Company
             _companyRepository = companyRepository;
         }
 
-        public async Task<bool> CreateCompany(CreateCompanyRequest request)
-        {
-            bool response = await _companyRepository.CreateCompany(request);
-            if (response)
-            {
-                //Create user
-                bool isCreated = await _companyRepository.CreateUser(request);
-
-                //company address
-                if (isCreated)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
     }
 }

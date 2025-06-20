@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
-using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services;
 
 namespace PalladiumPayroll.Controllers
@@ -13,20 +11,6 @@ namespace PalladiumPayroll.Controllers
         public CommonController(ICommonService commonService)
         {
             _commonService = commonService;
-        }
-
-        [HttpGet("GetCountryList")]
-        public async Task<IActionResult> GetCountryList()
-        {
-            try
-            {
-                List<CountryDropdownResponse> countryList = await _commonService.GetCountryList();
-                return HttpStatusCodeResponse.SuccessResponse(countryList, string.Empty);
-            }
-            catch (Exception)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
-            }
         }
     }
 }

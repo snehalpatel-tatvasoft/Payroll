@@ -1,5 +1,4 @@
-﻿using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
-using PalladiumPayroll.Repositories;
+﻿using PalladiumPayroll.Repositories;
 
 namespace PalladiumPayroll.Services
 {
@@ -11,9 +10,5 @@ namespace PalladiumPayroll.Services
             _commonRepository = commonRepository;
         }
 
-        public async Task<List<CountryDropdownResponse>> GetCountryList()
-        {
-            return await _commonRepository.GetCountryList();
-        }
     }
 }
