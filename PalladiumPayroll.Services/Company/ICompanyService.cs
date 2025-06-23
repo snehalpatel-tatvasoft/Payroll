@@ -1,9 +1,10 @@
-﻿using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
+﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 
 namespace PalladiumPayroll.Services.Company
 {
     public interface ICompanyService
     {
-        Task<bool> CreateCompany(CreateCompanyRequest request);
+        Task<JsonResult> CreateCompany(CreateCompanyRequest request);
     }
 }

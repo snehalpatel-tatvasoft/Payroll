@@ -1,13 +1,14 @@
-﻿using Dapper;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using PalladiumPayroll.Helper.Constants;
 using PalladiumPayroll.Helper.JWTToken;
+using PalladiumPayroll.Repositories.User;
 using System.Net;
 using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -18,10 +19,13 @@ namespace PalladiumPayroll.Repositories.Auth
     {
         private readonly DapperContext _dapper;
         private readonly IConfiguration _configuration;
-        public AuthRepository(IConfiguration configuration)
+        private readonly IUserRepository _userRepository;
+
+        public AuthRepository(IConfiguration configuration, IUserRepository userRepository)
         {
             _dapper = new DapperContext(configuration);
             _configuration = configuration;
+            _userRepository = userRepository;
         }
 
         public async Task<JsonResult> Login(LoginRequest loginRequest)
@@ -29,10 +33,7 @@ namespace PalladiumPayroll.Repositories.Auth
             try
             {
                 // Fetch user by email
-                DynamicParameters? parameters = new DynamicParameters();
-                parameters.Add("@Email", loginRequest.Email);
-
-                dynamic? user = await _dapper.ExecuteStoredProcedureSingle<dynamic>("sp_getUserDetailsByEmail", parameters);
+                UserResponse? user = await _userRepository.GetUserInfo(loginRequest.Email);
 
                 if (user == null)
                 {
@@ -46,7 +47,7 @@ namespace PalladiumPayroll.Repositories.Auth
 
                 // Verify password
                 PasswordHasher<object>? hasher = new PasswordHasher<object>();
-                dynamic? verificationResult = hasher.VerifyHashedPassword(null, user.passwordHash, loginRequest.Password);
+                dynamic? verificationResult = hasher.VerifyHashedPassword(null, user.PasswordHash, loginRequest.Password);
 
                 if (verificationResult == PasswordVerificationResult.Failed)
                 {
@@ -63,7 +64,7 @@ namespace PalladiumPayroll.Repositories.Auth
 
                 Claim[] claims =
                 {
-                    new Claim(JWTClaimTypes.UserId, user.UserId),
+                    new Claim(JWTClaimTypes.UserId, ""),
                     new Claim(JWTClaimTypes.UserName, user.UserName),
                     new Claim(JWTClaimTypes.Email, user.Email),
                     new Claim(JWTClaimTypes.Role, user.RoleId),
@@ -97,7 +98,7 @@ namespace PalladiumPayroll.Repositories.Auth
             catch (Exception)
             {
                 // Log the exception
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "Internal server error!!");
             }
         }
     }

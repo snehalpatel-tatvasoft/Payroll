@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 
 namespace PalladiumPayroll.Services.User
 {
     public interface IUserService
     {
+        Task<UserResponse> GetUserInfo(string email);
     }
 }

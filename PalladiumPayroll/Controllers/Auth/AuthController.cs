@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
+using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Auth;
+using PalladiumPayroll.Services.Company;
 using System.Net;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.Auth
 {
@@ -10,9 +15,11 @@ namespace PalladiumPayroll.Controllers.Auth
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        private readonly ICompanyService _companyService;
+        public AuthController(IAuthService authService, ICompanyService companyService)
         {
             _authService = authService;
+            _companyService = companyService;
         }
 
         [HttpPost("Login")]
@@ -26,6 +33,20 @@ namespace PalladiumPayroll.Controllers.Auth
             catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpPost("CreateCompany")]
+        public async Task<ActionResult> CreateCompany(CreateCompanyRequest request)
+        {
+            try
+            {
+                JsonResult? res = await _companyService.CreateCompany(request);
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, ex.Message));
             }
         }
     }

@@ -14,55 +14,41 @@ namespace PalladiumPayroll.Repositories.Company
             _dapper = new DapperContext(configuration);
         }
 
-        public async Task<bool> CreateCompany(CreateCompanyRequest request)
+        public async Task<long> CreateCompany(CreateCompanyRequest request)
         {
             DynamicParameters parameters = new DynamicParameters();
 
-            parameters.Add("@UserName", request.UserName);
-            parameters.Add("@FirstName", request.FirstName);
-            parameters.Add("@LastName", request.LastName);
-            parameters.Add("@CompanyName", request.CompanyName);
-            parameters.Add("@Country", request.Country);
+            parameters.Add("@CompanyName", request.Company);
             parameters.Add("@NoOfEmployee", request.NoOfEmployee);
-            parameters.Add("@ContactNo", request.ContactNo);
-            parameters.Add("@Email", request.Email);
-            parameters.Add("@CreatedBy", request.CreatedBy);
-            parameters.Add("@CreatedDate", request.CreatedDate);
-            parameters.Add("@Password", request.Password);
-            parameters.Add("@ConfirmPassword", request.ConfirmPassword);
-            parameters.Add("@Term", request.Term);
+            parameters.Add("@Country", request.Country);
 
-
-            bool result = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_createCompany", parameters);
-            return result;
+            long companyId = await _dapper.ExecuteStoredProcedureSingle<long>("sp_createCompany", parameters);
+            return companyId;
         }
 
-        public async Task<bool> CreateUser(CreateCompanyRequest request)
+        public async Task<bool> CreateUser(CreateUserRequestDto request)
         {
             DynamicParameters parameters = new DynamicParameters();
 
-            parameters.Add("@UserName", request.UserName);
-            parameters.Add("@FirstName", request.FirstName);
-            parameters.Add("@LastName", request.LastName);
-            parameters.Add("@CompanyName", request.CompanyName);
-            parameters.Add("@Country", request.Country);
-            parameters.Add("@NoOfEmployee", request.NoOfEmployee);
-            parameters.Add("@ContactNo", request.ContactNo);
+            parameters.Add("@UserName", request.FirstName);
+            parameters.Add("@SurName", request.LastName);
             parameters.Add("@Email", request.Email);
-            parameters.Add("@CreatedBy", request.CreatedBy);
-            parameters.Add("@CreatedDate", request.CreatedDate);
             parameters.Add("@Password", request.Password);
-            parameters.Add("@ConfirmPassword", request.ConfirmPassword);
-            parameters.Add("@Term", request.Term);
-
-            // Optional fields if they are part of the model:
-            parameters.Add("@RoleId", request.RoleId);
-            parameters.Add("@EmployeeId", request.EmployeeId);
-            parameters.Add("@EmployeeCode", request.EmployeeCode);
-            parameters.Add("@Country", request.Countries);
+            parameters.Add("@PasswordHash", request.PasswordHash);
+            parameters.Add("@ContactNo", request.ContactNo);
+            parameters.Add("@CompanyId", request.CompanyId);
 
             bool result = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_createUser", parameters);
             return result;
+        }
+
+        public async Task<bool> CheckCompanyExist(string company)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyName", company);
+
+            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CheckCompanyExists", parameters);
+            return response;
         }
     }
 }

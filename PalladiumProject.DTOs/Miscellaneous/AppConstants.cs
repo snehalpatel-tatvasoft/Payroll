@@ -38,12 +38,16 @@
             #region Company
 
             public static readonly string Company = "Company";
+            public const string CompanyAlreadyExists = "Company Already Exists";
+            public const string CompanyRegisteredSuccessfully = "Company Registered Successfully";
 
             #endregion
 
             #region User
 
             public static readonly string User = "User";
+            public const string UserNotFound = "We couldn't find an account associated with this email address!";
+            public const string EmailAlreadyExits = "Email Already Exists";
 
             #endregion
 
@@ -59,12 +63,13 @@
             public const string UserInActive = "Sorry your account is InActive, you can't login!";
             public const string PlanExpired = "Your subscription has expired. Please renew to continue using the service.";
             public const string TokenGeneratedSuccessfully = "Token Generated Successfully";
-            public const string UserNotFound= "We couldn't find an account associated with this email address!";
-
+            
             #endregion
 
             #region Dashboard
+
             public static readonly string Dashboard = "Dashboard data";
+
             #endregion
         }
     }

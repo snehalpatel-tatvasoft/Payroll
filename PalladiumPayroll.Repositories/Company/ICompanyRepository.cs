@@ -4,7 +4,8 @@ namespace PalladiumPayroll.Repositories.Company
 {
     public interface ICompanyRepository
     {
-        Task<bool> CreateCompany(CreateCompanyRequest request);
-        Task<bool> CreateUser(CreateCompanyRequest request);
+        Task<long> CreateCompany(CreateCompanyRequest request);
+        Task<bool> CreateUser(CreateUserRequestDto request);
+        Task<bool> CheckCompanyExist(string company);
     }
 }

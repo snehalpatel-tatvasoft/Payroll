@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 
 namespace PalladiumPayroll.Repositories.User
 {
     public interface IUserRepository
     {
+        Task<bool> CheckEmailExist(string email);
+        Task<UserResponse?> GetUserInfo(string email);
     }
 }

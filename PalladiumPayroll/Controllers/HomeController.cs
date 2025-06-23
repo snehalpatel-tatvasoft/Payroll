@@ -35,7 +35,7 @@ namespace PalladiumPayroll.Controllers
         {
             try
             {
-                var data = await _homeService.GetDashboardData();
+                var data = "";
                 return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Dashboard, ActionType.Retrieving));
             }
             catch (Exception ex)
