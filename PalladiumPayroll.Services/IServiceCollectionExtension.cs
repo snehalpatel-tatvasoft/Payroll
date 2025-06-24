@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PalladiumPayroll.Services.Applicationadmin;
 using PalladiumPayroll.Services.Auth;
 using PalladiumPayroll.Services.Company;
 using PalladiumPayroll.Services.Home;
@@ -15,6 +16,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICommonService, CommonService>();
+            services.AddScoped<IApplicationadminService, ApplicationadminService>();
             return services;
         }
     }

@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<DapperContext>();
 builder.Services.AddServiceRepositories();
 builder.Services.AddServices();
-builder.Services.AddHelpers();
+builder.Services.AddHelpers(builder.Configuration);
 builder.Services.ConfigureAuthentication(builder.Configuration);
 
 builder.Services.AddAutoMapper(typeof(Mapper));

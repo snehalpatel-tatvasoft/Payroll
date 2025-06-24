@@ -66,8 +66,12 @@
 
             #endregion
 
-            #region Dashboard
+            #region Home
             public static readonly string Dashboard = "Dashboard data";
+            #endregion
+
+            #region Application Admin
+            public static readonly string AppAdminDashboard = "Application Admin Dashboard Data";
             #endregion
         }
     }
