@@ -15,6 +15,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICommonService, CommonService>();
+            services.AddScoped<EmailService>();
             return services;
         }
     }

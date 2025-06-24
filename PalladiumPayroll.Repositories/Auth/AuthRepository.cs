@@ -64,7 +64,7 @@ namespace PalladiumPayroll.Repositories.Auth
 
                 Claim[] claims =
                 {
-                    new Claim(JWTClaimTypes.UserId, ""),
+                    new Claim(JWTClaimTypes.UserId, user.Id.ToString()),
                     new Claim(JWTClaimTypes.UserName, user.UserName),
                     new Claim(JWTClaimTypes.Email, user.Email),
                     new Claim(JWTClaimTypes.Role, user.RoleId),

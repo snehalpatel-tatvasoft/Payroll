@@ -63,12 +63,20 @@
             public const string UserInActive = "Sorry your account is InActive, you can't login!";
             public const string PlanExpired = "Your subscription has expired. Please renew to continue using the service.";
             public const string TokenGeneratedSuccessfully = "Token Generated Successfully";
-            
+
             #endregion
 
             #region Dashboard
 
             public static readonly string Dashboard = "Dashboard data";
+
+            #endregion
+
+            #region Email
+
+            public const string EmailSentSuccessfully = "Email Successfully Sent";
+            public const string EmailSentFailure = "Cannot Send Email";
+            public const string EmailMailboxUnavailable = "Mailbox unavailable";
 
             #endregion
         }
