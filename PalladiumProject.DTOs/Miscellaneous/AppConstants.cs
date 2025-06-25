@@ -2,6 +2,20 @@
 {
     public static class AppConstants
     {
+        public const int DefaultPageSize = 999999999;
+
+        public const int AuthTokenExpiryInMinutes = 10;
+
+        public const int RefreshTokenExpiryInDays = 7;
+
+        public const int ResetPasswordTokenExpiryInDays = 1;
+
+        public const int EmailVerificationTokenLength = 100;
+
+        public const int ResetPasswordTokenLength = 100;
+
+        public const int PageNumber = 1;
+
         public static class ResponseMessages
         {
             #region Common
@@ -18,6 +32,54 @@
             #region Employee
 
             public static readonly string Employee = "Employee";
+
+            #endregion
+
+            #region Company
+
+            public static readonly string Company = "Company";
+            public const string CompanyAlreadyExists = "Company Already Exists";
+            public const string CompanyRegisteredSuccessfully = "Company Registered Successfully";
+            public const string ErrorCreatingCompany = "Error While Creating Company!!";
+
+            #endregion
+
+            #region User
+
+            public static readonly string User = "User";
+            public const string UserNotFound = "We couldn't find an account associated with this email address!";
+            public const string EmailAlreadyExits = "Email Already Exists";
+            public const string ErrorCreatingUser = "Error While Creating User!!";
+
+            #endregion
+
+            #region Authorization
+
+            public const string LoginSuccessfully = "Login Successfully";
+            public const string LoginPasswordMismatch = "Password Is Incorrect";
+            public const string LinkExpired = "Link Is Expired!";
+            public const string PasswordChanged = "Password Changed Successfully";
+            public const string TokenExpired = "Token Expired";
+            public const string InvalidToken = "Invalid refresh token";
+            public const string ForcePasswordReset = "You need to reset your password";
+            public const string UserInActive = "Sorry your account is InActive, you can't login!";
+            public const string PlanExpired = "Your subscription has expired. Please renew to continue using the service.";
+            public const string TokenGeneratedSuccessfully = "Token Generated Successfully";
+            public const string InternalServerError = "Internal Server Error!!";
+
+            #endregion
+
+            #region Dashboard
+
+            public static readonly string Dashboard = "Dashboard data";
+
+            #endregion
+
+            #region Email
+
+            public const string EmailSentSuccessfully = "Confirmation email sent. Please Log in to activate your account.";
+            public const string EmailSentFailure = "Cannot Send Email";
+            public const string EmailMailboxUnavailable = "Mailbox unavailable";
 
             #endregion
         }
