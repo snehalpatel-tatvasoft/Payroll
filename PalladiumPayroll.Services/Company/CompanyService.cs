@@ -1,10 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using PalladiumPayroll.DTOs.Miscellaneous.Constants;
+using PalladiumPayroll.Helper.Constants;
+using PalladiumPayroll.Helper.JWTToken;
 using PalladiumPayroll.Repositories.Company;
 using PalladiumPayroll.Repositories.User;
 using System.Net;
+using System.Net.Mail;
+using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 
 namespace PalladiumPayroll.Services.Company
@@ -13,10 +19,14 @@ namespace PalladiumPayroll.Services.Company
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly IUserRepository _userRepository;
-        public CompanyService(ICompanyRepository companyRepository, IUserRepository userRepository)
+        private readonly EmailService _emailService;
+        private readonly IConfiguration _configuration;
+        public CompanyService(ICompanyRepository companyRepository, IUserRepository userRepository, EmailService emailService, IConfiguration configuration)
         {
             _companyRepository = companyRepository;
             _userRepository = userRepository;
+            _emailService = emailService;
+            _configuration = configuration;
         }
 
         public async Task<JsonResult> CreateCompany(CreateCompanyRequest request)
@@ -52,7 +62,7 @@ namespace PalladiumPayroll.Services.Company
                     return HttpStatusCodeResponse.GenerateResponse(
                         result: false,
                         statusCode: HttpStatusCode.InternalServerError,
-                        message: "Error While Creating the Company!!",
+                        message: ResponseMessages.ErrorCreatingCompany,
                         data: string.Empty
                     );
                 }
@@ -71,31 +81,95 @@ namespace PalladiumPayroll.Services.Company
                     CompanyId = (int)companyId
                 };
 
-                bool isUserCreated = await _companyRepository.CreateUser(createUserRequest);
-                if (!isUserCreated)
+                Guid userId = await _companyRepository.CreateUser(createUserRequest);
+                if (userId == Guid.Empty)
                 {
                     return HttpStatusCodeResponse.GenerateResponse(
                         result: false,
                         statusCode: HttpStatusCode.InternalServerError,
-                        message: "Error While Creating User!!",
+                        message: ResponseMessages.ErrorCreatingUser,
                         data: string.Empty
                     );
                 }
 
-                // Final success response
-                return HttpStatusCodeResponse.GenerateResponse(
-                    result: true,
-                    statusCode: HttpStatusCode.OK,
-                    message: ResponseMessages.CompanyRegisteredSuccessfully,
-                    data: string.Empty
-                );
+                #region Send Email
+
+                try
+                {
+                    string subject = "Premium Pay Welcome email";
+
+                    string webUrl = _configuration["Payroll:WebUrl"]!;
+                    string loginUrl = "/auth/login";
+
+                    JWTTokenService jwtService = new JWTTokenService(_configuration);
+
+                    Claim[] claims = { new Claim(JWTClaimTypes.UserId, userId.ToString()) };
+
+                    string token = jwtService.GenerateToken(
+                         claims,
+                         DateTime.Now.AddMinutes(AppConstants.AuthTokenExpiryInMinutes),
+                         _configuration["Jwt:Key"]!
+                     );
+
+                    // Append the token directly to the URL
+                    string finalUrl = $"{webUrl}{loginUrl}?token={token}";
+
+                    string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EmailTemplate", "WelcomeEmail.html");
+                    string bodyTemplate = await File.ReadAllTextAsync(templatePath);
+
+                    string emailBody = bodyTemplate
+                                    .Replace("{UserName}", request.FirstName ?? "User")
+                                    .Replace("{LoginUrl}", $"<a href='{finalUrl}' target='_blank'>Click here</a>");
+
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        Body = emailBody,
+                        Subject = subject,
+                        IsBodyHtml = true
+                    };
+
+                    mailMessage.To.Add("meetpanchal194@gmail.com");
+                    //mailMessage.To.Add(request.Email);
+
+                    string emailSent = _emailService.SendMail(mailMessage);
+
+                    if (emailSent == ResponseMessages.EmailSentSuccessfully)
+                    {
+                        return HttpStatusCodeResponse.GenerateResponse(
+                            result: true,
+                            statusCode: HttpStatusCode.OK,
+                            message: ResponseMessages.EmailSentSuccessfully,
+                            data: string.Empty
+                        );
+                    }
+                    else
+                    {
+                        return HttpStatusCodeResponse.GenerateResponse(
+                            result: false,
+                            statusCode: HttpStatusCode.InternalServerError,
+                            message: ResponseMessages.EmailSentFailure,
+                            data: string.Empty
+                        );
+                    }
+                }
+                catch (Exception)
+                {
+                    return HttpStatusCodeResponse.GenerateResponse(
+                        result: false,
+                        statusCode: HttpStatusCode.InternalServerError,
+                        message: ResponseMessages.InternalServerError,
+                        data: string.Empty
+                    );
+                }
+
+                #endregion
             }
             catch (Exception)
             {
                 return HttpStatusCodeResponse.GenerateResponse(
                     result: false,
                     statusCode: HttpStatusCode.InternalServerError,
-                    message: "Internal Server Error!!",
+                    message: ResponseMessages.InternalServerError,
                     data: string.Empty
                 );
             }
