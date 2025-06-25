@@ -22,11 +22,11 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@NoOfEmployee", request.NoOfEmployee);
             parameters.Add("@Country", request.Country);
 
-            long companyId = await _dapper.ExecuteStoredProcedureSingle<long>("sp_createCompany", parameters);
+            long companyId = await _dapper.ExecuteStoredProcedureSingle<long>("sp_CreateCompany", parameters);
             return companyId;
         }
 
-        public async Task<bool> CreateUser(CreateUserRequestDto request)
+        public async Task<Guid> CreateUser(CreateUserRequestDto request)
         {
             DynamicParameters parameters = new DynamicParameters();
 
@@ -38,8 +38,8 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@ContactNo", request.ContactNo);
             parameters.Add("@CompanyId", request.CompanyId);
 
-            bool result = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_createUser", parameters);
-            return result;
+            Guid userId = await _dapper.ExecuteStoredProcedureSingle<Guid>("sp_CreateUser", parameters);
+            return userId;
         }
 
         public async Task<bool> CheckCompanyExist(string company)

@@ -4,7 +4,7 @@
     {
         public const int DefaultPageSize = 999999999;
 
-        public const int AuthTokenExpiryInMinutes = 60;
+        public const int AuthTokenExpiryInMinutes = 10;
 
         public const int RefreshTokenExpiryInDays = 7;
 
@@ -40,6 +40,7 @@
             public static readonly string Company = "Company";
             public const string CompanyAlreadyExists = "Company Already Exists";
             public const string CompanyRegisteredSuccessfully = "Company Registered Successfully";
+            public const string ErrorCreatingCompany = "Error While Creating Company!!";
 
             #endregion
 
@@ -48,6 +49,7 @@
             public static readonly string User = "User";
             public const string UserNotFound = "We couldn't find an account associated with this email address!";
             public const string EmailAlreadyExits = "Email Already Exists";
+            public const string ErrorCreatingUser = "Error While Creating User!!";
 
             #endregion
 
@@ -63,6 +65,7 @@
             public const string UserInActive = "Sorry your account is InActive, you can't login!";
             public const string PlanExpired = "Your subscription has expired. Please renew to continue using the service.";
             public const string TokenGeneratedSuccessfully = "Token Generated Successfully";
+            public const string InternalServerError = "Internal Server Error!!";
 
             #endregion
 
@@ -74,7 +77,7 @@
 
             #region Email
 
-            public const string EmailSentSuccessfully = "Email Successfully Sent";
+            public const string EmailSentSuccessfully = "Confirmation email sent. Please Log in to activate your account.";
             public const string EmailSentFailure = "Cannot Send Email";
             public const string EmailMailboxUnavailable = "Mailbox unavailable";
 
