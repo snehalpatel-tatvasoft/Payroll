@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PalladiumPayroll.Helper.Middleware.CustomExceptions
+namespace PalladiumPayroll.Helper.Middleware.Exceptions.CustomExceptions
 {
     [Serializable]
     public class BusinessRuleException : Exception

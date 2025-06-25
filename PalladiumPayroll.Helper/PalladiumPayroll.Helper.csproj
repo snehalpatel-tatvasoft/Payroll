@@ -20,4 +20,8 @@
     <ProjectReference Include="..\PalladiumProject.DTOs\PalladiumPayroll.DTOs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PalladiumProject.DTOs\PalladiumPayroll.DTOs.csproj" />
+  </ItemGroup>
+
 </Project>
