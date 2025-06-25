@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
+using PalladiumPayroll.DTOs.DTOs;
+using PalladiumPayroll.Helper;
 using System.Net.Mail;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 
@@ -6,22 +8,22 @@ namespace PalladiumPayroll.Services
 {
     public class EmailService
     {
-        private readonly IConfiguration _configuration;
+        private readonly SmtpSettings? _smtpSetting;
         public EmailService(IConfiguration configuration)
         {
-            _configuration = configuration;
+            _smtpSetting = AppSettingsConfig.GetSection<SmtpSettings>(configuration, sectionName: "SmtpCredentials");
         }
 
         public string SendMail(MailMessage mailMessage)
         {
             try
             {
-                string SMTPMailServer = _configuration[key: "SmtpCredentials:SMTPMailServer"]!;
-                int SMTPMailServerPort = Convert.ToInt32(_configuration[key: "SmtpCredentials:SMTPPort"]);
-                string SMTPMailUser = _configuration[key: "SmtpCredentials:SMTPMailUser"]!;
-                string SMTPMailPassword = _configuration[key: "SmtpCredentials:SMTPMailPassword"]!;
-                bool EnableSsl = _configuration[key: "SmtpCredentials:SMTPEnableSsl"]?.ToLower() == "true" ? true : false;
-                string fromEmail = _configuration[key: "SmtpCredentials:SMTPFrom"]!;
+                string SMTPMailServer = _smtpSetting.SMTPMailServer;
+                int SMTPMailServerPort = _smtpSetting.SMTPPort;
+                string SMTPMailUser = _smtpSetting.SMTPMailUser;
+                string SMTPMailPassword = _smtpSetting.SMTPMailPassword;
+                bool EnableSsl = _smtpSetting.SMTPEnableSsl;
+                string fromEmail = _smtpSetting.SMTPFrom;
 
                 SmtpClient client = new SmtpClient(SMTPMailServer, SMTPMailServerPort)
                 {

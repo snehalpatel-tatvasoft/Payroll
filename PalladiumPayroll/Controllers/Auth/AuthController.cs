@@ -4,6 +4,7 @@ using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Auth;
 using PalladiumPayroll.Services.Company;
+using PalladiumPayroll.Services.User;
 using System.Net;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
@@ -16,10 +17,12 @@ namespace PalladiumPayroll.Controllers.Auth
     {
         private readonly IAuthService _authService;
         private readonly ICompanyService _companyService;
-        public AuthController(IAuthService authService, ICompanyService companyService)
+        private readonly IUserService _userService;
+        public AuthController(IAuthService authService, ICompanyService companyService, IUserService userService)
         {
             _authService = authService;
             _companyService = companyService;
+            _userService = userService;
         }
 
         [HttpPost("Login")]
@@ -43,6 +46,26 @@ namespace PalladiumPayroll.Controllers.Auth
             {
                 JsonResult? res = await _companyService.CreateCompany(request);
                 return res;
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, ex.Message));
+            }
+        }
+
+        [HttpPost("ConfirmEmail")]
+        public async Task<ActionResult> ConfirmEmail(string userId)
+        {
+            try
+            {
+                var res = await _userService.ConfirmEmail(userId);
+
+                return HttpStatusCodeResponse.GenerateResponse(
+                            result: true,
+                            statusCode: HttpStatusCode.OK,
+                            message: ResponseMessages.EmailVerified,
+                            data: string.Empty
+                        );
             }
             catch (Exception ex)
             {

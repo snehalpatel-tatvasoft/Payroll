@@ -14,4 +14,13 @@
         public string? Audience {  get; set; }
     }
 
+    public class SmtpSettings
+    {
+        public string SMTPMailServer { get; set; } = null!;
+        public int SMTPPort { get; set; } = 587;
+        public string SMTPMailUser { get; set; } = null!;
+        public string SMTPMailPassword { get; set; } = null!;
+        public bool SMTPEnableSsl { get; set; }
+        public string SMTPFrom { get; set; } = null!;
+    }
 }

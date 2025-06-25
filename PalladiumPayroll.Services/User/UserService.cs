@@ -14,5 +14,10 @@ namespace PalladiumPayroll.Services.User
         {
             return await _userRepository.GetUserInfo(email);
         }
+
+        public async Task<bool> ConfirmEmail(string userId)
+        {
+            return await _userRepository.ConfirmEmail(userId);
+        }
     }
 }

@@ -4,7 +4,7 @@
     {
         public const int DefaultPageSize = 999999999;
 
-        public const int AuthTokenExpiryInMinutes = 10;
+        public const int AuthTokenExpiryInMinutes = 60;
 
         public const int RefreshTokenExpiryInDays = 7;
 
@@ -76,9 +76,10 @@
 
             #region Email
 
-            public const string EmailSentSuccessfully = "Confirmation email sent. Please Log in to activate your account.";
+            public const string EmailSentSuccessfully = "Confirmation email sent. Please click on the link to activate your account.";
             public const string EmailSentFailure = "Cannot Send Email";
             public const string EmailMailboxUnavailable = "Mailbox unavailable";
+            public const string EmailVerified = "Email verified successfully. Please sign in to get started.";
 
             #endregion
 

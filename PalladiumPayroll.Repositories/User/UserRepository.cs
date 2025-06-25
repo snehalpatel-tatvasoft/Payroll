@@ -29,5 +29,14 @@ namespace PalladiumPayroll.Repositories.User
 
             return await _dapper.ExecuteStoredProcedureSingle<UserResponse>("sp_getUserDetailsByEmail", parameters);
         }
+
+        public async Task<bool> ConfirmEmail(string userId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserId", userId);
+
+            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_confirmUserEmail", parameters);
+            return response;
+        }
     }
 }

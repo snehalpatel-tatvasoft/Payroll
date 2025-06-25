@@ -128,7 +128,7 @@ namespace PalladiumPayroll.Services.Company
                         IsBodyHtml = true
                     };
 
-                    mailMessage.To.Add("meetpanchal194@gmail.com");
+                    mailMessage.To.Add("meet.panchal@tatvasoft.com");
                     //mailMessage.To.Add(request.Email);
 
                     string emailSent = _emailService.SendMail(mailMessage);
