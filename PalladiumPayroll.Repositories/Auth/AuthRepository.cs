@@ -44,6 +44,15 @@ namespace PalladiumPayroll.Repositories.Auth
                         data: string.Empty
                     );
                 }
+                else if (!user.ConfirmedEmail)
+                {
+                    return HttpStatusCodeResponse.GenerateResponse(
+                        result: false,
+                        statusCode: HttpStatusCode.NotFound,
+                        message: ResponseMessages.AccountNotConfirmed,
+                        data: string.Empty
+                    );
+                }
 
                 // Verify password
                 PasswordHasher<object>? hasher = new PasswordHasher<object>();

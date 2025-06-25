@@ -80,6 +80,7 @@
             public const string EmailSentFailure = "Cannot Send Email";
             public const string EmailMailboxUnavailable = "Mailbox unavailable";
             public const string EmailVerified = "Email verified successfully. Please sign in to get started.";
+            public const string AccountNotConfirmed = "Account not confirmed. Please contact the administrator to activate your account.";
 
             #endregion
 
