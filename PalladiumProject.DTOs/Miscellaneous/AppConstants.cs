@@ -69,8 +69,7 @@
 
             #endregion
 
-            #region Dashboard
-
+            #region Home
             public static readonly string Dashboard = "Dashboard data";
 
             #endregion
@@ -81,6 +80,10 @@
             public const string EmailSentFailure = "Cannot Send Email";
             public const string EmailMailboxUnavailable = "Mailbox unavailable";
 
+            #endregion
+
+            #region Application Admin
+            public static readonly string AppAdminDashboard = "Application Admin Dashboard Data";
             #endregion
         }
     }
