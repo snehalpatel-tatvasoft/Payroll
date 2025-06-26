@@ -97,6 +97,8 @@ namespace PalladiumPayroll.Repositories.Auth
                     RefreshToken = refreshToken
                 };
 
+                await _userRepository.LoginUser(user.Id.ToString());
+
                 return HttpStatusCodeResponse.GenerateResponse(
                    result: true,
                    HttpStatusCode.OK,

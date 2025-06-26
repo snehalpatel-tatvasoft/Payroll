@@ -56,5 +56,14 @@ namespace PalladiumPayroll.Repositories.User
             var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_updateUserLastActivity", parameters);
             return response;
         }
+
+        public async Task<bool> LoginUser(string userId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@UserId", userId);
+
+            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_updateIsLoggedInFlag", parameters);
+            return response;
+        }
     }
 }

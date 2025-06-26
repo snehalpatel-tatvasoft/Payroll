@@ -58,7 +58,7 @@ namespace PalladiumPayroll.Controllers.Auth
         {
             try
             {
-                var res = await _userService.ConfirmEmail(userId);
+                await _userService.ConfirmEmail(userId);
 
                 return HttpStatusCodeResponse.GenerateResponse(
                             result: true,

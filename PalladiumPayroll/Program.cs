@@ -43,6 +43,7 @@ app.UseCors(x => x
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<EncryptionMiddleware>();
+app.UseMiddleware<UpdateActivityMiddleware>();
 
 app.UseAuthorization();
 
