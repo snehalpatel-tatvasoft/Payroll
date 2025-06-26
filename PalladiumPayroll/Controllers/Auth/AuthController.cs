@@ -72,5 +72,23 @@ namespace PalladiumPayroll.Controllers.Auth
                 return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, ex.Message));
             }
         }
+
+        [HttpPost("CheckIsUserLoggedIn")]
+        public async Task<ActionResult> CheckIsUserLoggedIn(string userId)
+        {
+            try
+            {
+                bool res = await _userService.CheckIsUserLoggedIn(userId);
+                if (!res)
+                {
+                    return HttpStatusCodeResponse.GenerateResponse(result: false, statusCode: HttpStatusCode.OK, message: ResponseMessages.LoggedOutDueToInActivity, data: string.Empty);
+                }
+                return HttpStatusCodeResponse.GenerateResponse(result: true, statusCode: HttpStatusCode.OK, message: string.Empty, data: string.Empty);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, ex.Message));
+            }
+        }
     }
 }

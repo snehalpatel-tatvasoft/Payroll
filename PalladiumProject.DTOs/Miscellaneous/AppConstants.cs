@@ -50,6 +50,7 @@
             public const string UserNotFound = "We couldn't find an account associated with this email address!";
             public const string EmailAlreadyExits = "Email Already Exists";
             public const string ErrorCreatingUser = "Error While Creating User!!";
+            public const string LoggedOutDueToInActivity= "Your session has expired due to inactivity. Please log in again.";
 
             #endregion
 

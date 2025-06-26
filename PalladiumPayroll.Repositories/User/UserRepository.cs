@@ -15,7 +15,7 @@ namespace PalladiumPayroll.Repositories.User
 
         public async Task<bool> CheckEmailExist(string email)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@Email", email);
 
             bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CheckEmailExists", parameters);
@@ -24,7 +24,7 @@ namespace PalladiumPayroll.Repositories.User
 
         public async Task<UserResponse?> GetUserInfo(string email)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@Email", email);
 
             return await _dapper.ExecuteStoredProcedureSingle<UserResponse>("sp_getUserDetailsByEmail", parameters);
@@ -32,10 +32,28 @@ namespace PalladiumPayroll.Repositories.User
 
         public async Task<bool> ConfirmEmail(string userId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@UserId", userId);
 
-            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_confirmUserEmail", parameters);
+            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_confirmUserEmail", parameters);
+            return response;
+        }
+
+        public async Task<bool> CheckIsUserLoggedIn(string userId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@UserId", userId);
+
+            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_checkIsUserLoggedIn", parameters);
+            return response;
+        }
+
+        public async Task<bool> UpdateLastActivity(string userId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@UserId", userId);
+
+            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_updateUserLastActivity", parameters);
             return response;
         }
     }

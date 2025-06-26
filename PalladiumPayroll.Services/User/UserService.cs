@@ -19,5 +19,15 @@ namespace PalladiumPayroll.Services.User
         {
             return await _userRepository.ConfirmEmail(userId);
         }
+
+        public async Task<bool> CheckIsUserLoggedIn(string userId)
+        {
+            return await _userRepository.CheckIsUserLoggedIn(userId);
+        }  
+        
+        public async Task<bool> UpdateLastActivity(string userId)
+        {
+            return await _userRepository.UpdateLastActivity(userId);
+        }
     }
 }
