@@ -27,7 +27,7 @@ namespace PalladiumPayroll.Repositories.User
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@Email", email);
 
-            return await _dapper.ExecuteStoredProcedureSingle<UserResponse>("sp_getUserDetailsByEmail", parameters);
+            return await _dapper.ExecuteStoredProcedureSingle<UserResponse>("sp_GetUserDetailsByEmail", parameters);
         }
 
         public async Task<bool> ConfirmEmail(string userId)
@@ -35,7 +35,7 @@ namespace PalladiumPayroll.Repositories.User
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@UserId", userId);
 
-            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_confirmUserEmail", parameters);
+            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_ConfirmUserEmail", parameters);
             return response;
         }
 
@@ -44,7 +44,7 @@ namespace PalladiumPayroll.Repositories.User
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@UserId", userId);
 
-            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_checkIsUserLoggedIn", parameters);
+            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CheckIsUserLoggedIn", parameters);
             return response;
         }
 
@@ -53,7 +53,7 @@ namespace PalladiumPayroll.Repositories.User
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@UserId", userId);
 
-            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_updateUserLastActivity", parameters);
+            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_UpdateUserLastActivity", parameters);
             return response;
         }
 
@@ -62,13 +62,13 @@ namespace PalladiumPayroll.Repositories.User
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@UserId", userId);
 
-            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_updateIsLoggedInFlag", parameters);
+            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_UpdateIsLoggedInFlag", parameters);
             return response;
         }
 
         public async Task<bool> LogoutInactiveUsers()
         {
-            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_updateInActiveUsers");
+            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_UpdateInActiveUsers");
             return response;
         }
     }
