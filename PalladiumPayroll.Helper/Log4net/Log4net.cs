@@ -1,17 +1,12 @@
 ﻿using log4net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace PalladiumPayroll.Helper.Log4net
 {
-    public class Log4net: ILog4net
+    public class Log4net : ILog4net
     {
         string configFilePath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "PalladiumPayroll.Helper", "Log4net", "log4net.config");
         private static readonly log4net.ILog _log = GetLogger(typeof(Log4net));

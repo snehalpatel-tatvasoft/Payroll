@@ -54,7 +54,7 @@ namespace PalladiumPayroll.Repositories.Home
             parameters.Add("@CompanyId", CompanyId);
             parameters.Add("@UserId", UserId);
 
-            return  await _dapper.ExecuteStoredProcedureMultipleAsync("SP_GetDashboardData", parameters, async (multi) =>
+            return await _dapper.ExecuteStoredProcedureMultipleAsync("SP_GetDashboardData", parameters, async (multi) =>
             {
                 var dashboard = (await multi.ReadAsync<Dashboard>()).FirstOrDefault() ?? new Dashboard();
                 dashboard.BirthdayList = (await multi.ReadAsync<EmployeeBirhday>()).ToList();

@@ -1,20 +1,14 @@
 ﻿using Dapper;
 using PalladiumPayroll.DataContext;
-using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PalladiumPayroll.Repositories.Applicationadmin
 {
-    public class ApplicationadminRepository: IApplicationadminRepository
+    public class ApplicationadminRepository : IApplicationadminRepository
     {
         private readonly DapperContext _dapper;
-        public ApplicationadminRepository(DapperContext _dapper) 
-        { 
+        public ApplicationadminRepository(DapperContext _dapper)
+        {
             this._dapper = _dapper;
         }
 

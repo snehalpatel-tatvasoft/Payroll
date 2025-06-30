@@ -1,11 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using PalladiumPayroll.DTOs.DTOs;
-using System.Configuration;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using Microsoft.Extensions.Options;
 
 namespace PalladiumPayroll.Helper.License
 {

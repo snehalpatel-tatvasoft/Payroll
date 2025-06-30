@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PalladiumPayroll.DTOs.DTOs;
+﻿using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 
 namespace PalladiumPayroll.Services.Home

@@ -1,18 +1,12 @@
-﻿using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
-using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
+﻿using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 using PalladiumPayroll.Helper.License;
 using PalladiumPayroll.Repositories.Applicationadmin;
 using ServiceReference;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PalladiumPayroll.Services.Applicationadmin
 {
-    public class ApplicationadminService:IApplicationadminService
+    public class ApplicationadminService : IApplicationadminService
     {
         private readonly IApplicationadminRepository _appAdminRepo;
         private readonly PayrollMachine _payrollMachine;
