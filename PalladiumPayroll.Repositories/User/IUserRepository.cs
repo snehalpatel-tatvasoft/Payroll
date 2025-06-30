@@ -10,5 +10,6 @@ namespace PalladiumPayroll.Repositories.User
         Task<bool> CheckIsUserLoggedIn(string userId);
         Task<bool> UpdateLastActivity(string userId);
         Task<bool> LoginUser(string userId);
+        Task<bool> LogoutInactiveUsers();
     }
 }

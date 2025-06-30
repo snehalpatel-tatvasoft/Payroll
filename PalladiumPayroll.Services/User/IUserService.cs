@@ -8,5 +8,6 @@ namespace PalladiumPayroll.Services.User
         Task<bool> ConfirmEmail(string userId);
         Task<bool> CheckIsUserLoggedIn(string userId);
         Task<bool> UpdateLastActivity(string userId);
+        Task<bool> LogoutInactiveUsers();
     }
 }

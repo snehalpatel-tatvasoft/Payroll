@@ -65,5 +65,11 @@ namespace PalladiumPayroll.Repositories.User
             var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_updateIsLoggedInFlag", parameters);
             return response;
         }
+
+        public async Task<bool> LogoutInactiveUsers()
+        {
+            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_updateInActiveUsers");
+            return response;
+        }
     }
 }
