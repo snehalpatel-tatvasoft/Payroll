@@ -32,7 +32,7 @@ namespace PalladiumPayroll.Job
                     }
                 }
 
-                await Task.Delay(TimeSpan.FromMinutes((double)AppEnums.PositiveNumbers.Five), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes((double)AppEnums.PositiveNumbers.One), stoppingToken);
             }
         }
     }
