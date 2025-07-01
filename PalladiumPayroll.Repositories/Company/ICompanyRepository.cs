@@ -1,4 +1,7 @@
-﻿using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
+﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.Common;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 
 namespace PalladiumPayroll.Repositories.Company
 {
@@ -7,5 +10,7 @@ namespace PalladiumPayroll.Repositories.Company
         Task<long> CreateCompany(CreateCompanyRequest request);
         Task<Guid> CreateUser(CreateUserRequestDto request);
         Task<bool> CheckCompanyExist(string company);
+        Task<JsonResult> CompanyCreation(CompanyModels model);
+        Task<bool> AddNewBank(BankModel bankModel);
     }
 }

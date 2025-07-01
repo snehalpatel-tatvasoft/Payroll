@@ -4,10 +4,11 @@
     {
         public enum ActionType
         {
-            Save,
-            Delete,
-            Update,
-            Retrieve,
+            Created,
+            Saved,
+            Deleted,
+            Updated,
+            Retrieved,
             Saving,
             Retrieving,
             Updating,

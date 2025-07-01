@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
@@ -8,6 +8,10 @@ using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using PalladiumPayroll.Helper.Constants;
 using PalladiumPayroll.Helper.JWTToken;
+using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.Common;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.Company;
 using PalladiumPayroll.Repositories.User;
 using System.Net;
@@ -29,6 +33,11 @@ namespace PalladiumPayroll.Services.Company
             _userRepository = userRepository;
             _emailService = emailService;
             _configuration = configuration;
+        }
+
+        public async Task<JsonResult> CompanyCreation(CompanyModels model)
+        {
+            return await _companyRepository.CompanyCreation(model);
         }
 
         public async Task<JsonResult> CreateCompany(CreateCompanyRequest request)
@@ -175,6 +184,11 @@ namespace PalladiumPayroll.Services.Company
                     data: string.Empty
                 );
             }
+        }
+
+        public async Task<bool> AddNewBank(BankModel bankModel)
+        {
+            return await _companyRepository.AddNewBank(bankModel);
         }
     }
 }
