@@ -31,17 +31,44 @@ namespace PalladiumPayroll.Controllers
             }
         }
 
-        [HttpGet("GetDashboardData")]
-        public async Task<JsonResult> GetDashboardData()
+        [HttpGet("GetPayrollSummaryData")]
+        public async Task<JsonResult> GetPayrollSummaryData(int PayrollSetupId)
         {
             try
             {
-                var data = "";
-                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Dashboard, ActionType.Retrieving));
+                var data = await _homeService.GetPayrollSummaryData(PayrollSetupId);
+                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.PayrollSummary, ActionType.Retrieving));
             }
             catch (Exception ex)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Dashboard, ex.Message));
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.PayrollSummary, ex.Message));
+            }
+        }
+
+        [HttpGet("GetEmployeeTypeCount")]
+        public async Task<JsonResult> GetEmployeeTypeCount(int PayrollSetupId)
+        {
+            try
+            {
+                var data = await _homeService.GetEmployeeTypeCount(PayrollSetupId);
+                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTypeCount, ActionType.Retrieving));
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeTypeCount, ex.Message));
+            }
+        }
+        [HttpGet("GetPayrollCycleData")]
+        public async Task<JsonResult> GetPayrollCycleData()
+        {
+            try
+            {
+                var data = await _homeService.GetPayrollCycleData();
+                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTypeCount, ActionType.Retrieving));
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeTypeCount, ex.Message));
             }
         }
     }

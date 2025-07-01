@@ -7,6 +7,8 @@ namespace PalladiumPayroll.Services.Home
     public interface IHomeService
     {
         Task<List<Employee>> GetAllEmployeeList(int employeeId);
-        Task<Dashboard> GetDashboardData();
+        Task<PayrollSummaryResponse> GetPayrollSummaryData(int PayrollSetupId);
+        Task<EmployeeTypeCountResponse> GetEmployeeTypeCount(int PayrollSetupId);
+        Task<List<PayrollCycleDataResponse>> GetPayrollCycleData();
     }
 }

@@ -77,6 +77,7 @@ namespace PalladiumPayroll.Repositories.Auth
                     new Claim(JWTClaimTypes.UserName, user.UserName),
                     new Claim(JWTClaimTypes.Email, user.Email),
                     new Claim(JWTClaimTypes.Role, user.RoleId),
+                    new Claim(JWTClaimTypes.CompanyId, user.CompanyId),
                 };
 
                 string accessToken = jwtService.GenerateToken(

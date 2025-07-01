@@ -8,7 +8,8 @@ namespace PalladiumPayroll.Repositories.Home
     public interface IHomeRepository
     {
         Task<List<Employee>> GetAllEmployeeList(int employeeId);
-
-        Task<Dashboard> GetDashboardData(int CompanyId, string UserId);
+        Task<PayrollSummaryResponse> GetPayrollSummaryData(int CompanyId, int PayrollSetupId);
+        Task<EmployeeTypeCountResponse> GetEmployeeTypeCount(int CompanyId, int PayrollSetupId);
+        Task<List<PayrollCycleDataResponse>> GetPayrollCycleData(int CompanyId, string UserId);
     }
 }

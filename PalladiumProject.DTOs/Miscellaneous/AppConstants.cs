@@ -70,8 +70,9 @@
             #endregion
 
             #region Home
-            public static readonly string Dashboard = "Dashboard data";
-
+            public static readonly string PayrollSummary = "Payroll Summary data in dashboard";
+            public static readonly string EmployeeTypeCount = "Employee type count in dashboard";
+            public static readonly string PayrollCycle = "payroll cycles in dashboard";
             #endregion
 
             #region Email

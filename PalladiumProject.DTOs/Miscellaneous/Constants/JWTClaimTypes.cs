@@ -15,5 +15,7 @@ namespace PalladiumPayroll.DTOs.Miscellaneous.Constants
         public const string Email = "email";
 
         public const string Role = "role";
+
+        public const string CompanyId = "company_id";
     }
 }

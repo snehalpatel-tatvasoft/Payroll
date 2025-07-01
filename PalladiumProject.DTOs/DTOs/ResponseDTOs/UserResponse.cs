@@ -7,8 +7,8 @@
         public string Email { get; set; } = string.Empty;
         public string? AccessRoleID { get; set; }
         public string PasswordHash { get; set; } = string.Empty;
-
         public string RoleId { get; set; } = string.Empty;
         public bool ConfirmedEmail { get; set; }
+        public string CompanyId { get; set; } = string.Empty;
     }
 }
