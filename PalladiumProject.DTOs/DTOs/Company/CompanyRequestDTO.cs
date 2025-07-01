@@ -1,5 +1,6 @@
 ﻿
 
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 
@@ -368,6 +369,7 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
     public class CompnayInfo
     {
         public Int64 CompanyId { get; set; }
+        public IFormFile CompanyLogo { get; set; }
         public string CompanyName { get; set; }
         public int? CompanyTypeId { get; set; }
         public string CompanyRegNumber { get; set; }

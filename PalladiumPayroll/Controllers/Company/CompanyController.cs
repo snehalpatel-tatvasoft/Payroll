@@ -37,16 +37,11 @@ namespace PalladiumPayroll.Controllers.Company
         {
             try
             {
-                bool isBankAdded = await _companyService.AddNewBank(bankModel);
-                if (isBankAdded)
-                {
-                    return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Bank", ActionType.Saved));
-                }
-                return HttpStatusCodeResponse.InternalServerErrorResponse("Bank not added, Please try again..");
+                return await _companyService.AddNewBank(bankModel);
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
     }

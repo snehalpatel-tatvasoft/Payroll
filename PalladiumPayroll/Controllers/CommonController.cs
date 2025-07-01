@@ -49,8 +49,8 @@ namespace PalladiumPayroll.Controllers
         {
             try
             {
-                List<DropDownViewModel> bankList = await _commonService.GetBranchList(bankId);
-                return HttpStatusCodeResponse.SuccessResponse(bankList, string.Empty);
+                List<DropDownViewModel> branchList = await _commonService.GetBranchList(bankId);
+                return HttpStatusCodeResponse.SuccessResponse(branchList, string.Empty);
             }
             catch (Exception)
             {
@@ -64,8 +64,8 @@ namespace PalladiumPayroll.Controllers
         {
             try
             {
-                List<DropDownViewModel> bankList = await _commonService.GetStandardIndustryCode();
-                return HttpStatusCodeResponse.SuccessResponse(bankList, string.Empty);
+                List<DropDownViewModel> standardList = await _commonService.GetStandardIndustryCode();
+                return HttpStatusCodeResponse.SuccessResponse(standardList, string.Empty);
             }
             catch (Exception)
             {
@@ -79,8 +79,8 @@ namespace PalladiumPayroll.Controllers
         {
             try
             {
-                List<DropDownViewModel> bankList = await _commonService.GetTradeClassification();
-                return HttpStatusCodeResponse.SuccessResponse(bankList, string.Empty);
+                List<DropDownViewModel> tradeList = await _commonService.GetTradeClassification();
+                return HttpStatusCodeResponse.SuccessResponse(tradeList, string.Empty);
             }
             catch (Exception)
             {

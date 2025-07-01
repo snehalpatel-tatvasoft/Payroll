@@ -192,8 +192,8 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@BankName", bankModel.BankName);
             parameters.Add("@BranchCode", bankModel.BranchCode);
 
-            int isAdded = await _dapper.ExecuteStoredProcedureSingle<int>("sp_AddBank", parameters);
-            return true;
+            bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_AddBank", parameters);
+            return isAdded;
         }
 
     }
