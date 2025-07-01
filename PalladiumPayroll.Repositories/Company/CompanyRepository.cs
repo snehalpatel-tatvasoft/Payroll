@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
-using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 
 namespace PalladiumPayroll.Repositories.Company

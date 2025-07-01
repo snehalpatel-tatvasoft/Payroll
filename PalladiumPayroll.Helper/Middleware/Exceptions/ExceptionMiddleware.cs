@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using PalladiumPayroll.Helper.Log4net;
 using PalladiumPayroll.Helper.Middleware.Exceptions.CustomExceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace PalladiumPayroll.Helper.Middleware.Exceptions
 {

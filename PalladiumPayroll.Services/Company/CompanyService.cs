@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using PalladiumPayroll.Helper.Constants;
@@ -34,15 +36,15 @@ namespace PalladiumPayroll.Services.Company
             try
             {
                 // Check if email exists
-                if (await _userRepository.CheckEmailExist(request.Email))
-                {
-                    return HttpStatusCodeResponse.GenerateResponse(
-                        result: false,
-                        statusCode: HttpStatusCode.Found,
-                        message: ResponseMessages.EmailAlreadyExits,
-                        data: string.Empty
-                    );
-                }
+                //if (await _userRepository.CheckEmailExist(request.Email))
+                //{
+                //    return HttpStatusCodeResponse.GenerateResponse(
+                //        result: false,
+                //        statusCode: HttpStatusCode.Found,
+                //        message: ResponseMessages.EmailAlreadyExits,
+                //        data: string.Empty
+                //    );
+                //}
 
                 // Check if company already exists
                 if (await _companyRepository.CheckCompanyExist(request.Company))

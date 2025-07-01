@@ -22,16 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PalladiumProject.DTOs\PalladiumPayroll.DTOs.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <WCFMetadata Include="ServiceReference\Service1.wsdl" />
     <WCFMetadata Include="ServiceReference\Reference.svcmap" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\PalladiumProject.DTOs\PalladiumPayroll.DTOs.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\PalladiumProject.DTOs\PalladiumPayroll.DTOs.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
+﻿using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.Miscellaneous;
-using PalladiumPayroll.Helper.License;
 using PalladiumPayroll.Services.Applicationadmin;
-using ServiceReference;
-using System.ServiceModel;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 

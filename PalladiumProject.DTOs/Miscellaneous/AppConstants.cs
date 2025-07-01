@@ -1,10 +1,11 @@
-﻿namespace PalladiumPayroll.Helper.Constants
+﻿
+namespace PalladiumPayroll.Helper.Constants
 {
     public static class AppConstants
     {
         public const int DefaultPageSize = 999999999;
 
-        public const int AuthTokenExpiryInMinutes = 60;
+        public const int AuthTokenExpiryInMinutes = 10;
 
         public const int RefreshTokenExpiryInDays = 7;
 
@@ -50,6 +51,7 @@
             public const string UserNotFound = "We couldn't find an account associated with this email address!";
             public const string EmailAlreadyExits = "Email Already Exists";
             public const string ErrorCreatingUser = "Error While Creating User!!";
+            public const string LoggedOutDueToInActivity = "Your session has expired due to inactivity. Please log in again.";
 
             #endregion
 

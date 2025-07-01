@@ -3,6 +3,7 @@ using PalladiumPayroll.DataContext;
 using PalladiumPayroll.Helper;
 using PalladiumPayroll.Helper.Middleware.Encryption;
 using PalladiumPayroll.Helper.Middleware.Exceptions;
+using PalladiumPayroll.Job;
 using PalladiumPayroll.JWT;
 using PalladiumPayroll.Repositories;
 using PalladiumPayroll.Services;
@@ -24,6 +25,7 @@ builder.Services.AddHelpers(builder.Configuration);
 builder.Services.ConfigureAuthentication(builder.Configuration);
 
 builder.Services.AddAutoMapper(typeof(Mapper));
+builder.Services.AddHostedService<InactivityCheckerHostedService>();
 
 
 var app = builder.Build();
@@ -43,6 +45,7 @@ app.UseCors(x => x
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<EncryptionMiddleware>();
+app.UseMiddleware<UpdateActivityMiddleware>();
 
 app.UseAuthorization();
 
