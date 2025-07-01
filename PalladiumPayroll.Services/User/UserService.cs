@@ -1,4 +1,5 @@
-﻿using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
+﻿using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 using PalladiumPayroll.Repositories.User;
 
 namespace PalladiumPayroll.Services.User
@@ -33,6 +34,11 @@ namespace PalladiumPayroll.Services.User
         public async Task<bool> LogoutInactiveUsers()
         {
             return await _userRepository.LogoutInactiveUsers();
+        } 
+        
+        public async Task<List<CompanyDetails>> GetCompaniesByEmail(string email)
+        {
+            return await _userRepository.GetCompaniesByEmail(email);
         }
     }
 }

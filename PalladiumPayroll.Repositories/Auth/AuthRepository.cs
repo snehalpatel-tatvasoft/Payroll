@@ -91,10 +91,12 @@ namespace PalladiumPayroll.Repositories.Auth
                     _configuration["Jwt:RefreshTokenKey"]!
                 );
 
+                List<CompanyDetails>? companies = await _userRepository.GetCompaniesByEmail(loginRequest.Email);
                 var data = new
                 {
                     Token = accessToken,
-                    RefreshToken = refreshToken
+                    RefreshToken = refreshToken,
+                    Companies = companies
                 };
 
                 await _userRepository.LoginUser(user.Id.ToString());

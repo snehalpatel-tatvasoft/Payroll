@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 
 namespace PalladiumPayroll.Repositories.User
@@ -70,6 +71,15 @@ namespace PalladiumPayroll.Repositories.User
         {
             var response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_UpdateInActiveUsers");
             return response;
+        }
+
+        public async Task<List<CompanyDetails>> GetCompaniesByEmail(string email)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@Email", email);
+
+            List<CompanyDetails>? result = await _dapper.ExecuteStoredProcedure<CompanyDetails>("sp_GetCompaniesByUserEmail", parameters);
+            return result.ToList();
         }
     }
 }

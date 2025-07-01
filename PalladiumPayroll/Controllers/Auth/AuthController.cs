@@ -90,5 +90,19 @@ namespace PalladiumPayroll.Controllers.Auth
                 return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, ex.Message));
             }
         }
+
+        [HttpGet("GetCompaniesByEmail")]
+        public async Task<IActionResult> GetCompaniesByEmail(string email)
+        {
+            try
+            {
+                List<CompanyDetails>? companies = await _userService.GetCompaniesByEmail(email);
+                return HttpStatusCodeResponse.SuccessResponse(companies, "");
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Company, ex.Message));
+            }
+        }
     }
 }

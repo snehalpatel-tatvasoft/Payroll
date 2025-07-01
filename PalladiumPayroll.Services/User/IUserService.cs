@@ -1,4 +1,5 @@
-﻿using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
+﻿using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 
 namespace PalladiumPayroll.Services.User
 {
@@ -9,5 +10,6 @@ namespace PalladiumPayroll.Services.User
         Task<bool> CheckIsUserLoggedIn(string userId);
         Task<bool> UpdateLastActivity(string userId);
         Task<bool> LogoutInactiveUsers();
+        Task<List<CompanyDetails>> GetCompaniesByEmail(string email);
     }
 }
