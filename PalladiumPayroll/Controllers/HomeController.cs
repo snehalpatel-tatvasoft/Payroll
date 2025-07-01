@@ -32,7 +32,7 @@ namespace PalladiumPayroll.Controllers
         }
 
         [HttpGet("GetPayrollSummaryData")]
-        public async Task<JsonResult> GetPayrollSummaryData(int PayrollSetupId)
+        public async Task<JsonResult> GetPayrollSummaryData(int PayrollSetupId, int CompanyId, string UserId)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace PalladiumPayroll.Controllers
         }
 
         [HttpGet("GetEmployeeTypeCount")]
-        public async Task<JsonResult> GetEmployeeTypeCount(int PayrollSetupId)
+        public async Task<JsonResult> GetEmployeeTypeCount(int PayrollSetupId, int CompanyId, string UserId)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace PalladiumPayroll.Controllers
             }
         }
         [HttpGet("GetPayrollCycleData")]
-        public async Task<JsonResult> GetPayrollCycleData()
+        public async Task<JsonResult> GetPayrollCycleData(int CompanyId, string UserId)
         {
             try
             {
