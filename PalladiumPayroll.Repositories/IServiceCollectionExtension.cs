@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PalladiumPayroll.Repositories.Applicationadmin;
 using PalladiumPayroll.Repositories.Company;
 using PalladiumPayroll.Repositories.Home;
+using PalladiumPayroll.Repositories.User;
 
 namespace PalladiumPayroll.Repositories
 {
@@ -10,7 +12,9 @@ namespace PalladiumPayroll.Repositories
         {
             services.AddScoped<IHomeRepository, HomeRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICommonRepository, CommonRepository>();
+            services.AddScoped<IApplicationadminRepository, ApplicationadminRepository>();
             return services;
         }
     }

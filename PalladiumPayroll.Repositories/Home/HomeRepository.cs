@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 
 namespace PalladiumPayroll.Repositories.Home
 {
@@ -47,5 +48,31 @@ namespace PalladiumPayroll.Repositories.Home
             });
         }
 
+        public async Task<PayrollSummaryResponse> GetPayrollSummaryData(int CompanyId, int PayrollSetupId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", CompanyId);
+            parameters.Add("@PayrollSetupId", PayrollSetupId);
+
+            return await _dapper.ExecuteStoredProcedureSingle<PayrollSummaryResponse>("SP_GetPayrollSummaryData", parameters);
+        }
+
+        public async Task<EmployeeTypeCountResponse> GetEmployeeTypeCount(int CompanyId, int PayrollSetupId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", CompanyId);
+            parameters.Add("@PayrollSetupId", PayrollSetupId);
+
+            return await _dapper.ExecuteStoredProcedureSingle<EmployeeTypeCountResponse>("SP_GetEmployeeTypeCount", parameters);
+        }
+
+        public async Task<List<PayrollCycleDataResponse>> GetPayrollCycleData(int CompanyId, string UserId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", CompanyId);
+            parameters.Add("@UserId", UserId);
+
+            return await _dapper.ExecuteStoredProcedure<PayrollCycleDataResponse>("SP_GetPayrollCycleData", parameters);
+        }
     }
 }

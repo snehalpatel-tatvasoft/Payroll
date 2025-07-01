@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PalladiumPayroll.DTOs.Miscellaneous.Constants
+﻿namespace PalladiumPayroll.DTOs.Miscellaneous.Constants
 {
     public static class JWTClaimTypes
     {
@@ -15,5 +9,7 @@ namespace PalladiumPayroll.DTOs.Miscellaneous.Constants
         public const string Email = "email";
 
         public const string Role = "role";
+
+        public const string CompanyId = "company_id";
     }
 }

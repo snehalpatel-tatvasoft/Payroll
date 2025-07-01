@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
@@ -19,6 +20,34 @@ namespace PalladiumPayroll.Repositories.Company
         public CompanyRepository(IConfiguration configuration)
         {
             _dapper = new DapperContext(configuration);
+        }
+
+        public async Task<long> CreateCompany(CreateCompanyRequest request)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+
+            parameters.Add("@CompanyName", request.Company);
+            parameters.Add("@NoOfEmployee", request.NoOfEmployee);
+            parameters.Add("@Country", request.Country);
+
+            long companyId = await _dapper.ExecuteStoredProcedureSingle<long>("sp_CreateCompany", parameters);
+            return companyId;
+        }
+
+        public async Task<Guid> CreateUser(CreateUserRequestDto request)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+
+            parameters.Add("@UserName", request.FirstName);
+            parameters.Add("@SurName", request.LastName);
+            parameters.Add("@Email", request.Email);
+            parameters.Add("@Password", request.Password);
+            parameters.Add("@PasswordHash", request.PasswordHash);
+            parameters.Add("@ContactNo", request.ContactNo);
+            parameters.Add("@CompanyId", request.CompanyId);
+
+            Guid userId = await _dapper.ExecuteStoredProcedureSingle<Guid>("sp_CreateUser", parameters);
+            return userId;
         }
 
         public async Task<JsonResult> CompanyCreation(CompanyModels model)
@@ -147,10 +176,18 @@ namespace PalladiumPayroll.Repositories.Company
             return HttpStatusCodeResponse.BadRequestResponse();
         }
 
+        public async Task<bool> CheckCompanyExist(string company)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyName", company);
+
+            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CheckCompanyExists", parameters);
+            return response;
+        }
 
         public async Task<bool> AddNewBank(BankModel bankModel)
         {
-            DynamicParameters parameters = new DynamicParameters();
+            var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", bankModel.CompanyId);
             parameters.Add("@BankName", bankModel.BankName);
             parameters.Add("@BranchCode", bankModel.BranchCode);
@@ -158,6 +195,7 @@ namespace PalladiumPayroll.Repositories.Company
             int isAdded = await _dapper.ExecuteStoredProcedureSingle<int>("sp_AddBank", parameters);
             return true;
         }
+
     }
 
 }
