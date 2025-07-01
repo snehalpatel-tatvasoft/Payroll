@@ -27,6 +27,8 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string UnexpectedError = "Unexpected error occurred";
             public static readonly string InvalidOrMissingRequestParameters = "Invalid or missing request parameters";
             public static readonly string UnAuthorized = "UnAuthorized Access !!";
+            public static readonly string TryLater = "Plaese try again later.";
+            public static readonly string AlreadyExist = "{0} already exists !";
 
             #endregion
 

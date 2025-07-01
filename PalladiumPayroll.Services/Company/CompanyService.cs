@@ -1,23 +1,19 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
-using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
-using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using PalladiumPayroll.Helper.Constants;
 using PalladiumPayroll.Helper.JWTToken;
-using Microsoft.AspNetCore.Mvc;
-using PalladiumPayroll.DTOs.DTOs.Common;
-using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
-using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.Company;
 using PalladiumPayroll.Repositories.User;
-using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Services.Company
 {
@@ -44,38 +40,18 @@ namespace PalladiumPayroll.Services.Company
         {
             try
             {
-                // Check if email exists
-                //if (await _userRepository.CheckEmailExist(request.Email))
-                //{
-                //    return HttpStatusCodeResponse.GenerateResponse(
-                //        result: false,
-                //        statusCode: HttpStatusCode.Found,
-                //        message: ResponseMessages.EmailAlreadyExits,
-                //        data: string.Empty
-                //    );
-                //}
 
                 // Check if company already exists
                 if (await _companyRepository.CheckCompanyExist(request.Company))
                 {
-                    return HttpStatusCodeResponse.GenerateResponse(
-                        result: false,
-                        statusCode: HttpStatusCode.Found,
-                        message: ResponseMessages.CompanyAlreadyExists,
-                        data: string.Empty
-                    );
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.CompanyAlreadyExists);
                 }
 
                 // Create company
                 long companyId = await _companyRepository.CreateCompany(request);
                 if (companyId <= 0)
                 {
-                    return HttpStatusCodeResponse.GenerateResponse(
-                        result: false,
-                        statusCode: HttpStatusCode.InternalServerError,
-                        message: ResponseMessages.ErrorCreatingCompany,
-                        data: string.Empty
-                    );
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.ErrorCreatingCompany);
                 }
 
                 // Hash password and create user
@@ -95,12 +71,7 @@ namespace PalladiumPayroll.Services.Company
                 Guid userId = await _companyRepository.CreateUser(createUserRequest);
                 if (userId == Guid.Empty)
                 {
-                    return HttpStatusCodeResponse.GenerateResponse(
-                        result: false,
-                        statusCode: HttpStatusCode.InternalServerError,
-                        message: ResponseMessages.ErrorCreatingUser,
-                        data: string.Empty
-                    );
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.ErrorCreatingUser);
                 }
 
                 #region Send Email
@@ -146,49 +117,34 @@ namespace PalladiumPayroll.Services.Company
 
                     if (emailSent == ResponseMessages.EmailSentSuccessfully)
                     {
-                        return HttpStatusCodeResponse.GenerateResponse(
-                            result: true,
-                            statusCode: HttpStatusCode.OK,
-                            message: ResponseMessages.EmailSentSuccessfully,
-                            data: string.Empty
-                        );
+                        return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.EmailSentSuccessfully);
                     }
                     else
                     {
-                        return HttpStatusCodeResponse.GenerateResponse(
-                            result: false,
-                            statusCode: HttpStatusCode.InternalServerError,
-                            message: ResponseMessages.EmailSentFailure,
-                            data: string.Empty
-                        );
+                        return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.EmailSentFailure);
                     }
                 }
                 catch (Exception)
                 {
-                    return HttpStatusCodeResponse.GenerateResponse(
-                        result: false,
-                        statusCode: HttpStatusCode.InternalServerError,
-                        message: ResponseMessages.InternalServerError,
-                        data: string.Empty
-                    );
+                    return HttpStatusCodeResponse.BadRequestResponse();
                 }
 
                 #endregion
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.GenerateResponse(
-                    result: false,
-                    statusCode: HttpStatusCode.InternalServerError,
-                    message: ResponseMessages.InternalServerError,
-                    data: string.Empty
-                );
+                return HttpStatusCodeResponse.BadRequestResponse();
             }
         }
 
-        public async Task<bool> AddNewBank(BankModel bankModel)
+        public async Task<JsonResult> AddNewBank(BankModel bankModel)
         {
-            return await _companyRepository.AddNewBank(bankModel);
+            bool isAdded = await _companyRepository.AddNewBank(bankModel);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Bank", ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.AlreadyExist, "Branch"));
         }
     }
 }
