@@ -10,6 +10,7 @@ using PalladiumPayroll.Helper.Constants;
 using PalladiumPayroll.Helper.JWTToken;
 using PalladiumPayroll.Repositories.Company;
 using PalladiumPayroll.Repositories.User;
+using System.ComponentModel.Design;
 using System.Net.Mail;
 using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -145,6 +146,11 @@ namespace PalladiumPayroll.Services.Company
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Bank", ActionType.Saved));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.AlreadyExist, "Branch"));
+        }
+
+        public async Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId)
+        {
+            return await _companyRepository.GetCompanyWithSubCompany(companyId);
         }
     }
 }

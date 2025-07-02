@@ -195,7 +195,14 @@ namespace PalladiumPayroll.Repositories.Company
             bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_AddBank", parameters);
             return isAdded;
         }
+        
+        public async Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
 
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_GetCompanyWithChildren", parameters);
+            return response;
+        }
     }
-
 }
