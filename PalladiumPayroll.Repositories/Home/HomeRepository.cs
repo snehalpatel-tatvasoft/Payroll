@@ -48,20 +48,22 @@ namespace PalladiumPayroll.Repositories.Home
             });
         }
 
-        public async Task<PayrollSummaryResponse> GetPayrollSummaryData(int CompanyId, int PayrollSetupId)
+        public async Task<PayrollSummaryResponse> GetPayrollSummaryData(int CompanyId, int PayrollSetupId, string UserId)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", CompanyId);
             parameters.Add("@PayrollSetupId", PayrollSetupId);
+            parameters.Add("@UserId", UserId);
 
             return await _dapper.ExecuteStoredProcedureSingle<PayrollSummaryResponse>("SP_GetPayrollSummaryData", parameters);
         }
 
-        public async Task<EmployeeTypeCountResponse> GetEmployeeTypeCount(int CompanyId, int PayrollSetupId)
+        public async Task<EmployeeTypeCountResponse> GetEmployeeTypeCount(int CompanyId, int PayrollSetupId, string UserId)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", CompanyId);
             parameters.Add("@PayrollSetupId", PayrollSetupId);
+            parameters.Add("@UserId", UserId);
 
             return await _dapper.ExecuteStoredProcedureSingle<EmployeeTypeCountResponse>("SP_GetEmployeeTypeCount", parameters);
         }
