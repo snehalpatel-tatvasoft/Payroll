@@ -18,6 +18,12 @@ namespace PalladiumPayroll.Repositories
             return response;
         }
 
+        public async Task<List<DropDownViewModel>> GetTaxYearList()
+        {
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchTaxYear");
+            return response;
+        }
+
         public async Task<List<DropDownViewModel>> GetBankList(int? companyId)
         {
             DynamicParameters parameters = new DynamicParameters();

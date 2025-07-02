@@ -23,8 +23,7 @@ namespace PalladiumPayroll.Controllers.Company
         {
             try
             {
-                var data = await _companyService.CompanyCreation(model);
-                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieving));
+                return await _companyService.CompanyCreation(model);
             }
             catch (Exception ex)
             {
