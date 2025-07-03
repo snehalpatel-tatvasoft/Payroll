@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Home;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -17,11 +18,11 @@ namespace PalladiumPayroll.Controllers
         }
 
         [HttpGet("GetAllEmployeeList")]
-        public async Task<JsonResult> GetAllEmployeeList(int employeeId)
+        public async Task<ActionResult> GetAllEmployeeList([FromQuery]Employee employee)
         {
             try
             {
-                var data = await _homeService.GetAllEmployeeList(employeeId);
+                var data = await _homeService.GetAllEmployeeList(2);
                 return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieving));
             }
             catch (Exception ex)
@@ -30,17 +31,44 @@ namespace PalladiumPayroll.Controllers
             }
         }
 
-        [HttpGet("GetDashboardData")]
-        public async Task<JsonResult> GetDashboardData()
+        [HttpGet("GetPayrollSummaryData")]
+        public async Task<JsonResult> GetPayrollSummaryData(int PayrollSetupId, int CompanyId, string UserId)
         {
             try
             {
-                var data = "";
-                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Dashboard, ActionType.Retrieving));
+                var data = await _homeService.GetPayrollSummaryData(PayrollSetupId,CompanyId,UserId);
+                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.PayrollSummary, ActionType.Retrieving));
             }
             catch (Exception ex)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Dashboard, ex.Message));
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.PayrollSummary, ex.Message));
+            }
+        }
+
+        [HttpGet("GetEmployeeTypeCount")]
+        public async Task<JsonResult> GetEmployeeTypeCount(int PayrollSetupId, int CompanyId, string UserId)
+        {
+            try
+            {
+                var data = await _homeService.GetEmployeeTypeCount(PayrollSetupId, CompanyId, UserId);
+                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTypeCount, ActionType.Retrieving));
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeTypeCount, ex.Message));
+            }
+        }
+        [HttpGet("GetPayrollCycleData")]
+        public async Task<JsonResult> GetPayrollCycleData(int CompanyId, string UserId)
+        {
+            try
+            {
+                var data = await _homeService.GetPayrollCycleData(CompanyId, UserId);
+                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTypeCount, ActionType.Retrieving));
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeTypeCount, ex.Message));
             }
         }
     }

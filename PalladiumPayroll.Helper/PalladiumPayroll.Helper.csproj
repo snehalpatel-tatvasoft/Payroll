@@ -13,11 +13,21 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.6" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.6" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.6" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.0" />
+    
+    <!-- Required for WCF/ASMX client proxy usage -->
+    <PackageReference Include="System.ServiceModel.Http" Version="4.10.3" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.10.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PalladiumProject.DTOs\PalladiumPayroll.DTOs.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="ServiceReference\Service1.wsdl" />
+    <WCFMetadata Include="ServiceReference\Reference.svcmap" />
   </ItemGroup>
 
 </Project>

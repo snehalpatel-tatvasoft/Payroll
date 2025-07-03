@@ -27,7 +27,7 @@ public class MinimumWageService : IMinimumWageService
 
             bool isSaved = await _minimumWageRepository.CreateMinimumWage(request);
             return isSaved
-                ? HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Save))
+                ? HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Created))
                 : HttpStatusCodeResponse.InternalServerErrorResponse("Unable to save minimum wage.");
         }
         catch (Exception)
@@ -63,7 +63,7 @@ public class MinimumWageService : IMinimumWageService
             bool isUpdated = await _minimumWageRepository.UpdateMinimumWage(request);
 
             return isUpdated
-                ? HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Update))
+                ? HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Updated))
                 : HttpStatusCodeResponse.InternalServerErrorResponse("Minimum wage record not found or already deleted.");
         }
         catch (Exception)
@@ -83,7 +83,7 @@ public class MinimumWageService : IMinimumWageService
             {
                 return HttpStatusCodeResponse.NotFoundResponse("Minimum Wage entry could not be deleted or was not found.");
             }
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Delete));
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Deleted));
         }
         catch (Exception)
         {

@@ -9,6 +9,7 @@ using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using PalladiumPayroll.Helper.Constants;
 using PalladiumPayroll.Helper.JWTToken;
 using PalladiumPayroll.Repositories.User;
+using System.ComponentModel.Design;
 using System.Net;
 using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -44,6 +45,15 @@ namespace PalladiumPayroll.Repositories.Auth
                         data: string.Empty
                     );
                 }
+                else if (!user.ConfirmedEmail)
+                {
+                    return HttpStatusCodeResponse.GenerateResponse(
+                        result: false,
+                        statusCode: HttpStatusCode.NotFound,
+                        message: ResponseMessages.AccountNotConfirmed,
+                        data: string.Empty
+                    );
+                }
 
                 // Verify password
                 PasswordHasher<object>? hasher = new PasswordHasher<object>();
@@ -62,12 +72,15 @@ namespace PalladiumPayroll.Repositories.Auth
                 // Generate JWT & Refresh token
                 JWTTokenService jwtService = new JWTTokenService(_configuration);
 
+                List<CompanyDetails>? companies = await _userRepository.GetCompaniesByEmail(loginRequest.Email);
+
                 Claim[] claims =
                 {
-                    new Claim(JWTClaimTypes.UserId, ""),
+                    new Claim(JWTClaimTypes.UserId, user.Id.ToString()),
                     new Claim(JWTClaimTypes.UserName, user.UserName),
                     new Claim(JWTClaimTypes.Email, user.Email),
                     new Claim(JWTClaimTypes.Role, user.RoleId),
+                    new Claim(JWTClaimTypes.CompanyId, user.CompanyId),
                 };
 
                 string accessToken = jwtService.GenerateToken(
@@ -85,8 +98,11 @@ namespace PalladiumPayroll.Repositories.Auth
                 var data = new
                 {
                     Token = accessToken,
-                    RefreshToken = refreshToken
+                    RefreshToken = refreshToken,
+                    Companies = companies
                 };
+
+                await _userRepository.LoginUser(user.Id.ToString());
 
                 return HttpStatusCodeResponse.GenerateResponse(
                    result: true,

@@ -1,4 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.Common;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using PalladiumPayroll.DTOs.Miscellaneous;
+using PalladiumPayroll.Services.Company;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.Company
 {
@@ -6,8 +12,65 @@ namespace PalladiumPayroll.Controllers.Company
     [ApiController]
     public class CompanyController : ControllerBase
     {
-        public CompanyController()
+        private readonly ICompanyService _companyService;
+        public CompanyController(ICompanyService companyService)
         {
+            _companyService = companyService;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CompanyCreation(CompanyModels model)
+        {
+            try
+            {
+                var data = await _companyService.CompanyCreation(model);
+                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieving));
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, ex.Message));
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> AddBank(BankModel bankModel)
+        {
+            try
+            {
+                return await _companyService.AddNewBank(bankModel);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetCompanyWithSubCompany(int companyId)
+        {
+            try
+            {
+                List<DropDownViewModel> companyWithSubCompanyList = await _companyService.GetCompanyWithSubCompany(companyId);
+                return HttpStatusCodeResponse.SuccessResponse(companyWithSubCompanyList, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> SetActiveCompanyId(int companyId)
+        {
+            try
+            {
+                return await _companyService.SetActiveCompanyId(companyId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
         }
     }
 }

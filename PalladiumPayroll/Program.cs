@@ -1,7 +1,9 @@
 using AutoMapper;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.Helper;
-using PalladiumPayroll.Helper.Middleware;
+using PalladiumPayroll.Helper.Middleware.Encryption;
+using PalladiumPayroll.Helper.Middleware.Exceptions;
+using PalladiumPayroll.Job;
 using PalladiumPayroll.JWT;
 using PalladiumPayroll.Repositories;
 using PalladiumPayroll.Services;
@@ -19,10 +21,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<DapperContext>();
 builder.Services.AddServiceRepositories();
 builder.Services.AddServices();
-builder.Services.AddHelpers();
+builder.Services.AddHelpers(builder.Configuration);
 builder.Services.ConfigureAuthentication(builder.Configuration);
 
 builder.Services.AddAutoMapper(typeof(Mapper));
+builder.Services.AddHostedService<InactivityCheckerHostedService>();
 
 
 var app = builder.Build();
@@ -33,15 +36,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
-app.MapControllers();
 app.UseCors(x => x
         .AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader());
 
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<EncryptionMiddleware>();
+app.UseMiddleware<UpdateActivityMiddleware>();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
 await app.RunAsync();
+
