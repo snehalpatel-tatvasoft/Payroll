@@ -2,6 +2,7 @@
 using PalladiumPayroll.Services.Applicationadmin;
 using PalladiumPayroll.Services.Auth;
 using PalladiumPayroll.Services.Company;
+using PalladiumPayroll.Services.Company_Settings;
 using PalladiumPayroll.Services.CompanySettings;
 using PalladiumPayroll.Services.Home;
 using PalladiumPayroll.Services.User;
@@ -21,6 +22,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<EmailService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICommonService, CommonService>();
+            services.AddScoped<IDesignationsService, DesignationsService>();
             services.AddScoped<IMinimumWageService,MinimumWageService>();
             return services;
         }

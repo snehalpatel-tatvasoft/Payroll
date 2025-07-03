@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PalladiumPayroll.Repositories.Applicationadmin;
 using PalladiumPayroll.Repositories.Auth;
+using PalladiumPayroll.Repositories.Comany_Settings;
 using PalladiumPayroll.Repositories.Company;
 using PalladiumPayroll.Repositories.CompanySettings;
 using PalladiumPayroll.Repositories.Home;
@@ -20,6 +21,7 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<IApplicationadminRepository, ApplicationadminRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ICommonRepository, CommonRepository>();
+            services.AddScoped<IDesignationsRepository, DesignationsRepository>();
             services.AddScoped<IMinimumWageRepository, MinimumWageRepository>();
             return services;
         }
