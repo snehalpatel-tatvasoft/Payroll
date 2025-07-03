@@ -71,6 +71,12 @@
             public static readonly string Dashboard = "Dashboard data";
 
             #endregion
+
+            #region Company settings
+            
+            public static readonly string MinimumWage= "Minimum Wage";
+
+            #endregion
         }
     }
 
