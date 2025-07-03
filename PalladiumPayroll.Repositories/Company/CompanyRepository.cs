@@ -55,44 +55,44 @@ namespace PalladiumPayroll.Repositories.Company
             var parameters = new DynamicParameters();
 
             // step-1 company info
-            parameters.Add("@CompanyId", model.CompnayInfo.CompanyId);
-            parameters.Add("@CompanyName", model.CompnayInfo.CompanyName);
-            parameters.Add("@CompanyType", model.CompnayInfo.CompanyTypeId);
-            parameters.Add("@CompanyRegNumber", model.CompnayInfo.CompanyRegNumber);
-            parameters.Add("@TaxRegNumber", model.CompnayInfo.TaxRegNumber);
-            parameters.Add("@StdIndustryCode", model.CompnayInfo.StdIndustryCode);
-            parameters.Add("@PAYEReferenceNumber", model.CompnayInfo.PAYEReferenceNumber);
-            parameters.Add("@TradeClassificationId", model.CompnayInfo.TradeClassificationId);
-            parameters.Add("@UIFRegNumber", model.CompnayInfo.UIFRegNumber);
-            parameters.Add("@SplEcoZoneId", model.CompnayInfo.SplEcoZoneId);
-            parameters.Add("@UIFRefNumber", model.CompnayInfo.UIFRefNumber);
-            parameters.Add("@CurrencyID", model.CompnayInfo.CurrencyID);
-            parameters.Add("@SDLRefNumber", model.CompnayInfo.SDLRefNumber);
-            parameters.Add("@CountryID", model.CompnayInfo.CountryID);
-            parameters.Add("@IsExemptSDL", model.CompnayInfo.IsExemptSDL);
-            parameters.Add("@UseBCEARemuneration", model.CompnayInfo.UseBCEARemuneration);
+            parameters.Add("@CompanyId", model.CompanyInfo.CompanyId);
+            parameters.Add("@CompanyName", model.CompanyInfo.CompanyName);
+            parameters.Add("@CompanyType", model.CompanyInfo.CompanyTypeId);
+            parameters.Add("@CompanyRegNumber", model.CompanyInfo.CompanyRegNumber);
+            parameters.Add("@TaxRegNumber", model.CompanyInfo.TaxRegNumber);
+            parameters.Add("@StdIndustryCode", model.CompanyInfo.StdIndustryCode);
+            parameters.Add("@PAYEReferenceNumber", model.CompanyInfo.PAYEReferenceNumber);
+            parameters.Add("@TradeClassificationId", model.CompanyInfo.TradeClassificationId);
+            parameters.Add("@UIFRegNumber", model.CompanyInfo.UIFRegNumber);
+            parameters.Add("@SplEcoZoneId", model.CompanyInfo.SplEcoZoneId);
+            parameters.Add("@UIFRefNumber", model.CompanyInfo.UIFRefNumber);
+            parameters.Add("@CurrencyID", model.CompanyInfo.CurrencyID);
+            parameters.Add("@SDLRefNumber", model.CompanyInfo.SDLRefNumber);
+            parameters.Add("@CountryID", model.CompanyInfo.CountryID);
+            parameters.Add("@IsExemptSDL", model.CompanyInfo.IsExemptSDL);
+            parameters.Add("@UseBCEARemuneration", model.CompanyInfo.UseBCEARemuneration);
 
-            parameters.Add("@EmployerDisentitlementId", model.CompnayInfo.EmployerDisentitlementId);
+            parameters.Add("@EmployerDisentitlementId", model.CompanyInfo.EmployerDisentitlementId);
             //parameters.Add("@covid19", model.reli);
 
-            parameters.Add("@UnitNumber", model.CompnayInfo.UnitNumber);
-            parameters.Add("@ComplexName", model.CompnayInfo.ComplexName);
-            parameters.Add("@StreetNumber", model.CompnayInfo.StreetNumber);
-            parameters.Add("@Street", model.CompnayInfo.Street);
-            parameters.Add("@District", model.CompnayInfo.District);
-            parameters.Add("@City", model.CompnayInfo.City);
-            parameters.Add("@PinCode", model.CompnayInfo.PinCode);
-            parameters.Add("@IsPostalSame", model.CompnayInfo.IsPostalSame);
-            parameters.Add("@Pos_Address1", model.CompnayInfo.Pos_Address1);
-            parameters.Add("@Pos_Address2", model.CompnayInfo.Pos_Address2);
-            parameters.Add("@Pos_Address3", model.CompnayInfo.Pos_Address3);
-            parameters.Add("@Pos_PinCode", model.CompnayInfo.Pos_PinCode);
-            parameters.Add("@Pos_CountryId", model.CompnayInfo.Pos_CountryId);
+            parameters.Add("@UnitNumber", model.CompanyInfo.UnitNumber);
+            parameters.Add("@ComplexName", model.CompanyInfo.ComplexName);
+            parameters.Add("@StreetNumber", model.CompanyInfo.StreetNumber);
+            parameters.Add("@Street", model.CompanyInfo.Street);
+            parameters.Add("@District", model.CompanyInfo.District);
+            parameters.Add("@City", model.CompanyInfo.City);
+            parameters.Add("@PinCode", model.CompanyInfo.PinCode);
+            parameters.Add("@IsPostalSame", model.CompanyInfo.IsPostalSame);
+            parameters.Add("@Pos_Address1", model.CompanyInfo.Pos_Address1);
+            parameters.Add("@Pos_Address2", model.CompanyInfo.Pos_Address2);
+            parameters.Add("@Pos_Address3", model.CompanyInfo.Pos_Address3);
+            parameters.Add("@Pos_PinCode", model.CompanyInfo.Pos_PinCode);
+            parameters.Add("@Pos_CountryId", model.CompanyInfo.Pos_CountryId);
 
             // step-2 representive
-            parameters.Add("@SARSName", model.CompanyRepresentive.SARSName);
-            parameters.Add("@SARSContactEmail", model.CompanyRepresentive.SARSContactEmail);
-            parameters.Add("@SARSContactNo", model.CompanyRepresentive.SARSContactNo);
+            parameters.Add("@SARSName", model.CompanyRepresentative.SARSName);
+            parameters.Add("@SARSContactEmail", model.CompanyRepresentative.SARSContactEmail);
+            parameters.Add("@SARSContactNo", model.CompanyRepresentative.SARSContactNo);
 
             // step-3 payroll cycle setup
             DataTable payRollCycle = new DataTable();
@@ -100,15 +100,19 @@ namespace PalladiumPayroll.Repositories.Company
             payRollCycle.Columns.Add("CycleName", typeof(string));
             payRollCycle.Columns.Add("CycleTypeId", typeof(int));
             payRollCycle.Columns.Add("CycleEndDate", typeof(DateTime));
-            foreach (var item in model.PayrollCycles)
+            if(model.PayrollCycles != null)
             {
-                DataRow row = payRollCycle.NewRow();
-                row["CycleID"] = item.CycleID;
-                row["CycleName"] = item.CycleName;
-                row["CycleTypeId"] = item.CycleTypeId;
-                row["CycleEndDate"] = item.CycleEndDate;
-                payRollCycle.Rows.Add(row);
+                foreach (var item in model.PayrollCycles)
+                {
+                    DataRow row = payRollCycle.NewRow();
+                    row["CycleID"] = item.CycleID;
+                    row["CycleName"] = item.CycleName;
+                    row["CycleTypeId"] = item.CycleTypeId;
+                    row["CycleEndDate"] = item.CycleEndDate;
+                    payRollCycle.Rows.Add(row);
+                }
             }
+            parameters.Add("@TaxYear", model.TaxYear);
             parameters.Add("@CycleRecord", payRollCycle.AsTableValuedParameter("dbo.CycleRecordType"));
 
             // step-4 general ledger
@@ -118,14 +122,17 @@ namespace PalladiumPayroll.Repositories.Company
             DataTable MedicalAid = new DataTable();
             MedicalAid.Columns.Add("MedAidId", typeof(int));
             MedicalAid.Columns.Add("MedAidFundName", typeof(string));
-            MedicalAid.Columns.Add("MedAidSchemeType", typeof(int));
-            foreach (var item in model.PayrollMedicalAidList)
+            MedicalAid.Columns.Add("MedAidSchemeType", typeof(string));
+            if(model.PayrollMedicalAidList != null)
             {
-                DataRow row = MedicalAid.NewRow();
-                row["MedAidId"] = item.MedAidId;
-                row["MedAidFundName"] = item.MedAidFundName;
-                row["MedAidSchemeType"] = item.MedAidSchemeType;
-                MedicalAid.Rows.Add(row);
+                foreach (var item in model.PayrollMedicalAidList)
+                {
+                    DataRow row = MedicalAid.NewRow();
+                    row["MedAidId"] = item.FundId;
+                    row["MedAidFundName"] = item.FundName;
+                    row["MedAidSchemeType"] = item.SchemeName;
+                    MedicalAid.Rows.Add(row);
+                }
             }
             parameters.Add("@MedAidFundRecord", MedicalAid.AsTableValuedParameter("dbo.MedAidFundType"));
 
@@ -141,21 +148,24 @@ namespace PalladiumPayroll.Repositories.Company
             BenifitFund.Columns.Add("Comcon", typeof(decimal));
             BenifitFund.Columns.Add("RFIpercent", typeof(decimal));
             BenifitFund.Columns.Add("Fundcaltypeid", typeof(int));
-            foreach (var item in model.PayrollBenefitFundLists)
+            if (model.PayrollBenefitFundList != null)
             {
-                DataRow row = BenifitFund.NewRow();
-                row["BenfId"] = item.BenfId;
-                row["ProvidentFundId"] = item.ProvidentFundType;
-                row["PensionFundId"] = item.PensionFundType;
-                row["BenfFundName"] = item.BenfFundName;
-                row["BenfFundType"] = item.BenfFundType;
-                row["ClearanceNo"] = item.ClearanceNo;
-                row["Catfactor"] = item.Catfactor;
-                row["Empcon"] = item.Empcon;
-                row["Comcon"] = item.Comcon;
-                row["RFIpercent"] = item.RFIpercent;
-                row["Fundcaltypeid"] = item.Fundcaltypeid;
-                BenifitFund.Rows.Add(row);
+                foreach (var item in model.PayrollBenefitFundList)
+                {
+                    DataRow row = BenifitFund.NewRow();
+                    row["BenfId"] = item.FundId;
+                    row["BenfFundName"] = item.FundName;
+                    row["BenfFundType"] = item.FundType;
+                    row["ProvidentFundId"] = item.ProvidentFund;
+                    row["PensionFundId"] = item.PensionFund;
+                    row["ClearanceNo"] = item.ClearanceNo;
+                    row["Catfactor"] = item.CatFactor;
+                    row["Empcon"] = item.EmpCon;
+                    row["Comcon"] = item.ComCon;
+                    row["RFIpercent"] = item.RFIPercent;
+                    row["Fundcaltypeid"] = item.FundcalTypeId;
+                    BenifitFund.Rows.Add(row);
+                }
             }
             parameters.Add("@BenifitFundRecord", BenifitFund.AsTableValuedParameter("dbo.BenifitFundType"));
 

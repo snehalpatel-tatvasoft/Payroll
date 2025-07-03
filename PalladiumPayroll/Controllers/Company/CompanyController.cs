@@ -18,16 +18,17 @@ namespace PalladiumPayroll.Controllers.Company
             _companyService = companyService;
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<ActionResult> CompanyCreation(CompanyModels model)
         {
             try
             {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Company));
                 return await _companyService.CompanyCreation(model);
             }
             catch (Exception ex)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, ex.Message));
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Company, ex.Message));
             }
         }
 
