@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PalladiumPayroll.Repositories.Auth;
+using PalladiumPayroll.Repositories.Comany_Settings;
 using PalladiumPayroll.Repositories.Company;
 using PalladiumPayroll.Repositories.Home;
 using PalladiumPayroll.Repositories.User;
@@ -15,6 +16,7 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ICommonRepository, CommonRepository>();
+            services.AddScoped<IDesignationsRepository, DesignationsRepository>();
             return services;
         }
     }

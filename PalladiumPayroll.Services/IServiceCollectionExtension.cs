@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PalladiumPayroll.Services.Auth;
 using PalladiumPayroll.Services.Company;
+using PalladiumPayroll.Services.Company_Settings;
 using PalladiumPayroll.Services.Home;
 using PalladiumPayroll.Services.User;
 
@@ -15,6 +16,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICommonService, CommonService>();
+            services.AddScoped<IDesignationsService, DesignationsService>();
             return services;
         }
     }

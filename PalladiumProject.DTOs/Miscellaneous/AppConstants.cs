@@ -1,4 +1,6 @@
-﻿namespace PalladiumPayroll.Helper.Constants
+﻿using System.Runtime.CompilerServices;
+
+namespace PalladiumPayroll.Helper.Constants
 {
     public static class AppConstants
     {
@@ -63,13 +65,25 @@
             public const string UserInActive = "Sorry your account is InActive, you can't login!";
             public const string PlanExpired = "Your subscription has expired. Please renew to continue using the service.";
             public const string TokenGeneratedSuccessfully = "Token Generated Successfully";
-            
+
             #endregion
 
             #region Dashboard
 
             public static readonly string Dashboard = "Dashboard data";
 
+            #endregion
+
+            #region Designation
+
+            public const string DesignationsCreatedSuccessfully = "Designation created successfully";
+            public const string DesignationsCreationFailed = "Failed to create designation";
+            public const string DataFetchSuccess = "Data fetched successfully";
+            public const string DesignationsDeletedSuccessfully = "Designation deleted successfully";
+            public const string DesignationsUpdatedSuccessfully = "Designation updated successfully";
+            public const string DesignationsUpdateFailed = "Failed to update designation";
+            public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
+            
             #endregion
         }
     }
