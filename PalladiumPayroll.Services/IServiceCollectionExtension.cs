@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PalladiumPayroll.Services.Applicationadmin;
 using PalladiumPayroll.Services.Auth;
 using PalladiumPayroll.Services.Company;
 using PalladiumPayroll.Services.Company_Settings;
@@ -12,8 +13,12 @@ namespace PalladiumPayroll.Services
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IHomeService, HomeService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ICommonService, CommonService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IApplicationadminService, ApplicationadminService>();
+            services.AddScoped<EmailService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICommonService, CommonService>();
             services.AddScoped<IDesignationsService, DesignationsService>();

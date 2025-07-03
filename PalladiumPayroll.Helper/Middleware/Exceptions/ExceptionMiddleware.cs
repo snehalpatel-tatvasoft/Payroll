@@ -1,15 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using PalladiumPayroll.Helper.Log4net;
-using PalladiumPayroll.Helper.Middleware.CustomExceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using PalladiumPayroll.Helper.Middleware.Exceptions.CustomExceptions;
 using System.Net;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
-namespace PalladiumPayroll.Helper.Middleware
+namespace PalladiumPayroll.Helper.Middleware.Exceptions
 {
     public class ExceptionMiddleware
     {
@@ -74,7 +69,7 @@ namespace PalladiumPayroll.Helper.Middleware
         {
             string source = ex.Source;
             string stack = ex.StackTrace;
-            string message = (ex.InnerException != null) ? string.Format("{0}: {1}", ex.Message, ex.InnerException.ToString()) : ex.Message;
+            string message = ex.InnerException != null ? string.Format("{0}: {1}", ex.Message, ex.InnerException.ToString()) : ex.Message;
 
             _ILog4net.Error(source + "( Unhandled Exception )" + message + stack);
 

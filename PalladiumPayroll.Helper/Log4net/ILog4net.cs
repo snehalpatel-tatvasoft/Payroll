@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PalladiumPayroll.Helper.Log4net
+﻿namespace PalladiumPayroll.Helper.Log4net
 {
     public interface ILog4net
     {

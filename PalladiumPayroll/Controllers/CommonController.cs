@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services;
 
@@ -15,13 +15,72 @@ namespace PalladiumPayroll.Controllers
             _commonService = commonService;
         }
 
-        [HttpGet("GetCountryList")]
-        public async Task<IActionResult> GetCountryList()
+        [ResponseCache(Duration = 30)]
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetCountryList()
         {
             try
             {
-                List<CountryDropdownResponse> countryList = await _commonService.GetCountryList();
+                List<DropDownViewModel> countryList = await _commonService.GetCountryList();
                 return HttpStatusCodeResponse.SuccessResponse(countryList, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetBankList(int? companyId)
+        {
+            try
+            {
+                List<DropDownViewModel> bankList = await _commonService.GetBankList(companyId);
+                return HttpStatusCodeResponse.SuccessResponse(bankList, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetBranchList(int bankId)
+        {
+            try
+            {
+                List<DropDownViewModel> branchList = await _commonService.GetBranchList(bankId);
+                return HttpStatusCodeResponse.SuccessResponse(branchList, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+            }
+        }
+
+        [ResponseCache(Duration = 30)]
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetStandardIndustryCode()
+        {
+            try
+            {
+                List<DropDownViewModel> standardList = await _commonService.GetStandardIndustryCode();
+                return HttpStatusCodeResponse.SuccessResponse(standardList, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+            }
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetTradeClassification()
+        {
+            try
+            {
+                List<DropDownViewModel> tradeList = await _commonService.GetTradeClassification();
+                return HttpStatusCodeResponse.SuccessResponse(tradeList, string.Empty);
             }
             catch (Exception)
             {
