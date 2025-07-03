@@ -63,12 +63,29 @@
             public const string UserInActive = "Sorry your account is InActive, you can't login!";
             public const string PlanExpired = "Your subscription has expired. Please renew to continue using the service.";
             public const string TokenGeneratedSuccessfully = "Token Generated Successfully";
-            
+
             #endregion
 
             #region Dashboard
 
             public static readonly string Dashboard = "Dashboard data";
+
+            #endregion
+
+            #region Department
+
+            public static readonly string DepartmentsRetrievedSuccessfully = "Departments retrieved successfully.";
+            public static readonly string NoDepartmentsForThisCompanyId = "No departments found for the specified company.";
+            public static readonly string ErrorRetrievingDepartments = "Error retrieving departments.";
+            public static readonly string CheckDuplicateDepartment = "This department name already exists. Please choose a different one.";
+            public static readonly string DepartmentCreateSuccessfully = "Department created successfully.";
+            public static readonly string DepartmentNameRequired = "Department name is required.";
+            public static readonly string ErrorCreatingDepartment = "Error while creating the department.";
+            public static readonly string DepartmentUpdateSuccessfully = "Department updated successfully.";
+            public static readonly string ErrorUpdatingDepartment = "Error updating department.";
+            public static readonly string ErrorDeletingDepartment = "Error deleting department.";
+            public static readonly string DepartmentDeleteSuccessfully = "Department deleted successfully.";
+
 
             #endregion
         }
