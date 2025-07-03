@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PalladiumPayroll.Helper\PalladiumPayroll.Helper.csproj" />
     <ProjectReference Include="..\PalladiumPayroll.Repositories\PalladiumPayroll.Repositories.csproj" />
     <ProjectReference Include="..\PalladiumProject.DTOs\PalladiumPayroll.DTOs.csproj" />
   </ItemGroup>

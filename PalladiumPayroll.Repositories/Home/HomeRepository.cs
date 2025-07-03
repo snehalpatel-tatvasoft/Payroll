@@ -48,19 +48,33 @@ namespace PalladiumPayroll.Repositories.Home
             });
         }
 
-        public async Task<Dashboard> GetDashboardData(int CompanyId, string UserId)
+        public async Task<PayrollSummaryResponse> GetPayrollSummaryData(int CompanyId, int PayrollSetupId, string UserId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", CompanyId);
+            parameters.Add("@PayrollSetupId", PayrollSetupId);
+            parameters.Add("@UserId", UserId);
+
+            return await _dapper.ExecuteStoredProcedureSingle<PayrollSummaryResponse>("SP_GetPayrollSummaryData", parameters);
+        }
+
+        public async Task<EmployeeTypeCountResponse> GetEmployeeTypeCount(int CompanyId, int PayrollSetupId, string UserId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", CompanyId);
+            parameters.Add("@PayrollSetupId", PayrollSetupId);
+            parameters.Add("@UserId", UserId);
+
+            return await _dapper.ExecuteStoredProcedureSingle<EmployeeTypeCountResponse>("SP_GetEmployeeTypeCount", parameters);
+        }
+
+        public async Task<List<PayrollCycleDataResponse>> GetPayrollCycleData(int CompanyId, string UserId)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", CompanyId);
             parameters.Add("@UserId", UserId);
 
-            return  await _dapper.ExecuteStoredProcedureMultipleAsync("SP_GetDashboardData", parameters, async (multi) =>
-            {
-                var dashboard = (await multi.ReadAsync<Dashboard>()).FirstOrDefault() ?? new Dashboard();
-                dashboard.BirthdayList = (await multi.ReadAsync<EmployeeBirhday>()).ToList();
-                dashboard.PayrollCycleList = (await multi.ReadAsync<PayrollCycles>()).ToList();
-                return dashboard;
-            });
+            return await _dapper.ExecuteStoredProcedure<PayrollCycleDataResponse>("SP_GetPayrollCycleData", parameters);
         }
     }
 }

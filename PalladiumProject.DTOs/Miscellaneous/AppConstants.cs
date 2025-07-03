@@ -1,10 +1,13 @@
-﻿namespace PalladiumPayroll.Helper.Constants
+﻿
+using System.Runtime.CompilerServices;
+
+namespace PalladiumPayroll.Helper.Constants
 {
     public static class AppConstants
     {
         public const int DefaultPageSize = 999999999;
 
-        public const int AuthTokenExpiryInMinutes = 60;
+        public const int AuthTokenExpiryInMinutes = 10;
 
         public const int RefreshTokenExpiryInDays = 7;
 
@@ -26,6 +29,8 @@
             public static readonly string UnexpectedError = "Unexpected error occurred";
             public static readonly string InvalidOrMissingRequestParameters = "Invalid or missing request parameters";
             public static readonly string UnAuthorized = "UnAuthorized Access !!";
+            public static readonly string TryLater = "Plaese try again later.";
+            public static readonly string AlreadyExist = "{0} already exists !";
 
             #endregion
 
@@ -40,6 +45,7 @@
             public static readonly string Company = "Company";
             public const string CompanyAlreadyExists = "Company Already Exists";
             public const string CompanyRegisteredSuccessfully = "Company Registered Successfully";
+            public const string ErrorCreatingCompany = "Error While Creating Company!!";
 
             #endregion
 
@@ -48,6 +54,8 @@
             public static readonly string User = "User";
             public const string UserNotFound = "We couldn't find an account associated with this email address!";
             public const string EmailAlreadyExits = "Email Already Exists";
+            public const string ErrorCreatingUser = "Error While Creating User!!";
+            public const string LoggedOutDueToInActivity = "Your session has expired due to inactivity. Please log in again.";
 
             #endregion
 
@@ -63,12 +71,54 @@
             public const string UserInActive = "Sorry your account is InActive, you can't login!";
             public const string PlanExpired = "Your subscription has expired. Please renew to continue using the service.";
             public const string TokenGeneratedSuccessfully = "Token Generated Successfully";
+            public const string InternalServerError = "Internal Server Error!!";
+
 
             #endregion
 
+            #region Home
+            public static readonly string PayrollSummary = "Payroll Summary data in dashboard";
+            public static readonly string EmployeeTypeCount = "Employee type count in dashboard";
+            public static readonly string PayrollCycle = "payroll cycles in dashboard";
+            #endregion
+
+            #region Email
+
+            public const string EmailSentSuccessfully = "Confirmation email sent. Please click on the link to activate your account.";
+            public const string EmailSentFailure = "Cannot Send Email";
+            public const string EmailMailboxUnavailable = "Mailbox unavailable";
+            public const string EmailVerified = "Email verified successfully. Please sign in to get started.";
+            public const string AccountNotConfirmed = "Account not confirmed. Please contact the administrator to activate your account.";
+
+            #endregion
+
+            #region Application Admin
+            public static readonly string AppAdminDashboard = "Application Admin Dashboard Data";
+
+
+            #endregion
+            
             #region Dashboard
 
             public static readonly string Dashboard = "Dashboard data";
+
+            #endregion
+
+            #region Designation
+
+            public const string DesignationsCreatedSuccessfully = "Designation created successfully";
+            public const string DesignationsCreationFailed = "Failed to create designation";
+            public const string DataFetchSuccess = "Data fetched successfully";
+            public const string DesignationsDeletedSuccessfully = "Designation deleted successfully";
+            public const string DesignationsUpdatedSuccessfully = "Designation updated successfully";
+            public const string DesignationsUpdateFailed = "Failed to update designation";
+            public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
+            
+            #endregion
+
+            #region Company settings
+            
+            public static readonly string MinimumWage= "Minimum Wage";
 
             #endregion
 
