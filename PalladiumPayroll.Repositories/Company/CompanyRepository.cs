@@ -6,20 +6,22 @@ using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
-using System;
 using System.Data;
-using System.Text;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
+using Microsoft.AspNetCore.Http;
+using System;
 
 namespace PalladiumPayroll.Repositories.Company
 {
     public class CompanyRepository : ICompanyRepository
     {
         private readonly DapperContext _dapper;
-        public CompanyRepository(IConfiguration configuration)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public CompanyRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _dapper = new DapperContext(configuration);
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<long> CreateCompany(CreateCompanyRequest request)
@@ -203,6 +205,18 @@ namespace PalladiumPayroll.Repositories.Company
 
             List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_GetCompanyWithChildren", parameters);
             return response;
+        }
+
+        public async Task<bool> SetActiveCompanyId(int companyId)
+        {
+            string userId = _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value;
+
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            parameters.Add("@UserId", userId);
+
+            bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_SetActiveCompanyId", parameters);
+            return isAdded;
         }
     }
 }

@@ -11,5 +11,6 @@ namespace PalladiumPayroll.Services.Company
         Task<JsonResult> CompanyCreation(CompanyModels model);
         Task<JsonResult> AddNewBank(BankModel bankModel);
         Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId);
+        Task<JsonResult> SetActiveCompanyId(int companyId);
     }
 }
