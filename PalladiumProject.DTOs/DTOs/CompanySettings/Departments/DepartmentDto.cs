@@ -13,8 +13,9 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs
         public string DepartmentName { get; set; }
     }
 
-    public class EditDepartmentRequestDto
+   public class EditDepartmentRequestDto
     {
+        public long CompanyId { get; set; }
         public string DepartmentName { get; set; }
     }
 }

@@ -97,11 +97,11 @@ namespace PalladiumPayroll.Services.Department
                 }
 
                 // Fetch the current department to exclude it from the duplicate check
-                var departments = await _departmentRepository.GetDepartmentsByCompanyId(20); // Hardcoded CompanyId
+                var departments = await _departmentRepository.GetDepartmentsByCompanyId(request.CompanyId);
                 var existingDepartment = departments.FirstOrDefault(d => d.DepartmentId == departmentId);
                 if (existingDepartment != null)
                 {
-                    bool exists = await _departmentRepository.CheckDepartmentNameExists(20, normalizedName);
+                    bool exists = await _departmentRepository.CheckDepartmentNameExists(request.CompanyId, normalizedName);
                     if (exists && existingDepartment.DepartmentName?.Trim().ToLower() != normalizedName)
                     {
                         return HttpStatusCodeResponse.GenerateResponse(
