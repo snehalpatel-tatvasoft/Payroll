@@ -42,7 +42,7 @@ public class MinimumWageController : ControllerBase
         {
             if (companyId <= 0)
             {
-                return HttpStatusCodeResponse.NotFoundResponse("Company Id is not found.");
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
             }
 
            return await _minimumWageService.GetMinimumWagesByCompanyId(companyId);
@@ -61,7 +61,7 @@ public class MinimumWageController : ControllerBase
         {
             if (request.Id == null || request.Id == 0)
             {
-                return HttpStatusCodeResponse.NotFoundResponse("Wage Id is not found.");
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.WageIdNotFound);
             }
             return await _minimumWageService.UpdateMinimumWage(request);      
         }
@@ -79,7 +79,7 @@ public class MinimumWageController : ControllerBase
         {
             if (wageId <= 0)
             {
-                return HttpStatusCodeResponse.NotFoundResponse("Wage Id is not found.");
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.WageIdNotFound);
             }
 
             return await _minimumWageService.DeleteMinimumWage(wageId);

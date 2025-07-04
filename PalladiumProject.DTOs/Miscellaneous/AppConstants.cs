@@ -97,7 +97,7 @@ namespace PalladiumPayroll.Helper.Constants
 
 
             #endregion
-            
+
             #region Dashboard
 
             public static readonly string Dashboard = "Dashboard data";
@@ -113,13 +113,18 @@ namespace PalladiumPayroll.Helper.Constants
             public const string DesignationsUpdatedSuccessfully = "Designation updated successfully";
             public const string DesignationsUpdateFailed = "Failed to update designation";
             public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
-            
+
             #endregion
 
-            #region Company settings
-            
-            public static readonly string MinimumWage= "Minimum Wage";
+            #region Minimum Wage 
 
+            public static readonly string MinimumWage = "Minimum Wage";
+            public const string DuplicateMinimumWage = "Duplicate minimum wage name for this company.";
+            public const string UnableToSaveMinimumWage = "Unable to save minimum wage.";
+            public const string MinimumWageNotFound = "Minimum Wage entry could not be deleted or was not found.";
+            public const string WageIdNotFound = "Wage Id is not found.";
+            public const string CompanyIdNotFound = "Company Id is not found.";
+            
             #endregion
 
             #region Department

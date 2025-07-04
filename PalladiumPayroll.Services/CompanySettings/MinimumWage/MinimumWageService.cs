@@ -1,3 +1,4 @@
+using Azure;
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.CompanySettings;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.CompanySettings;
@@ -23,12 +24,12 @@ public class MinimumWageService : IMinimumWageService
         {
             bool isDuplicate = await _minimumWageRepository.IsDuplicateMinimumWageName(request.Name, request.CompanyId);
             if (isDuplicate)
-                return HttpStatusCodeResponse.InternalServerErrorResponse("Duplicate minimum wage name for this company.");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DuplicateMinimumWage);
 
             bool isSaved = await _minimumWageRepository.CreateMinimumWage(request);
             return isSaved
                 ? HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Created))
-                : HttpStatusCodeResponse.InternalServerErrorResponse("Unable to save minimum wage.");
+                : HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnableToSaveMinimumWage);
         }
         catch (Exception)
         {
@@ -43,7 +44,7 @@ public class MinimumWageService : IMinimumWageService
         {
             List<MinimumWageResponseDTO> wages = await _minimumWageRepository.GetMinimumWagesByCompanyId(companyId);
 
-            return HttpStatusCodeResponse.SuccessResponse(wages, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Retrieving));
+            return HttpStatusCodeResponse.SuccessResponse(wages, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Retrieved));
         }
         catch (Exception)
         {
@@ -58,13 +59,13 @@ public class MinimumWageService : IMinimumWageService
         {
             bool isDuplicate = await _minimumWageRepository.IsDuplicateMinimumWageName(request.Name, request.CompanyId, request.Id);
             if (isDuplicate)
-                return HttpStatusCodeResponse.InternalServerErrorResponse("Duplicate minimum wage name for this company.");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DuplicateMinimumWage);
 
             bool isUpdated = await _minimumWageRepository.UpdateMinimumWage(request);
 
             return isUpdated
                 ? HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Updated))
-                : HttpStatusCodeResponse.InternalServerErrorResponse("Minimum wage record not found or already deleted.");
+                : HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.MinimumWageNotFound);
         }
         catch (Exception)
         {
@@ -81,7 +82,7 @@ public class MinimumWageService : IMinimumWageService
 
             if (!isDeleted)
             {
-                return HttpStatusCodeResponse.NotFoundResponse("Minimum Wage entry could not be deleted or was not found.");
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.MinimumWageNotFound);
             }
             return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Deleted));
         }
