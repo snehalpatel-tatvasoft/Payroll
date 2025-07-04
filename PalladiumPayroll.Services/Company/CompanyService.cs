@@ -47,7 +47,6 @@ namespace PalladiumPayroll.Services.Company
         {
             try
             {
-
                 // Check if company already exists
                 if (await _companyRepository.CheckCompanyExist(request.Company))
                 {
@@ -147,6 +146,21 @@ namespace PalladiumPayroll.Services.Company
         public async Task<JsonResult> AddNewBank(BankModel bankModel)
         {
             bool isAdded = await _companyRepository.AddNewBank(bankModel);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Bank", ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.AlreadyExist, "Branch"));
+        }
+
+        public async Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId)
+        {
+            return await _companyRepository.GetCompanyWithSubCompany(companyId);
+        }
+
+        public async Task<JsonResult> SetActiveCompanyId(int companyId)
+        {
+            bool isAdded = await _companyRepository.SetActiveCompanyId(companyId);
             if (isAdded)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Bank", ActionType.Saved));

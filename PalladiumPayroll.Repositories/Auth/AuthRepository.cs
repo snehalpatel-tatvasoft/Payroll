@@ -73,11 +73,6 @@ namespace PalladiumPayroll.Repositories.Auth
                 JWTTokenService jwtService = new JWTTokenService(_configuration);
 
                 List<CompanyDetails>? companies = await _userRepository.GetCompaniesByEmail(loginRequest.Email);
-                string companyId = string.Empty;
-                if (companies.Count == 1)
-                {
-                    companyId = companies[0].CompanyId.ToString();
-                }
 
                 Claim[] claims =
                 {
@@ -85,7 +80,7 @@ namespace PalladiumPayroll.Repositories.Auth
                     new Claim(JWTClaimTypes.UserName, user.UserName),
                     new Claim(JWTClaimTypes.Email, user.Email),
                     new Claim(JWTClaimTypes.Role, user.RoleId),
-                    new Claim(JWTClaimTypes.CompanyId, companyId),
+                    new Claim(JWTClaimTypes.CompanyId, user.CompanyId),
                 };
 
                 string accessToken = jwtService.GenerateToken(

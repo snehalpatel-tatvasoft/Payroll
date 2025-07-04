@@ -36,7 +36,7 @@ namespace PalladiumPayroll.Controllers
         {
             try
             {
-                var data = await _homeService.GetPayrollSummaryData(PayrollSetupId);
+                var data = await _homeService.GetPayrollSummaryData(PayrollSetupId,CompanyId,UserId);
                 return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.PayrollSummary, ActionType.Retrieving));
             }
             catch (Exception ex)
@@ -50,7 +50,7 @@ namespace PalladiumPayroll.Controllers
         {
             try
             {
-                var data = await _homeService.GetEmployeeTypeCount(PayrollSetupId);
+                var data = await _homeService.GetEmployeeTypeCount(PayrollSetupId, CompanyId, UserId);
                 return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTypeCount, ActionType.Retrieving));
             }
             catch (Exception ex)
@@ -63,7 +63,7 @@ namespace PalladiumPayroll.Controllers
         {
             try
             {
-                var data = await _homeService.GetPayrollCycleData();
+                var data = await _homeService.GetPayrollCycleData(CompanyId, UserId);
                 return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTypeCount, ActionType.Retrieving));
             }
             catch (Exception ex)
