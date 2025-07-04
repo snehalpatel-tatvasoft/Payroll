@@ -21,8 +21,6 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IApplicationadminService, ApplicationadminService>();
             services.AddScoped<EmailService>();
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<ICommonService, CommonService>();
             services.AddScoped<IDesignationsService, DesignationsService>();
             services.AddScoped<IMinimumWageService,MinimumWageService>();
             services.AddScoped<IDepartmentService, DepartmentService>();

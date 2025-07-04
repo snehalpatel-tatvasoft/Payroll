@@ -20,8 +20,6 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IApplicationadminRepository, ApplicationadminRepository>();
-            services.AddScoped<IAuthRepository, AuthRepository>();
-            services.AddScoped<ICommonRepository, CommonRepository>();
             services.AddScoped<IDesignationsRepository, DesignationsRepository>();
             services.AddScoped<IMinimumWageRepository, MinimumWageRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
