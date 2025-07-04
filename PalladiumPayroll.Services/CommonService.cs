@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories;
@@ -47,6 +48,16 @@ namespace PalladiumPayroll.Services
         {
             List<DropDownViewModel> tradeList = await _commonRepository.GetTradeClassification();
             return HttpStatusCodeResponse.SuccessResponse(tradeList, string.Empty);
+        }
+
+        public async Task<JsonResult> CheckDBConnection(DBConnectionModel dbConnectionModel)
+        {
+            bool isConnected = await _commonRepository.CheckDBConnection(dbConnectionModel);
+            if(isConnected)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, "Database connection is healthy.");
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse("Database connection failed");
         }
     }
 }

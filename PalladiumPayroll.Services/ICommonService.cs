@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 
 namespace PalladiumPayroll.Services
 {
@@ -10,5 +11,6 @@ namespace PalladiumPayroll.Services
         Task<JsonResult> GetBranchList(int bankId);
         Task<JsonResult> GetStandardIndustryCode();
         Task<JsonResult> GetTradeClassification();
+        Task<JsonResult> CheckDBConnection(DBConnectionModel dbConnectionModel);
     }
 }

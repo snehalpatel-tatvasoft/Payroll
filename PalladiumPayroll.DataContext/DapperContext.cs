@@ -44,5 +44,21 @@ namespace PalladiumPayroll.DataContext
             }
         }
 
+        public static async Task<bool> CheckDBConnection(string connectionString)
+        {
+            try
+            {
+                using (var db = new SqlConnection(connectionString))
+                {
+                    await db.OpenAsync();
+                    return db.State == ConnectionState.Open;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
     }
 }

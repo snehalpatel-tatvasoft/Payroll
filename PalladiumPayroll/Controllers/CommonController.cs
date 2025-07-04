@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -92,6 +93,20 @@ namespace PalladiumPayroll.Controllers
                 return await _commonService.GetTradeClassification();
             }
             catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> CheckDBConnection([FromQuery]DBConnectionModel dbConnectionModel)
+        {
+            try
+            {
+                return await _commonService.CheckDBConnection(dbConnectionModel);
+            }
+            catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }

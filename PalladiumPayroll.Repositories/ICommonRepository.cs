@@ -1,4 +1,5 @@
-﻿using PalladiumPayroll.DTOs.DTOs.Common;
+﻿using PalladiumPayroll.DTOs.DTOs;
+using PalladiumPayroll.DTOs.DTOs.Common;
 
 namespace PalladiumPayroll.Repositories
 {
@@ -10,5 +11,6 @@ namespace PalladiumPayroll.Repositories
         Task<List<DropDownViewModel>> GetBranchList(int bankId);
         Task<List<DropDownViewModel>> GetStandardIndustryCode();
         Task<List<DropDownViewModel>> GetTradeClassification();
+        Task<bool> CheckDBConnection(DBConnectionModel dbConnectionModel);
     }
 }
