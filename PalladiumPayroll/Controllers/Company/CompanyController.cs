@@ -23,12 +23,11 @@ namespace PalladiumPayroll.Controllers.Company
         {
             try
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Company));
                 return await _companyService.CompanyCreation(model);
             }
             catch (Exception ex)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Company, ex.Message));
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
 

@@ -55,7 +55,7 @@ namespace PalladiumPayroll.Repositories.Company
             var parameters = new DynamicParameters();
 
             // step-1 company info
-            parameters.Add("@CompanyId", model.CompanyInfo.CompanyId);
+            parameters.Add("@ParentCompanyId", model.CompanyInfo.CompanyId);
             parameters.Add("@CompanyName", model.CompanyInfo.CompanyName);
             parameters.Add("@CompanyType", model.CompanyInfo.CompanyTypeId);
             parameters.Add("@CompanyRegNumber", model.CompanyInfo.CompanyRegNumber);
@@ -107,7 +107,7 @@ namespace PalladiumPayroll.Repositories.Company
                     DataRow row = payRollCycle.NewRow();
                     row["CycleID"] = item.CycleID;
                     row["CycleName"] = item.CycleName;
-                    row["CycleTypeId"] = item.CycleTypeId;
+                    row["CycleTypeId"] = item.CycleType;
                     row["CycleEndDate"] = item.CycleEndDate;
                     payRollCycle.Rows.Add(row);
                 }
@@ -122,7 +122,7 @@ namespace PalladiumPayroll.Repositories.Company
             DataTable MedicalAid = new DataTable();
             MedicalAid.Columns.Add("MedAidId", typeof(int));
             MedicalAid.Columns.Add("MedAidFundName", typeof(string));
-            MedicalAid.Columns.Add("MedAidSchemeType", typeof(string));
+            MedicalAid.Columns.Add("MedAidSchemeName", typeof(string));
             if(model.PayrollMedicalAidList != null)
             {
                 foreach (var item in model.PayrollMedicalAidList)
@@ -130,52 +130,52 @@ namespace PalladiumPayroll.Repositories.Company
                     DataRow row = MedicalAid.NewRow();
                     row["MedAidId"] = item.FundId;
                     row["MedAidFundName"] = item.FundName;
-                    row["MedAidSchemeType"] = item.SchemeName;
+                    row["MedAidSchemeName"] = item.SchemeName;
                     MedicalAid.Rows.Add(row);
                 }
             }
             parameters.Add("@MedAidFundRecord", MedicalAid.AsTableValuedParameter("dbo.MedAidFundType"));
 
             DataTable BenifitFund = new DataTable();
-            BenifitFund.Columns.Add("BenfId", typeof(int));
-            BenifitFund.Columns.Add("ProvidentFundId", typeof(int));
-            BenifitFund.Columns.Add("PensionFundId", typeof(int));
-            BenifitFund.Columns.Add("BenfFundName", typeof(string));
-            BenifitFund.Columns.Add("BenfFundType", typeof(string));
+            BenifitFund.Columns.Add("BenId", typeof(int));
+            BenifitFund.Columns.Add("BenFundName", typeof(string));
+            BenifitFund.Columns.Add("BenFundType", typeof(string));
+            BenifitFund.Columns.Add("ProvidentFund", typeof(int));
+            BenifitFund.Columns.Add("PensionFund", typeof(int));
             BenifitFund.Columns.Add("ClearanceNo", typeof(string));
-            BenifitFund.Columns.Add("Catfactor", typeof(decimal));
-            BenifitFund.Columns.Add("Empcon", typeof(decimal));
-            BenifitFund.Columns.Add("Comcon", typeof(decimal));
-            BenifitFund.Columns.Add("RFIpercent", typeof(decimal));
-            BenifitFund.Columns.Add("Fundcaltypeid", typeof(int));
+            BenifitFund.Columns.Add("RFIPercent", typeof(decimal));
+            BenifitFund.Columns.Add("CatFactor", typeof(int));
+            BenifitFund.Columns.Add("FundCalType", typeof(int));
+            BenifitFund.Columns.Add("EmpCon", typeof(decimal));
+            BenifitFund.Columns.Add("ComCon", typeof(decimal));
             if (model.PayrollBenefitFundList != null)
             {
                 foreach (var item in model.PayrollBenefitFundList)
                 {
                     DataRow row = BenifitFund.NewRow();
-                    row["BenfId"] = item.FundId;
-                    row["BenfFundName"] = item.FundName;
-                    row["BenfFundType"] = item.FundType;
-                    row["ProvidentFundId"] = item.ProvidentFund;
-                    row["PensionFundId"] = item.PensionFund;
+                    row["BenId"] = item.FundId;
+                    row["BenFundName"] = item.FundName;
+                    row["BenFundType"] = item.FundType;
+                    row["ProvidentFund"] = item.ProvidentFund ?? (object)DBNull.Value;
+                    row["PensionFund"] = item.PensionFund ?? (object)DBNull.Value;
                     row["ClearanceNo"] = item.ClearanceNo;
-                    row["Catfactor"] = item.CatFactor;
-                    row["Empcon"] = item.EmpCon;
-                    row["Comcon"] = item.ComCon;
-                    row["RFIpercent"] = item.RFIPercent;
-                    row["Fundcaltypeid"] = item.FundcalTypeId;
+                    row["RFIPercent"] = item.RFIPercent;
+                    row["CatFactor"] = item.CatFactor;
+                    row["FundCalType"] = item.FundCal;
+                    row["EmpCon"] = item.EmpCon;
+                    row["ComCon"] = item.ComCon;
                     BenifitFund.Rows.Add(row);
                 }
             }
             parameters.Add("@BenifitFundRecord", BenifitFund.AsTableValuedParameter("dbo.BenifitFundType"));
 
             // step-6 Bank Detail
-            parameters.Add("@AccountHolderName", model.CompanyBankAccount.AccountHolderName);
-            parameters.Add("@AccountNumber", model.CompanyBankAccount.AccountNumber);
-            parameters.Add("@TypeofAccount", model.CompanyBankAccount.TypeofAccount);
-            parameters.Add("@BankId", model.CompanyBankAccount.BankId);
-            parameters.Add("@BranchCode", model.CompanyBankAccount.BranchCode);
-            parameters.Add("@CreatedBy", 1);
+            parameters.Add("@AccountHolderName", model.CompanyBankAccount?.AccountHolderName);
+            parameters.Add("@AccountNumber", model.CompanyBankAccount?.AccountNumber);
+            parameters.Add("@TypeofAccount", model.CompanyBankAccount?.TypeofAccount);
+            parameters.Add("@BankId", model.CompanyBankAccount?.BankId);
+            parameters.Add("@BranchCode", model.CompanyBankAccount?.BranchCode);
+            parameters.Add("@CreatedBy", model.CreatedBy);
 
             var isCreated = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_AddCompany", parameters);
             if (isCreated)

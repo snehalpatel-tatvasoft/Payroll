@@ -54,8 +54,8 @@
     {
         public int CycleID { get; set; }
         public string CycleName { get; set; }
-        public DateTime CycleEndDate { get; set; } = DateTime.Now;
-        public int CycleTypeId { get; set; }
+        public DateTime CycleEndDate { get; set; }
+        public int CycleType { get; set; }
     }
 
     public class PayrollMedicalAidList
@@ -73,20 +73,20 @@
         public string ClearanceNo { get; set; }
         public int? PensionFund { get; set; }
         public int? ProvidentFund { get; set; }
-        public int FundCal { get; set; }
         public decimal? CatFactor { get; set; }
+        public decimal? RFIPercent { get; set; }
+        public int FundCal { get; set; }
         public decimal? EmpCon { get; set; }
         public decimal? ComCon { get; set; }
-        public decimal? RFIPercent { get; set; }
     }
 
     public class CompanyBankAccount
     {
-        public string AccountHolderName { get; set; }
-        public string AccountNumber { get; set; }
-        public int TypeofAccount { get; set; }
-        public int BankId { get; set; }
-        public int BranchCode { get; set; }
+        public string? AccountHolderName { get; set; }
+        public string? AccountNumber { get; set; }
+        public int? TypeofAccount { get; set; }
+        public int? BankId { get; set; }
+        public int? BranchCode { get; set; }
     }
 
     public class CompanyModels
@@ -97,7 +97,8 @@
         public List<CompanyPayrollCycle>? PayrollCycles { get; set; }
         public List<PayrollMedicalAidList>? PayrollMedicalAidList { get; set; }
         public List<PayrollBenefitFundList>? PayrollBenefitFundList { get; set; }
-        public CompanyBankAccount CompanyBankAccount { get; set; }
+        public CompanyBankAccount? CompanyBankAccount { get; set; }
+        public int CreatedBy { get; set; }
     }
 
 
