@@ -29,6 +29,7 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string UnAuthorized = "UnAuthorized Access !!";
             public static readonly string TryLater = "Plaese try again later.";
             public static readonly string AlreadyExist = "{0} already exists !";
+            public static readonly string Valid = "{0} is valid";
             public static readonly string SomethingWrong = "Something went wrong.";
 
             #endregion

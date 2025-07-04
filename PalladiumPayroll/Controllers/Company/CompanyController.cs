@@ -3,9 +3,7 @@ using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Company;
-using System.Reflection;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
-using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.Company
 {
@@ -17,6 +15,20 @@ namespace PalladiumPayroll.Controllers.Company
         public CompanyController(ICompanyService companyService)
         {
             _companyService = companyService;
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> CheckCompanyExist(int companyId, string companyName)
+        {
+            try
+            {
+                return await _companyService.CheckCompanyExist(companyId, companyName);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
         }
 
         [HttpPost("[action]")]

@@ -2,13 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
-using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
-using System;
 using System.Data;
-using System.Text;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 
@@ -100,7 +98,7 @@ namespace PalladiumPayroll.Repositories.Company
             payRollCycle.Columns.Add("CycleName", typeof(string));
             payRollCycle.Columns.Add("CycleTypeId", typeof(int));
             payRollCycle.Columns.Add("CycleEndDate", typeof(DateTime));
-            if(model.PayrollCycles != null)
+            if (model.PayrollCycles != null)
             {
                 foreach (var item in model.PayrollCycles)
                 {
@@ -123,7 +121,7 @@ namespace PalladiumPayroll.Repositories.Company
             MedicalAid.Columns.Add("MedAidId", typeof(int));
             MedicalAid.Columns.Add("MedAidFundName", typeof(string));
             MedicalAid.Columns.Add("MedAidSchemeName", typeof(string));
-            if(model.PayrollMedicalAidList != null)
+            if (model.PayrollMedicalAidList != null)
             {
                 foreach (var item in model.PayrollMedicalAidList)
                 {
@@ -182,8 +180,7 @@ namespace PalladiumPayroll.Repositories.Company
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Company, ActionType.Created));
             }
-
-            return HttpStatusCodeResponse.BadRequestResponse();
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
         }
 
         public async Task<bool> CheckCompanyExist(string company)
@@ -193,6 +190,15 @@ namespace PalladiumPayroll.Repositories.Company
 
             bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CheckCompanyExists", parameters);
             return response;
+        }
+
+        public async Task<bool> CheckCompanyExist(int companyId, string companyName)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            parameters.Add("@CompanyName", companyName);
+
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CheckSubCompanyExists", parameters);
         }
 
         public async Task<bool> AddNewBank(BankModel bankModel)

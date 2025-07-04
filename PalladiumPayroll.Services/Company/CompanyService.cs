@@ -9,7 +9,6 @@ using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using PalladiumPayroll.Helper.Constants;
 using PalladiumPayroll.Helper.JWTToken;
 using PalladiumPayroll.Repositories.Company;
-using PalladiumPayroll.Repositories.User;
 using System.Net.Mail;
 using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -20,13 +19,11 @@ namespace PalladiumPayroll.Services.Company
     public class CompanyService : ICompanyService
     {
         private readonly ICompanyRepository _companyRepository;
-        private readonly IUserRepository _userRepository;
         private readonly EmailService _emailService;
         private readonly IConfiguration _configuration;
-        public CompanyService(ICompanyRepository companyRepository, IUserRepository userRepository, EmailService emailService, IConfiguration configuration)
+        public CompanyService(ICompanyRepository companyRepository, EmailService emailService, IConfiguration configuration)
         {
             _companyRepository = companyRepository;
-            _userRepository = userRepository;
             _emailService = emailService;
             _configuration = configuration;
         }
@@ -34,6 +31,16 @@ namespace PalladiumPayroll.Services.Company
         public async Task<JsonResult> CompanyCreation(CompanyModels model)
         {
             return await _companyRepository.CompanyCreation(model);
+        }
+
+        public async Task<JsonResult> CheckCompanyExist(int companyId, string companyName)
+        {
+            bool isExist = await _companyRepository.CheckCompanyExist(companyId, companyName);
+            if (isExist)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.AlreadyExist, ResponseMessages.Company));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Valid, ResponseMessages.Company));
         }
 
         public async Task<JsonResult> CreateCompany(CreateCompanyRequest request)
