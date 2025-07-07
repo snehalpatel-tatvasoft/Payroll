@@ -28,7 +28,7 @@
         public string District { get; set; }
         public string City { get; set; }
         public string PinCode { get; set; }
-        public bool IsPostalSame { get; set; }
+        public bool sameAddress { get; set; }
         public string? Pos_UnitNumber { get; set; }
         public string? Pos_ComplexName { get; set; }
         public string? Pos_StreetNumber { get; set; }
@@ -98,7 +98,6 @@
         public List<PayrollMedicalAidList>? PayrollMedicalAidList { get; set; }
         public List<PayrollBenefitFundList>? PayrollBenefitFundList { get; set; }
         public CompanyBankAccount? CompanyBankAccount { get; set; }
-        public int CreatedBy { get; set; }
     }
 
 
