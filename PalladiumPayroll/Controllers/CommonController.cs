@@ -111,5 +111,18 @@ namespace PalladiumPayroll.Controllers
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetTransactionList()
+        {
+            try
+            {
+                return await _commonService.GetTransactionList();
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+            }
+        }
     }
 }

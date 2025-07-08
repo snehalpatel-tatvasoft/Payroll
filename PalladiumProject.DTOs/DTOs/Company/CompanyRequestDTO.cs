@@ -1,4 +1,6 @@
-﻿namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
+﻿using System.Collections.Generic;
+
+namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
 {
 
     public class CompanyInfo
@@ -89,6 +91,16 @@
         public int? BranchCode { get; set; }
     }
 
+    public class TransactionList
+    {
+        public int TransactionOrders { get; set; }
+        public int AllowanceTypeId { get; set; }
+        public string? Description { get; set; }
+        public string? DebitAccountNumber { get; set; }
+        public string? CreditAccountNumber { get; set; }
+        public string? ContraAccountNumber { get; set; }
+    }
+
     public class CompanyModels
     {
         public CompanyInfo CompanyInfo { get; set; }
@@ -98,6 +110,7 @@
         public List<PayrollMedicalAidList>? PayrollMedicalAidList { get; set; }
         public List<PayrollBenefitFundList>? PayrollBenefitFundList { get; set; }
         public CompanyBankAccount? CompanyBankAccount { get; set; }
+        public List<TransactionList> TransactionList { get; set; }
     }
 
     public class CheckCompanyExistModel
