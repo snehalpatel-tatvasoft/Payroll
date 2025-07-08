@@ -10,5 +10,6 @@ namespace PalladiumPayroll.Services
         Task<JsonResult> GetBranchList(int bankId);
         Task<JsonResult> GetStandardIndustryCode();
         Task<JsonResult> GetTradeClassification();
+        Task<JsonResult> GetTransactionList();
     }
 }

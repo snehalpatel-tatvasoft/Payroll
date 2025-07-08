@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.Common;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 namespace PalladiumPayroll.Repositories
 {
     public class CommonRepository : ICommonRepository
@@ -49,6 +51,11 @@ namespace PalladiumPayroll.Repositories
         public async Task<List<DropDownViewModel>> GetTradeClassification()
         {
             List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchTradeClassification");
+            return response;
+        }
+        public async Task<List<TransactionList>> GetTransactionList()
+        {
+            List<TransactionList> response = await _dapper.ExecuteStoredProcedure<TransactionList>("sp_GetTransactionList");
             return response;
         }
     }

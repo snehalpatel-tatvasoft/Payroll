@@ -462,7 +462,15 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public string BranchCode { get; set; }
     }
 
-
+    public class TransactionList
+    {
+        public int TransactionOrders { get; set; }
+        public int AllowanceTypeId { get; set; }
+        public string? Description { get; set; }
+        public string? DebitAccountNumber { get; set; }
+        public string? CreditAccountNumber { get; set; }
+        public string? ContraAccountNumber { get; set; }
+    }
 
     public class CompanyModels
     {
@@ -472,6 +480,8 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public List<PayrollMedicalAidList> PayrollMedicalAidList { get; set; }
         public List<PayrollBenefitFundList> PayrollBenefitFundLists { get; set; }
         public CompanyBankAccount CompanyBankAccount { get; set; }
+        public List<TransactionList> TransactionList { get; set; }
+        public int TaxYear { get; set; }
     }
     
 
