@@ -11,6 +11,7 @@ using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 using Microsoft.AspNetCore.Http;
+using System.Reflection;
 
 namespace PalladiumPayroll.Repositories.Company
 {
@@ -273,16 +274,17 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@District", companyInfo.District);
             parameters.Add("@City", companyInfo.City);
             parameters.Add("@PinCode", companyInfo.PinCode);
-            parameters.Add("@IsPostalSame", companyInfo.IsPostalSame);
+            bool isPostalSame = companyInfo.sameAddress;
+            parameters.Add("@IsPostalSame", isPostalSame);
 
             // Postal Address
-            parameters.Add("@Pos_UnitNumber", companyInfo.Pos_UnitNumber);
-            parameters.Add("@Pos_ComplexName", companyInfo.Pos_ComplexName);
-            parameters.Add("@Pos_StreetNumber", companyInfo.Pos_StreetNumber);
-            parameters.Add("@Pos_StreetName", companyInfo.Pos_Street);
-            parameters.Add("@Pos_District", companyInfo.Pos_District);
-            parameters.Add("@Pos_City", companyInfo.Pos_City);
-            parameters.Add("@Pos_PostalCode", companyInfo.Pos_PinCode);
+            parameters.Add("@Pos_UnitNumber", isPostalSame ? companyInfo.UnitNumber : null);
+            parameters.Add("@Pos_ComplexName", isPostalSame ? companyInfo.ComplexName : null);
+            parameters.Add("@Pos_StreetNumber", isPostalSame ? companyInfo.StreetNumber : null);
+            parameters.Add("@Pos_StreetName", isPostalSame ? companyInfo.Street : null);
+            parameters.Add("@Pos_District", isPostalSame ? companyInfo.District : null);
+            parameters.Add("@Pos_City", isPostalSame ? companyInfo.City : null);
+            parameters.Add("@Pos_PostalCode", isPostalSame ? companyInfo.PinCode : null);
             parameters.Add("@Pos_Address1", companyInfo.Pos_Address1);
             parameters.Add("@Pos_Address2", companyInfo.Pos_Address2);
             parameters.Add("@Pos_Address3", companyInfo.Pos_Address3);
