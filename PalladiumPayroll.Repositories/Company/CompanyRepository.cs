@@ -83,17 +83,17 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@PostalCode", model.CompanyInfo.PinCode);
             var isPostalSame = model.CompanyInfo.sameAddress;
             parameters.Add("@IsPostalSame", isPostalSame);
-            parameters.Add("@Pos_UnitNumber", isPostalSame ? model.CompanyInfo.UnitNumber : null);
-            parameters.Add("@Pos_ComplexName", isPostalSame ? model.CompanyInfo.ComplexName : null);
-            parameters.Add("@Pos_StreetNumber", isPostalSame ? model.CompanyInfo.StreetNumber : null);
-            parameters.Add("@Pos_StreetName", isPostalSame ? model.CompanyInfo.Street : null);
-            parameters.Add("@Pos_District", isPostalSame ? model.CompanyInfo.District : null);
-            parameters.Add("@Pos_City", isPostalSame ? model.CompanyInfo.City : null);
-            parameters.Add("@Pos_PostalCode", isPostalSame ? model.CompanyInfo.PinCode : null);
+            parameters.Add("@Pos_UnitNumber", isPostalSame ? model.CompanyInfo.UnitNumber : model.CompanyInfo.Pos_UnitNumber);
+            parameters.Add("@Pos_ComplexName", isPostalSame ? model.CompanyInfo.ComplexName : model.CompanyInfo.Pos_ComplexName);
+            parameters.Add("@Pos_StreetNumber", isPostalSame ? model.CompanyInfo.StreetNumber : model.CompanyInfo.Pos_StreetNumber);
+            parameters.Add("@Pos_StreetName", isPostalSame ? model.CompanyInfo.Street : model.CompanyInfo.Pos_Street);
+            parameters.Add("@Pos_District", isPostalSame ? model.CompanyInfo.District : model.CompanyInfo.Pos_District);
+            parameters.Add("@Pos_City", isPostalSame ? model.CompanyInfo.City : model.CompanyInfo.Pos_City);
+            parameters.Add("@Pos_PostalCode", isPostalSame ? model.CompanyInfo.PinCode : model.CompanyInfo.Pos_PinCode);
             parameters.Add("@Pos_Address1", model.CompanyInfo.Pos_Address1);
             parameters.Add("@Pos_Address2", model.CompanyInfo.Pos_Address2);
             parameters.Add("@Pos_Address3", model.CompanyInfo.Pos_Address3);
-            parameters.Add("@Pos_AddressPostalCode", model.CompanyInfo.Pos_PinCode);
+            parameters.Add("@Pos_AddressPostalCode", model.CompanyInfo.Pos_AddPinCode);
             parameters.Add("@Pos_CountryId", model.CompanyInfo.Pos_CountryId);
 
             // step-2 representative

@@ -110,7 +110,7 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public List<PayrollMedicalAidList>? PayrollMedicalAidList { get; set; }
         public List<PayrollBenefitFundList>? PayrollBenefitFundList { get; set; }
         public CompanyBankAccount? CompanyBankAccount { get; set; }
-        public List<TransactionList> TransactionList { get; set; }
+        public List<TransactionList>? TransactionList { get; set; }
     }
 
     public class CheckCompanyExistModel
