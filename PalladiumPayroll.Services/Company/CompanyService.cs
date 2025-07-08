@@ -167,5 +167,20 @@ namespace PalladiumPayroll.Services.Company
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.AlreadyExist, "Branch"));
         }
+        
+        public async Task<List<CompanyInfo>> GetCompanyInformation(int companyId)
+        {
+            return await _companyRepository.GetCompanyInformation(companyId);
+        }
+
+        public async Task<JsonResult> UpdateCompanyInformation(CompanyInfo companyInfo)
+        {
+            bool isAdded = await _companyRepository.UpdateCompanyInformation(companyInfo);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Company, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
     }
 }

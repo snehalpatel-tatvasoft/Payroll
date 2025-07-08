@@ -84,5 +84,32 @@ namespace PalladiumPayroll.Controllers.Company
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetCompanyInformation(int companyId)
+        {
+            try
+            {
+                List<CompanyInfo> companyInfo = await _companyService.GetCompanyInformation(companyId);
+                return HttpStatusCodeResponse.SuccessResponse(companyInfo, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpdateCompanyInformation(CompanyInfo companyInfo)
+        {
+            try
+            {
+                return await _companyService.UpdateCompanyInformation(companyInfo);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
     }
 }

@@ -5,29 +5,29 @@
     {
         public Int64? CompanyId { get; set; }
         public string? CompanyLogo { get; set; }
-        public string CompanyName { get; set; }
+        public string CompanyName { get; set; } = null!;
         public int CompanyTypeId { get; set; }
-        public string CompanyRegNumber { get; set; }
+        public string CompanyRegNumber { get; set; } = null!;
         public long TaxRegNumber { get; set; }
         public int StdIndustryCode { get; set; }
-        public string PAYEReferenceNumber { get; set; }
+        public string PAYEReferenceNumber { get; set; } = null!;
         public int TradeClassificationId { get; set; }
-        public string UIFRefNumber { get; set; }
-        public string UIFRegNumber { get; set; }
+        public string UIFRefNumber { get; set; } = null!;
+        public string UIFRegNumber { get; set; } = null!;
         public int? SplEcoZoneId { get; set; }
-        public string SDLRefNumber { get; set; }
+        public string SDLRefNumber { get; set; } = null!;
         public int CurrencyID { get; set; }
         public int CountryID { get; set; }
         public bool IsExemptSDL { get; set; }
         public bool UseBCEARemuneration { get; set; }
         public int EmployerDisentitlementId { get; set; }
-        public string UnitNumber { get; set; }
-        public string ComplexName { get; set; }
-        public string StreetNumber { get; set; }
-        public string Street { get; set; }
-        public string District { get; set; }
-        public string City { get; set; }
-        public string PinCode { get; set; }
+        public string UnitNumber { get; set; } = null!;
+        public string ComplexName { get; set; } = null!;
+        public string StreetNumber { get; set; } = null!;
+        public string Street { get; set; } = null!;
+        public string District { get; set; } = null!;
+        public string City { get; set; } = null!;
+        public string PinCode { get; set; } = null!;
         public bool IsPostalSame { get; set; }
         public string? Pos_UnitNumber { get; set; }
         public string? Pos_ComplexName { get; set; }

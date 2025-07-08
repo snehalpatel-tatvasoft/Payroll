@@ -10,7 +10,6 @@ using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 using Microsoft.AspNetCore.Http;
-using System;
 
 namespace PalladiumPayroll.Repositories.Company
 {
@@ -215,7 +214,7 @@ namespace PalladiumPayroll.Repositories.Company
             bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_AddBank", parameters);
             return isAdded;
         }
-        
+
         public async Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId)
         {
             var parameters = new DynamicParameters();
@@ -235,6 +234,65 @@ namespace PalladiumPayroll.Repositories.Company
 
             bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_SetActiveCompanyId", parameters);
             return isAdded;
+        }
+
+        public async Task<bool> UpdateCompanyInformation(CompanyInfo companyInfo)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyInfo.CompanyId);
+            parameters.Add("@CompanyName", companyInfo.CompanyName);
+            parameters.Add("@CompanyLogo", companyInfo.CompanyLogo);
+            parameters.Add("@CompanyType", companyInfo.CompanyTypeId);
+            parameters.Add("@CompanyRegNumber", companyInfo.CompanyRegNumber);
+            parameters.Add("@TaxRegNumber", companyInfo.TaxRegNumber);
+            parameters.Add("@StdIndustryCode", companyInfo.StdIndustryCode);
+            parameters.Add("@PAYEReferenceNumber", companyInfo.PAYEReferenceNumber);
+            parameters.Add("@TradeClassificationId", companyInfo.TradeClassificationId);
+            parameters.Add("@UIFRegNumber", companyInfo.UIFRegNumber);
+            parameters.Add("@SplEcoZoneId", companyInfo.SplEcoZoneId);
+            parameters.Add("@UIFRefNumber", companyInfo.UIFRefNumber);
+            parameters.Add("@CurrencyID", companyInfo.CurrencyID);
+            parameters.Add("@SDLRefNumber", companyInfo.SDLRefNumber);
+            parameters.Add("@CountryID", companyInfo.CountryID);
+            parameters.Add("@IsExemptSDL", companyInfo.IsExemptSDL);
+            parameters.Add("@UseBCEARemuneration", companyInfo.UseBCEARemuneration);
+            parameters.Add("@EmployerDisentitlementId", companyInfo.EmployerDisentitlementId);
+
+            // Physical Address
+            parameters.Add("@UnitNumber", companyInfo.UnitNumber);
+            parameters.Add("@ComplexName", companyInfo.ComplexName);
+            parameters.Add("@StreetNumber", companyInfo.StreetNumber);
+            parameters.Add("@StreetName", companyInfo.Street);
+            parameters.Add("@District", companyInfo.District);
+            parameters.Add("@City", companyInfo.City);
+            parameters.Add("@PinCode", companyInfo.PinCode);
+            parameters.Add("@IsPostalSame", companyInfo.IsPostalSame);
+
+            // Postal Address
+            parameters.Add("@Pos_UnitNumber", companyInfo.Pos_UnitNumber);
+            parameters.Add("@Pos_ComplexName", companyInfo.Pos_ComplexName);
+            parameters.Add("@Pos_StreetNumber", companyInfo.Pos_StreetNumber);
+            parameters.Add("@Pos_StreetName", companyInfo.Pos_Street);
+            parameters.Add("@Pos_District", companyInfo.Pos_District);
+            parameters.Add("@Pos_City", companyInfo.Pos_City);
+            parameters.Add("@Pos_PostalCode", companyInfo.Pos_PinCode);
+            parameters.Add("@Pos_Address1", companyInfo.Pos_Address1);
+            parameters.Add("@Pos_Address2", companyInfo.Pos_Address2);
+            parameters.Add("@Pos_Address3", companyInfo.Pos_Address3);
+            parameters.Add("@Pos_AddressPostalCode", companyInfo.Pos_PinCode);
+            parameters.Add("@Pos_CountryId", companyInfo.Pos_CountryId);
+
+            bool isUpdated = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateCompanyDetails", parameters);
+            return isUpdated;
+        }
+
+        public async Task<List<CompanyInfo>> GetCompanyInformation(int companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            List<CompanyInfo> response = await _dapper.ExecuteStoredProcedure<CompanyInfo>("usp_GetCompanyInfoByCompanyId ", parameters);
+            return response;
         }
     }
 }
