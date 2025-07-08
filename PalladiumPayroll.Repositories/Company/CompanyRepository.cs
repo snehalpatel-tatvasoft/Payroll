@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
@@ -56,8 +57,9 @@ namespace PalladiumPayroll.Repositories.Company
             var parameters = new DynamicParameters();
 
             // step-1 company info
-            parameters.Add("@ParentCompanyId", model.CompanyInfo.CompanyId);
+            parameters.Add("@ActiveCompanyId", model.CompanyInfo.CompanyId);
             parameters.Add("@CompanyName", model.CompanyInfo.CompanyName);
+            parameters.Add("@CompanyLogo", model.CompanyInfo.CompanyLogo);
             parameters.Add("@CompanyType", model.CompanyInfo.CompanyTypeId);
             parameters.Add("@CompanyRegNumber", model.CompanyInfo.CompanyRegNumber);
             parameters.Add("@TaxRegNumber", model.CompanyInfo.TaxRegNumber);
@@ -72,25 +74,30 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@CountryID", model.CompanyInfo.CountryID);
             parameters.Add("@IsExemptSDL", model.CompanyInfo.IsExemptSDL);
             parameters.Add("@UseBCEARemuneration", model.CompanyInfo.UseBCEARemuneration);
-
             parameters.Add("@EmployerDisentitlementId", model.CompanyInfo.EmployerDisentitlementId);
-            //parameters.Add("@covid19", model.reli);
-
             parameters.Add("@UnitNumber", model.CompanyInfo.UnitNumber);
             parameters.Add("@ComplexName", model.CompanyInfo.ComplexName);
             parameters.Add("@StreetNumber", model.CompanyInfo.StreetNumber);
-            parameters.Add("@Street", model.CompanyInfo.Street);
+            parameters.Add("@StreetName", model.CompanyInfo.Street);
             parameters.Add("@District", model.CompanyInfo.District);
             parameters.Add("@City", model.CompanyInfo.City);
-            parameters.Add("@PinCode", model.CompanyInfo.PinCode);
-            parameters.Add("@IsPostalSame", model.CompanyInfo.IsPostalSame);
+            parameters.Add("@PostalCode", model.CompanyInfo.PinCode);
+            var isPostalSame = model.CompanyInfo.sameAddress;
+            parameters.Add("@IsPostalSame", isPostalSame);
+            parameters.Add("@Pos_UnitNumber", isPostalSame ? model.CompanyInfo.UnitNumber : null);
+            parameters.Add("@Pos_ComplexName", isPostalSame ? model.CompanyInfo.ComplexName : null);
+            parameters.Add("@Pos_StreetNumber", isPostalSame ? model.CompanyInfo.StreetNumber : null);
+            parameters.Add("@Pos_StreetName", isPostalSame ? model.CompanyInfo.Street : null);
+            parameters.Add("@Pos_District", isPostalSame ? model.CompanyInfo.District : null);
+            parameters.Add("@Pos_City", isPostalSame ? model.CompanyInfo.City : null);
+            parameters.Add("@Pos_PostalCode", isPostalSame ? model.CompanyInfo.PinCode : null);
             parameters.Add("@Pos_Address1", model.CompanyInfo.Pos_Address1);
             parameters.Add("@Pos_Address2", model.CompanyInfo.Pos_Address2);
             parameters.Add("@Pos_Address3", model.CompanyInfo.Pos_Address3);
-            parameters.Add("@Pos_PinCode", model.CompanyInfo.Pos_PinCode);
+            parameters.Add("@Pos_AddressPostalCode", model.CompanyInfo.Pos_PinCode);
             parameters.Add("@Pos_CountryId", model.CompanyInfo.Pos_CountryId);
 
-            // step-2 representive
+            // step-2 representative
             parameters.Add("@SARSName", model.CompanyRepresentative.SARSName);
             parameters.Add("@SARSContactEmail", model.CompanyRepresentative.SARSContactEmail);
             parameters.Add("@SARSContactNo", model.CompanyRepresentative.SARSContactNo);
@@ -176,7 +183,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@TypeofAccount", model.CompanyBankAccount?.TypeofAccount);
             parameters.Add("@BankId", model.CompanyBankAccount?.BankId);
             parameters.Add("@BranchCode", model.CompanyBankAccount?.BranchCode);
-            parameters.Add("@CreatedBy", model.CreatedBy);
+            parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
             var isCreated = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_AddCompany", parameters);
             if (isCreated)
