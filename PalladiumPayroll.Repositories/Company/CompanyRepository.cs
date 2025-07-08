@@ -295,6 +295,14 @@ namespace PalladiumPayroll.Repositories.Company
             bool isUpdated = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateCompanyDetails", parameters);
             return isUpdated;
         }
+        public async Task<List<CompanyInfo>> GetCompanyInformation(int companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            List<CompanyInfo> response = await _dapper.ExecuteStoredProcedure<CompanyInfo>("usp_GetCompanyInfoByCompanyId ", parameters);
+            return response;
+        }
         
         public async Task<bool> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo)
         {
@@ -308,15 +316,6 @@ namespace PalladiumPayroll.Repositories.Company
             return isUpdated;
         }
 
-        public async Task<List<CompanyInfo>> GetCompanyInformation(int companyId)
-        {
-            var parameters = new DynamicParameters();
-            parameters.Add("@CompanyId", companyId);
-
-            List<CompanyInfo> response = await _dapper.ExecuteStoredProcedure<CompanyInfo>("usp_GetCompanyInfoByCompanyId ", parameters);
-            return response;
-        }
-        
         public async Task<List<CompanyRepresentative>> GetCompanyRepresentativeInfo(int companyId)
         {
             DynamicParameters? parameters = new DynamicParameters();
@@ -324,6 +323,38 @@ namespace PalladiumPayroll.Repositories.Company
 
             List<CompanyRepresentative> response = await _dapper.ExecuteStoredProcedure<CompanyRepresentative>("usp_GetCompanyRepresentativeInfoByCompanyId ", parameters);
             return response;
+        }
+        
+        public async Task<List<CompanyBankAccount>> GetBankDetailsInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            try
+            {
+                var result = await _dapper.ExecuteStoredProcedure<CompanyBankAccount>("usp_GetCompanyBankDetailsByCompanyId", parameters);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Log or inspect the error
+                throw new Exception("DB call failed: " + ex.Message, ex);
+            }
+
+        }
+
+        public async Task<bool> UpdateBankDetailsInfo(CompanyBankAccount companyBankAccount)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyBankAccount.CompanyId);
+            parameters.Add("@AccountName", companyBankAccount.AccountHolderName);
+            parameters.Add("@AccountNumber", companyBankAccount.AccountNumber);
+            parameters.Add("@AccountTypeId", companyBankAccount.TypeofAccount);
+            parameters.Add("@BankId", companyBankAccount.BankId);
+            parameters.Add("@BranchCode", companyBankAccount.BranchCode);
+
+            bool isUpdated = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateCompanyBankDetails", parameters);
+            return isUpdated;
         }
     }
 }

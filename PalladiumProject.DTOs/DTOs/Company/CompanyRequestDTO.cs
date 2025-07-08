@@ -86,7 +86,7 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public decimal? ComCon { get; set; }
     }
 
-    public class CompanyBankAccount
+    public class CompanyBankAccount : BasicCompanyInfo
     {
         public string? AccountHolderName { get; set; }
         public string? AccountNumber { get; set; }

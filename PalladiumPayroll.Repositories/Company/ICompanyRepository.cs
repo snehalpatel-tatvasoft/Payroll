@@ -16,8 +16,10 @@ namespace PalladiumPayroll.Repositories.Company
         Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId);
         Task<bool> SetActiveCompanyId(int companyId);
         Task<List<CompanyInfo>> GetCompanyInformation(int companyId);
-        Task<List<CompanyRepresentative>> GetCompanyRepresentativeInfo(int companyId);
         Task<bool> UpdateCompanyInformation(CompanyInfo companyInfo);
+        Task<List<CompanyRepresentative>> GetCompanyRepresentativeInfo(int companyId);
         Task<bool> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo);
+        Task<List<CompanyBankAccount>> GetBankDetailsInfo(int companyId);
+        Task<bool> UpdateBankDetailsInfo(CompanyBankAccount companyBankAccount);
     }
 }
