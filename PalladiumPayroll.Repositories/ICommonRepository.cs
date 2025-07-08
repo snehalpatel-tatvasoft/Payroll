@@ -1,4 +1,5 @@
-﻿using PalladiumPayroll.DTOs.DTOs.Common;
+﻿using PalladiumPayroll.DTOs.DTOs;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 
@@ -13,5 +14,6 @@ namespace PalladiumPayroll.Repositories
         Task<List<DropDownViewModel>> GetStandardIndustryCode();
         Task<List<DropDownViewModel>> GetTradeClassification();
         Task<List<TransactionList>> GetTransactionList();
+        Task<bool> CheckDBConnection(DBConnectionModel dbConnectionModel);
     }
 }

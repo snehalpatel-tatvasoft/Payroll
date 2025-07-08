@@ -18,23 +18,19 @@ namespace PalladiumPayroll.Services.Home
             return await _homeRepository.GetAllEmployeeList(employeeId);
         }
 
-        public async Task<PayrollSummaryResponse> GetPayrollSummaryData(int PayrollSetupId)
+        public async Task<PayrollSummaryResponse> GetPayrollSummaryData(int PayrollSetupId, int CompanyId, string UserId)
         {
-            int CompanyId = 1;
-            return await _homeRepository.GetPayrollSummaryData(CompanyId, PayrollSetupId);
+            return await _homeRepository.GetPayrollSummaryData(CompanyId, PayrollSetupId, UserId);
         }
 
-        public async Task<EmployeeTypeCountResponse> GetEmployeeTypeCount(int PayrollSetupId)
+        public async Task<EmployeeTypeCountResponse> GetEmployeeTypeCount(int PayrollSetupId, int CompanyId, string UserId)
         {
-            int CompanyId = 1;
-            return await _homeRepository.GetEmployeeTypeCount(CompanyId, PayrollSetupId);
+            return await _homeRepository.GetEmployeeTypeCount(CompanyId, PayrollSetupId, UserId);
         }
 
-        public async Task<List<PayrollCycleDataResponse>> GetPayrollCycleData()
+        public async Task<List<PayrollCycleDataResponse>> GetPayrollCycleData(int CompanyId, string UserId)
         {
             List<PayrollCycleDataResponse> res = new();
-            int CompanyId = 20;
-            string UserId = "d1ae5f39-ad09-4cf8-b7da-c3a9bb8b9ab2";
 
             var data = await _homeRepository.GetPayrollCycleData(CompanyId, UserId);
 

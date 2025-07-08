@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
 
 namespace PalladiumPayroll.Controllers
 {
@@ -24,7 +26,7 @@ namespace PalladiumPayroll.Controllers
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
 
@@ -38,7 +40,7 @@ namespace PalladiumPayroll.Controllers
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
 
@@ -51,7 +53,7 @@ namespace PalladiumPayroll.Controllers
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
 
@@ -64,7 +66,7 @@ namespace PalladiumPayroll.Controllers
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
 
@@ -78,7 +80,7 @@ namespace PalladiumPayroll.Controllers
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
 
@@ -92,7 +94,21 @@ namespace PalladiumPayroll.Controllers
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> CheckDBConnection([FromQuery]DBConnectionModel dbConnectionModel)
+        {
+            try
+            {
+                return await _commonService.CheckDBConnection(dbConnectionModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
 

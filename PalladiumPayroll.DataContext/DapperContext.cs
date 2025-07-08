@@ -15,8 +15,7 @@ namespace PalladiumPayroll.DataContext
             _connectionString = AppSettingsConfig.GetConnectionString(configuration);
         }
 
-        public IDbConnection CreateConnection()
-            => new SqlConnection(_connectionString);
+        public IDbConnection CreateConnection() => new SqlConnection(_connectionString);
 
         public async Task<List<T>> ExecuteStoredProcedure<T>(string storedProcedureName, DynamicParameters? parameters = null)
         {
@@ -42,6 +41,22 @@ namespace PalladiumPayroll.DataContext
                 {
                     return await mapFunc(multi);
                 }
+            }
+        }
+
+        public static async Task<bool> CheckDBConnection(string connectionString)
+        {
+            try
+            {
+                using (var db = new SqlConnection(connectionString))
+                {
+                    await db.OpenAsync();
+                    return db.State == ConnectionState.Open;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
 

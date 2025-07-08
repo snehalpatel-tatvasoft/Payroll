@@ -23,4 +23,12 @@
         public bool SMTPEnableSsl { get; set; }
         public string SMTPFrom { get; set; } = null!;
     }
+
+    public class DBConnectionModel
+    {
+        public string ServerName { get; set; } = null!;
+        public string DBName { get; set; } = null!;
+        public string UserName { get; set; } = null!;
+        public string Password { get; set; } = null!;
+    }
 }

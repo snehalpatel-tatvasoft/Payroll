@@ -9,7 +9,6 @@ using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using PalladiumPayroll.Helper.Constants;
 using PalladiumPayroll.Helper.JWTToken;
 using PalladiumPayroll.Repositories.Company;
-using PalladiumPayroll.Repositories.User;
 using System.Net.Mail;
 using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -20,13 +19,11 @@ namespace PalladiumPayroll.Services.Company
     public class CompanyService : ICompanyService
     {
         private readonly ICompanyRepository _companyRepository;
-        private readonly IUserRepository _userRepository;
         private readonly EmailService _emailService;
         private readonly IConfiguration _configuration;
-        public CompanyService(ICompanyRepository companyRepository, IUserRepository userRepository, EmailService emailService, IConfiguration configuration)
+        public CompanyService(ICompanyRepository companyRepository, EmailService emailService, IConfiguration configuration)
         {
             _companyRepository = companyRepository;
-            _userRepository = userRepository;
             _emailService = emailService;
             _configuration = configuration;
         }
@@ -36,11 +33,20 @@ namespace PalladiumPayroll.Services.Company
             return await _companyRepository.CompanyCreation(model);
         }
 
+        public async Task<JsonResult> CheckCompanyExist(int companyId, string companyName)
+        {
+            bool isExist = await _companyRepository.CheckCompanyExist(companyId, companyName);
+            if (isExist)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.AlreadyExist, ResponseMessages.Company));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Valid, ResponseMessages.Company));
+        }
+
         public async Task<JsonResult> CreateCompany(CreateCompanyRequest request)
         {
             try
             {
-
                 // Check if company already exists
                 if (await _companyRepository.CheckCompanyExist(request.Company))
                 {
@@ -140,6 +146,21 @@ namespace PalladiumPayroll.Services.Company
         public async Task<JsonResult> AddNewBank(BankModel bankModel)
         {
             bool isAdded = await _companyRepository.AddNewBank(bankModel);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Bank", ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.AlreadyExist, "Branch"));
+        }
+
+        public async Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId)
+        {
+            return await _companyRepository.GetCompanyWithSubCompany(companyId);
+        }
+
+        public async Task<JsonResult> SetActiveCompanyId(int companyId)
+        {
+            bool isAdded = await _companyRepository.SetActiveCompanyId(companyId);
             if (isAdded)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Bank", ActionType.Saved));

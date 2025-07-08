@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
@@ -57,6 +58,13 @@ namespace PalladiumPayroll.Repositories
         {
             List<TransactionList> response = await _dapper.ExecuteStoredProcedure<TransactionList>("sp_GetTransactionList");
             return response;
+        }
+
+        public async Task<bool> CheckDBConnection(DBConnectionModel dbConnectionModel)
+        {
+            string connectionString = "Data Source={0}; initial catalog={1};User ID={2};Password={3};TrustServerCertificate=True;";
+            string orignalString = string.Format(connectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
+            return await DapperContext.CheckDBConnection(orignalString);
         }
     }
 }
