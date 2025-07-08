@@ -5,7 +5,7 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
 
     public class CompanyInfo
     {
-        public Int64? CompanyId { get; set; }
+        public Int64 CompanyId { get; set; }
         public string? CompanyLogo { get; set; }
         public string CompanyName { get; set; }
         public int CompanyTypeId { get; set; }
@@ -110,8 +110,14 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public List<PayrollMedicalAidList>? PayrollMedicalAidList { get; set; }
         public List<PayrollBenefitFundList>? PayrollBenefitFundList { get; set; }
         public CompanyBankAccount? CompanyBankAccount { get; set; }
-        public List<TransactionList> TransactionList { get; set; }
+        public List<TransactionList>? TransactionList { get; set; }
     }
 
+    public class CheckCompanyExistModel
+    {
+        public int CompanyId { get; set; }
+        public int? ExcludeCompanyId { get; set; }
+        public string CompanyName { get; set; } = null!;
+    }
 
 }
