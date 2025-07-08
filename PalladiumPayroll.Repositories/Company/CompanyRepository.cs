@@ -1,8 +1,10 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
@@ -23,6 +25,18 @@ namespace PalladiumPayroll.Repositories.Company
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<List<DropDownViewModel>> GetGLAccounts(DBConnectionModel dbConnectionModel)
+        {
+            string connectionString =
+                $"Data Source={dbConnectionModel.ServerName}; Initial Catalog={dbConnectionModel.DBName}; User ID={dbConnectionModel.UserName}; Password={dbConnectionModel.Password}; TrustServerCertificate=True;";
+
+            using var connection = new SqlConnection(connectionString);
+            await connection.OpenAsync();
+
+            string sql = "SELECT Id, Name, Department FROM Employees"; // Adjust as needed
+            var result = await connection.QueryAsync<DropDownViewModel>(sql);
+            return result.ToList();
+        }
         public async Task<long> CreateCompany(CreateCompanyRequest request)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -123,7 +137,25 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@CycleRecord", payRollCycle.AsTableValuedParameter("dbo.CycleRecordType"));
 
             // step-4 general ledger
+            DataTable glTransaction= new DataTable();
+            glTransaction.Columns.Add("TransactionOrders", typeof(string));
+            glTransaction.Columns.Add("DebitAccountNumber", typeof(string));
+            glTransaction.Columns.Add("CreditAccountNumber", typeof(string));
+            glTransaction.Columns.Add("ContraAccountNumber", typeof(string));
 
+            if(model.TransactionList != null)
+            {
+                foreach (var item in model.TransactionList)
+                {
+                    DataRow row = glTransaction.NewRow();
+                    row["TransactionOrders"] = item.TransactionOrders;
+                    row["DebitAccountNumber"] = item.DebitAccountNumber;
+                    row["CreditAccountNumber"] = item.CreditAccountNumber;
+                    row["ContraAccountNumber"] = item.ContraAccountNumber;
+                    glTransaction.Rows.Add(row);
+                }
+            }
+            parameters.Add("@GLTransaction", glTransaction.AsTableValuedParameter("dbo.GLTransactionType"));
 
             // step-5 fund setup
             DataTable MedicalAid = new DataTable();
