@@ -203,11 +203,12 @@ namespace PalladiumPayroll.Repositories.Company
             return response;
         }
 
-        public async Task<bool> CheckCompanyExist(int companyId, string companyName)
+        public async Task<bool> CheckCompanyExist(CheckCompanyExistModel reqModel)
         {
             var parameters = new DynamicParameters();
-            parameters.Add("@CompanyId", companyId);
-            parameters.Add("@CompanyName", companyName);
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@ExcludeCompanyId", reqModel.ExcludeCompanyId);
+            parameters.Add("@CompanyName", reqModel.CompanyName);
 
             return await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CheckSubCompanyExists", parameters);
         }

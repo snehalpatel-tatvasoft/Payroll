@@ -33,9 +33,9 @@ namespace PalladiumPayroll.Services.Company
             return await _companyRepository.CompanyCreation(model);
         }
 
-        public async Task<JsonResult> CheckCompanyExist(int companyId, string companyName)
+        public async Task<JsonResult> CheckCompanyExist(CheckCompanyExistModel reqModel)
         {
-            bool isExist = await _companyRepository.CheckCompanyExist(companyId, companyName);
+            bool isExist = await _companyRepository.CheckCompanyExist(reqModel);
             if (isExist)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.AlreadyExist, ResponseMessages.Company));

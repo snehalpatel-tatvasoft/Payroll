@@ -10,7 +10,7 @@ namespace PalladiumPayroll.Repositories.Company
         Task<long> CreateCompany(CreateCompanyRequest request);
         Task<Guid> CreateUser(CreateUserRequestDto request);
         Task<bool> CheckCompanyExist(string company);
-        Task<bool> CheckCompanyExist(int companyId, string companyName);
+        Task<bool> CheckCompanyExist(CheckCompanyExistModel reqModel);
         Task<JsonResult> CompanyCreation(CompanyModels model);
         Task<bool> AddNewBank(BankModel bankModel);
         Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId);

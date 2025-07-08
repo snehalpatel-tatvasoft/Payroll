@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories;
 
@@ -48,6 +50,12 @@ namespace PalladiumPayroll.Services
         {
             List<DropDownViewModel> tradeList = await _commonRepository.GetTradeClassification();
             return HttpStatusCodeResponse.SuccessResponse(tradeList, string.Empty);
+        }
+
+        public async Task<JsonResult> GetTransactionList()
+        {
+            List<TransactionList> transactionList = await _commonRepository.GetTransactionList();
+            return HttpStatusCodeResponse.SuccessResponse(transactionList, string.Empty);
         }
 
         public async Task<JsonResult> CheckDBConnection(DBConnectionModel dbConnectionModel)
