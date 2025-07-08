@@ -3,7 +3,7 @@
 
     public class CompanyInfo
     {
-        public Int64? CompanyId { get; set; }
+        public Int64 CompanyId { get; set; }
         public string? CompanyLogo { get; set; }
         public string CompanyName { get; set; }
         public int CompanyTypeId { get; set; }
@@ -100,5 +100,11 @@
         public CompanyBankAccount? CompanyBankAccount { get; set; }
     }
 
+    public class CheckCompanyExistModel
+    {
+        public int CompanyId { get; set; }
+        public int? ExcludeCompanyId { get; set; }
+        public string CompanyName { get; set; } = null!;
+    }
 
 }

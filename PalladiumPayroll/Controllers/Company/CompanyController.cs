@@ -19,11 +19,11 @@ namespace PalladiumPayroll.Controllers.Company
 
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> CheckCompanyExist(int companyId, string companyName)
+        public async Task<ActionResult> CheckCompanyExist([FromQuery]CheckCompanyExistModel reqModel)
         {
             try
             {
-                return await _companyService.CheckCompanyExist(companyId, companyName);
+                return await _companyService.CheckCompanyExist(reqModel);
             }
             catch (Exception)
             {
