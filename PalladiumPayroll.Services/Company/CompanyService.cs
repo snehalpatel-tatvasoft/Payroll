@@ -172,6 +172,11 @@ namespace PalladiumPayroll.Services.Company
         {
             return await _companyRepository.GetCompanyInformation(companyId);
         }
+        
+        public async Task<List<CompanyRepresentative>> GetCompanyRepresentativeInfo(int companyId)
+        {
+            return await _companyRepository.GetCompanyRepresentativeInfo(companyId);
+        }
 
         public async Task<JsonResult> UpdateCompanyInformation(CompanyInfo companyInfo)
         {
@@ -179,6 +184,16 @@ namespace PalladiumPayroll.Services.Company
             if (isAdded)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Company, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        } 
+        
+        public async Task<JsonResult> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo)
+        {
+            bool isAdded = await _companyRepository.UpdateCompanyRepresentativeInfo(companyRepresentativeInfo);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyRepresentativeInfo, ActionType.Updated));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
         }

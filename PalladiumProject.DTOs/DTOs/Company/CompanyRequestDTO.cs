@@ -44,8 +44,12 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public string? Pos_Address3 { get; set; }
         public string? Pos_AddPinCode { get; set; }
     }
+    public class BasicCompanyInfo
+    {
+        public Int64? CompanyId { get; set;}
+    }
 
-    public class CompanyRepresentative
+    public class CompanyRepresentative : BasicCompanyInfo
     {
         public string SARSName { get; set; }
         public string SARSContactNo { get; set; }

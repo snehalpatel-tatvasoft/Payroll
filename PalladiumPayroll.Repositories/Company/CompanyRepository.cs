@@ -295,6 +295,18 @@ namespace PalladiumPayroll.Repositories.Company
             bool isUpdated = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateCompanyDetails", parameters);
             return isUpdated;
         }
+        
+        public async Task<bool> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyRepresentativeInfo.CompanyId);
+            parameters.Add("@SARSName", companyRepresentativeInfo.SARSName);
+            parameters.Add("@SARSContactNo", companyRepresentativeInfo.SARSContactNo);
+            parameters.Add("@SARSContactEmail", companyRepresentativeInfo.SARSContactEmail);
+
+            bool isUpdated = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateCompanyRepresentative", parameters);
+            return isUpdated;
+        }
 
         public async Task<List<CompanyInfo>> GetCompanyInformation(int companyId)
         {
@@ -302,6 +314,15 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@CompanyId", companyId);
 
             List<CompanyInfo> response = await _dapper.ExecuteStoredProcedure<CompanyInfo>("usp_GetCompanyInfoByCompanyId ", parameters);
+            return response;
+        }
+        
+        public async Task<List<CompanyRepresentative>> GetCompanyRepresentativeInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            List<CompanyRepresentative> response = await _dapper.ExecuteStoredProcedure<CompanyRepresentative>("usp_GetCompanyRepresentativeInfoByCompanyId ", parameters);
             return response;
         }
     }

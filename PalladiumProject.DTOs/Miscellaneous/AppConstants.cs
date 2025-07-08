@@ -44,6 +44,7 @@ namespace PalladiumPayroll.Helper.Constants
 
             public static readonly string Company = "Company";
             public static readonly string CompanyInfo = "Company Information";
+            public static readonly string CompanyRepresentativeInfo = "Company Representative";
             public const string CompanyAlreadyExists = "Company Already Exists";
             public const string CompanyRegisteredSuccessfully = "Company Registered Successfully";
             public const string ErrorCreatingCompany = "Error While Creating Company!!";
