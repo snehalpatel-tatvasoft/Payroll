@@ -47,6 +47,7 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
     public class BasicCompanyInfo
     {
         public Int64? CompanyId { get; set;}
+        public int? TaxYearId { get; set; }
     }
 
     public class CompanyRepresentative : BasicCompanyInfo
@@ -56,9 +57,9 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public string SARSContactEmail { get; set; }
     }
 
-    public class CompanyPayrollCycle
+    public class CompanyPayrollCycle : BasicCompanyInfo
     {
-        public int CycleID { get; set; }
+        public int? CycleId { get; set; }
         public string CycleName { get; set; }
         public DateTime CycleEndDate { get; set; }
         public int CycleType { get; set; }

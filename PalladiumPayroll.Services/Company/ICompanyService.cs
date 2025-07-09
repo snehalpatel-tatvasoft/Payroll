@@ -19,5 +19,8 @@ namespace PalladiumPayroll.Services.Company
         Task<JsonResult> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo);
         Task<List<CompanyBankAccount>> GetBankDetailsInfo(int companyId);
         Task<JsonResult> UpdateBankDetailsInfo(CompanyBankAccount companyBankAccount);
+        Task<List<CompanyPayrollCycle>> GetPayrollCycleInfo(int companyId, int taxYearId);
+        Task<JsonResult> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle);
+        Task<JsonResult> DeletePayrollCycleInfo(int cycleId);
     }
 }

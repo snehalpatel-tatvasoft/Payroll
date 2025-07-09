@@ -10,8 +10,6 @@ using PalladiumPayroll.DTOs.Miscellaneous;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
-using Microsoft.AspNetCore.Http;
-using System.Reflection;
 
 namespace PalladiumPayroll.Repositories.Company
 {
@@ -114,7 +112,7 @@ namespace PalladiumPayroll.Repositories.Company
                 foreach (var item in model.PayrollCycles)
                 {
                     DataRow row = payRollCycle.NewRow();
-                    row["CycleID"] = item.CycleID;
+                    row["CycleID"] = item.CycleId;
                     row["CycleName"] = item.CycleName;
                     row["CycleTypeId"] = item.CycleType;
                     row["CycleEndDate"] = item.CycleEndDate;
@@ -303,7 +301,7 @@ namespace PalladiumPayroll.Repositories.Company
             List<CompanyInfo> response = await _dapper.ExecuteStoredProcedure<CompanyInfo>("usp_GetCompanyInfoByCompanyId ", parameters);
             return response;
         }
-        
+
         public async Task<bool> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -324,23 +322,14 @@ namespace PalladiumPayroll.Repositories.Company
             List<CompanyRepresentative> response = await _dapper.ExecuteStoredProcedure<CompanyRepresentative>("usp_GetCompanyRepresentativeInfoByCompanyId ", parameters);
             return response;
         }
-        
+
         public async Task<List<CompanyBankAccount>> GetBankDetailsInfo(int companyId)
         {
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
 
-            try
-            {
-                var result = await _dapper.ExecuteStoredProcedure<CompanyBankAccount>("usp_GetCompanyBankDetailsByCompanyId", parameters);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                // Log or inspect the error
-                throw new Exception("DB call failed: " + ex.Message, ex);
-            }
-
+            var result = await _dapper.ExecuteStoredProcedure<CompanyBankAccount>("usp_GetCompanyBankDetailsByCompanyId", parameters);
+            return result;
         }
 
         public async Task<bool> UpdateBankDetailsInfo(CompanyBankAccount companyBankAccount)
@@ -355,6 +344,39 @@ namespace PalladiumPayroll.Repositories.Company
 
             bool isUpdated = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateCompanyBankDetails", parameters);
             return isUpdated;
+        }
+
+        public async Task<List<CompanyPayrollCycle>> GetPayrollCycleInfo(int companyId, int taxYearId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            parameters.Add("@TaxYearId", taxYearId);
+
+            List<CompanyPayrollCycle>? result = await _dapper.ExecuteStoredProcedure<CompanyPayrollCycle>("usp_GetCompanyPayrollCycleByCompanyId", parameters);
+            return result;
+        }
+
+        public async Task<bool> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CycleId", companyPayrollCycle.CycleId);
+            parameters.Add("@CompanyId", companyPayrollCycle.CompanyId);
+            parameters.Add("@TaxYear", companyPayrollCycle.TaxYearId);
+            parameters.Add("@PayrollCycleName", companyPayrollCycle.CycleName);
+            parameters.Add("@PayrollCycleTypeId", companyPayrollCycle.CycleType);
+            parameters.Add("@CycleEndDate", companyPayrollCycle.CycleEndDate);
+
+            bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCompanyPayrollCycle", parameters);
+            return isUpsert;
+        }
+
+        public async Task<bool> DeletePayrollCycleInfo(int cycleId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CycleId", cycleId);
+
+            bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteCompanyPayrollCycle", parameters);
+            return isUpsert;
         }
     }
 }

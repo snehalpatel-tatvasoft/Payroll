@@ -21,5 +21,8 @@ namespace PalladiumPayroll.Repositories.Company
         Task<bool> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo);
         Task<List<CompanyBankAccount>> GetBankDetailsInfo(int companyId);
         Task<bool> UpdateBankDetailsInfo(CompanyBankAccount companyBankAccount);
+        Task<List<CompanyPayrollCycle>> GetPayrollCycleInfo(int companyId, int taxYearId);
+        Task<bool> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle);
+        Task<bool> DeletePayrollCycleInfo(int cycleId);
     }
 }

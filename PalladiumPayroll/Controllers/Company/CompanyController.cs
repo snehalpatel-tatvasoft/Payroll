@@ -19,7 +19,7 @@ namespace PalladiumPayroll.Controllers.Company
 
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> CheckCompanyExist([FromQuery]CheckCompanyExistModel reqModel)
+        public async Task<ActionResult> CheckCompanyExist([FromQuery] CheckCompanyExistModel reqModel)
         {
             try
             {
@@ -137,8 +137,8 @@ namespace PalladiumPayroll.Controllers.Company
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
-        } 
-        
+        }
+
         [HttpGet("[action]")]
         public async Task<ActionResult> GetBankDetailsInfo(int companyId)
         {
@@ -159,6 +159,46 @@ namespace PalladiumPayroll.Controllers.Company
             try
             {
                 return await _companyService.UpdateBankDetailsInfo(companyBankAccount);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetPayrollCycleInfo(int companyId, int taxYearId)
+        {
+            try
+            {
+                List<CompanyPayrollCycle> companyInfo = await _companyService.GetPayrollCycleInfo(companyId, taxYearId);
+                return HttpStatusCodeResponse.SuccessResponse(companyInfo, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle)
+        {
+            try
+            {
+                return await _companyService.UpsertPayrollCycleInfo(companyPayrollCycle);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeletePayrollCycleInfo(int cycleId)
+        {
+            try
+            {
+                return await _companyService.DeletePayrollCycleInfo(cycleId);
             }
             catch (Exception)
             {
