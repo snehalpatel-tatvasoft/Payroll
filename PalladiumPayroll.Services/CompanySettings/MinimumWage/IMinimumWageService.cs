@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.CompanySettings;
-using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.CompanySettings;
 
 namespace PalladiumPayroll.Services.CompanySettings;
 

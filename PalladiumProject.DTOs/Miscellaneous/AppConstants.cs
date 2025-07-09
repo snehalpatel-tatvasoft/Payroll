@@ -143,6 +143,15 @@ namespace PalladiumPayroll.Helper.Constants
 
 
             #endregion
+
+
+            #region Employee Code
+
+            public static readonly string EmployeeCode = "Employee Code";
+
+            public const string EmployeeCodeSaveFailed  = "Failed to save employee code";
+
+            #endregion
         }
     }
 
