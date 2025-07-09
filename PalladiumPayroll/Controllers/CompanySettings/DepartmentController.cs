@@ -23,13 +23,13 @@ namespace PalladiumPayroll.Controllers.Department
         }
 
         [HttpPost]
-        public async Task<JsonResult> CreateDepartment([FromBody] CreateDepartmentRequestDto request)
+        public async Task<JsonResult> CreateDepartment([FromBody] AddEditDepartmentRequestDTO request)
         {
             return await _departmentService.CreateDepartment(request);
         }
 
         [HttpPut("{departmentId}")]
-        public async Task<JsonResult> EditDepartment(long departmentId, [FromBody] EditDepartmentRequestDto request)
+        public async Task<JsonResult> EditDepartment(long departmentId, [FromBody] AddEditDepartmentRequestDTO request)
         {
             return await _departmentService.EditDepartment(departmentId, request);
         }

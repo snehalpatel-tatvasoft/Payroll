@@ -23,6 +23,7 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<IDesignationsRepository, DesignationsRepository>();
             services.AddScoped<IMinimumWageRepository, MinimumWageRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            services.AddScoped<ICustomizeReportRepository, CustomizeReportRepository>();
             return services;
         }
     }
