@@ -14,7 +14,7 @@ namespace PalladiumPayroll.Repositories
 
         public async Task<List<DropDownViewModel>> GetCountryList()
         {
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchCountry");
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchCountry");
             return response;
         }
 
@@ -22,7 +22,7 @@ namespace PalladiumPayroll.Repositories
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchBank", parameters);
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchBank", parameters);
             return response;
         }
 
@@ -30,19 +30,19 @@ namespace PalladiumPayroll.Repositories
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@BankId", bankId);
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchBranchCode", parameters);
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchBranchCode", parameters);
             return response;
         }
 
         public async Task<List<DropDownViewModel>> GetStandardIndustryCode()
         {
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchStandardIndustry");
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchStandardIndustry");
             return response;
         }
 
         public async Task<List<DropDownViewModel>> GetTradeClassification()
         {
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchTradeClassification");
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchTradeClassification");
             return response;
         }
     }
