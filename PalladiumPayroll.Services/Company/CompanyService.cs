@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using PalladiumPayroll.Helper.Constants;
@@ -166,6 +168,21 @@ namespace PalladiumPayroll.Services.Company
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Bank", ActionType.Saved));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.AlreadyExist, "Branch"));
+        }
+
+        public async Task<JsonResult> GetGLSetup(DBConnectionModel dbConnectionModel)
+        {
+            GLConnRes glSetup = new();
+            bool IsDbConnection = await _companyRepository.CheckGLDBConnection(dbConnectionModel);
+            glSetup.IsDbConnection = IsDbConnection;
+            glSetup.ConnectionMessage = !IsDbConnection ? ResponseMessages.GLSetupError : ResponseMessages.GLSetupSuccess;
+
+            if (IsDbConnection)
+            {
+                glSetup.GlAccountList = await _companyRepository.GetGLAccounts(dbConnectionModel);
+                glSetup.GlDepartmentList = await _companyRepository.GetGLDepartments(dbConnectionModel);
+            }
+            return HttpStatusCodeResponse.SuccessResponse(glSetup, string.Format(ResponseMessages.Success, "GL Account", ActionType.Retrieved));
         }
     }
 }

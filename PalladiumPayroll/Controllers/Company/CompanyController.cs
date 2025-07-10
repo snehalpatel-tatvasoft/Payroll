@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
@@ -80,6 +81,19 @@ namespace PalladiumPayroll.Controllers.Company
                 return await _companyService.SetActiveCompanyId(companyId);
             }
             catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetGLSetup([FromQuery] DBConnectionModel dbConnectionModel)
+        {
+            try
+            {
+                return await _companyService.GetGLSetup(dbConnectionModel);
+            }
+            catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }

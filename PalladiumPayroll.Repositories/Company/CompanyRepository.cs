@@ -8,6 +8,7 @@ using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -25,18 +26,30 @@ namespace PalladiumPayroll.Repositories.Company
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<List<DropDownViewModel>> GetGLAccounts(DBConnectionModel dbConnectionModel)
+        public async Task<List<DropDownViewModelWithString>> GetGLAccounts(DBConnectionModel dbConnectionModel)
+        {
+            string connectionString =
+            $"Data Source={dbConnectionModel.ServerName}; Initial Catalog={dbConnectionModel.DBName}; User ID={dbConnectionModel.UserName}; Password={dbConnectionModel.Password}; TrustServerCertificate=True;";
+
+            string query = "SELECT intGLNumber as ID ,intGLNumber AS [KEY], intGLNumber AS [VALUE] from dbo.tblAccounts"; // Adjust as needed
+            return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
+        }
+        public async Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel)
+        {
+            string connectionString =
+            $"Data Source={dbConnectionModel.ServerName}; Initial Catalog={dbConnectionModel.DBName}; User ID={dbConnectionModel.UserName}; Password={dbConnectionModel.Password}; TrustServerCertificate=True;";
+
+            string query = "SELECT strDesc as ID ,strDesc AS [KEY], strDesc AS [VALUE] from dbo.tblDepartments"; // Adjust as needed
+            return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
+        }
+
+        public async Task<bool> CheckGLDBConnection(DBConnectionModel dbConnectionModel)
         {
             string connectionString =
                 $"Data Source={dbConnectionModel.ServerName}; Initial Catalog={dbConnectionModel.DBName}; User ID={dbConnectionModel.UserName}; Password={dbConnectionModel.Password}; TrustServerCertificate=True;";
-
-            using var connection = new SqlConnection(connectionString);
-            await connection.OpenAsync();
-
-            string sql = "SELECT Id, Name, Department FROM Employees"; // Adjust as needed
-            var result = await connection.QueryAsync<DropDownViewModel>(sql);
-            return result.ToList();
+            return await DapperContext.CheckDBConnection(connectionString);
         }
+
         public async Task<long> CreateCompany(CreateCompanyRequest request)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -156,6 +169,13 @@ namespace PalladiumPayroll.Repositories.Company
                 }
             }
             parameters.Add("@GLTransaction", glTransaction.AsTableValuedParameter("dbo.GLTransactionType"));
+
+            parameters.Add("@GLServerName", model.GlSetup?.DatabaseServerName);
+            parameters.Add("@GLUserName", model.GlSetup?.DatabaseUserName);
+            parameters.Add("@GLPassword", model.GlSetup?.Password);
+            parameters.Add("@GLDBName", model.GlSetup?.DatabaseName);
+            parameters.Add("@SalaryClearingAccountNumber", model.GlSetup?.SalaryClearingAccountNumber);
+            parameters.Add("@PalladiumDepartment", model.GlSetup?.PalladiumDepartment);
 
             // step-5 fund setup
             DataTable MedicalAid = new DataTable();

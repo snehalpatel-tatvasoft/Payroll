@@ -46,6 +46,8 @@ namespace PalladiumPayroll.Helper.Constants
             public const string CompanyAlreadyExists = "Company Already Exists";
             public const string CompanyRegisteredSuccessfully = "Company Registered Successfully";
             public const string ErrorCreatingCompany = "Error While Creating Company!!";
+            public const string GLSetupError = "Error while connecting GL Database!!";
+            public const string GLSetupSuccess = "GL database connected succssfully!!";
 
             #endregion
 

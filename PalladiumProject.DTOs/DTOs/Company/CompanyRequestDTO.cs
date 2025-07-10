@@ -111,6 +111,8 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public List<PayrollBenefitFundList>? PayrollBenefitFundList { get; set; }
         public CompanyBankAccount? CompanyBankAccount { get; set; }
         public List<TransactionList>? TransactionList { get; set; }
+        public GLSetup? GlSetup {  get; set; }
+
     }
 
     public class CheckCompanyExistModel
@@ -118,6 +120,16 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public int CompanyId { get; set; }
         public int? ExcludeCompanyId { get; set; }
         public string CompanyName { get; set; } = null!;
+    }
+
+    public class GLSetup
+    {
+        public string? DatabaseServerName { get; set; }
+        public string? DatabaseUserName { get; set; }
+        public string? DatabaseName { get; set; }
+        public string? Password { get; set; }
+        public string? SalaryClearingAccountNumber { get; set; }
+        public string? PalladiumDepartment { get; set; } 
     }
 
 }
