@@ -21,7 +21,7 @@ namespace PalladiumPayroll.Repositories.Home
 
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", employeeId);
-            var data = await _dapper.ExecuteStoredProcedure<Employee>("SP_FetchEmployeeList", parameters);
+            var data = await _dapper.ExecuteStoredProcedure<Employee>("usp_FetchEmployeeList", parameters);
 
             if (data.Count != 0)
             {
@@ -35,7 +35,7 @@ namespace PalladiumPayroll.Repositories.Home
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", employeeId);
 
-            return await _dapper.ExecuteStoredProcedureMultipleAsync("SP_FetchEmployeeList", parameters, async (multi) =>
+            return await _dapper.ExecuteStoredProcedureMultipleAsync("usp_FetchEmployeeList", parameters, async (multi) =>
             {
                 var employeeList = (await multi.ReadAsync<Employee>()).ToList();
                 var total = (await multi.ReadAsync<int>()).FirstOrDefault();
@@ -55,7 +55,7 @@ namespace PalladiumPayroll.Repositories.Home
             parameters.Add("@PayrollSetupId", PayrollSetupId);
             parameters.Add("@UserId", UserId);
 
-            return await _dapper.ExecuteStoredProcedureSingle<PayrollSummaryResponse>("SP_GetPayrollSummaryData", parameters);
+            return await _dapper.ExecuteStoredProcedureSingle<PayrollSummaryResponse>("usp_GetPayrollSummaryData", parameters);
         }
 
         public async Task<EmployeeTypeCountResponse> GetEmployeeTypeCount(int CompanyId, int PayrollSetupId, string UserId)
@@ -65,7 +65,7 @@ namespace PalladiumPayroll.Repositories.Home
             parameters.Add("@PayrollSetupId", PayrollSetupId);
             parameters.Add("@UserId", UserId);
 
-            return await _dapper.ExecuteStoredProcedureSingle<EmployeeTypeCountResponse>("SP_GetEmployeeTypeCount", parameters);
+            return await _dapper.ExecuteStoredProcedureSingle<EmployeeTypeCountResponse>("usp_GetEmployeeTypeCount", parameters);
         }
 
         public async Task<List<PayrollCycleDataResponse>> GetPayrollCycleData(int CompanyId, string UserId)
@@ -74,7 +74,7 @@ namespace PalladiumPayroll.Repositories.Home
             parameters.Add("@CompanyId", CompanyId);
             parameters.Add("@UserId", UserId);
 
-            return await _dapper.ExecuteStoredProcedure<PayrollCycleDataResponse>("SP_GetPayrollCycleData", parameters);
+            return await _dapper.ExecuteStoredProcedure<PayrollCycleDataResponse>("usp_GetPayrollCycleData", parameters);
         }
     }
 }
