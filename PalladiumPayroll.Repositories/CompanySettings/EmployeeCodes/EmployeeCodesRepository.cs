@@ -35,6 +35,6 @@ public class EmployeeCodesRepository : IEmployeeCodesRepository
         parameters.Add("@CompanyId", companyId);
 
         return await _dapper.ExecuteStoredProcedureSingle<EmployeeCodeResponseDTO>(
-            "sp_GetEmployeeCode", parameters);
+            "sp_GetEmployeeCodeData", parameters);
     }
 }

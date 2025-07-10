@@ -152,6 +152,15 @@ namespace PalladiumPayroll.Helper.Constants
             public const string EmployeeCodeSaveFailed  = "Failed to save employee code";
 
             #endregion
+
+
+            #region Payslip Display Setup
+
+            public static readonly string PayslipDisplaySetup = "Payslip Display Settings";
+
+            public const string PayslipDisplaySetupSaveFailed  = "Failed to save Payslip Display Settings";
+
+            #endregion
         }
     }
 
