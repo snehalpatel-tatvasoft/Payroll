@@ -10,8 +10,8 @@ namespace PalladiumPayroll.Services.Department
     public interface IDepartmentService
     {
         Task<JsonResult> GetDepartmentsByCompanyId(long companyId);
-        Task<JsonResult> CreateDepartment(AddEditDepartmentRequestDTO request);
-        Task<JsonResult> EditDepartment(long departmentId, AddEditDepartmentRequestDTO request);
+        Task<JsonResult> CreateDepartment(DepartmentRequestDTO request);
+        Task<JsonResult> EditDepartment(long departmentId, DepartmentRequestDTO request);
         Task<JsonResult> DeleteDepartment(long departmentId);
     }
 }

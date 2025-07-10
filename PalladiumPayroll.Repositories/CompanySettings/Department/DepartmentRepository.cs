@@ -28,7 +28,7 @@ namespace PalladiumPayroll.Repositories.Department
             return departments;
         }
 
-        public async Task<long> CreateDepartment(AddEditDepartmentRequestDTO request)
+        public async Task<long> CreateDepartment(DepartmentRequestDTO request)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", request.CompanyId);
@@ -38,7 +38,7 @@ namespace PalladiumPayroll.Repositories.Department
             return departmentId;
         }
 
-        public async Task<bool> EditDepartment(long departmentId, AddEditDepartmentRequestDTO request)
+        public async Task<bool> EditDepartment(long departmentId, DepartmentRequestDTO request)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@DepartmentId", departmentId);
