@@ -260,7 +260,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@ExcludeCompanyId", reqModel.ExcludeCompanyId);
             parameters.Add("@CompanyName", reqModel.CompanyName);
 
-            return await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CheckSubCompanyExists", parameters);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_CheckSubCompanyExists", parameters);
         }
 
         public async Task<bool> AddNewBank(BankModel bankModel)

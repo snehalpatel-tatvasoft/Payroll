@@ -23,7 +23,7 @@ namespace PalladiumPayroll.Repositories
 
         public async Task<List<DropDownViewModel>> GetTaxYearList()
         {
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchTaxYear");
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchTaxYear");
             return response;
         }
 
@@ -56,7 +56,7 @@ namespace PalladiumPayroll.Repositories
         }
         public async Task<List<TransactionList>> GetTransactionList()
         {
-            List<TransactionList> response = await _dapper.ExecuteStoredProcedure<TransactionList>("sp_GetTransactionList");
+            List<TransactionList> response = await _dapper.ExecuteStoredProcedure<TransactionList>("usp_GetTransactionList");
             return response;
         }
 
