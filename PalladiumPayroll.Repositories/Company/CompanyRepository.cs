@@ -32,7 +32,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@NoOfEmployee", request.NoOfEmployee);
             parameters.Add("@Country", request.Country);
 
-            long companyId = await _dapper.ExecuteStoredProcedureSingle<long>("sp_CreateCompany", parameters);
+            long companyId = await _dapper.ExecuteStoredProcedureSingle<long>("usp_CreateCompany", parameters);
             return companyId;
         }
 
@@ -48,7 +48,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@ContactNo", request.ContactNo);
             parameters.Add("@CompanyId", request.CompanyId);
 
-            Guid userId = await _dapper.ExecuteStoredProcedureSingle<Guid>("sp_CreateUser", parameters);
+            Guid userId = await _dapper.ExecuteStoredProcedureSingle<Guid>("usp_CreateUser", parameters);
             return userId;
         }
 
@@ -169,7 +169,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@BranchCode", model.CompanyBankAccount.BranchCode);
             parameters.Add("@CreatedBy", 1);
 
-            var isCreated = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_AddCompany", parameters);
+            var isCreated = await _dapper.ExecuteStoredProcedureSingle<bool>("uusp_AddCompany", parameters);
             if (isCreated)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Company, ActionType.Created));
@@ -183,7 +183,7 @@ namespace PalladiumPayroll.Repositories.Company
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyName", company);
 
-            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CheckCompanyExists", parameters);
+            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_CheckCompanyExists", parameters);
             return response;
         }
 
@@ -194,7 +194,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@BankName", bankModel.BankName);
             parameters.Add("@BranchCode", bankModel.BranchCode);
 
-            bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_AddBank", parameters);
+            bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_AddBank", parameters);
             return isAdded;
         }
         
@@ -203,7 +203,7 @@ namespace PalladiumPayroll.Repositories.Company
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
 
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_GetCompanyWithChildren", parameters);
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_GetCompanyWithChildren", parameters);
             return response;
         }
 
@@ -215,7 +215,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@CompanyId", companyId);
             parameters.Add("@UserId", userId);
 
-            bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_SetActiveCompanyId", parameters);
+            bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SetActiveCompanyId", parameters);
             return isAdded;
         }
     }

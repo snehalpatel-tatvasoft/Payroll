@@ -3,7 +3,7 @@ namespace PalladiumPayroll.Helper.Constants
 {
     public static class AppConstants
     {
-        public const int DefaultPageSize = 999999999;
+        public const int DefaultPageSize = 10;
 
         public const int AuthTokenExpiryInMinutes = 10;
 
@@ -16,6 +16,9 @@ namespace PalladiumPayroll.Helper.Constants
         public const int ResetPasswordTokenLength = 100;
 
         public const int PageNumber = 1;
+
+        public const string SortAsc = "ASC";
+        public const string SortDesc = "DESC";
 
         public static class ResponseMessages
         {

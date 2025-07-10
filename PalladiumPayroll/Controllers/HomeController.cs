@@ -18,7 +18,7 @@ namespace PalladiumPayroll.Controllers
         }
 
         [HttpGet("GetAllEmployeeList")]
-        public async Task<ActionResult> GetAllEmployeeList([FromQuery]Employee employee)
+        public async Task<ActionResult> GetAllEmployeeList(int id)
         {
             try
             {
