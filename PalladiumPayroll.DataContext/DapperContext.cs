@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using PalladiumPayroll.Helper;
 using System.Data;
+using PalladiumPayroll.Helper;
 
 namespace PalladiumPayroll.DataContext
 {

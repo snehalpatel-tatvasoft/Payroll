@@ -1,6 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PalladiumPayroll.Services.Applicationadmin;
+using PalladiumPayroll.Services.Auth;
+using PalladiumPayroll.Services.Company;
 using PalladiumPayroll.Services.Employees;
 using PalladiumPayroll.Services.Home;
+using PalladiumPayroll.Services.User;
 
 namespace PalladiumPayroll.Services
 {
@@ -9,7 +13,13 @@ namespace PalladiumPayroll.Services
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IHomeService, HomeService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ICommonService, CommonService>();
+            services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IApplicationadminService, ApplicationadminService>();
+            services.AddScoped<EmailService>();
             return services;
         }
     }
