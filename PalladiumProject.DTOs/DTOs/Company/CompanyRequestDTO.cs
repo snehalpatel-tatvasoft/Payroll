@@ -10,15 +10,15 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public string CompanyName { get; set; }
         public int CompanyTypeId { get; set; }
         public string CompanyRegNumber { get; set; }
-        public long TaxRegNumber { get; set; }
+        public long? TaxRegNumber { get; set; }
         public int StdIndustryCode { get; set; }
-        public string PAYEReferenceNumber { get; set; }
+        public string? PAYEReferenceNumber { get; set; }
         public int TradeClassificationId { get; set; }
-        public string UIFRefNumber { get; set; }
-        public string UIFRegNumber { get; set; }
+        public string? UIFRefNumber { get; set; }
+        public string? UIFRegNumber { get; set; }
         public int? SplEcoZoneId { get; set; }
-        public string SDLRefNumber { get; set; }
-        public int CurrencyID { get; set; }
+        public string? SDLRefNumber { get; set; }
+        public int? CurrencyID { get; set; }
         public int CountryID { get; set; }
         public bool IsExemptSDL { get; set; }
         public bool UseBCEARemuneration { get; set; }
