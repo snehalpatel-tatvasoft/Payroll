@@ -25,6 +25,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IMinimumWageService,MinimumWageService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<IEmployeeCodesService, EmployeeCodesService>();
+            services.AddScoped<ICustomizeReportService, CustomizeReportService>();
             services.AddScoped<IPayslipDisplaySetupService, PayslipDisplaySetupService>();
             return services;
         }
