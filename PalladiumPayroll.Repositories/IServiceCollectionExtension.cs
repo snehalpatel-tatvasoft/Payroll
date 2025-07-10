@@ -24,6 +24,8 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<IMinimumWageRepository, MinimumWageRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IEmployeeCodesRepository, EmployeeCodesRepository>();
+             services.AddScoped<IPayslipDisplaySetupRepository, PayslipDisplaySetupRepository>();
+
             return services;
         }
     }
