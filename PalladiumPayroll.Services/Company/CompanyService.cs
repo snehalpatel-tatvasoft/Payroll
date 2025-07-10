@@ -217,6 +217,16 @@ namespace PalladiumPayroll.Services.Company
             return await _companyRepository.GetPayrollCycleInfo(companyId, taxYearId);
         }
 
+        public async Task<List<PayrollMedicalAidList>> GetMedicalAidFundInfo(int companyId)
+        {
+            return await _companyRepository.GetMedicalAidFundInfo(companyId);
+        }
+
+        public async Task<List<PayrollBenefitFundList>> GetCompanyBenefitFundInfo(int companyId)
+        {
+            return await _companyRepository.GetCompanyBenefitFundInfo(companyId);
+        }
+
         public async Task<JsonResult> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle)
         {
             bool isAdded = await _companyRepository.UpsertPayrollCycleInfo(companyPayrollCycle);
@@ -227,10 +237,50 @@ namespace PalladiumPayroll.Services.Company
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
         }
 
+        public async Task<JsonResult> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList)
+        {
+            bool isAdded = await _companyRepository.UpsertCompanyBenefitFund(payrollBenefitFundList);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<JsonResult> AddMedicalAidFundInfo(PayrollMedicalAidList payrollMedicalAidList)
+        {
+            bool isAdded = await _companyRepository.AddMedicalAidFundInfo(payrollMedicalAidList);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
         public async Task<JsonResult> DeletePayrollCycleInfo(int cycleId)
         {
-            bool isAdded = await _companyRepository.DeletePayrollCycleInfo(cycleId);
-            if (isAdded)
+            bool isDeleted = await _companyRepository.DeletePayrollCycleInfo(cycleId);
+            if (isDeleted)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<JsonResult> DeleteMedicalAidFund(int fundId)
+        {
+            bool isDeleted = await _companyRepository.DeleteMedicalAidFund(fundId);
+            if (isDeleted)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<JsonResult> DeleteCompanyBenefitFund(int fundId)
+        {
+            bool isDeleted = await _companyRepository.DeleteCompanyBenefitFund(fundId);
+            if (isDeleted)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Deleted));
             }

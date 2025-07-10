@@ -356,6 +356,24 @@ namespace PalladiumPayroll.Repositories.Company
             return result;
         }
 
+        public async Task<List<PayrollMedicalAidList>> GetMedicalAidFundInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            List<PayrollMedicalAidList>? result = await _dapper.ExecuteStoredProcedure<PayrollMedicalAidList>("usp_GetCompanyMedicalAidFundByCompanyId", parameters);
+            return result;
+        }
+
+        public async Task<List<PayrollBenefitFundList>> GetCompanyBenefitFundInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            List<PayrollBenefitFundList>? result = await _dapper.ExecuteStoredProcedure<PayrollBenefitFundList>("usp_GetCompanyBenefitFundsByCompanyId", parameters);
+            return result;
+        }
+
         public async Task<bool> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -370,13 +388,62 @@ namespace PalladiumPayroll.Repositories.Company
             return isUpsert;
         }
 
+        public async Task<bool> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@BenId", payrollBenefitFundList.FundId);
+            parameters.Add("@CompanyId", payrollBenefitFundList.CompanyId);
+            parameters.Add("@BenFundName", payrollBenefitFundList.FundName);
+            parameters.Add("@BenFundType", payrollBenefitFundList.FundType);
+            parameters.Add("@ProvidentFund", payrollBenefitFundList.ProvidentFund);
+            parameters.Add("@PensionFund", payrollBenefitFundList.PensionFund);
+            parameters.Add("@ClearanceNo", payrollBenefitFundList.ClearanceNo);
+            parameters.Add("@CatFactor", payrollBenefitFundList.CatFactor);
+            parameters.Add("@FundCalType", payrollBenefitFundList.FundCal);
+            parameters.Add("@EmpCon", payrollBenefitFundList.EmpCon);
+            parameters.Add("@ComCon", payrollBenefitFundList.ComCon);
+            parameters.Add("@RFIPercent", payrollBenefitFundList.RFIPercent);
+
+            bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCompanyBenefitFund", parameters);
+            return isUpsert;
+        }
+
+        public async Task<bool> AddMedicalAidFundInfo(PayrollMedicalAidList payrollMedicalAidList)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", payrollMedicalAidList.CompanyId);
+            parameters.Add("@MedicalAidFundName", payrollMedicalAidList.FundName);
+            parameters.Add("@MedicalAidSchemeName", payrollMedicalAidList.SchemeName);
+
+            bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_AddCompanyMedicalAidFund", parameters);
+            return isAdded;
+        }
+
         public async Task<bool> DeletePayrollCycleInfo(int cycleId)
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@CycleId", cycleId);
 
-            bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteCompanyPayrollCycle", parameters);
-            return isUpsert;
+            bool isDeleted = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteCompanyPayrollCycle", parameters);
+            return isDeleted;
+        }
+
+        public async Task<bool> DeleteMedicalAidFund(int fundId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@FundId", fundId);
+
+            bool isDeleted = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteMedicalAidFund", parameters);
+            return isDeleted;
+        }
+
+        public async Task<bool> DeleteCompanyBenefitFund(int fundId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@FundId", fundId);
+
+            bool isDeleted = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteCompanyBenefitFund", parameters);
+            return isDeleted;
         }
     }
 }

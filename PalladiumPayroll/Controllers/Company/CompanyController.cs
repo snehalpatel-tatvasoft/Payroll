@@ -180,6 +180,34 @@ namespace PalladiumPayroll.Controllers.Company
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetMedicalAidFundInfo(int companyId)
+        {
+            try
+            {
+                List<PayrollMedicalAidList> companyInfo = await _companyService.GetMedicalAidFundInfo(companyId);
+                return HttpStatusCodeResponse.SuccessResponse(companyInfo, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetCompanyBenefitFundInfo(int companyId)
+        {
+            try
+            {
+                List<PayrollBenefitFundList> companyInfo = await _companyService.GetCompanyBenefitFundInfo(companyId);
+                return HttpStatusCodeResponse.SuccessResponse(companyInfo, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
         [HttpPost("[action]")]
         public async Task<ActionResult> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle)
         {
@@ -193,12 +221,64 @@ namespace PalladiumPayroll.Controllers.Company
             }
         }
 
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList)
+        {
+            try
+            {
+                return await _companyService.UpsertCompanyBenefitFund(payrollBenefitFundList);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
         [HttpDelete("[action]")]
         public async Task<ActionResult> DeletePayrollCycleInfo(int cycleId)
         {
             try
             {
                 return await _companyService.DeletePayrollCycleInfo(cycleId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeleteMedicalAidFund(int fundId)
+        {
+            try
+            {
+                return await _companyService.DeleteMedicalAidFund(fundId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeleteCompanyBenefitFund(int fundId)
+        {
+            try
+            {
+                return await _companyService.DeleteCompanyBenefitFund(fundId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> AddMedicalAidFundInfo(PayrollMedicalAidList payrollMedicalAidList)
+        {
+            try
+            {
+                return await _companyService.AddMedicalAidFundInfo(payrollMedicalAidList);
             }
             catch (Exception)
             {

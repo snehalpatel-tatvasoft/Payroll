@@ -65,16 +65,16 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public int CycleType { get; set; }
     }
 
-    public class PayrollMedicalAidList
+    public class PayrollMedicalAidList : BasicCompanyInfo 
     {
-        public int FundId { get; set; }
+        public int? FundId { get; set; }
         public string FundName { get; set; }
         public string SchemeName { get; set; }
     }
 
-    public class PayrollBenefitFundList
+    public class PayrollBenefitFundList : BasicCompanyInfo
     {
-        public int FundId { get; set; }
+        public int? FundId { get; set; }
         public string FundName { get; set; }
         public int FundType { get; set; }
         public string ClearanceNo { get; set; }
