@@ -1,14 +1,12 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
-using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -28,25 +26,22 @@ namespace PalladiumPayroll.Repositories.Company
 
         public async Task<List<DropDownViewModelWithString>> GetGLAccounts(DBConnectionModel dbConnectionModel)
         {
-            string connectionString =
-            $"Data Source={dbConnectionModel.ServerName}; Initial Catalog={dbConnectionModel.DBName}; User ID={dbConnectionModel.UserName}; Password={dbConnectionModel.Password}; TrustServerCertificate=True;";
-
+            string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
+      
             string query = "SELECT intGLNumber as ID ,intGLNumber AS [KEY], intGLNumber AS [VALUE] from dbo.tblAccounts"; // Adjust as needed
             return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
         }
         public async Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel)
         {
-            string connectionString =
-            $"Data Source={dbConnectionModel.ServerName}; Initial Catalog={dbConnectionModel.DBName}; User ID={dbConnectionModel.UserName}; Password={dbConnectionModel.Password}; TrustServerCertificate=True;";
-
+            string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
+      
             string query = "SELECT strDesc as ID ,strDesc AS [KEY], strDesc AS [VALUE] from dbo.tblDepartments"; // Adjust as needed
             return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
         }
 
         public async Task<bool> CheckGLDBConnection(DBConnectionModel dbConnectionModel)
         {
-            string connectionString =
-                $"Data Source={dbConnectionModel.ServerName}; Initial Catalog={dbConnectionModel.DBName}; User ID={dbConnectionModel.UserName}; Password={dbConnectionModel.Password}; TrustServerCertificate=True;";
+            string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
             return await DapperContext.CheckDBConnection(connectionString);
         }
 

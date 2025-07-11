@@ -16,6 +16,9 @@ namespace PalladiumPayroll.Helper.Constants
         public const int ResetPasswordTokenLength = 100;
 
         public const int PageNumber = 1;
+        
+        public const string DefaultConnectionString = "Data Source={0}; initial catalog={1}; User ID={2}; Password={3}; TrustServerCertificate=True;";
+
 
         public static class ResponseMessages
         {
