@@ -1,4 +1,9 @@
-﻿using PalladiumPayroll.DTOs.DTOs.Common;
+﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
+using PalladiumPayroll.DTOs.DTOs.Common;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
+using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories;
 
 namespace PalladiumPayroll.Services
@@ -11,29 +16,56 @@ namespace PalladiumPayroll.Services
             _commonRepository = commonRepository;
         }
 
-        public async Task<List<DropDownViewModel>> GetCountryList()
+        public async Task<JsonResult> GetCountryList()
         {
-            return await _commonRepository.GetCountryList();
+            List<DropDownViewModel> countryList = await _commonRepository.GetCountryList();
+            return HttpStatusCodeResponse.SuccessResponse(countryList, string.Empty);
         }
 
-        public async Task<List<DropDownViewModel>> GetBankList(int? companyId)
+        public async Task<JsonResult> GetTaxYearList()
         {
-            return await _commonRepository.GetBankList(companyId);
+            List<DropDownViewModel> yearList = await _commonRepository.GetTaxYearList();
+            return HttpStatusCodeResponse.SuccessResponse(yearList, string.Empty);
         }
 
-        public async Task<List<DropDownViewModel>> GetBranchList(int bankId)
+        public async Task<JsonResult> GetBankList(int? companyId)
         {
-            return await _commonRepository.GetBranchList(bankId);
+            List<DropDownViewModel> bankList = await _commonRepository.GetBankList(companyId);
+            return HttpStatusCodeResponse.SuccessResponse(bankList, string.Empty);
         }
 
-        public async Task<List<DropDownViewModel>> GetStandardIndustryCode()
+        public async Task<JsonResult> GetBranchList(int bankId)
         {
-            return await _commonRepository.GetStandardIndustryCode();
+            List<DropDownViewModel> branchList = await _commonRepository.GetBranchList(bankId);
+            return HttpStatusCodeResponse.SuccessResponse(branchList, string.Empty);
         }
 
-        public async Task<List<DropDownViewModel>> GetTradeClassification()
+        public async Task<JsonResult> GetStandardIndustryCode()
         {
-            return await _commonRepository.GetTradeClassification();
+            List<DropDownViewModel> standardList = await _commonRepository.GetStandardIndustryCode();
+            return HttpStatusCodeResponse.SuccessResponse(standardList, string.Empty);
+        }
+
+        public async Task<JsonResult> GetTradeClassification()
+        {
+            List<DropDownViewModel> tradeList = await _commonRepository.GetTradeClassification();
+            return HttpStatusCodeResponse.SuccessResponse(tradeList, string.Empty);
+        }
+
+        public async Task<JsonResult> GetTransactionList()
+        {
+            List<TransactionList> transactionList = await _commonRepository.GetTransactionList();
+            return HttpStatusCodeResponse.SuccessResponse(transactionList, string.Empty);
+        }
+
+        public async Task<JsonResult> CheckDBConnection(DBConnectionModel dbConnectionModel)
+        {
+            bool isConnected = await _commonRepository.CheckDBConnection(dbConnectionModel);
+            if(isConnected)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, "Database connection is healthy.");
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse("Database connection failed");
         }
     }
 }
