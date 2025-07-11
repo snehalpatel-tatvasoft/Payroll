@@ -1,7 +1,11 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
+using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+
 namespace PalladiumPayroll.Repositories
 {
     public class CommonRepository : ICommonRepository
@@ -15,6 +19,12 @@ namespace PalladiumPayroll.Repositories
         public async Task<List<DropDownViewModel>> GetCountryList()
         {
             List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchCountry");
+            return response;
+        }
+
+        public async Task<List<DropDownViewModel>> GetTaxYearList()
+        {
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchTaxYear");
             return response;
         }
 
@@ -44,6 +54,17 @@ namespace PalladiumPayroll.Repositories
         {
             List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchTradeClassification");
             return response;
+        }
+        public async Task<List<TransactionList>> GetTransactionList()
+        {
+            List<TransactionList> response = await _dapper.ExecuteStoredProcedure<TransactionList>("usp_GetTransactionList");
+            return response;
+        }
+
+        public async Task<bool> CheckDBConnection(DBConnectionModel dbConnectionModel)
+        {
+            string originalString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
+            return await DapperContext.CheckDBConnection(originalString);
         }
     }
 }

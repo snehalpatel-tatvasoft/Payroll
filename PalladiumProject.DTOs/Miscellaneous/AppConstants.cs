@@ -16,6 +16,9 @@ namespace PalladiumPayroll.Helper.Constants
         public const int ResetPasswordTokenLength = 100;
 
         public const int PageNumber = 1;
+        
+        public const string DefaultConnectionString = "Data Source={0}; initial catalog={1}; User ID={2}; Password={3}; TrustServerCertificate=True;";
+
 
         public const string SortAsc = "ASC";
         public const string SortDesc = "DESC";
@@ -27,11 +30,13 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string Success = "{0} {1} Successfully.";
             public static readonly string NotFound = "{0} Not Found!";
             public static readonly string Exception = "An Error Occurred While {0} {1}: {2}";
-            public static readonly string UnexpectedError = "Unexpected error occurred";
+            public static readonly string UnexpectedError = "An Unexpected error occurred";
             public static readonly string InvalidOrMissingRequestParameters = "Invalid or missing request parameters";
             public static readonly string UnAuthorized = "UnAuthorized Access !!";
             public static readonly string TryLater = "Plaese try again later.";
             public static readonly string AlreadyExist = "{0} already exists !";
+            public static readonly string Valid = "{0} is valid";
+            public static readonly string SomethingWrong = "Something went wrong.";
 
             #endregion
 
@@ -47,6 +52,8 @@ namespace PalladiumPayroll.Helper.Constants
             public const string CompanyAlreadyExists = "Company Already Exists";
             public const string CompanyRegisteredSuccessfully = "Company Registered Successfully";
             public const string ErrorCreatingCompany = "Error While Creating Company!!";
+            public const string GLSetupError = "Error while connecting GL Database!!";
+            public const string GLSetupSuccess = "GL database connected succssfully!!";
 
             #endregion
 

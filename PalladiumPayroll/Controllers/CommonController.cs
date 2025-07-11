@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PalladiumPayroll.DTOs.DTOs.Common;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
 
 namespace PalladiumPayroll.Controllers
 {
@@ -21,12 +22,25 @@ namespace PalladiumPayroll.Controllers
         {
             try
             {
-                List<DropDownViewModel> countryList = await _commonService.GetCountryList();
-                return HttpStatusCodeResponse.SuccessResponse(countryList, string.Empty);
+                return await _commonService.GetCountryList();
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [ResponseCache(Duration = 60)]
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetTaxYearList()
+        {
+            try
+            {
+                return await _commonService.GetTaxYearList();
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
 
@@ -35,12 +49,11 @@ namespace PalladiumPayroll.Controllers
         {
             try
             {
-                List<DropDownViewModel> bankList = await _commonService.GetBankList(companyId);
-                return HttpStatusCodeResponse.SuccessResponse(bankList, string.Empty);
+                return await _commonService.GetBankList(companyId);
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
 
@@ -49,12 +62,11 @@ namespace PalladiumPayroll.Controllers
         {
             try
             {
-                List<DropDownViewModel> branchList = await _commonService.GetBranchList(bankId);
-                return HttpStatusCodeResponse.SuccessResponse(branchList, string.Empty);
+                return await _commonService.GetBranchList(bankId);
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
 
@@ -64,12 +76,11 @@ namespace PalladiumPayroll.Controllers
         {
             try
             {
-                List<DropDownViewModel> standardList = await _commonService.GetStandardIndustryCode();
-                return HttpStatusCodeResponse.SuccessResponse(standardList, string.Empty);
+                return await _commonService.GetStandardIndustryCode();
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
 
@@ -79,8 +90,34 @@ namespace PalladiumPayroll.Controllers
         {
             try
             {
-                List<DropDownViewModel> tradeList = await _commonService.GetTradeClassification();
-                return HttpStatusCodeResponse.SuccessResponse(tradeList, string.Empty);
+                return await _commonService.GetTradeClassification();
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> CheckDBConnection([FromQuery]DBConnectionModel dbConnectionModel)
+        {
+            try
+            {
+                return await _commonService.CheckDBConnection(dbConnectionModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetTransactionList()
+        {
+            try
+            {
+                return await _commonService.GetTransactionList();
             }
             catch (Exception)
             {
