@@ -131,7 +131,7 @@ namespace PalladiumPayroll.Helper.Constants
             public const string MinimumWageNotFound = "Minimum Wage entry could not be deleted or was not found.";
             public const string WageIdNotFound = "Wage Id is not found.";
             public const string CompanyIdNotFound = "Company Id is not found.";
-            
+
             #endregion
 
             #region Department
@@ -166,6 +166,16 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string PayslipDisplaySetup = "Payslip Display Settings";
 
             public const string PayslipDisplaySetupSaveFailed  = "Failed to save Payslip Display Settings";
+
+            #endregion
+
+            #region Create Transaction
+            public static readonly string TransactionCreatedSuccessfully = "Create transaction successfully.";
+
+            public static readonly string TransactionCreationFailed = "Failed to create transaction.";
+
+            public static readonly string TransactionUpdatedSuccessfully = "Transaction updated successfully.";
+            public static readonly string TransactionUpdateFailed = "Failed to update transaction.";
 
             #endregion
         }
