@@ -17,7 +17,7 @@ namespace PalladiumPayroll.Controllers.Company_Settings
         }
 
         [HttpPost("CreateDesignations")]
-        public async Task<ActionResult> CreateDesignations([FromBody] DesignationRequestDto request)
+        public async Task<ActionResult> CreateDesignations([FromBody] DesignationRequestDTO request)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace PalladiumPayroll.Controllers.Company_Settings
         }
 
         [HttpPatch("UpdateDesignations")]
-        public async Task<ActionResult> UpdateDesignations([FromBody] DesignationRequestDto request)
+        public async Task<ActionResult> UpdateDesignations([FromBody] DesignationRequestDTO request)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace PalladiumPayroll.Controllers.Company_Settings
             }
         }
         [HttpPost("ImportDesignations")]
-        public async Task<ActionResult> ImportDesignations([FromBody] ImportDesignationRequestDto request)
+        public async Task<ActionResult> ImportDesignations([FromBody] ImportDesignationRequestDTO request)
         {
             try
             {

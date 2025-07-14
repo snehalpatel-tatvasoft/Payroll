@@ -4,6 +4,7 @@ using PalladiumPayroll.Services.Auth;
 using PalladiumPayroll.Services.Company;
 using PalladiumPayroll.Services.Company_Settings;
 using PalladiumPayroll.Services.CompanySettings;
+using PalladiumPayroll.Services.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Services.Department;
 using PalladiumPayroll.Services.Home;
 using PalladiumPayroll.Services.User;
@@ -24,6 +25,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IDesignationsService, DesignationsService>();
             services.AddScoped<IMinimumWageService,MinimumWageService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
+            services.AddScoped<ICreateTransactionService, CreateTransactionService>();
             return services;
         }
     }
