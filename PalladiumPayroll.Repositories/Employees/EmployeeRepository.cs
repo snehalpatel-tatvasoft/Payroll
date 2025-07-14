@@ -51,7 +51,7 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@PageSize", reqModel.PageSize);
             parameters.Add("@SortBy", reqModel.SortBy);
             parameters.Add("@SortType", reqModel.sortType == true ? SortAsc : SortDesc);
-            parameters.Add("@SearchByName", reqModel.Search);
+            parameters.Add("@SearchByName", string.IsNullOrEmpty(reqModel.Search) ? string.Empty : reqModel.Search);
             parameters.Add("@TotalCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             var employeeData = await _dapper.ExecuteStoredProcedure<EmployeeDataViewModel>("usp_GetEmployeeList", parameters);
