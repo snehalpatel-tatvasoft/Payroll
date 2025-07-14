@@ -19,7 +19,7 @@ namespace PalladiumPayroll.Repositories.User
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@Email", email);
 
-            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CheckEmailExists", parameters);
+            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_CheckEmailExists", parameters);
             return response;
         }
 
@@ -28,7 +28,7 @@ namespace PalladiumPayroll.Repositories.User
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@Email", email);
 
-            return await _dapper.ExecuteStoredProcedureSingle<UserResponse>("sp_GetUserDetailsByEmail", parameters);
+            return await _dapper.ExecuteStoredProcedureSingle<UserResponse>("usp_GetUserDetailsByEmail", parameters);
         }
 
         public async Task<bool> ConfirmEmail(string userId)
@@ -36,7 +36,7 @@ namespace PalladiumPayroll.Repositories.User
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@UserId", userId);
 
-            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_ConfirmUserEmail", parameters);
+            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_ConfirmUserEmail", parameters);
             return response;
         }
 
@@ -45,7 +45,7 @@ namespace PalladiumPayroll.Repositories.User
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@UserId", userId);
 
-            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CheckIsUserLoggedIn", parameters);
+            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_CheckIsUserLoggedIn", parameters);
             return response;
         }
 
@@ -54,7 +54,7 @@ namespace PalladiumPayroll.Repositories.User
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@UserId", userId);
 
-            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_UpdateUserLastActivity", parameters);
+            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateUserLastActivity", parameters);
             return response;
         }
 
@@ -63,13 +63,13 @@ namespace PalladiumPayroll.Repositories.User
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@UserId", userId);
 
-            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_UpdateIsLoggedInFlag", parameters);
+            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateIsLoggedInFlag", parameters);
             return response;
         }
 
         public async Task<bool> LogoutInactiveUsers()
         {
-            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_UpdateInActiveUsers");
+            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateInActiveUsers");
             return response;
         }
 
@@ -78,7 +78,7 @@ namespace PalladiumPayroll.Repositories.User
             var parameters = new DynamicParameters();
             parameters.Add("@Email", email);
 
-            List<CompanyDetails>? result = await _dapper.ExecuteStoredProcedure<CompanyDetails>("sp_GetCompaniesByUserEmail", parameters);
+            List<CompanyDetails>? result = await _dapper.ExecuteStoredProcedure<CompanyDetails>("usp_GetCompaniesByUserEmail", parameters);
             return result.ToList();
         }
     }

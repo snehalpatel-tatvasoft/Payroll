@@ -44,7 +44,7 @@ namespace PalladiumPayroll.Services.Department
             }
         }
 
-        public async Task<JsonResult> CreateDepartment(CreateDepartmentRequestDto request)
+        public async Task<JsonResult> CreateDepartment(DepartmentRequestDTO request)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace PalladiumPayroll.Services.Department
             }
         }
 
-        public async Task<JsonResult> EditDepartment(long departmentId, EditDepartmentRequestDto request)
+        public async Task<JsonResult> EditDepartment(long departmentId, DepartmentRequestDTO request)
         {
             try
             {

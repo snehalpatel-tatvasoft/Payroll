@@ -18,7 +18,7 @@ namespace PalladiumPayroll.Repositories.Applicationadmin
 
             var parameters = new DynamicParameters();
             parameters.Add("@mode", mode);
-            var data = await _dapper.ExecuteStoredProcedure<UserActivation>("SP_GetUserActivationData", parameters);
+            var data = await _dapper.ExecuteStoredProcedure<UserActivation>("usp_GetUserActivationData", parameters);
 
             if (data.Count != 0)
             {

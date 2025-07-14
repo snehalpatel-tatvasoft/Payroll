@@ -15,12 +15,12 @@ namespace PalladiumPayroll.Repositories.Department
             _dapper = new DapperContext(configuration);
         }
 
-        public async Task<List<DepartmentDto>> GetDepartmentsByCompanyId(long companyId)
+        public async Task<List<DepartmentResponseDTO>> GetDepartmentsByCompanyId(long companyId)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
 
-            var departments = await _dapper.ExecuteStoredProcedure<DepartmentDto>(
+            var departments = await _dapper.ExecuteStoredProcedure<DepartmentResponseDTO>(
                 "sp_GetDepartmentsByCompanyId",
                 parameters
             );
@@ -28,7 +28,7 @@ namespace PalladiumPayroll.Repositories.Department
             return departments;
         }
 
-        public async Task<long> CreateDepartment(CreateDepartmentRequestDto request)
+        public async Task<long> CreateDepartment(DepartmentRequestDTO request)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", request.CompanyId);
@@ -38,7 +38,7 @@ namespace PalladiumPayroll.Repositories.Department
             return departmentId;
         }
 
-        public async Task<bool> EditDepartment(long departmentId, EditDepartmentRequestDto request)
+        public async Task<bool> EditDepartment(long departmentId, DepartmentRequestDTO request)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@DepartmentId", departmentId);
