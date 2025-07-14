@@ -41,11 +41,20 @@ public class PayslipDisplaySetupController : ControllerBase
     [HttpGet("[action]")]
     public async Task<ActionResult> GetPayslipSettings(int companyId)
     {
-        if (companyId <= 0)
+        try
         {
-            return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
-        }
+            if (companyId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+            }
 
-        return await _payslipDisplaySetupService.GetPayslipSettingsByCompanyId(companyId);
+            return await _payslipDisplaySetupService.GetPayslipSettingsByCompanyId(companyId);
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.PayslipDisplaySetup, ex.Message)
+            );
+        }
     }
 }

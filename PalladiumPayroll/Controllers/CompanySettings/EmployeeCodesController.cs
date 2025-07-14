@@ -40,11 +40,20 @@ public class EmployeeCodesController : ControllerBase
     [HttpGet("[action]")]
     public async Task<ActionResult> GetEmployeeCode(int companyId)
     {
-        if (companyId <= 0)
+        try
         {
-            return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
-        }
+            if (companyId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+            }
 
-        return await _employeeCodesService.GetEmployeeCodeByCompanyId(companyId);
+            return await _employeeCodesService.GetEmployeeCodeByCompanyId(companyId);
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeCode, ex.Message)
+            );
+        }
     }
 }
