@@ -123,5 +123,14 @@ public class CreateTransactionRepository : ICreateTransactionRepository
 
         return result.FirstOrDefault();
     }
+    public async Task<bool> DeleteTransaction(long id)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@Id", id);
+
+        return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteTransaction", parameters);
+    }
+
+
 
 }

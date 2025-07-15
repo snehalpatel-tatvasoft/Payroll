@@ -173,9 +173,9 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string TransactionCreatedSuccessfully = "Create transaction successfully.";
             public static readonly string TransactionCreationFailed = "Failed to create transaction.";
             public static readonly string DuplicateTransaction = "Transaction exists with the same type and description.";
-
             public static readonly string TransactionUpdatedSuccessfully = "Transaction updated successfully.";
             public static readonly string TransactionUpdateFailed = "Failed to update transaction.";
+            public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
 
             #endregion
         }

@@ -9,6 +9,7 @@ public interface ICreateTransactionService
     Task<JsonResult> AddTransaction(CreateTransactionRequestDTO request);
     Task<JsonResult> UpdateTransaction(CreateTransactionRequestDTO request);
     Task<JsonResult> GetTransactionById(long payrollProcessId);
+    Task<JsonResult> DeleteTransaction(long payrollProcessId);
 
     
 }

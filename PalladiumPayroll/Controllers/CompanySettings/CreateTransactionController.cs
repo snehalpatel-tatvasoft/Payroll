@@ -73,5 +73,20 @@ public class CreateTransactionController : ControllerBase
             return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
         }
     }
+    
+    [HttpDelete("delete-transaction/{id}")]
+    public async Task<ActionResult> DeleteTransaction(long id)
+    {
+        try
+        {
+            JsonResult res = await _createTransactionService.DeleteTransaction(id);
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+        }
+    }
+
 
 }
