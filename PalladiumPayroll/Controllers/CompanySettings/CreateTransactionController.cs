@@ -44,6 +44,7 @@ public class CreateTransactionController : ControllerBase
             return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
         }
     }
+
     [HttpPut("update-transaction/{id}")]
     public async Task<ActionResult> UpdateTransaction(long id, [FromBody] CreateTransactionRequestDTO request)
     {
@@ -51,6 +52,20 @@ public class CreateTransactionController : ControllerBase
         {
             request.PayrollProcessId = id;
             var res = await _createTransactionService.UpdateTransaction(request);
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+        }
+    }
+
+    [HttpGet("transactions/{id}")]
+    public async Task<ActionResult> GetTransactionById(long id)
+    {
+        try
+        {
+            var res = await _createTransactionService.GetTransactionById(id);
             return res;
         }
         catch (Exception ex)
