@@ -178,6 +178,17 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string TransactionUpdateFailed = "Failed to update transaction.";
 
             #endregion
+
+            #region Payslip Display Setup
+
+            public static readonly string EmployeeGrievances = "Employee Grievances";
+
+            public static readonly string NatureOfGrievances = "Nature of Grievances";
+            public const string EmployeeGrievanceSaveFailed  = "Failed to save Employee Grievances";
+            public const string InvalidEmployeeGrievanceId = "Employee Grievance Id is Invalid.";
+            public const string EmployeeGrievanceNotFound = "Employee Grievance was not found.";
+
+            #endregion
         }
     }
 

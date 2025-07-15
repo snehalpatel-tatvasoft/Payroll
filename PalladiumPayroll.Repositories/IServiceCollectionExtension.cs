@@ -7,6 +7,7 @@ using PalladiumPayroll.Repositories.CompanySettings;
 using PalladiumPayroll.Repositories.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Repositories.Department;
 using PalladiumPayroll.Repositories.Home;
+using PalladiumPayroll.Repositories.HRFunctions.EmployeeGrievances;
 using PalladiumPayroll.Repositories.User;
 
 namespace PalladiumPayroll.Repositories
@@ -30,6 +31,7 @@ namespace PalladiumPayroll.Repositories
 
             services.AddScoped<ITimesheetSetupRepository, TimesheetSetupRepository>();
             services.AddScoped<ICreateTransactionRepository, CreateTransactionRepository>();
+            services.AddScoped<IEmployeeGrievancesRepository, EmployeeGrievancesRepository>();
             return services;
         }
     }
