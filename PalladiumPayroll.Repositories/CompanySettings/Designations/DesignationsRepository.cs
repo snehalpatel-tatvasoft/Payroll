@@ -20,7 +20,7 @@ public class DesignationsRepository : IDesignationsRepository
         _dapper = new DapperContext(_configuration);
     }
 
-    public async Task<bool> CreateDesignations(DesignationRequestDto request)
+    public async Task<bool> CreateDesignations(DesignationRequestDTO request)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@DesignationName", request.DesignationsName);
@@ -30,12 +30,12 @@ public class DesignationsRepository : IDesignationsRepository
         return await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CreateDesignation", parameters);
     }
 
-    public async Task<List<DesignationResponseDto>> GetAllDesignations(long companyId)
+    public async Task<List<DesignationResponseDTO>> GetAllDesignations(long companyId)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@CompanyId", companyId);
 
-        var result = await _dapper.ExecuteStoredProcedure<DesignationResponseDto>(
+        var result = await _dapper.ExecuteStoredProcedure<DesignationResponseDTO>(
             "sp_GetAllDesignations", parameters);
         return result.ToList();
     }
@@ -49,7 +49,7 @@ public class DesignationsRepository : IDesignationsRepository
         return await _dapper.ExecuteStoredProcedureSingle<bool>("sp_DeleteDesignation", parameters);
     }
 
-    public async Task<bool> UpdateDesignations(DesignationRequestDto request)
+    public async Task<bool> UpdateDesignations(DesignationRequestDTO request)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@Id", request.Id);
@@ -59,7 +59,7 @@ public class DesignationsRepository : IDesignationsRepository
 
         return await _dapper.ExecuteStoredProcedureSingle<bool>("sp_UpdateDesignation", parameters);
     }
-    public async Task<bool> CheckDuplicateDesignation(DesignationRequestDto request)
+    public async Task<bool> CheckDuplicateDesignation(DesignationRequestDTO request)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@Id", request.Id);
@@ -73,7 +73,7 @@ public class DesignationsRepository : IDesignationsRepository
     }
     
     
-public async Task<string?> ImportDesignations(ImportDesignationRequestDto request)
+public async Task<string?> ImportDesignations(ImportDesignationRequestDTO request)
 {
     foreach (var item in request.Designations)
     {

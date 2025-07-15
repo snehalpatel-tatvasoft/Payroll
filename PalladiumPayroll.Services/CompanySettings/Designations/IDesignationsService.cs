@@ -5,10 +5,10 @@ namespace PalladiumPayroll.Services.Company_Settings;
 
 public interface IDesignationsService
 {
-    Task<JsonResult> CreateDesignations(DesignationRequestDto request);
+    Task<JsonResult> CreateDesignations(DesignationRequestDTO request);
     Task<JsonResult> GetAllDesignations(long companyId);
     Task<JsonResult> DeleteDesignations(long id);
-    Task<JsonResult> UpdateDesignations(DesignationRequestDto request);
-    Task<JsonResult> ImportDesignations(ImportDesignationRequestDto request);
+    Task<JsonResult> UpdateDesignations(DesignationRequestDTO request);
+    Task<JsonResult> ImportDesignations(ImportDesignationRequestDTO request);
 
 }

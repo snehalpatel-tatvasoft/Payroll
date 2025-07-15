@@ -1,6 +1,6 @@
 namespace PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 
-public class DesignationResponseDto
+public class DesignationResponseDTO
 {
         public int Id { get; set; }
         public string DesignationsName { get; set; } = null! ;

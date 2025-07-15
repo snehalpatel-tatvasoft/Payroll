@@ -16,7 +16,7 @@ public class DesignationsService : IDesignationsService
         _designationsRepository = designationsRepository;
     }
 
-    public async Task<JsonResult> CreateDesignations(DesignationRequestDto request)
+    public async Task<JsonResult> CreateDesignations(DesignationRequestDTO request)
     {
         try
         {
@@ -69,7 +69,7 @@ public class DesignationsService : IDesignationsService
         }
     }
 
-    public async Task<JsonResult> UpdateDesignations(DesignationRequestDto request)
+    public async Task<JsonResult> UpdateDesignations(DesignationRequestDTO request)
     {
         try
         {
@@ -93,7 +93,7 @@ public class DesignationsService : IDesignationsService
         }
     }
 
-public async Task<JsonResult> ImportDesignations(ImportDesignationRequestDto request)
+public async Task<JsonResult> ImportDesignations(ImportDesignationRequestDTO request)
 {
     try
     {

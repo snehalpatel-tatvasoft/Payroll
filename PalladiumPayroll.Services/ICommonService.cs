@@ -1,13 +1,17 @@
-﻿using PalladiumPayroll.DTOs.DTOs.Common;
+﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 
 namespace PalladiumPayroll.Services
 {
     public interface ICommonService
     {
-        Task<List<DropDownViewModel>> GetCountryList();
-        Task<List<DropDownViewModel>> GetBankList(int? companyId);
-        Task<List<DropDownViewModel>> GetBranchList(int bankId);
-        Task<List<DropDownViewModel>> GetStandardIndustryCode();
-        Task<List<DropDownViewModel>> GetTradeClassification();
+        Task<JsonResult> GetCountryList();
+        Task<JsonResult> GetTaxYearList();
+        Task<JsonResult> GetBankList(int? companyId);
+        Task<JsonResult> GetBranchList(int bankId);
+        Task<JsonResult> GetStandardIndustryCode();
+        Task<JsonResult> GetTradeClassification();
+        Task<JsonResult> GetTransactionList();
+        Task<JsonResult> CheckDBConnection(DBConnectionModel dbConnectionModel);
     }
 }

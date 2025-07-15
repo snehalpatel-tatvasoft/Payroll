@@ -24,7 +24,7 @@ public class EmployeeCodesRepository : IEmployeeCodesRepository
         parameters.Add("@InitialEmployeeCode", string.IsNullOrEmpty(request.InitialCode) ? null : request.InitialCode);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-        await _dapper.ExecuteStoredProcedureSingle<object>("sp_SaveEmployeeCode", parameters);
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_SaveEmployeeCode", parameters);
 
         return parameters.Get<bool>("@IsSuccess");
     }
@@ -35,6 +35,6 @@ public class EmployeeCodesRepository : IEmployeeCodesRepository
         parameters.Add("@CompanyId", companyId);
 
         return await _dapper.ExecuteStoredProcedureSingle<EmployeeCodeResponseDTO>(
-            "sp_GetEmployeeCodeData", parameters);
+            "usp_GetEmployeeCodeData", parameters);
     }
 }

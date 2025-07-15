@@ -28,7 +28,7 @@ public class PayslipDisplaySetupRepository : IPayslipDisplaySetupRepository
         parameters.Add("@RestorePayslipLayout", request.RestorePayslipLayout);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-        await _dapper.ExecuteStoredProcedureSingle<object>("sp_SavePayslipLayout", parameters);
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_SavePayslipLayout", parameters);
 
         return parameters.Get<bool>("@IsSuccess");
     }
@@ -41,7 +41,7 @@ public class PayslipDisplaySetupRepository : IPayslipDisplaySetupRepository
         parameters.Add("@CompanyId", companyId);
 
         return await _dapper.ExecuteStoredProcedureSingle<PayslipDisplaySetupDataDTO>(
-            "sp_GetPayslipLayoutData", parameters);
+            "usp_GetPayslipLayoutData", parameters);
     }
 
 }

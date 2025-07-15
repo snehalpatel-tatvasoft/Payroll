@@ -4,6 +4,7 @@ using PalladiumPayroll.Services.Auth;
 using PalladiumPayroll.Services.Company;
 using PalladiumPayroll.Services.Company_Settings;
 using PalladiumPayroll.Services.CompanySettings;
+using PalladiumPayroll.Services.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Services.Department;
 using PalladiumPayroll.Services.Home;
 using PalladiumPayroll.Services.User;
@@ -28,6 +29,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<ICustomizeReportService, CustomizeReportService>();
             services.AddScoped<IPayslipDisplaySetupService, PayslipDisplaySetupService>();
             services.AddScoped<ITimesheetSetupService, TimesheetSetupService>();
+            services.AddScoped<ICreateTransactionService, CreateTransactionService>();
             services.AddScoped<IPasswordPolicyService, PasswordPolicyService>();
             return services;
         }
