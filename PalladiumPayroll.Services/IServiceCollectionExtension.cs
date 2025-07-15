@@ -28,6 +28,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<ICustomizeReportService, CustomizeReportService>();
             services.AddScoped<IPayslipDisplaySetupService, PayslipDisplaySetupService>();
             services.AddScoped<ITimesheetSetupService, TimesheetSetupService>();
+            services.AddScoped<IPasswordPolicyService, PasswordPolicyService>();
             return services;
         }
     }

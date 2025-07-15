@@ -22,7 +22,7 @@ public class CustomizeReportRepository : ICustomizeReportRepository
     {
 
         var result = await _dapper.ExecuteStoredProcedure<CustomizeReportResponseDTO>(
-            "sp_GetAllReports", null);
+            "usp_GetAllReports", null);
         return result.ToList();
     }
 
@@ -33,7 +33,7 @@ public class CustomizeReportRepository : ICustomizeReportRepository
         parameters.Add("@CompanyId", request.CompanyId, dbType: DbType.Int32, direction: ParameterDirection.Input);
 
         return await _dapper.ExecuteStoredProcedureSingle<DownloadReportResponseDTO>(
-            "sp_DownloadReport", parameters);
+            "usp_DownloadReport", parameters);
     }
 
      public async Task<UploadReportResponseDTO?> UploadReport(UploadReportRequestDTO request, string reportPath)
@@ -45,7 +45,7 @@ public class CustomizeReportRepository : ICustomizeReportRepository
         parameters.Add("@ReportPathId", dbType: DbType.Int64, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedure<UploadReportResponseDTO>(
-            "sp_UploadReport", parameters);
+            "usp_UploadReport", parameters);
 
         var reportPathId = parameters.Get<long>("@ReportPathId");
 
