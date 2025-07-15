@@ -32,8 +32,19 @@ public class CreateTransactionService : ICreateTransactionService
     {
         try
         {
+            bool isDuplicate = await _createTransactionRepository.CheckDuplicateTransaction(
+                request.CompanyId,
+                request.TransactionType,
+                request.Description
+            );
+
+            if (isDuplicate)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DuplicateTransaction);
+            }
 
             bool isCreated = await _createTransactionRepository.AddTransaction(request);
+
             if (isCreated)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.TransactionCreatedSuccessfully);
@@ -44,13 +55,25 @@ public class CreateTransactionService : ICreateTransactionService
         catch (Exception)
         {
             return HttpStatusCodeResponse.BadRequestResponse();
-
         }
     }
+
     public async Task<JsonResult> UpdateTransaction(CreateTransactionRequestDTO request)
     {
         try
         {
+            bool isDuplicate = await _createTransactionRepository.CheckDuplicateTransaction(
+                request.CompanyId,
+                request.TransactionType,
+                request.Description,
+                request.PayrollProcessId
+            );
+
+            if (isDuplicate)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DuplicateTransaction);
+            }
+
             bool isUpdated = await _createTransactionRepository.UpdateTransaction(request);
             if (isUpdated)
             {
@@ -59,15 +82,22 @@ public class CreateTransactionService : ICreateTransactionService
 
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TransactionUpdateFailed);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return new JsonResult(new
-            {
-                success = false,
-                error = ex.Message,
-                inner = ex.InnerException?.Message,
-                stack = ex.StackTrace
-            });
+             return HttpStatusCodeResponse.BadRequestResponse();
+
+        }
+    }
+    public async Task<JsonResult> GetTransactionById(long payrollProcessId)
+    {
+        try
+        {
+            var transaction = await _createTransactionRepository.GetTransactionById(payrollProcessId);
+            return HttpStatusCodeResponse.SuccessResponse(transaction, ResponseMessages.DataFetchSuccess);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
         }
     }
 

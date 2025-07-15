@@ -18,7 +18,7 @@ public class CreateTransactionResponseDTO
     public bool RFI { get; set; }
     public decimal? RfiPercent { get; set; }
     public bool ETI { get; set; }
-    public decimal? EtiUsedPercentValue { get; set; }
+    public bool? EtiUsedPercentValue { get; set; }
     public bool Enable { get; set; }
     public string BCEA { get; set; } = null!;
     public bool SpecialRun { get; set; }
@@ -30,5 +30,8 @@ public class CreateTransactionResponseDTO
     public decimal? Amount { get; set; }
     public bool AffectTaxBenefitOnly { get; set; }
     public long? Council { get; set; }
+    public int ShiftCalculationType { get; set; }
+    public int Factor { get; set; }
+    public int NumberOfWeeks { get; set; }
 
 }

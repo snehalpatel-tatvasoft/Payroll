@@ -8,5 +8,7 @@ public interface ICreateTransactionRepository
     Task<bool> AddTransaction(CreateTransactionRequestDTO request);
 
     Task<bool> UpdateTransaction(CreateTransactionRequestDTO request);
+    Task<bool> CheckDuplicateTransaction(long companyId, int allowanceTypeId, string description, long? payrollProcessId = null);
+    Task<CreateTransactionResponseDTO?> GetTransactionById(long payrollProcessId);
 
 }

@@ -24,7 +24,7 @@ namespace PalladiumPayroll.Repositories.CompanySettings
             parameters.Add("@CompanyId", companyId, dbType: DbType.Int64);
 
             var result = await _dapper.ExecuteStoredProcedure<TimesheetSetupResponseDTO>(
-                "sp_GetPayrollCycles", parameters);
+                "usp_GetPayrollCycles", parameters);
             return result.ToList();
         }
 
@@ -34,7 +34,7 @@ namespace PalladiumPayroll.Repositories.CompanySettings
             parameters.Add("@CompanyId", companyId, dbType: DbType.Int64);
 
             var result = await _dapper.ExecuteStoredProcedure<TimesheetPayrollSetupResponseDTO>(
-                "sp_GetTimesheetPayrollSetup", parameters);
+                "usp_GetTimesheetPayrollSetup", parameters);
             return result.ToList();
         }
 
@@ -46,7 +46,7 @@ namespace PalladiumPayroll.Repositories.CompanySettings
             parameters.Add("@CompanyPayrollIds", string.Join(",", request.CompanyPayrollIds));
 
             await _dapper.ExecuteStoredProcedure<object>(
-                "sp_UpsertTimesheetPayrollSetup", parameters);
+                "usp_UpsertTimesheetPayrollSetup", parameters);
             return true;
         }
     }
