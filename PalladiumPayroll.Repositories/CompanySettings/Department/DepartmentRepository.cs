@@ -21,7 +21,7 @@ namespace PalladiumPayroll.Repositories.Department
             parameters.Add("@CompanyId", companyId);
 
             var departments = await _dapper.ExecuteStoredProcedure<DepartmentResponseDTO>(
-                "sp_GetDepartmentsByCompanyId",
+                "usp_GetDepartmentsByCompanyId",
                 parameters
             );
 
@@ -34,7 +34,7 @@ namespace PalladiumPayroll.Repositories.Department
             parameters.Add("@CompanyId", request.CompanyId);
             parameters.Add("@DepartmentName", request.DepartmentName);
 
-            long departmentId = await _dapper.ExecuteStoredProcedureSingle<long>("sp_CreateDepartment", parameters);
+            long departmentId = await _dapper.ExecuteStoredProcedureSingle<long>("usp_CreateDepartment", parameters);
             return departmentId;
         }
 
@@ -45,7 +45,7 @@ namespace PalladiumPayroll.Repositories.Department
             parameters.Add("@DepartmentName", request.DepartmentName);
 
             int rowsAffected = await _dapper.CreateConnection().ExecuteAsync(
-                "sp_UpdateDepartment",
+                "usp_UpdateDepartment",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
@@ -59,7 +59,7 @@ namespace PalladiumPayroll.Repositories.Department
             parameters.Add("@DepartmentId", departmentId);
 
             int rowsAffected = await _dapper.CreateConnection().ExecuteAsync(
-                "sp_DeleteDepartment",
+                "usp_DeleteDepartment",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
@@ -75,7 +75,7 @@ namespace PalladiumPayroll.Repositories.Department
             parameters.Add("@Exists", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
             await _dapper.CreateConnection().ExecuteAsync(
-                "sp_CheckDepartmentNameExists",
+                "usp_CheckDepartmentNameExists",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );

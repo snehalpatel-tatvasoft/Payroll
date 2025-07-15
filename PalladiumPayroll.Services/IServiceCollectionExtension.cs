@@ -30,6 +30,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IPayslipDisplaySetupService, PayslipDisplaySetupService>();
             services.AddScoped<ITimesheetSetupService, TimesheetSetupService>();
             services.AddScoped<ICreateTransactionService, CreateTransactionService>();
+            services.AddScoped<IPasswordPolicyService, PasswordPolicyService>();
             return services;
         }
     }

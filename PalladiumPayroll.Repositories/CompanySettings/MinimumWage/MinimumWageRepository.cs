@@ -24,7 +24,7 @@ public class MinimumWageRepository : IMinimumWageRepository
         parameters.Add("@ExcludeWageId", wageId);
         parameters.Add("@IsDuplicate", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-        await _dapper.ExecuteStoredProcedureSingle<object>("sp_CheckDuplicateMinimumWage", parameters);
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_CheckDuplicateMinimumWage", parameters);
         return parameters.Get<bool>("@IsDuplicate");
     }
 
@@ -40,7 +40,7 @@ public class MinimumWageRepository : IMinimumWageRepository
         parameters.Add("@CreatedDate", DateTime.Now);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-        await _dapper.ExecuteStoredProcedureSingle<object>("sp_CreateMinimumWage", parameters);
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_CreateMinimumWage", parameters);
 
         return parameters.Get<bool>("@IsSuccess");
     }
@@ -51,7 +51,7 @@ public class MinimumWageRepository : IMinimumWageRepository
         parameters.Add("@CompanyId", companyId);
 
         List<MinimumWageResponseDTO>? result = await _dapper.ExecuteStoredProcedure<MinimumWageResponseDTO>(
-            "sp_GetMinimumWageByCompanyId",
+            "usp_GetMinimumWageByCompanyId",
             parameters
         );
 
@@ -70,7 +70,7 @@ public class MinimumWageRepository : IMinimumWageRepository
         parameters.Add("@UpdatedDate", DateTime.Now);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-        await _dapper.ExecuteStoredProcedureSingle<object>("sp_UpdateMinimumWage", parameters);
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_UpdateMinimumWage", parameters);
         return parameters.Get<bool>("@IsSuccess");
     }
 
@@ -80,7 +80,7 @@ public class MinimumWageRepository : IMinimumWageRepository
         parameters.Add("@Id", wageId);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-        await _dapper.ExecuteStoredProcedureSingle<object>("sp_DeleteMinimumWage", parameters);
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeleteMinimumWage", parameters);
         return parameters.Get<bool>("@IsSuccess");
     }
 

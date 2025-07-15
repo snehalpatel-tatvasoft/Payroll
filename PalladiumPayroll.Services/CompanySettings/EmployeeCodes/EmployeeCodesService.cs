@@ -41,16 +41,7 @@ public class EmployeeCodesService : IEmployeeCodesService
         {
             EmployeeCodeResponseDTO? employeeCodeData = await _employeeCodeRepository.GetEmployeeCodeByCompanyId(companyId);
 
-            if (employeeCodeData == null)
-            {
-                employeeCodeData = new EmployeeCodeResponseDTO
-                {
-                    IsAutomatic = true,
-                    InitialCode = string.Empty
-                };
-            }
-
-            return HttpStatusCodeResponse.SuccessResponse(employeeCodeData,string.Empty);
+            return HttpStatusCodeResponse.SuccessResponse(employeeCodeData, string.Empty);
         }
         catch (Exception)
         {
