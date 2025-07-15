@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
@@ -23,6 +24,27 @@ namespace PalladiumPayroll.Repositories.Company
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<List<DropDownViewModelWithString>> GetGLAccounts(DBConnectionModel dbConnectionModel)
+        {
+            string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
+      
+            string query = "SELECT intGLNumber as ID ,intGLNumber AS [KEY], intGLNumber AS [VALUE] from dbo.tblAccounts"; // Adjust as needed
+            return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
+        }
+        public async Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel)
+        {
+            string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
+      
+            string query = "SELECT strDesc as ID ,strDesc AS [KEY], strDesc AS [VALUE] from dbo.tblDepartments"; // Adjust as needed
+            return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
+        }
+
+        public async Task<bool> CheckGLDBConnection(DBConnectionModel dbConnectionModel)
+        {
+            string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
+            return await DapperContext.CheckDBConnection(connectionString);
+        }
+
         public async Task<long> CreateCompany(CreateCompanyRequest request)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -31,7 +53,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@NoOfEmployee", request.NoOfEmployee);
             parameters.Add("@Country", request.Country);
 
-            long companyId = await _dapper.ExecuteStoredProcedureSingle<long>("sp_CreateCompany", parameters);
+            long companyId = await _dapper.ExecuteStoredProcedureSingle<long>("usp_CreateCompany", parameters);
             return companyId;
         }
 
@@ -47,7 +69,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@ContactNo", request.ContactNo);
             parameters.Add("@CompanyId", request.CompanyId);
 
-            Guid userId = await _dapper.ExecuteStoredProcedureSingle<Guid>("sp_CreateUser", parameters);
+            Guid userId = await _dapper.ExecuteStoredProcedureSingle<Guid>("usp_CreateUser", parameters);
             return userId;
         }
 
@@ -83,17 +105,17 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@PostalCode", model.CompanyInfo.PinCode);
             var isPostalSame = model.CompanyInfo.sameAddress;
             parameters.Add("@IsPostalSame", isPostalSame);
-            parameters.Add("@Pos_UnitNumber", isPostalSame ? model.CompanyInfo.UnitNumber : null);
-            parameters.Add("@Pos_ComplexName", isPostalSame ? model.CompanyInfo.ComplexName : null);
-            parameters.Add("@Pos_StreetNumber", isPostalSame ? model.CompanyInfo.StreetNumber : null);
-            parameters.Add("@Pos_StreetName", isPostalSame ? model.CompanyInfo.Street : null);
-            parameters.Add("@Pos_District", isPostalSame ? model.CompanyInfo.District : null);
-            parameters.Add("@Pos_City", isPostalSame ? model.CompanyInfo.City : null);
-            parameters.Add("@Pos_PostalCode", isPostalSame ? model.CompanyInfo.PinCode : null);
+            parameters.Add("@Pos_UnitNumber", isPostalSame ? model.CompanyInfo.UnitNumber : model.CompanyInfo.Pos_UnitNumber);
+            parameters.Add("@Pos_ComplexName", isPostalSame ? model.CompanyInfo.ComplexName : model.CompanyInfo.Pos_ComplexName);
+            parameters.Add("@Pos_StreetNumber", isPostalSame ? model.CompanyInfo.StreetNumber : model.CompanyInfo.Pos_StreetNumber);
+            parameters.Add("@Pos_StreetName", isPostalSame ? model.CompanyInfo.Street : model.CompanyInfo.Pos_Street);
+            parameters.Add("@Pos_District", isPostalSame ? model.CompanyInfo.District : model.CompanyInfo.Pos_District);
+            parameters.Add("@Pos_City", isPostalSame ? model.CompanyInfo.City : model.CompanyInfo.Pos_City);
+            parameters.Add("@Pos_PostalCode", isPostalSame ? model.CompanyInfo.PinCode : model.CompanyInfo.Pos_PinCode);
             parameters.Add("@Pos_Address1", model.CompanyInfo.Pos_Address1);
             parameters.Add("@Pos_Address2", model.CompanyInfo.Pos_Address2);
             parameters.Add("@Pos_Address3", model.CompanyInfo.Pos_Address3);
-            parameters.Add("@Pos_AddressPostalCode", model.CompanyInfo.Pos_PinCode);
+            parameters.Add("@Pos_AddressPostalCode", model.CompanyInfo.Pos_AddPinCode);
             parameters.Add("@Pos_CountryId", model.CompanyInfo.Pos_CountryId);
 
             // step-2 representative
@@ -123,7 +145,32 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@CycleRecord", payRollCycle.AsTableValuedParameter("dbo.CycleRecordType"));
 
             // step-4 general ledger
+            DataTable glTransaction= new DataTable();
+            glTransaction.Columns.Add("TransactionOrders", typeof(string));
+            glTransaction.Columns.Add("DebitAccountNumber", typeof(string));
+            glTransaction.Columns.Add("CreditAccountNumber", typeof(string));
+            glTransaction.Columns.Add("ContraAccountNumber", typeof(string));
 
+            if(model.TransactionList != null)
+            {
+                foreach (var item in model.TransactionList)
+                {
+                    DataRow row = glTransaction.NewRow();
+                    row["TransactionOrders"] = item.TransactionOrders;
+                    row["DebitAccountNumber"] = item.DebitAccountNumber;
+                    row["CreditAccountNumber"] = item.CreditAccountNumber;
+                    row["ContraAccountNumber"] = item.ContraAccountNumber;
+                    glTransaction.Rows.Add(row);
+                }
+            }
+            parameters.Add("@GLTransaction", glTransaction.AsTableValuedParameter("dbo.GLTransactionType"));
+
+            parameters.Add("@GLServerName", model.GlSetup?.DatabaseServerName);
+            parameters.Add("@GLUserName", model.GlSetup?.DatabaseUserName);
+            parameters.Add("@GLPassword", model.GlSetup?.Password);
+            parameters.Add("@GLDBName", model.GlSetup?.DatabaseName);
+            parameters.Add("@SalaryClearingAccountNumber", model.GlSetup?.SalaryClearingAccountNumber);
+            parameters.Add("@PalladiumDepartment", model.GlSetup?.PalladiumDepartment);
 
             // step-5 fund setup
             DataTable MedicalAid = new DataTable();
@@ -197,7 +244,7 @@ namespace PalladiumPayroll.Repositories.Company
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyName", company);
 
-            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CheckCompanyExists", parameters);
+            bool response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_CheckCompanyExists", parameters);
             return response;
         }
 
@@ -208,7 +255,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@ExcludeCompanyId", reqModel.ExcludeCompanyId);
             parameters.Add("@CompanyName", reqModel.CompanyName);
 
-            return await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CheckSubCompanyExists", parameters);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_CheckSubCompanyExists", parameters);
         }
 
         public async Task<bool> AddNewBank(BankModel bankModel)
@@ -218,7 +265,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@BankName", bankModel.BankName);
             parameters.Add("@BranchCode", bankModel.BranchCode);
 
-            bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_AddBank", parameters);
+            bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_AddBank", parameters);
             return isAdded;
         }
 
@@ -227,7 +274,7 @@ namespace PalladiumPayroll.Repositories.Company
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
 
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_GetCompanyWithChildren", parameters);
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_GetCompanyWithChildren", parameters);
             return response;
         }
 
@@ -239,7 +286,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@CompanyId", companyId);
             parameters.Add("@UserId", userId);
 
-            bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("sp_SetActiveCompanyId", parameters);
+            bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SetActiveCompanyId", parameters);
             return isAdded;
         }
 

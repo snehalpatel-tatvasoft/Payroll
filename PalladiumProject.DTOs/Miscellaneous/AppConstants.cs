@@ -16,6 +16,9 @@ namespace PalladiumPayroll.Helper.Constants
         public const int ResetPasswordTokenLength = 100;
 
         public const int PageNumber = 1;
+        
+        public const string DefaultConnectionString = "Data Source={0}; initial catalog={1}; User ID={2}; Password={3}; TrustServerCertificate=True;";
+
 
         public static class ResponseMessages
         {
@@ -49,6 +52,8 @@ namespace PalladiumPayroll.Helper.Constants
             public const string CompanyAlreadyExists = "Company Already Exists";
             public const string CompanyRegisteredSuccessfully = "Company Registered Successfully";
             public const string ErrorCreatingCompany = "Error While Creating Company!!";
+            public const string GLSetupError = "Error while connecting GL Database!!";
+            public const string GLSetupSuccess = "GL database connected succssfully!!";
 
             #endregion
 

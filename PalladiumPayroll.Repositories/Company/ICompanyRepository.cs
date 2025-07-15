@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
@@ -30,5 +31,8 @@ namespace PalladiumPayroll.Repositories.Company
         Task<bool> DeletePayrollCycleInfo(int cycleId);
         Task<bool> DeleteMedicalAidFund(int fundId);
         Task<bool> DeleteCompanyBenefitFund(int fundId);
+        Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel);
+        Task<List<DropDownViewModelWithString>> GetGLAccounts(DBConnectionModel dbConnectionModel);
+        Task<bool> CheckGLDBConnection(DBConnectionModel dbConnectionModel);
     }
 }

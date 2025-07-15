@@ -9,16 +9,16 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public string? CompanyLogo { get; set; }
         public string CompanyName { get; set; } = null!;
         public int CompanyTypeId { get; set; }
-        public string CompanyRegNumber { get; set; } = null!;
-        public long TaxRegNumber { get; set; }
+        public string CompanyRegNumber { get; set; }
+        public long? TaxRegNumber { get; set; }
         public int StdIndustryCode { get; set; }
-        public string PAYEReferenceNumber { get; set; } = null!;
+        public string? PAYEReferenceNumber { get; set; }
         public int TradeClassificationId { get; set; }
-        public string UIFRefNumber { get; set; } = null!;
-        public string UIFRegNumber { get; set; } = null!;
+        public string? UIFRefNumber { get; set; }
+        public string? UIFRegNumber { get; set; }
         public int? SplEcoZoneId { get; set; }
-        public string SDLRefNumber { get; set; } = null!;
-        public int CurrencyID { get; set; }
+        public string? SDLRefNumber { get; set; }
+        public int? CurrencyID { get; set; }
         public int CountryID { get; set; }
         public bool IsExemptSDL { get; set; }
         public bool UseBCEARemuneration { get; set; }
@@ -115,7 +115,9 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public List<PayrollMedicalAidList>? PayrollMedicalAidList { get; set; }
         public List<PayrollBenefitFundList>? PayrollBenefitFundList { get; set; }
         public CompanyBankAccount? CompanyBankAccount { get; set; }
-        public List<TransactionList> TransactionList { get; set; }
+        public List<TransactionList>? TransactionList { get; set; }
+        public GLSetup? GlSetup {  get; set; }
+
     }
 
     public class CheckCompanyExistModel
@@ -123,6 +125,16 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public int CompanyId { get; set; }
         public int? ExcludeCompanyId { get; set; }
         public string CompanyName { get; set; } = null!;
+    }
+
+    public class GLSetup
+    {
+        public string? DatabaseServerName { get; set; }
+        public string? DatabaseUserName { get; set; }
+        public string? DatabaseName { get; set; }
+        public string? Password { get; set; }
+        public string? SalaryClearingAccountNumber { get; set; }
+        public string? PalladiumDepartment { get; set; } 
     }
 
 }

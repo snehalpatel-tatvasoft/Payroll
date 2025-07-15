@@ -59,6 +59,12 @@ namespace PalladiumPayroll.DataContext
                 return false;
             }
         }
-
+        public async Task<List<T>> ExecuteQueryWithConnection<T>(string query, string connectionString)
+        {
+            using (IDbConnection db = new SqlConnection(connectionString))
+            {
+                return (await db.QueryAsync<T>(query)).ToList();
+            }
+        }
     }
 }

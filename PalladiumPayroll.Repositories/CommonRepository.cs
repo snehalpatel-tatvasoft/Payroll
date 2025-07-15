@@ -4,7 +4,8 @@ using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
-using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+
 namespace PalladiumPayroll.Repositories
 {
     public class CommonRepository : ICommonRepository
@@ -17,13 +18,13 @@ namespace PalladiumPayroll.Repositories
 
         public async Task<List<DropDownViewModel>> GetCountryList()
         {
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchCountry");
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchCountry");
             return response;
         }
 
         public async Task<List<DropDownViewModel>> GetTaxYearList()
         {
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchTaxYear");
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchTaxYear");
             return response;
         }
 
@@ -31,7 +32,7 @@ namespace PalladiumPayroll.Repositories
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchBank", parameters);
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchBank", parameters);
             return response;
         }
 
@@ -39,32 +40,31 @@ namespace PalladiumPayroll.Repositories
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@BankId", bankId);
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchBranchCode", parameters);
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchBranchCode", parameters);
             return response;
         }
 
         public async Task<List<DropDownViewModel>> GetStandardIndustryCode()
         {
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchStandardIndustry");
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchStandardIndustry");
             return response;
         }
 
         public async Task<List<DropDownViewModel>> GetTradeClassification()
         {
-            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("sp_FetchTradeClassification");
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchTradeClassification");
             return response;
         }
         public async Task<List<TransactionList>> GetTransactionList()
         {
-            List<TransactionList> response = await _dapper.ExecuteStoredProcedure<TransactionList>("sp_GetTransactionList");
+            List<TransactionList> response = await _dapper.ExecuteStoredProcedure<TransactionList>("usp_GetTransactionList");
             return response;
         }
 
         public async Task<bool> CheckDBConnection(DBConnectionModel dbConnectionModel)
         {
-            string connectionString = "Data Source={0}; initial catalog={1};User ID={2};Password={3};TrustServerCertificate=True;";
-            string orignalString = string.Format(connectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
-            return await DapperContext.CheckDBConnection(orignalString);
+            string originalString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
+            return await DapperContext.CheckDBConnection(originalString);
         }
     }
 }
