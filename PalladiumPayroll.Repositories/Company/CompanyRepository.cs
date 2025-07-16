@@ -402,6 +402,16 @@ namespace PalladiumPayroll.Repositories.Company
             List<CompanyPayrollCycle>? result = await _dapper.ExecuteStoredProcedure<CompanyPayrollCycle>("usp_GetCompanyPayrollCycleByCompanyId", parameters);
             return result;
         }
+        
+        public async Task<List<CompanyCoidaSetup>> GetCOIDASetupInfo(int companyId, int taxYearId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            parameters.Add("@YearId", taxYearId);
+
+            List<CompanyCoidaSetup>? result = await _dapper.ExecuteStoredProcedure<CompanyCoidaSetup>("usp_GetCompanyCOIDASetupInfoByCompanyId", parameters);
+            return result;
+        }
 
         public async Task<List<PayrollMedicalAidList>> GetMedicalAidFundInfo(int companyId)
         {
@@ -452,6 +462,21 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@RFIPercent", payrollBenefitFundList.RFIPercent);
 
             bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCompanyBenefitFund", parameters);
+            return isUpsert;
+        }
+        
+        public async Task<bool> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CoidaId", companyCoidaSetup.CoidaId);
+            parameters.Add("@CompanyId", companyCoidaSetup.CompanyId);
+            parameters.Add("@AnnualCeiling", companyCoidaSetup.AnnualCeiling);
+            parameters.Add("@RatesPerR100", companyCoidaSetup.RatesPerR100);
+            parameters.Add("@Percentage", companyCoidaSetup.Percentage);
+            parameters.Add("@IsIncludeOvertime", companyCoidaSetup.IsIncludeOvertime);
+            parameters.Add("@YearId", companyCoidaSetup.YearId);
+
+            bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCompanyCoidaSetup", parameters);
             return isUpsert;
         }
 

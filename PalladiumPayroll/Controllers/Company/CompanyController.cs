@@ -234,6 +234,19 @@ namespace PalladiumPayroll.Controllers.Company
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+        
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup)
+        {
+            try
+            {
+                return await _companyService.UpsertCOIDASetupInfo(companyCoidaSetup);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
 
         [HttpDelete("[action]")]
         public async Task<ActionResult> DeletePayrollCycleInfo(int cycleId)
@@ -280,6 +293,20 @@ namespace PalladiumPayroll.Controllers.Company
             try
             {
                 return await _companyService.AddMedicalAidFundInfo(payrollMedicalAidList);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetCOIDASetupInfo(int companyId, int yearId)
+        {
+            try
+            {
+                List<CompanyCoidaSetup> companyInfo = await _companyService.GetCOIDASetupInfo(companyId, yearId);
+                return HttpStatusCodeResponse.SuccessResponse(companyInfo, string.Empty);
             }
             catch (Exception)
             {

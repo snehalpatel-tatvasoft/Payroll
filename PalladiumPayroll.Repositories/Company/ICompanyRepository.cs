@@ -23,10 +23,12 @@ namespace PalladiumPayroll.Repositories.Company
         Task<List<CompanyBankAccount>> GetBankDetailsInfo(int companyId);
         Task<bool> UpdateBankDetailsInfo(CompanyBankAccount companyBankAccount);
         Task<List<CompanyPayrollCycle>> GetPayrollCycleInfo(int companyId, int taxYearId);
+        Task<List<CompanyCoidaSetup>> GetCOIDASetupInfo(int companyId, int yearId);
         Task<List<PayrollMedicalAidList>> GetMedicalAidFundInfo(int companyId);
         Task<List<PayrollBenefitFundList>> GetCompanyBenefitFundInfo(int companyId);
         Task<bool> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle);
         Task<bool> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList);
+        Task<bool> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup);
         Task<bool> AddMedicalAidFundInfo(PayrollMedicalAidList payrollMedicalAidList);
         Task<bool> DeletePayrollCycleInfo(int cycleId);
         Task<bool> DeleteMedicalAidFund(int fundId);

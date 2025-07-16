@@ -218,6 +218,11 @@ namespace PalladiumPayroll.Services.Company
         {
             return await _companyRepository.GetPayrollCycleInfo(companyId, taxYearId);
         }
+        
+        public async Task<List<CompanyCoidaSetup>> GetCOIDASetupInfo(int companyId, int yearId)
+        {
+            return await _companyRepository.GetCOIDASetupInfo(companyId, yearId);
+        }
 
         public async Task<List<PayrollMedicalAidList>> GetMedicalAidFundInfo(int companyId)
         {
@@ -242,6 +247,16 @@ namespace PalladiumPayroll.Services.Company
         public async Task<JsonResult> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList)
         {
             bool isAdded = await _companyRepository.UpsertCompanyBenefitFund(payrollBenefitFundList);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+        
+        public async Task<JsonResult> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup)
+        {
+            bool isAdded = await _companyRepository.UpsertCOIDASetupInfo(companyCoidaSetup);
             if (isAdded)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Updated));

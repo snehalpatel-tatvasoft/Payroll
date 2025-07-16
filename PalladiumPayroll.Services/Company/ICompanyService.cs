@@ -21,10 +21,12 @@ namespace PalladiumPayroll.Services.Company
         Task<List<CompanyBankAccount>> GetBankDetailsInfo(int companyId);
         Task<JsonResult> UpdateBankDetailsInfo(CompanyBankAccount companyBankAccount);
         Task<List<CompanyPayrollCycle>> GetPayrollCycleInfo(int companyId, int taxYearId);
+        Task<List<CompanyCoidaSetup>> GetCOIDASetupInfo(int companyId, int yearId);
         Task<List<PayrollMedicalAidList>> GetMedicalAidFundInfo(int companyId);
         Task<List<PayrollBenefitFundList>> GetCompanyBenefitFundInfo(int companyId);
         Task<JsonResult> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle);
         Task<JsonResult> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList);
+        Task<JsonResult> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup);
         Task<JsonResult> AddMedicalAidFundInfo(PayrollMedicalAidList payrollMedicalAidList);
         Task<JsonResult> DeletePayrollCycleInfo(int cycleId);
         Task<JsonResult> DeleteMedicalAidFund(int fundId);

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
+﻿namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
 {
 
     public class CompanyInfo
@@ -46,7 +44,7 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
     }
     public class BasicCompanyInfo
     {
-        public Int64? CompanyId { get; set;}
+        public Int64? CompanyId { get; set; }
         public int? TaxYearId { get; set; }
     }
 
@@ -65,7 +63,7 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public int CycleType { get; set; }
     }
 
-    public class PayrollMedicalAidList : BasicCompanyInfo 
+    public class PayrollMedicalAidList : BasicCompanyInfo
     {
         public int? FundId { get; set; }
         public string FundName { get; set; }
@@ -116,7 +114,7 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public List<PayrollBenefitFundList>? PayrollBenefitFundList { get; set; }
         public CompanyBankAccount? CompanyBankAccount { get; set; }
         public List<TransactionList>? TransactionList { get; set; }
-        public GLSetup? GlSetup {  get; set; }
+        public GLSetup? GlSetup { get; set; }
 
     }
 
@@ -134,7 +132,16 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public string? DatabaseName { get; set; }
         public string? Password { get; set; }
         public string? SalaryClearingAccountNumber { get; set; }
-        public string? PalladiumDepartment { get; set; } 
+        public string? PalladiumDepartment { get; set; }
     }
 
+    public class CompanyCoidaSetup : BasicCompanyInfo
+    {
+        public int? CoidaId { get; set; }
+        public decimal AnnualCeiling { get; set; }
+        public decimal RatesPerR100 { get; set; }
+        public decimal Percentage { get; set; }
+        public bool IsIncludeOvertime { get; set; }
+        public int YearId { get; set; }
+    }
 }
