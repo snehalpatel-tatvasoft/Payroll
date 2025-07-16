@@ -111,4 +111,22 @@ public class EmployeeGrievancesController : ControllerBase
         }
     }
 
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetEmployeeGrievanceById(long grievanceId)
+    {
+        try
+        {
+            if (grievanceId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidEmployeeGrievanceId);
+            }
+
+            return await _employeeGrievancesService.GetEmployeeGrievanceById(grievanceId);
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeGrievances, ex.Message));
+        }
+    }
+
 }

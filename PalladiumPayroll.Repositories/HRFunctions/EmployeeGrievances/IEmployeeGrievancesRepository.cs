@@ -13,4 +13,6 @@ public interface IEmployeeGrievancesRepository
      Task<List<NatureOfGrievanceDTO>> GetNatureOfGrievances(long companyId);
 
      Task<List<EmployeeGrievanceDTO>> GetEmployeeGrievances(long companyId);
+
+     Task<EmployeeGrievanceDTO?> GetEmployeeGrievanceById(long grievanceId);
 }

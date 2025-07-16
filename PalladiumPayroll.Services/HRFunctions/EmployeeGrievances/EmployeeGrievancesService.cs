@@ -95,4 +95,18 @@ public class EmployeeGrievancesService : IEmployeeGrievancesService
             return HttpStatusCodeResponse.BadRequestResponse();
         }
     }
+
+     public async Task<JsonResult> GetEmployeeGrievanceById(long grievanceId)
+    {
+        try
+        {
+            EmployeeGrievanceDTO? employeeGrievance = await _employeeGrievancesRepository.GetEmployeeGrievanceById(grievanceId);
+
+            return HttpStatusCodeResponse.SuccessResponse(employeeGrievance, string.Empty);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
 }

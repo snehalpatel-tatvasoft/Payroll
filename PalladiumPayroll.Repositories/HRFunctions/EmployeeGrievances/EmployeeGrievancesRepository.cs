@@ -92,6 +92,15 @@ public class EmployeeGrievancesRepository : IEmployeeGrievancesRepository
         return result;
     }
 
+    public async Task<EmployeeGrievanceDTO?> GetEmployeeGrievanceById(long grievanceId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@GrievanceId", grievanceId);
+
+        return await _dapper.ExecuteStoredProcedureSingle<EmployeeGrievanceDTO>(
+            "usp_GetEmployeeGrievanceById", parameters);
+    }
+
 
 
 }
