@@ -84,7 +84,7 @@ public class CreateTransactionService : ICreateTransactionService
         }
         catch (Exception)
         {
-             return HttpStatusCodeResponse.BadRequestResponse();
+            return HttpStatusCodeResponse.BadRequestResponse();
 
         }
     }
@@ -100,5 +100,18 @@ public class CreateTransactionService : ICreateTransactionService
             return HttpStatusCodeResponse.BadRequestResponse();
         }
     }
+    public async Task<JsonResult> DeleteTransaction(long id)
+    {
+        try
+        {
+            await _createTransactionRepository.DeleteTransaction(id);
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.TransactionDeletedSuccessfully);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
+
 
 }
