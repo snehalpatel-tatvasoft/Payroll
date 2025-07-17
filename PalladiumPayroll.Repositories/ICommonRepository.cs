@@ -1,7 +1,6 @@
 ﻿using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
-using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 
 namespace PalladiumPayroll.Repositories
 {
@@ -15,5 +14,10 @@ namespace PalladiumPayroll.Repositories
         Task<List<DropDownViewModel>> GetTradeClassification();
         Task<List<TransactionList>> GetTransactionList();
         Task<bool> CheckDBConnection(DBConnectionModel dbConnectionModel);
+        Task<bool> AddIndustrySectorType(string industrySector);
+        Task<List<DropDownViewModel>> GetBusinessTypeList();
+        Task<List<DropDownViewModel>> GetNumberOfEmployeesList();
+        Task<List<DropDownViewModel>> GetIndustryOrSectorTypeList();
+        Task<bool> DeleteIndustrySector(int industrySectorId);
     }
 }

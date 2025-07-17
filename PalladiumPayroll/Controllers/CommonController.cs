@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -100,7 +101,7 @@ namespace PalladiumPayroll.Controllers
 
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> CheckDBConnection([FromQuery]DBConnectionModel dbConnectionModel)
+        public async Task<ActionResult> CheckDBConnection([FromQuery] DBConnectionModel dbConnectionModel)
         {
             try
             {
@@ -122,6 +123,71 @@ namespace PalladiumPayroll.Controllers
             catch (Exception)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetBusinessTypeList()
+        {
+            try
+            {
+                return await _commonService.GetBusinessTypeList();
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetNumberOfEmployeesList()
+        {
+            try
+            {
+                return await _commonService.GetNumberOfEmployeesList();
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetIndustryOrSectorTypeList()
+        {
+            try
+            {
+                return await _commonService.GetIndustryOrSectorTypeList();
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> AddIndustrySectorType([FromBody] string newIndustrySector)
+        {
+            try
+            {
+                return await _commonService.AddIndustrySectorType(newIndustrySector);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeleteIndustrySector(int industrySectorId)
+        {
+            try
+            {
+                return await _commonService.DeleteIndustrySector(industrySectorId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
     }

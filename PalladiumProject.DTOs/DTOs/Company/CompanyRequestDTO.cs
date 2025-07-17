@@ -144,4 +144,21 @@
         public bool IsIncludeOvertime { get; set; }
         public int YearId { get; set; }
     }
+
+    public class EmploymentEquityInformation : BasicCompanyInfo
+    {
+        public int? EeReferenceNumber { get; set; }
+        public string? SetaClassification { get; set; }
+        public string? AccountingOfficerNameAndSurname { get; set; }
+        public string? AccountingOfficerTelephoneNumber { get; set; }
+        public string? AccountingOfficerFaxNumber { get; set; }
+        public string? AccountingOfficerEmail { get; set; }
+        public string? EquityManagerNameAndSurname { get; set; }
+        public string? EquityManagerTelephoneNumber { get; set; }
+        public string? EquityManagerFaxNumber { get; set; }
+        public string? EquityManagerEmail { get; set; }
+        public int IndustrySectorControlId { get; set; }
+        public int BusinessTypeControlId { get; set; }
+        public int NumberOfEmployeeControlId { get; set; }
+    }
 }

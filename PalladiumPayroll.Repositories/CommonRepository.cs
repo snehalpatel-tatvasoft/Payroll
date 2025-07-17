@@ -66,5 +66,41 @@ namespace PalladiumPayroll.Repositories
             string originalString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
             return await DapperContext.CheckDBConnection(originalString);
         }
+
+        public async Task<List<DropDownViewModel>> GetBusinessTypeList()
+        {
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_GetBusinessTypeList");
+            return response;
+        }
+
+        public async Task<List<DropDownViewModel>> GetNumberOfEmployeesList()
+        {
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_GetNumberOfEmployeesList");
+            return response;
+        }
+
+        public async Task<List<DropDownViewModel>> GetIndustryOrSectorTypeList()
+        {
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_GetIndustryOrSectorTypeList");
+            return response;
+        }
+
+        public async Task<bool> AddIndustrySectorType(string industrySector)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@IndustrySectorName", industrySector);
+
+            bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_AddIndustrySectorType", parameters);
+            return isAdded;
+        }
+
+        public async Task<bool> DeleteIndustrySector(int industrySectorId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IndustrySectorId", industrySectorId);
+
+            bool isDeleted = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteIndustrySector", parameters);
+            return isDeleted;
+        }
     }
 }
