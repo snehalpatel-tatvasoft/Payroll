@@ -1,4 +1,6 @@
 ﻿
+using System.Runtime.CompilerServices;
+
 namespace PalladiumPayroll.Helper.Constants
 {
     public static class AppConstants
@@ -78,6 +80,7 @@ namespace PalladiumPayroll.Helper.Constants
             public const string TokenGeneratedSuccessfully = "Token Generated Successfully";
             public const string InternalServerError = "Internal Server Error!!";
 
+
             #endregion
 
             #region Home
@@ -98,6 +101,93 @@ namespace PalladiumPayroll.Helper.Constants
 
             #region Application Admin
             public static readonly string AppAdminDashboard = "Application Admin Dashboard Data";
+
+
+            #endregion
+
+            #region Dashboard
+
+            public static readonly string Dashboard = "Dashboard data";
+
+            #endregion
+
+            #region Designation
+
+            public const string DesignationsCreatedSuccessfully = "Designation created successfully";
+            public const string DesignationsCreationFailed = "Failed to create designation";
+            public const string DataFetchSuccess = "Data fetched successfully";
+            public const string DesignationsDeletedSuccessfully = "Designation deleted successfully";
+            public const string DesignationsUpdatedSuccessfully = "Designation updated successfully";
+            public const string DesignationsUpdateFailed = "Failed to update designation";
+            public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
+
+            #endregion
+
+            #region Minimum Wage 
+
+            public static readonly string MinimumWage = "Minimum Wage";
+            public const string DuplicateMinimumWage = "Duplicate minimum wage name for this company.";
+            public const string UnableToSaveMinimumWage = "Unable to save minimum wage.";
+            public const string MinimumWageNotFound = "Minimum Wage entry could not be deleted or was not found.";
+            public const string WageIdNotFound = "Wage Id is not found.";
+            public const string CompanyIdNotFound = "Company Id is not found.";
+
+            #endregion
+
+            #region Department
+
+            public static readonly string DepartmentsRetrievedSuccessfully = "Departments retrieved successfully.";
+            public static readonly string NoDepartmentsForThisCompanyId = "No departments found for the specified company.";
+            public static readonly string ErrorRetrievingDepartments = "Error retrieving departments.";
+            public static readonly string CheckDuplicateDepartment = "This department name already exists. Please choose a different one.";
+            public static readonly string DepartmentCreateSuccessfully = "Department created successfully.";
+            public static readonly string DepartmentNameRequired = "Department name is required.";
+            public static readonly string ErrorCreatingDepartment = "Error while creating the department.";
+            public static readonly string DepartmentUpdateSuccessfully = "Department updated successfully.";
+            public static readonly string ErrorUpdatingDepartment = "Error updating department.";
+            public static readonly string ErrorDeletingDepartment = "Error deleting department.";
+            public static readonly string DepartmentDeleteSuccessfully = "Department deleted successfully.";
+
+
+            #endregion
+
+
+            #region Employee Code
+
+            public static readonly string EmployeeCode = "Employee Code";
+
+            public const string EmployeeCodeSaveFailed  = "Failed to save employee code";
+
+            #endregion
+
+
+            #region Payslip Display Setup
+
+            public static readonly string PayslipDisplaySetup = "Payslip Display Settings";
+
+            public const string PayslipDisplaySetupSaveFailed  = "Failed to save Payslip Display Settings";
+
+            #endregion
+
+            #region Create Transaction
+            public static readonly string TransactionCreatedSuccessfully = "Create transaction successfully.";
+            public static readonly string TransactionCreationFailed = "Failed to create transaction.";
+            public static readonly string DuplicateTransaction = "Transaction exists with the same type and description.";
+            public static readonly string TransactionUpdatedSuccessfully = "Transaction updated successfully.";
+            public static readonly string TransactionUpdateFailed = "Failed to update transaction.";
+            public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
+
+            #endregion
+
+            #region Payslip Display Setup
+
+            public static readonly string EmployeeGrievances = "Employee Grievances";
+
+            public static readonly string NatureOfGrievances = "Nature of Grievances";
+            public const string EmployeeGrievanceSaveFailed  = "Failed to save Employee Grievances";
+            public const string InvalidEmployeeGrievanceId = "Employee Grievance Id is Invalid.";
+            public const string EmployeeGrievanceNotFound = "Employee Grievance was not found.";
+
             #endregion
         }
     }

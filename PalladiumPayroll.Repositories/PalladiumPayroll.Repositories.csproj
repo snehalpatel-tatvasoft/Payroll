@@ -1,11 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
@@ -13,11 +11,9 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.6" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\PalladiumPayroll.DataContext\PalladiumPayroll.DataContext.csproj" />
     <ProjectReference Include="..\PalladiumPayroll.Helper\PalladiumPayroll.Helper.csproj" />
     <ProjectReference Include="..\PalladiumProject.DTOs\PalladiumPayroll.DTOs.csproj" />
   </ItemGroup>
-
 </Project>
