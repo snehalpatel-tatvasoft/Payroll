@@ -131,6 +131,42 @@ public class CreateTransactionRepository : ICreateTransactionRepository
         return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteTransaction", parameters);
     }
 
+    public async Task<string?> ImportTransactions(CreateTransactionRequestDTO transaction)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", transaction.CompanyId);
+        parameters.Add("@AllowanceTypeId", transaction.TransactionType);
+        parameters.Add("@Description", transaction.Description);
+        parameters.Add("@IRP5_Code", transaction.IRP5Code);
+        parameters.Add("@Taxability", transaction.TaxMethod);
+        parameters.Add("@Taxable_Percent", transaction.TaxablePercent);
+        parameters.Add("@Directive_Required", transaction.DirectiveRequired);
+        parameters.Add("@UIF", transaction.UIF);
+        parameters.Add("@UIFPercent", transaction.UIFPercent);
+        parameters.Add("@SDL", transaction.SDL);
+        parameters.Add("@SDLPercent", transaction.SDLPercent);
+        parameters.Add("@COID", transaction.COID);
+        parameters.Add("@RFI", transaction.RFI);
+        parameters.Add("@RFIPercent", transaction.RFIPercent);
+        parameters.Add("@ETI", transaction.ETI);
+        parameters.Add("@ETI_Used_Taxable_Value", transaction.ETIUsedTaxableValue);
+        parameters.Add("@AffectTaxOnly", transaction.AffectTaxBenefitOnly);
+        parameters.Add("@EssClaim", transaction.EssClaim);
+        parameters.Add("@SpecialRun", transaction.SpecialRun);
+        parameters.Add("@TransactionEnable", transaction.Enable);
+        parameters.Add("@CouncilOptionsId", transaction.Council);
+        parameters.Add("@Amount", transaction.Amount);
+        parameters.Add("@CalculationType", string.IsNullOrWhiteSpace(transaction.CalculationType) ? null : transaction.CalculationType);
+        parameters.Add("@Percentage", transaction.Percentage);
+        parameters.Add("@BCEA", string.IsNullOrWhiteSpace(transaction.BCEA) ? null : transaction.BCEA);
+        parameters.Add("@Shifts", transaction.Shifts);
+        parameters.Add("@LeaveWeeks", transaction.LeaveWeeks);
+        parameters.Add("@NumberOfWeeks", transaction.NumberOfWeeks);
+        parameters.Add("@Factor", transaction.Factor);
+        parameters.Add("@ShiftCalculationTypeId", transaction.ShiftCalculationType);
 
+        var result = await _dapper.ExecuteStoredProcedureSingle<string>("usp_ImportTransactions", parameters);
+        return result;
+    }
 
 }

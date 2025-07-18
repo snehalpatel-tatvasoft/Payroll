@@ -73,26 +73,26 @@ public class DesignationsRepository : IDesignationsRepository
     }
     
     
-public async Task<string?> ImportDesignations(ImportDesignationRequestDTO request)
-{
-    foreach (var item in request.Designations)
+    public async Task<string?> ImportDesignations(ImportDesignationRequestDTO request)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("@DesignationsName", item.DesignationsName);
-        parameters.Add("@DesignationsCode", item.DesignationsCode);
-        parameters.Add("@CompanyId", request.CompanyId);
+        foreach (var item in request.Designations)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@DesignationsName", item.DesignationsName);
+            parameters.Add("@DesignationsCode", item.DesignationsCode);
+            parameters.Add("@CompanyId", request.CompanyId);
 
-        var result = await _dapper.ExecuteStoredProcedureSingle<string>("usp_ImportDesignations", parameters);
+            var result = await _dapper.ExecuteStoredProcedureSingle<string>("usp_ImportDesignations", parameters);
 
-        if (result == "DUPLICATE")
-            return $"Duplicate record: {item.DesignationsName} - {item.DesignationsCode}";
+            if (result == "DUPLICATE")
+                return $"Duplicate record";
 
-        if (result == "DUPLICATE_CODE")
-            return $"Code already exists for another designation: {item.DesignationsCode}";
+            if (result == "DUPLICATE_CODE")
+                return $"Code already exists for another designation";
+        }
+
+        return null; 
     }
-
-    return null; 
-}
 
 
 }

@@ -176,7 +176,7 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string TransactionUpdatedSuccessfully = "Transaction updated successfully.";
             public static readonly string TransactionUpdateFailed = "Failed to update transaction.";
             public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
-
+            public static readonly string TransactionImportedSuccessfully = "Transaction imported successfully.";
             #endregion
 
             #region Payslip Display Setup

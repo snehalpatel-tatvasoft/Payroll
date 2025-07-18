@@ -112,6 +112,28 @@ public class CreateTransactionService : ICreateTransactionService
             return HttpStatusCodeResponse.BadRequestResponse();
         }
     }
+    public async Task<JsonResult> ImportTransactions(ImportTransactionRequestDTO request)
+    {
+        try
+        {
+            foreach (var transaction in request.Transactions)
+            {
+                transaction.CompanyId = request.CompanyId;
 
+                var status = await _createTransactionRepository.ImportTransactions(transaction);
+
+                if (string.IsNullOrEmpty(status))
+                {
+                    return HttpStatusCodeResponse.InternalServerErrorResponse("Unknown error during import.");
+                }
+            }
+
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.TransactionImportedSuccessfully);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
 
 }

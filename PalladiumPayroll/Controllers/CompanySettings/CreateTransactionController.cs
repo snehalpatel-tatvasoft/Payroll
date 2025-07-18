@@ -1,5 +1,4 @@
 using System.Net;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Services.CompanySettings.CreateTransaction;
@@ -17,7 +16,7 @@ public class CreateTransactionController : ControllerBase
         _createTransactionService = createTransactionService;
     }
 
-    [HttpGet("transactions")]
+    [HttpGet("Transactions")]
     public async Task<ActionResult> GetAllTransactions([FromQuery] long companyId)
     {
         try
@@ -31,7 +30,7 @@ public class CreateTransactionController : ControllerBase
         }
     }
 
-    [HttpPost("add-transaction")]
+    [HttpPost("AddTransaction")]
     public async Task<ActionResult> AddTransaction([FromBody] CreateTransactionRequestDTO request)
     {
         try
@@ -45,7 +44,7 @@ public class CreateTransactionController : ControllerBase
         }
     }
 
-    [HttpPut("update-transaction/{id}")]
+    [HttpPut("UpdateTransaction/{id}")]
     public async Task<ActionResult> UpdateTransaction(long id, [FromBody] CreateTransactionRequestDTO request)
     {
         try
@@ -74,7 +73,7 @@ public class CreateTransactionController : ControllerBase
         }
     }
     
-    [HttpDelete("delete-transaction/{id}")]
+    [HttpDelete("DeleteTransaction/{id}")]
     public async Task<ActionResult> DeleteTransaction(long id)
     {
         try
@@ -88,5 +87,18 @@ public class CreateTransactionController : ControllerBase
         }
     }
 
+    [HttpPost("ImportTransactions")]
+    public async Task<ActionResult> ImportTransactions([FromBody] ImportTransactionRequestDTO request)
+    {
+        try
+        {
+            var res = await _createTransactionService.ImportTransactions(request);
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+        }
+    }
 
 }

@@ -37,3 +37,9 @@ public class CreateTransactionRequestDTO
     public long? Council { get; set; } 
 
 }
+
+public class ImportTransactionRequestDTO
+{
+    public long CompanyId { get; set; }
+    public List<CreateTransactionRequestDTO> Transactions { get; set; } = new List<CreateTransactionRequestDTO>();
+}
