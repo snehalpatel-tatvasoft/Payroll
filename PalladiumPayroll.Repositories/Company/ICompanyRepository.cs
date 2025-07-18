@@ -36,5 +36,7 @@ namespace PalladiumPayroll.Repositories.Company
         Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel);
         Task<List<DropDownViewModelWithString>> GetGLAccounts(DBConnectionModel dbConnectionModel);
         Task<bool> CheckGLDBConnection(DBConnectionModel dbConnectionModel);
+        Task<bool> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation);
+        Task<List<EmploymentEquityInformation>> GetEmploymentEquityInfo(int companyId);
     }
 }

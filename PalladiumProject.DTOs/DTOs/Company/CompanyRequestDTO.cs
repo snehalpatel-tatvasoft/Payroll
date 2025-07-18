@@ -147,15 +147,16 @@
 
     public class EmploymentEquityInformation : BasicCompanyInfo
     {
+        public int? EmploymentEquityInfoId { get; set; }
         public int? EeReferenceNumber { get; set; }
         public string? SetaClassification { get; set; }
         public string? AccountingOfficerNameAndSurname { get; set; }
         public string? AccountingOfficerTelephoneNumber { get; set; }
         public string? AccountingOfficerFaxNumber { get; set; }
         public string? AccountingOfficerEmail { get; set; }
-        public string? EquityManagerNameAndSurname { get; set; }
-        public string? EquityManagerTelephoneNumber { get; set; }
-        public string? EquityManagerFaxNumber { get; set; }
+        public string? EquityManagerNameSurname { get; set; }
+        public string? EquityManagerTelephone { get; set; }
+        public string? EquityManagerFax { get; set; }
         public string? EquityManagerEmail { get; set; }
         public int IndustrySectorControlId { get; set; }
         public int BusinessTypeControlId { get; set; }

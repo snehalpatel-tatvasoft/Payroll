@@ -218,7 +218,7 @@ namespace PalladiumPayroll.Services.Company
         {
             return await _companyRepository.GetPayrollCycleInfo(companyId, taxYearId);
         }
-        
+
         public async Task<List<CompanyCoidaSetup>> GetCOIDASetupInfo(int companyId, int yearId)
         {
             return await _companyRepository.GetCOIDASetupInfo(companyId, yearId);
@@ -253,7 +253,7 @@ namespace PalladiumPayroll.Services.Company
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
         }
-        
+
         public async Task<JsonResult> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup)
         {
             bool isAdded = await _companyRepository.UpsertCOIDASetupInfo(companyCoidaSetup);
@@ -317,6 +317,21 @@ namespace PalladiumPayroll.Services.Company
                 glSetup.GlDepartmentList = await _companyRepository.GetGLDepartments(dbConnectionModel);
             }
             return HttpStatusCodeResponse.SuccessResponse(glSetup, string.Format(ResponseMessages.Success, "GL Account", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation)
+        {
+            bool isAdded = await _companyRepository.UpsertEmploymentEquityInfo(employmentEquityInformation);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmploymentEquityInformation, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<List<EmploymentEquityInformation>> GetEmploymentEquityInfo(int companyId)
+        {
+            return await _companyRepository.GetEmploymentEquityInfo(companyId);
         }
     }
 }

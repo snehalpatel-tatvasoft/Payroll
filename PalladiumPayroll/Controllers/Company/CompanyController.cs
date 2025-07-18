@@ -313,5 +313,32 @@ namespace PalladiumPayroll.Controllers.Company
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+        
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmploymentEquityInfo(int companyId)
+        {
+            try
+            {
+                List<EmploymentEquityInformation> companyInfo = await _companyService.GetEmploymentEquityInfo(companyId);
+                return HttpStatusCodeResponse.SuccessResponse(companyInfo, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation)
+        {
+            try
+            {
+                return await _companyService.UpsertEmploymentEquityInfo(employmentEquityInformation);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
     }
 }

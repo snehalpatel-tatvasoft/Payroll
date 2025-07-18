@@ -27,14 +27,14 @@ namespace PalladiumPayroll.Repositories.Company
         public async Task<List<DropDownViewModelWithString>> GetGLAccounts(DBConnectionModel dbConnectionModel)
         {
             string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
-      
+
             string query = "SELECT intGLNumber as ID ,intGLNumber AS [KEY], intGLNumber AS [VALUE] from dbo.tblAccounts"; // Adjust as needed
             return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
         }
         public async Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel)
         {
             string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
-      
+
             string query = "SELECT strDesc as ID ,strDesc AS [KEY], strDesc AS [VALUE] from dbo.tblDepartments"; // Adjust as needed
             return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
         }
@@ -145,13 +145,13 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@CycleRecord", payRollCycle.AsTableValuedParameter("dbo.CycleRecordType"));
 
             // step-4 general ledger
-            DataTable glTransaction= new DataTable();
+            DataTable glTransaction = new DataTable();
             glTransaction.Columns.Add("TransactionOrders", typeof(string));
             glTransaction.Columns.Add("DebitAccountNumber", typeof(string));
             glTransaction.Columns.Add("CreditAccountNumber", typeof(string));
             glTransaction.Columns.Add("ContraAccountNumber", typeof(string));
 
-            if(model.TransactionList != null)
+            if (model.TransactionList != null)
             {
                 foreach (var item in model.TransactionList)
                 {
@@ -402,7 +402,7 @@ namespace PalladiumPayroll.Repositories.Company
             List<CompanyPayrollCycle>? result = await _dapper.ExecuteStoredProcedure<CompanyPayrollCycle>("usp_GetCompanyPayrollCycleByCompanyId", parameters);
             return result;
         }
-        
+
         public async Task<List<CompanyCoidaSetup>> GetCOIDASetupInfo(int companyId, int taxYearId)
         {
             DynamicParameters? parameters = new DynamicParameters();
@@ -464,7 +464,7 @@ namespace PalladiumPayroll.Repositories.Company
             bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCompanyBenefitFund", parameters);
             return isUpsert;
         }
-        
+
         public async Task<bool> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -516,6 +516,38 @@ namespace PalladiumPayroll.Repositories.Company
 
             bool isDeleted = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteCompanyBenefitFund", parameters);
             return isDeleted;
+        }
+
+        public async Task<List<EmploymentEquityInformation>> GetEmploymentEquityInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            List<EmploymentEquityInformation>? result = await _dapper.ExecuteStoredProcedure<EmploymentEquityInformation>("usp_GetEmploymentEquityInfoByCompanyId", parameters);
+            return result;
+        }
+
+        public async Task<bool> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@EmploymentEquityInfoId", employmentEquityInformation.EmploymentEquityInfoId);
+            parameters.Add("@CompanyId", employmentEquityInformation.CompanyId);
+            parameters.Add("@EeReferenceNumber", employmentEquityInformation.EeReferenceNumber);
+            parameters.Add("@SetaClassification", employmentEquityInformation.SetaClassification);
+            parameters.Add("@AccountingOfficerNameAndSurname", employmentEquityInformation.AccountingOfficerNameAndSurname);
+            parameters.Add("@AccountingOfficerTelephoneNumber", employmentEquityInformation.AccountingOfficerTelephoneNumber);
+            parameters.Add("@AccountingOfficerFaxNumber", employmentEquityInformation.AccountingOfficerFaxNumber);
+            parameters.Add("@AccountingOfficerEmail", employmentEquityInformation.AccountingOfficerEmail);
+            parameters.Add("@EquityManagerNameAndSurname", employmentEquityInformation.AccountingOfficerNameAndSurname);
+            parameters.Add("@EquityManagerTelephone", employmentEquityInformation.EquityManagerTelephone);
+            parameters.Add("@EquityManagerFax", employmentEquityInformation.AccountingOfficerFaxNumber);
+            parameters.Add("@EquityManagerEmail", employmentEquityInformation.EquityManagerEmail);
+            parameters.Add("@IndustrySectorControlId", employmentEquityInformation.IndustrySectorControlId);
+            parameters.Add("@BusinessTypeControlId", employmentEquityInformation.BusinessTypeControlId);
+            parameters.Add("@NumberOfEmployeeControlId", employmentEquityInformation.NumberOfEmployeeControlId);
+
+            bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmploymentEquityInformation", parameters);
+            return isUpsert;
         }
     }
 }
