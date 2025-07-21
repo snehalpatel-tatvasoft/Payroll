@@ -75,9 +75,18 @@ public class EmployeeDropdownDto
     public string Initials { get; set; }="";
 }
 
-public class DesignationCodeDto
+public class DesignationDto
 {
-    public string DesignationCode { get; set; }="";
+     public long DesignationId { get; set; }
+    public string DesignationCode { get; set; } = "";
+    public string DesignationName { get; set; } = "";
+}
+
+public class ReportToEmployeeDto
+{
+    public long EmployeeId { get; set; }
+    public string EmployeeName { get; set; } = "";
+    public string EmployeeSurname { get; set; } = "";
 }
 
 
@@ -95,13 +104,43 @@ public class EmployeePromotionDropdownsDTO
     public List<SupportFunctionDto> SupportFunctions { get; set; } = new();
     public List<DepartmentDto> Departments { get; set; } = new();
     public List<EmployeeDropdownDto> Employees { get; set; } = new();
-    public List<DesignationCodeDto> DesignationCodes { get; set; } = new();
+    public List<DesignationDto> Designations { get; set; } = new();
+     public List<ReportToEmployeeDto> ReportTos { get; set; } = new();
 }
 
 public class EmployeePromotionsdisplayDataDTO
 {
+        public long EmployeePromotionId { get; set; }
+        public string EmployeeCode { get; set; } = string.Empty;
+        // public string EmployeeFullName { get; set; } = string.Empty;
+        public string JobTitle { get; set; } = string.Empty;
+        public string OFOCode { get; set; } = string.Empty;
+        public string MajorCostCenter { get; set; } = string.Empty;
+        public string NICGrade { get; set; } = string.Empty;
+        public string EffectiveDate { get; set; } = string.Empty;
+        public string Branch { get; set; } = string.Empty;
 }
 
 public class EmployeePromotionDetailDTO
 {
+    public long EmployeePromotionId { get; set; }
+    public long CompanyId { get; set; }
+
+    public long EmployeeId { get; set; }
+    public string EmployeeInitialsSurname { get; set; }=string.Empty;
+    public long? DesignationId { get; set; }
+    public long? JobGradeId { get; set; }
+    public long? WSPCategoryId { get; set; }
+    public long? OFOCodeId { get; set; }
+    public long? MajorCostCentreId { get; set; }
+    public long? NICGradeId { get; set; }
+    public long? OccupationalCategoryId { get; set; }
+    public long? OccupationalLevelId { get; set; }
+
+    public DateTime? EffectiveDate { get; set; }
+    public long? ReportToId { get; set; }
+    public long? BranchId { get; set; }
+    public long? DepartmentId { get; set; }
+    public long? ProvinceId { get; set; }
+    public long? SupportFunctionId { get; set; }
 }
