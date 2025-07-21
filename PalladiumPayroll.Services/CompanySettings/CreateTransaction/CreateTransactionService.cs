@@ -84,7 +84,7 @@ public class CreateTransactionService : ICreateTransactionService
         }
         catch (Exception)
         {
-             return HttpStatusCodeResponse.BadRequestResponse();
+            return HttpStatusCodeResponse.BadRequestResponse();
 
         }
     }
@@ -94,6 +94,41 @@ public class CreateTransactionService : ICreateTransactionService
         {
             var transaction = await _createTransactionRepository.GetTransactionById(payrollProcessId);
             return HttpStatusCodeResponse.SuccessResponse(transaction, ResponseMessages.DataFetchSuccess);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
+    public async Task<JsonResult> DeleteTransaction(long id)
+    {
+        try
+        {
+            await _createTransactionRepository.DeleteTransaction(id);
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.TransactionDeletedSuccessfully);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
+    public async Task<JsonResult> ImportTransactions(ImportTransactionRequestDTO request)
+    {
+        try
+        {
+            foreach (var transaction in request.Transactions)
+            {
+                transaction.CompanyId = request.CompanyId;
+
+                var status = await _createTransactionRepository.ImportTransactions(transaction);
+
+                if (string.IsNullOrEmpty(status))
+                {
+                    return HttpStatusCodeResponse.InternalServerErrorResponse("Unknown error during import.");
+                }
+            }
+
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.TransactionImportedSuccessfully);
         }
         catch (Exception)
         {

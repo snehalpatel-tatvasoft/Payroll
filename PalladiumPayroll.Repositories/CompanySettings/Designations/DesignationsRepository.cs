@@ -27,7 +27,7 @@ public class DesignationsRepository : IDesignationsRepository
         parameters.Add("@DesignationCode", request.DesignationsCode);
         parameters.Add("@ComanyID", request.CompanyId);
 
-        return await _dapper.ExecuteStoredProcedureSingle<bool>("sp_CreateDesignation", parameters);
+        return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_CreateDesignation", parameters);
     }
 
     public async Task<List<DesignationResponseDTO>> GetAllDesignations(long companyId)
@@ -36,7 +36,7 @@ public class DesignationsRepository : IDesignationsRepository
         parameters.Add("@CompanyId", companyId);
 
         var result = await _dapper.ExecuteStoredProcedure<DesignationResponseDTO>(
-            "sp_GetAllDesignations", parameters);
+            "usp_GetAllDesignations", parameters);
         return result.ToList();
     }
 
@@ -46,7 +46,7 @@ public class DesignationsRepository : IDesignationsRepository
         var parameters = new DynamicParameters();
         parameters.Add("@Id", id);
 
-        return await _dapper.ExecuteStoredProcedureSingle<bool>("sp_DeleteDesignation", parameters);
+        return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteDesignation", parameters);
     }
 
     public async Task<bool> UpdateDesignations(DesignationRequestDTO request)
@@ -57,7 +57,7 @@ public class DesignationsRepository : IDesignationsRepository
         parameters.Add("@DesignationCode", request.DesignationsCode);
         parameters.Add("@ComanyID", request.CompanyId);
 
-        return await _dapper.ExecuteStoredProcedureSingle<bool>("sp_UpdateDesignation", parameters);
+        return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateDesignation", parameters);
     }
     public async Task<bool> CheckDuplicateDesignation(DesignationRequestDTO request)
     {
@@ -68,31 +68,31 @@ public class DesignationsRepository : IDesignationsRepository
         parameters.Add("@CompanyId", request.CompanyId);
         parameters.Add("@IsDuplicate", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-        await _dapper.ExecuteStoredProcedure<object>("sp_CheckDuplicateDesignation", parameters);
+        await _dapper.ExecuteStoredProcedure<object>("usp_CheckDuplicateDesignation", parameters);
         return parameters.Get<bool>("@IsDuplicate");
     }
     
     
-public async Task<string?> ImportDesignations(ImportDesignationRequestDTO request)
-{
-    foreach (var item in request.Designations)
+    public async Task<string?> ImportDesignations(ImportDesignationRequestDTO request)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("@DesignationsName", item.DesignationsName);
-        parameters.Add("@DesignationsCode", item.DesignationsCode);
-        parameters.Add("@CompanyId", request.CompanyId);
+        foreach (var item in request.Designations)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@DesignationsName", item.DesignationsName);
+            parameters.Add("@DesignationsCode", item.DesignationsCode);
+            parameters.Add("@CompanyId", request.CompanyId);
 
-        var result = await _dapper.ExecuteStoredProcedureSingle<string>("sp_ImportDesignations", parameters);
+            var result = await _dapper.ExecuteStoredProcedureSingle<string>("usp_ImportDesignations", parameters);
 
-        if (result == "DUPLICATE")
-            return $"Duplicate record: {item.DesignationsName} - {item.DesignationsCode}";
+            if (result == "DUPLICATE")
+                return $"Duplicate record";
 
-        if (result == "DUPLICATE_CODE")
-            return $"Code already exists for another designation: {item.DesignationsCode}";
+            if (result == "DUPLICATE_CODE")
+                return $"Code already exists for another designation";
+        }
+
+        return null; 
     }
-
-    return null; // success
-}
 
 
 }

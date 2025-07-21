@@ -173,9 +173,20 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string TransactionCreatedSuccessfully = "Create transaction successfully.";
             public static readonly string TransactionCreationFailed = "Failed to create transaction.";
             public static readonly string DuplicateTransaction = "Transaction exists with the same type and description.";
-
             public static readonly string TransactionUpdatedSuccessfully = "Transaction updated successfully.";
             public static readonly string TransactionUpdateFailed = "Failed to update transaction.";
+            public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
+            public static readonly string TransactionImportedSuccessfully = "Transaction imported successfully.";
+            #endregion
+
+            #region Payslip Display Setup
+
+            public static readonly string EmployeeGrievances = "Employee Grievances";
+
+            public static readonly string NatureOfGrievances = "Nature of Grievances";
+            public const string EmployeeGrievanceSaveFailed  = "Failed to save Employee Grievances";
+            public const string InvalidEmployeeGrievanceId = "Employee Grievance Id is Invalid.";
+            public const string EmployeeGrievanceNotFound = "Employee Grievance was not found.";
 
             #endregion
         }
