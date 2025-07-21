@@ -124,7 +124,7 @@ public class CreateTransactionService : ICreateTransactionService
 
                 if (string.IsNullOrEmpty(status))
                 {
-                    return HttpStatusCodeResponse.InternalServerErrorResponse("Unknown error during import.");
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TransactionImportFailed);
                 }
             }
 
