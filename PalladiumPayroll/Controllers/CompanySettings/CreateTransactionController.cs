@@ -1,7 +1,10 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.CompanySettings.CreateTransaction;
+using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.CompanySettings.CreateTransaction;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.CompanySettings;
 
@@ -26,7 +29,9 @@ public class CreateTransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.CreateTransaction, ex.Message)
+            );
         }
     }
 
@@ -40,7 +45,9 @@ public class CreateTransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.CreateTransaction, ex.Message)
+            );
         }
     }
 
@@ -55,11 +62,13 @@ public class CreateTransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Updating, ResponseMessages.CreateTransaction, ex.Message)
+            );
         }
     }
 
-    [HttpGet("transactions/{id}")]
+    [HttpGet("Transactions/{id}")]
     public async Task<ActionResult> GetTransactionById(long id)
     {
         try
@@ -69,10 +78,12 @@ public class CreateTransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.CreateTransaction, ex.Message)
+            );
         }
     }
-    
+
     [HttpDelete("DeleteTransaction/{id}")]
     public async Task<ActionResult> DeleteTransaction(long id)
     {
@@ -83,7 +94,9 @@ public class CreateTransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.CreateTransaction, ex.Message)
+            );
         }
     }
 
@@ -97,7 +110,9 @@ public class CreateTransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.CreateTransaction, ex.Message)
+            );
         }
     }
 

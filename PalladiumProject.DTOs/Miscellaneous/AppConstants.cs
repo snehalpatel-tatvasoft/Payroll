@@ -170,6 +170,8 @@ namespace PalladiumPayroll.Helper.Constants
             #endregion
 
             #region Create Transaction
+            
+            public static readonly string CreateTransaction = "Create Transaction";
             public static readonly string TransactionCreatedSuccessfully = "Create transaction successfully.";
             public static readonly string TransactionCreationFailed = "Failed to create transaction.";
             public static readonly string DuplicateTransaction = "Transaction exists with the same type and description.";
@@ -177,6 +179,8 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string TransactionUpdateFailed = "Failed to update transaction.";
             public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
             public static readonly string TransactionImportedSuccessfully = "Transaction imported successfully.";
+            public static readonly string TransactionImportFailed = "Error occurred while importing the data";
+
             #endregion
 
             #region Payslip Display Setup
