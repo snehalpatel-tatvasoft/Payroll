@@ -8,6 +8,7 @@ using PalladiumPayroll.Services.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Services.Department;
 using PalladiumPayroll.Services.Home;
 using PalladiumPayroll.Services.HRFunctions.EmployeeGrievances;
+using PalladiumPayroll.Services.HRFunctions.EmployeePromotions;
 using PalladiumPayroll.Services.User;
 
 namespace PalladiumPayroll.Services
@@ -33,6 +34,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<ICreateTransactionService, CreateTransactionService>();
             services.AddScoped<IPasswordPolicyService, PasswordPolicyService>();
             services.AddScoped<IEmployeeGrievancesService, EmployeeGrievancesService>();
+            services.AddScoped<IEmployeePromotionsService, EmployeePromotionsService>();
             return services;
         }
     }

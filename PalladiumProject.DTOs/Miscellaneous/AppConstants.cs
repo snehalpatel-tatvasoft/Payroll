@@ -179,7 +179,7 @@ namespace PalladiumPayroll.Helper.Constants
 
             #endregion
 
-            #region Payslip Display Setup
+            #region Employee Grievances
 
             public static readonly string EmployeeGrievances = "Employee Grievances";
 
@@ -187,6 +187,17 @@ namespace PalladiumPayroll.Helper.Constants
             public const string EmployeeGrievanceSaveFailed  = "Failed to save Employee Grievances";
             public const string InvalidEmployeeGrievanceId = "Employee Grievance Id is Invalid.";
             public const string EmployeeGrievanceNotFound = "Employee Grievance was not found.";
+
+            #endregion
+            
+            #region Employee Grievances
+
+            public static readonly string EmployeePromotions = "Employee Promotions";
+
+            public static readonly string NatureOfPromotions = "Nature of Promotions";
+            public const string EmployeePromotionSaveFailed  = "Failed to save Employee Promotion";
+            public const string InvalidEmployeePromotionId = "Employee Promotion Id is Invalid.";
+            public const string EmployeePromotionNotFound = "Employee Promotion was not found.";
 
             #endregion
         }
