@@ -31,5 +31,6 @@ namespace PalladiumPayroll.DTOs.DTOs.ResponseDTOs.CompanySettings
         public string EmployeeFullName { get; set; }
         public string DepartmentName { get; set; }
         public string HomeLanguageName { get; set; }
+        public string Email { get; set; }
     }
 }
