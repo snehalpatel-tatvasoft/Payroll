@@ -15,6 +15,7 @@ namespace PalladiumPayroll.Services.Company
         Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId);
         Task<JsonResult> SetActiveCompanyId(int companyId);
         Task<List<CompanyInfo>> GetCompanyInformation(int companyId);
+        Task<List<GLSetup>> GetCompanyGLInfo(int companyId);
         Task<JsonResult> UpdateCompanyInformation(CompanyInfo companyInfo);
         Task<List<CompanyRepresentative>> GetCompanyRepresentativeInfo(int companyId);
         Task<JsonResult> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo);

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
@@ -93,6 +92,20 @@ namespace PalladiumPayroll.Controllers.Company
             {
                 List<CompanyInfo> companyInfo = await _companyService.GetCompanyInformation(companyId);
                 return HttpStatusCodeResponse.SuccessResponse(companyInfo, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetCompanyGLInfo(int companyId)
+        {
+            try
+            {
+                List<GLSetup> glSetupInfo = await _companyService.GetCompanyGLInfo(companyId);
+                return HttpStatusCodeResponse.SuccessResponse(glSetupInfo, string.Empty);
             }
             catch (Exception)
             {
@@ -234,7 +247,7 @@ namespace PalladiumPayroll.Controllers.Company
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
-        
+
         [HttpPost("[action]")]
         public async Task<ActionResult> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup)
         {
@@ -313,7 +326,7 @@ namespace PalladiumPayroll.Controllers.Company
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
-        
+
         [HttpGet("[action]")]
         public async Task<ActionResult> GetEmploymentEquityInfo(int companyId)
         {

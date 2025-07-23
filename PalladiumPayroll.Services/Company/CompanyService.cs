@@ -173,6 +173,11 @@ namespace PalladiumPayroll.Services.Company
         public async Task<List<CompanyInfo>> GetCompanyInformation(int companyId)
         {
             return await _companyRepository.GetCompanyInformation(companyId);
+        } 
+        
+        public async Task<List<GLSetup>> GetCompanyGLInfo(int companyId)
+        {
+            return await _companyRepository.GetCompanyGLInfo(companyId);
         }
         public async Task<JsonResult> UpdateCompanyInformation(CompanyInfo companyInfo)
         {

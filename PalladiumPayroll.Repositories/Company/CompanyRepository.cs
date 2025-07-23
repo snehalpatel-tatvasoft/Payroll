@@ -349,6 +349,15 @@ namespace PalladiumPayroll.Repositories.Company
             return response;
         }
 
+        public async Task<List<GLSetup>> GetCompanyGLInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            List<GLSetup> response = await _dapper.ExecuteStoredProcedure<GLSetup>("usp_GetGLSetupByCompanyId", parameters);
+            return response;
+        }
+
         public async Task<bool> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo)
         {
             DynamicParameters parameters = new DynamicParameters();

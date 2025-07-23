@@ -125,7 +125,7 @@
         public string CompanyName { get; set; } = null!;
     }
 
-    public class GLSetup
+    public class GLSetup : BasicCompanyInfo
     {
         public string? DatabaseServerName { get; set; }
         public string? DatabaseUserName { get; set; }
