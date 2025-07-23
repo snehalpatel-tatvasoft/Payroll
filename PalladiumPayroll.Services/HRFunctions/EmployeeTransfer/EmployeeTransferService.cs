@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeTransfer;
 using PalladiumPayroll.DTOs.HRFunctions.EmployeeTransfer;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeTransfer;
@@ -46,11 +47,43 @@ public class EmployeeTransferService : IEmployeeTransferService
 
             return HttpStatusCodeResponse.SuccessResponse(autofillData, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTransfer, ActionType.Retrieved));
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.BadRequestResponse();
         }
     }
+    public async Task<JsonResult> AddEmployeeTransfer(EmployeeTransferRequestDTO request)
+    {
+        try
+        {
+            if (request.EmployeeId <= 0 || request.CompanyId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidEmployeeOrCompanyId);
+            }
 
+            var result = await _employeeTransferRepository.AddEmployeeTransfer(request);
+            if (result != null)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(result, ResponseMessages.EmployeeTransferCreatedSuccessfully);
+            }
 
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.EmployeeTransferCreationFailed);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
+    public async Task<List<EmployeeTransferDisplayDataModel>> GetEmployeeTransferList(long companyId)
+    {
+        try
+        {
+            var data = await _employeeTransferRepository.GetEmployeeTransferList(companyId);
+            return data;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
 }

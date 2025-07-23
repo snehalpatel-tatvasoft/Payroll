@@ -1,6 +1,7 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeTransfer;
 using PalladiumPayroll.DTOs.HRFunctions.EmployeeTransfer;
 
 
@@ -57,11 +58,44 @@ public class EmployeeTransferRepository : IEmployeeTransferRepository
         parameters.Add("@company_id", companyId);
 
         var result = await _dapper.ExecuteStoredProcedureSingle<EmployeeTransferAutoFillDTO>(
-            "usp_GetEmployeeTransferAutofilldata", 
+            "usp_GetEmployeeTransferAutofilldata",
             parameters
         );
 
         return result;
     }
+    public async Task<EmployeeTransferDetailDTO?> AddEmployeeTransfer(EmployeeTransferRequestDTO request)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@EmployeeId", request.EmployeeId);
+        parameters.Add("@EmployeeInitialsSurname", request.EmployeeInitialsSurname);
+        parameters.Add("@DesignationId", request.DesignationId);
+        parameters.Add("@JobGradeId", request.JobGradeId);
+        parameters.Add("@WSPCategoryId", request.WSPCategoryId);
+        parameters.Add("@OFOCodeId", request.OFOCodeId);
+        parameters.Add("@MajorCostCenterId", request.MajorCostCenterId);
+        parameters.Add("@NICGradeId", request.NICGradeId);
+        parameters.Add("@OccupationalCategoryId", request.OccupationalCategoryId);
+        parameters.Add("@OccupationalLevelId", request.OccupationalLevelId);
+        parameters.Add("@EffectiveDate", request.EffectiveDate);
+        parameters.Add("@ReportToId", request.ReportToId);
+        parameters.Add("@BranchId", request.BranchId);
+        parameters.Add("@DepartmentId", request.DepartmentId);
+        parameters.Add("@ProvinceId", request.ProvinceId);
+        parameters.Add("@SupportFunctionId", request.SupportFunctionId);
+        parameters.Add("@OccupationalStatusId", request.OccupationalStatusId);
+        parameters.Add("@AppointmentTypeId", request.AppointmentTypeId);
+        parameters.Add("@CompanyId", request.CompanyId);
+        parameters.Add("@UserId", request.UserId);
 
+        return await _dapper.ExecuteStoredProcedureSingle<EmployeeTransferDetailDTO>("usp_AddEmployeeTransfer", parameters);
+    }
+    public async Task<List<EmployeeTransferDisplayDataModel>> GetEmployeeTransferList(long companyId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", companyId);
+
+        var result = await _dapper.ExecuteStoredProcedure<EmployeeTransferDisplayDataModel>("usp_GetEmployeeTransferList", parameters);
+        return result.ToList();
+    }
 }

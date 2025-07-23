@@ -130,7 +130,7 @@ public class EmployeeTransferDetailDTO
 {
     public long EmployeeTransferId { get; set; }
     public long EmployeeId { get; set; }
-    public string EmployeeInitialsSurname { get; set; } = "";
+    public string? EmployeeInitialsSurname { get; set; }
     public long? DesignationId { get; set; }
     public long? JobGradeId { get; set; }
     public long? WSPCategoryId { get; set; }
@@ -148,7 +148,7 @@ public class EmployeeTransferDetailDTO
     public long? OccupationalStatusId { get; set; }
     public long? AppointmentTypeId { get; set; }
     public long CompanyId { get; set; }
-    public string UserId { get; set; } = "";
+    public int UserId { get; set; } 
 }
 
 public class EmployeeTransferAutoFillDTO
@@ -169,4 +169,28 @@ public class EmployeeTransferAutoFillDTO
     public int? SupportFunctionId { get; set; }
     public int? OccupationalStatusId { get; set; }
     public int? AppointmentTypeId { get; set; }
+    public DateTime? EffectiveDate { get; set; }
+}
+
+public class EmployeeTransferDisplayDataModel
+{
+    public long EmployeeTransferId { get; set; }
+    public string EmployeeCode { get; set; } = "";
+    public string JobTitle { get; set; } = "";
+    public string JobTitleCode { get; set; } = "";
+    public string JobGrade { get; set; } = "";
+    public string WspCategory { get; set; } = "";
+    public string OfoCode { get; set; } = "";
+    public string MajorCostCenter { get; set; } = "";
+    public string NicGrade { get; set; } = "";
+    public string OccupationalCategory { get; set; } = "";
+    public string OccupationalLevel { get; set; } = "";
+    public string EffectiveDate { get; set; } = "";
+    public string ReportTo { get; set; } = "";
+    public string Branch { get; set; } = "";
+    public string Department { get; set; } = "";
+    public string Province { get; set; } = "";
+    public string CoreSupportFunction { get; set; } = "";
+    public string? OccupationalStatus { get; set; }
+    public string? AppointmentType{ get; set; }
 }

@@ -218,6 +218,7 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string EmployeeTransferCreationFailed = "Employee Transfer Creation Failed";
             public static readonly string EmployeeOrCompanyIdInvalid = "EmployeeId Or CompanyId is Invalid";
             public static readonly string EmployeeNotFound = "Employee Not Found";
+            public static readonly string InvalidEmployeeOrCompanyId = "Invalid Employee Or CompanyId";
 
             #endregion
         }
