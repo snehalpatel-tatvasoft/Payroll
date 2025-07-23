@@ -124,7 +124,7 @@ public class EmployeeTrainingService : IEmployeeTrainingService
             await file.CopyToAsync(stream);
         }
 
-        var relativePath = $"assets/disciplinary-log-documents/{fileName}";
+        var relativePath = $"E:/PCTR25/Payroll-final-Project/PremiumPayProject-Frontend/Payroll-UI/src/assets/disciplinary-log-documents/{fileName}";
         return relativePath;
     }
 

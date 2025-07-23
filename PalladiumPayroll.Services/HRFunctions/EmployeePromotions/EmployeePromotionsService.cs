@@ -16,17 +16,36 @@ public class EmployeePromotionsService : IEmployeePromotionsService
         _employeePromotionsRepository = employeePromotionsRepository;
     }
 
-    public async Task<JsonResult> UpsertEmployeePromotions(EmployeePromotionsUpsertData request)
+    public async Task<JsonResult> AddEmployeePromotion(EmployeePromotionsUpsertData request)
     {
         try
         {
-            bool isSaved = await _employeePromotionsRepository.UpsertEmployeePromotions(request);
+            bool isSaved = await _employeePromotionsRepository.AddEmployeePromotion(request);
 
             if (!isSaved)
             {
                 return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeGrievanceSaveFailed);
             }
             return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeePromotions, ActionType.Saved));
+
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
+
+    public async Task<JsonResult> UpdateEmployeePromotion(EmployeePromotionsUpsertData request)
+    {
+        try
+        {
+            bool isSaved = await _employeePromotionsRepository.UpdateEmployeePromotion(request);
+
+            if (!isSaved)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeGrievanceSaveFailed);
+            }
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeePromotions, ActionType.Updated));
 
         }
         catch (Exception)
@@ -88,6 +107,20 @@ public class EmployeePromotionsService : IEmployeePromotionsService
             EmployeePromotionDetailDTO? employeePromotion = await _employeePromotionsRepository.GetEmployeePromotioneById(promotionId);
 
             return HttpStatusCodeResponse.SuccessResponse(employeePromotion, string.Empty);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
+
+    public async Task<JsonResult> GetEmployeePromotionAutofillData(long employeeId, long companyId)
+    {
+        try
+        {
+            EmployeePromotionAutoFillDTO? autoFilData = await _employeePromotionsRepository.GetEmployeePromotionAutofillData(employeeId,companyId);
+
+            return HttpStatusCodeResponse.SuccessResponse(autoFilData, string.Empty);
         }
         catch (Exception)
         {

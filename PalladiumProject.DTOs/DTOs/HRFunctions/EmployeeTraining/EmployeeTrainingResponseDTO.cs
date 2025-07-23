@@ -106,3 +106,4 @@ public class EmployeeTrainingDropdownsDTO
     public List<CourseStatusDto> CourseStatuses { get; set; } = new();
     public List<EmployeeDto> Employees { get; set; } = new();
 }
+
