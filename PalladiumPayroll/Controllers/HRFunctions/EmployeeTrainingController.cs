@@ -9,9 +9,9 @@ namespace PalladiumPayroll.Controllers.HRFunctions;
 
 [ApiController]
 [Route("api/[controller]")]
-public class EmployeeTrainingController:ControllerBase
+public class EmployeeTrainingController : ControllerBase
 {
-     private readonly IEmployeeTrainingService _employeeTrainingService;
+    private readonly IEmployeeTrainingService _employeeTrainingService;
 
     public EmployeeTrainingController(IEmployeeTrainingService employeeTrainingService)
     {
@@ -19,7 +19,7 @@ public class EmployeeTrainingController:ControllerBase
     }
 
 
-     [HttpPost("[action]")]
+    [HttpPost("[action]")]
     public async Task<ActionResult> UpsertEmployeeTraining(EmployeeTrainingUpsertData request)
     {
         try
@@ -38,7 +38,7 @@ public class EmployeeTrainingController:ControllerBase
         }
     }
 
-    
+
     [HttpDelete("[action]")]
     public async Task<ActionResult> DeleteEmployeeTraining(long employeeTrainingId, string userId)
     {
@@ -114,4 +114,23 @@ public class EmployeeTrainingController:ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeTraining, ex.Message));
         }
     }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> UploadFile(IFormFile file)
+    {
+        try
+        {
+            string? relativePath = await _employeeTrainingService.UploadTrainingFile(file);
+
+            if (string.IsNullOrEmpty(relativePath))
+               return HttpStatusCodeResponse.NotFoundResponse("File upload failed.");
+
+          return HttpStatusCodeResponse.SuccessResponse(relativePath, "File uploaded successfully.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"An error occurred while uploading the file: {ex.Message}");
+        }
+    }
+
 }

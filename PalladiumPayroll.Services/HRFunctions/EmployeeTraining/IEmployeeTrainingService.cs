@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeTraining;
 
@@ -14,4 +15,6 @@ public interface IEmployeeTrainingService
     Task<JsonResult> GetEmployeeTrainings(long companyId);
 
     Task<JsonResult> GetEmployeeTrainingById(long trainingId);
+
+     Task<string?> UploadTrainingFile(IFormFile file);
 }
