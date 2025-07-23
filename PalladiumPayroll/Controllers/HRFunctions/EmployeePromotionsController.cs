@@ -24,10 +24,10 @@ public class EmployeePromotionsController : ControllerBase
     {
         try
         {
-            // if (request.EmployeePromotionId < 0)
-            // {
-            //     return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidEmployeePromotionId);
-            // }
+            if (request.EmployeePromotionsId < 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidEmployeePromotionId);
+            }
             return await _employeePromotionsService.UpsertEmployeePromotions(request);
         }
         catch (Exception ex)

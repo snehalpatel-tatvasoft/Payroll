@@ -12,5 +12,5 @@ public interface IEmployeePromotionsRepository
 
     Task<List<EmployeePromotionsdisplayDataDTO>> GetEmployeePromotionsDisplayData(long companyId);
 
-    Task<EmployeePromotionDetailDTO?> GetEmployeePromotioneById(long promotionId);
+    Task<EmployeePromotionDetailDTO?> GetEmployeePromotioneById(long employeePromotionId);
 }

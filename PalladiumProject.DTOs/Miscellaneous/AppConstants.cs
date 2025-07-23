@@ -189,15 +189,25 @@ namespace PalladiumPayroll.Helper.Constants
             public const string EmployeeGrievanceNotFound = "Employee Grievance was not found.";
 
             #endregion
+            
+            #region Employee Promotions
 
-            #region Employee Grievances
 
             public static readonly string EmployeePromotions = "Employee Promotions";
+            public const string EmployeePromotionSaveFailed  = "Failed to save Employee Promotion";
 
             public static readonly string NatureOfPromotions = "Nature of Promotions";
-            public const string EmployeePromotionSaveFailed = "Failed to save Employee Promotion";
             public const string InvalidEmployeePromotionId = "Employee Promotion Id is Invalid.";
             public const string EmployeePromotionNotFound = "Employee Promotion was not found.";
+
+            #endregion
+
+            #region Employee Training
+
+            public static readonly string EmployeeTraining = "Employee Training";
+            public const string EmployeeTrainingSaveFailed  = "Failed to save Employee Training";
+            public const string InvalidEmployeeTrainingnId = "Employee Training Id is Invalid.";
+            public const string EmployeeTrainingNotFound = "Employee Training was not found.";
 
             #endregion
 
