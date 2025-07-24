@@ -176,6 +176,7 @@ public class EmployeeTransferDisplayDataModel
 {
     public long EmployeeTransferId { get; set; }
     public string EmployeeCode { get; set; } = "";
+    public string EmployeeInitialsSurname { get; set; } = "";
     public string JobTitle { get; set; } = "";
     public string JobTitleCode { get; set; } = "";
     public string JobGrade { get; set; } = "";
