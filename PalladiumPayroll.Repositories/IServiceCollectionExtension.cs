@@ -7,6 +7,7 @@ using PalladiumPayroll.Repositories.CompanySettings;
 using PalladiumPayroll.Repositories.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Repositories.Department;
 using PalladiumPayroll.Repositories.Home;
+using PalladiumPayroll.Repositories.HRFunctions.DisciplinaryLog;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeGrievances;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeePromotions;
 using PalladiumPayroll.Repositories.User;
@@ -29,12 +30,12 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<IEmployeeCodesRepository, EmployeeCodesRepository>();
             services.AddScoped<ICustomizeReportRepository, CustomizeReportRepository>();
             services.AddScoped<IPayslipDisplaySetupRepository, PayslipDisplaySetupRepository>();
-
             services.AddScoped<ITimesheetSetupRepository, TimesheetSetupRepository>();
             services.AddScoped<ICreateTransactionRepository, CreateTransactionRepository>();
             services.AddScoped<IPasswordPolicyRepository, PasswordPolicyRepository>();
             services.AddScoped<IEmployeeGrievancesRepository, EmployeeGrievancesRepository>();
             services.AddScoped<IEmployeePromotionsRepository, EmployeePromotionsRepository>();
+            services.AddScoped<IDisciplinaryLogRepository, DisciplinaryLogRepository>();
             return services;
         }
     }
