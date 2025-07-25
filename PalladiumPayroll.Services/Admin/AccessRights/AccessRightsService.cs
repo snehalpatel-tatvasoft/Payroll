@@ -23,7 +23,7 @@ public class AccessRightsService : IAccessRightsService
             bool isExists = await _accessRightsRepository.CheckAccessRoleExists(request.AccessRoleName, request.CompanyId, request.AccessRoleId);
 
             if (isExists)
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DuplicateMinimumWage);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.AcceessRoleAlreadyExists);
 
             bool isSaved = await _accessRightsRepository.UpsertAccessRole(request);
             return isSaved

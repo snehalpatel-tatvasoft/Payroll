@@ -7,4 +7,4 @@ public class AccessRoleResponseDTO
     public string? AccessRoleName { get; set; } 
     public int? AccessTypeId { get; set; }        
     public long CompanyId { get; set; }    
-}
+}   

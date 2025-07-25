@@ -53,14 +53,14 @@ public class AccessRightsRepository : IAccessRightsRepository
         parameters.Add("@IsExists", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_CheckAccessRoleExists", parameters);
-        return parameters.Get<bool>("@IsDuplicate");
+        return parameters.Get<bool>("@IsExists");
     }
 
 
     public async Task<bool> DeleteAccessRoles(int accessRoleId)
     {
         DynamicParameters parameters = new DynamicParameters();
-        parameters.Add("@Id", accessRoleId);
+        parameters.Add("@AccessRoleId", accessRoleId);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeleteAccessRole", parameters);
