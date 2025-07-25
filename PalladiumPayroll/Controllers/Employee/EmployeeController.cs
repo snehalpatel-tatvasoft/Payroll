@@ -30,11 +30,50 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> GetEmployeeList([FromQuery]EmployeeFilterViewModel reqModel)
+        public async Task<ActionResult> GetEmployeeList([FromQuery] EmployeeFilterViewModel reqModel)
         {
             try
             {
                 return await _employeeService.GetEmployeeList(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeleteEmployee(int employeeId)
+        {
+            try
+            {
+                return await _employeeService.DeleteEmployee(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeePaymentDetail(int employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeePaymentDetail(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> EmployeePaymentDetailSave(EmployeePaymentDetail reqModel)
+        {
+            try
+            {
+                return await _employeeService.EmployeePaymentDetailSave(reqModel);
             }
             catch (Exception ex)
             {
