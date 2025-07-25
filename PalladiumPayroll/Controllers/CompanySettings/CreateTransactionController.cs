@@ -1,8 +1,10 @@
 using System.Net;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.CompanySettings.CreateTransaction;
+using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.CompanySettings.CreateTransaction;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.CompanySettings;
 
@@ -17,7 +19,7 @@ public class CreateTransactionController : ControllerBase
         _createTransactionService = createTransactionService;
     }
 
-    [HttpGet("transactions")]
+    [HttpGet("Transactions")]
     public async Task<ActionResult> GetAllTransactions([FromQuery] long companyId)
     {
         try
@@ -27,11 +29,13 @@ public class CreateTransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.CreateTransaction, ex.Message)
+            );
         }
     }
 
-    [HttpPost("add-transaction")]
+    [HttpPost("AddTransaction")]
     public async Task<ActionResult> AddTransaction([FromBody] CreateTransactionRequestDTO request)
     {
         try
@@ -41,11 +45,13 @@ public class CreateTransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.CreateTransaction, ex.Message)
+            );
         }
     }
 
-    [HttpPut("update-transaction/{id}")]
+    [HttpPut("UpdateTransaction/{id}")]
     public async Task<ActionResult> UpdateTransaction(long id, [FromBody] CreateTransactionRequestDTO request)
     {
         try
@@ -56,11 +62,13 @@ public class CreateTransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Updating, ResponseMessages.CreateTransaction, ex.Message)
+            );
         }
     }
 
-    [HttpGet("transactions/{id}")]
+    [HttpGet("Transactions/{id}")]
     public async Task<ActionResult> GetTransactionById(long id)
     {
         try
@@ -70,11 +78,13 @@ public class CreateTransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.CreateTransaction, ex.Message)
+            );
         }
     }
-    
-    [HttpDelete("delete-transaction/{id}")]
+
+    [HttpDelete("DeleteTransaction/{id}")]
     public async Task<ActionResult> DeleteTransaction(long id)
     {
         try
@@ -84,9 +94,26 @@ public class CreateTransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.CreateTransaction, ex.Message)
+            );
         }
     }
 
+    [HttpPost("ImportTransactions")]
+    public async Task<ActionResult> ImportTransactions([FromBody] ImportTransactionRequestDTO request)
+    {
+        try
+        {
+            var res = await _createTransactionService.ImportTransactions(request);
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.CreateTransaction, ex.Message)
+            );
+        }
+    }
 
 }
