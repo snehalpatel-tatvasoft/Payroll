@@ -25,17 +25,19 @@ public class AccessRightsService : IAccessRightsService
             if (isExists)
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.AcceessRoleAlreadyExists);
 
-            bool isSaved = await _accessRightsRepository.UpsertAccessRole(request);
+            var (isSaved, accessRoleId) = await _accessRightsRepository.UpsertAccessRole(request);
+
             return isSaved
-                ? HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Created))
+                ? HttpStatusCodeResponse.SuccessResponse(new { accessRoleId }, string.Format(ResponseMessages.Success, ResponseMessages.AccessRole, ActionType.Saved))
                 : HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnableToSaveAccessRole);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return HttpStatusCodeResponse.BadRequestResponse();
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+         string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.AccessRole, ex.Message)
+     );
         }
     }
-
 
     public async Task<JsonResult> GetAllAccessRoles(int companyId)
     {
@@ -68,7 +70,80 @@ public class AccessRightsService : IAccessRightsService
         {
             return HttpStatusCodeResponse.BadRequestResponse();
         }
-
     }
+
+    public async Task<JsonResult> GetAccessRightsByRoleType(int accessRoleId)
+    {
+        try
+        {
+            List<EmployeeAccessRightsDTO> employeeAccessRights = await _accessRightsRepository.GetAccessRightsByRoleType(accessRoleId);
+
+            return HttpStatusCodeResponse.SuccessResponse(employeeAccessRights, string.Format(ResponseMessages.Success, ResponseMessages.AccessRights, ActionType.Retrieved));
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
+
+
+    public async Task<JsonResult> SaveRoleFunctinalityAccessRights(List<SaveEmployeeAccessRightsDTO> request)
+    {
+        try
+        {
+            bool isSaved = await _accessRightsRepository.SaveRoleFunctinalityAccessRights(request);
+            return isSaved
+                ? HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.AccessRights, ActionType.Saved))
+                : HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnableToSaveAccessRights);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
+
+    public async Task<JsonResult> GetPayFrequencyAccessRights(int accessRoleId)
+    {
+        try
+        {
+            List<PayFrequencyAccessRightsDTO> accessRights = await _accessRightsRepository.GetPayFrequencyAccessRights(accessRoleId);
+
+            return HttpStatusCodeResponse.SuccessResponse(accessRights, string.Format(ResponseMessages.Success, ResponseMessages.AccessRights, ActionType.Retrieved));
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
+
+    public async Task<JsonResult> SavePayFrequencyAccessRights(List<SavePayFrequencyAccessRightsDTO> request)
+    {
+        try
+        {
+            bool isSaved = await _accessRightsRepository.SavePayFrequencyAccessRights(request);
+            return isSaved
+                ? HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.AccessRights, ActionType.Saved))
+                : HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnableToSaveAccessRights);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
+
+    public async Task<JsonResult> GetTransactionFunctionAccessRights(int accessRoleId)
+    {
+        try
+        {
+            List<EmployeeAccessRightsDTO> employeeAccessRights = await _accessRightsRepository.GetTransactionFunctionAccessRights(accessRoleId);
+
+            return HttpStatusCodeResponse.SuccessResponse(employeeAccessRights, string.Format(ResponseMessages.Success, ResponseMessages.AccessRights, ActionType.Retrieved));
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
+
 
 }

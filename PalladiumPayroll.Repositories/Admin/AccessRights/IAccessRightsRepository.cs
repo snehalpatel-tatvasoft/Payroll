@@ -4,11 +4,23 @@ namespace PalladiumPayroll.Repositories.Admin.AccessRights;
 
 public interface IAccessRightsRepository
 {
-    Task<bool> UpsertAccessRole(AccessRoleDTO request);
-    
+    Task<(bool IsSuccess, int AccessRoleId)> UpsertAccessRole(AccessRoleDTO request);
+
+
     Task<List<AccessRoleResponseDTO>> GetAllAccessRoles(long companyId);
 
     Task<bool> CheckAccessRoleExists(string accessRoleName, long companyId, int? accessRoleId = null);
 
     Task<bool> DeleteAccessRoles(int accessRoleId);
+
+    Task<List<EmployeeAccessRightsDTO>> GetAccessRightsByRoleType(int accessRoleId);
+
+    Task<bool> SaveRoleFunctinalityAccessRights(List<SaveEmployeeAccessRightsDTO> requests);
+
+
+    Task<bool> SavePayFrequencyAccessRights(List<SavePayFrequencyAccessRightsDTO> requests);
+
+    Task<List<PayFrequencyAccessRightsDTO>> GetPayFrequencyAccessRights(int accessRoleId);
+
+     Task<List<EmployeeAccessRightsDTO>> GetTransactionFunctionAccessRights(int accessRoleId);
 }

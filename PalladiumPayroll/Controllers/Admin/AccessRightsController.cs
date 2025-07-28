@@ -18,6 +18,7 @@ public class AccessRightsController : ControllerBase
         _accessRightsService = accessRightsService;
     }
 
+
     [HttpPost("[action]")]
     public async Task<ActionResult> UpsertAccessRole(AccessRoleDTO request)
     {
@@ -32,6 +33,7 @@ public class AccessRightsController : ControllerBase
             );
         }
     }
+
 
     [HttpGet("[action]")]
     public async Task<ActionResult> GetAllAccessRoles(int companyId)
@@ -51,6 +53,7 @@ public class AccessRightsController : ControllerBase
         }
     }
 
+
     [HttpDelete("[action]")]
     public async Task<ActionResult> DeleteAccessRole(int accessRoleId)
     {
@@ -68,6 +71,93 @@ public class AccessRightsController : ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.AccessRole, ex.Message)
             );
+        }
+    }
+
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetAccessRightsByRoleType(int accessRoleId)
+    {
+        try
+        {
+            if (accessRoleId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidAccessRoleId);
+            }
+
+            return await _accessRightsService.GetAccessRightsByRoleType(accessRoleId);
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.AccessRights, ex.Message));
+        }
+    }
+
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> SaveRoleFunctinalityAccessRights(List<SaveEmployeeAccessRightsDTO> request)
+    {
+        try
+        {
+            return await _accessRightsService.SaveRoleFunctinalityAccessRights(request);
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.AccessRights, ex.Message)
+            );
+        }
+    }
+
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetPayFrequencyAccessRights(int accessRoleId)
+    {
+        try
+        {
+            if (accessRoleId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidAccessRoleId);
+            }
+            return await _accessRightsService.GetPayFrequencyAccessRights(accessRoleId);
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.AccessRights, ex.Message));
+        }
+    }
+
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> SavePayFrequencyAccessRights(List<SavePayFrequencyAccessRightsDTO> request)
+    {
+        try
+        {
+            return await _accessRightsService.SavePayFrequencyAccessRights(request);
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.AccessRights, ex.Message)
+            );
+        }
+    }
+
+  
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetTransactionFunctionAccessRights(int accessRoleId)
+    {
+        try
+        {
+            if (accessRoleId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidAccessRoleId);
+            }
+            return await _accessRightsService.GetTransactionFunctionAccessRights(accessRoleId);
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.AccessRights, ex.Message));
         }
     }
 
