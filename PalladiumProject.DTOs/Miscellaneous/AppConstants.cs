@@ -189,6 +189,22 @@ namespace PalladiumPayroll.Helper.Constants
             public const string EmployeeGrievanceNotFound = "Employee Grievance was not found.";
 
             #endregion
+
+            #region Employees Loan
+
+            public static readonly string LoanPausedSuccessfully = "Loan paused successfully.";
+            public static readonly string LoanPausedFailed = "Failed to pause the loan.";
+            public static readonly string LoanCreatedSuccessfully = "Loan created successfully.";
+            public static readonly string LoanCreationFailed = "Loan creation failed.";
+            public static readonly string LoanUpdatedSuccessfully = "Loan updated successfully.";
+            public static readonly string LoanUpdatedFailed = "Loan update failed.";
+            public static readonly string LoanDataFetchedSuccessfully = "Loan data fetched successfully.";
+            public static readonly string LoanPaidSuccessfully = "Full Loan paid successfully.";
+            public static readonly string LoanPaidFailed = "Failed to pay full loan.";
+
+
+
+            #endregion
         }
     }
 
