@@ -87,5 +87,26 @@ namespace PalladiumPayroll.Repositories.Admin
                 "usp_GetUsersByCompanyId", parameters);
             return result.ToList();
         }
+
+        public async Task<List<AccessRoleResponseDTO>> GetAccessRolesNamesByCompanyId(long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId, dbType: DbType.Int64);
+
+            var result = await _dapper.ExecuteStoredProcedure<AccessRoleResponseDTO>(
+                "usp_GetAccessRolesNamesByCompanyId", parameters);
+            return result.ToList();
+        }
+
+        public async Task<UserCreationRequestDTO> GetUserById(Guid id, long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", id, dbType: DbType.Guid);
+            parameters.Add("@CompanyId", companyId, dbType: DbType.Int64);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<UserCreationRequestDTO>(
+                "usp_GetUserById", parameters);
+            return result ?? new UserCreationRequestDTO();
+        }
     }
 }

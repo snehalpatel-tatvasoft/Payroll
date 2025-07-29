@@ -9,5 +9,7 @@ namespace PalladiumPayroll.Repositories.Admin
         Task<int> UpdateUser(UserCreationRequestDTO request, Guid id);
         Task<int> DeleteUser(Guid id, long companyId);
         Task<List<UserListResponseDTO>> GetUsersByCompanyId(long companyId);
+        Task<List<AccessRoleResponseDTO>> GetAccessRolesNamesByCompanyId(long companyId);
+        Task<UserCreationRequestDTO> GetUserById(Guid id, long companyId);
     }
 }

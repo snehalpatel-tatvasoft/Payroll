@@ -96,5 +96,45 @@ namespace PalladiumPayroll.Controllers.CompanySettings
                 });
             }
         }
+
+        [HttpGet("GetAccessRolesNamesByCompanyId/{companyId}")]
+        public async Task<ActionResult> GetAccessRolesNamesByCompanyId(long companyId)
+        {
+            try
+            {
+                JsonResult? res = await _userCreationService.GetAccessRolesNamesByCompanyId(companyId);
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
+                {
+                    Result = false,
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Message = ex.Message,
+                    Data = null
+                });
+            }
+        }
+
+        [HttpGet("GetUserById/{id}/{companyId}")]
+        public async Task<ActionResult> GetUserById(Guid id, long companyId)
+        {
+            try
+            {
+                JsonResult? res = await _userCreationService.GetUserById(id, companyId);
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
+                {
+                    Result = false,
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Message = ex.Message,
+                    Data = null
+                });
+            }
+        }
     }
 }

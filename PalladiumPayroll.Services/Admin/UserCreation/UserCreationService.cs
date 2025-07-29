@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Admin;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Admin;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.Admin;
 using Microsoft.AspNetCore.Identity;
@@ -153,6 +154,50 @@ namespace PalladiumPayroll.Services.Admin
             catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching users: {ex.Message}");
+            }
+        }
+
+        public async Task<JsonResult> GetAccessRolesNamesByCompanyId(long companyId)
+        {
+            try
+            {
+                if (companyId <= 0)
+                {
+                    return HttpStatusCodeResponse.BadRequestResponse();
+                }
+
+                var accessRoles = await _userCreationRepository.GetAccessRolesNamesByCompanyId(companyId);
+                if (accessRoles.Any())
+                {
+                    return HttpStatusCodeResponse.SuccessResponse(accessRoles, ResponseMessages.DataFetchSuccess);
+                }
+                return HttpStatusCodeResponse.NotFoundResponse("Access Roles");
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching access roles: {ex.Message}");
+            }
+        }
+
+        public async Task<JsonResult> GetUserById(Guid id, long companyId)
+        {
+            try
+            {
+                if (id == Guid.Empty || companyId <= 0)
+                {
+                    return HttpStatusCodeResponse.BadRequestResponse();
+                }
+
+                var user = await _userCreationRepository.GetUserById(id, companyId);
+                if (user != null && !string.IsNullOrEmpty(user.Email))
+                {
+                    return HttpStatusCodeResponse.SuccessResponse(user, ResponseMessages.DataFetchSuccess);
+                }
+                return HttpStatusCodeResponse.NotFoundResponse("User");
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching user: {ex.Message}");
             }
         }
     }

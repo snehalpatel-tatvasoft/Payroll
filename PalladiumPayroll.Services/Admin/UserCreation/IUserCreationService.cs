@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Admin;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Admin;
 
 namespace PalladiumPayroll.Services.Admin
 {
@@ -9,5 +10,7 @@ namespace PalladiumPayroll.Services.Admin
         Task<JsonResult> UpdateUser(UserCreationRequestDTO request, Guid id);
         Task<JsonResult> DeleteUser(Guid id, long companyId);
         Task<JsonResult> GetUsersByCompanyId(long companyId);
+        Task<JsonResult> GetAccessRolesNamesByCompanyId(long companyId);
+        Task<JsonResult> GetUserById(Guid id, long companyId);
     }
 }
