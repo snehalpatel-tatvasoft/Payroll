@@ -76,7 +76,7 @@ public class AccessRightsService : IAccessRightsService
     {
         try
         {
-            List<EmployeeAccessRightsDTO> employeeAccessRights = await _accessRightsRepository.GetAccessRightsByRoleType(accessRoleId);
+            List<AccessRightsByRoleTypeDTO> employeeAccessRights = await _accessRightsRepository.GetAccessRightsByRoleType(accessRoleId);
 
             return HttpStatusCodeResponse.SuccessResponse(employeeAccessRights, string.Format(ResponseMessages.Success, ResponseMessages.AccessRights, ActionType.Retrieved));
         }
@@ -87,7 +87,7 @@ public class AccessRightsService : IAccessRightsService
     }
 
 
-    public async Task<JsonResult> SaveRoleFunctinalityAccessRights(List<SaveEmployeeAccessRightsDTO> request)
+    public async Task<JsonResult> SaveRoleFunctinalityAccessRights(List<SaveRoleFunctinalityAccessRightsDTO> request)
     {
         try
         {
@@ -135,7 +135,7 @@ public class AccessRightsService : IAccessRightsService
     {
         try
         {
-            List<EmployeeAccessRightsDTO> employeeAccessRights = await _accessRightsRepository.GetTransactionFunctionAccessRights(accessRoleId);
+            List<AccessRightsByRoleTypeDTO> employeeAccessRights = await _accessRightsRepository.GetTransactionFunctionAccessRights(accessRoleId);
 
             return HttpStatusCodeResponse.SuccessResponse(employeeAccessRights, string.Format(ResponseMessages.Success, ResponseMessages.AccessRights, ActionType.Retrieved));
         }

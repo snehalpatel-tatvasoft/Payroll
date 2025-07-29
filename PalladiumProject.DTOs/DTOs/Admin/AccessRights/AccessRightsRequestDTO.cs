@@ -10,8 +10,7 @@ public class AccessRoleDTO
     public string? UserId { get; set; }     
 }
 
-public class SaveEmployeeAccessRightsDTO
-{
+public class SaveRoleFunctinalityAccessRightsDTO{
     public int AccessRoleId { get; set; }
     public int FunctionalityId { get; set; }
     public bool View { get; set; }

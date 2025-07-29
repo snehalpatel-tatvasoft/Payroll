@@ -95,7 +95,7 @@ public class AccessRightsController : ControllerBase
 
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> SaveRoleFunctinalityAccessRights(List<SaveEmployeeAccessRightsDTO> request)
+    public async Task<ActionResult> SaveRoleFunctinalityAccessRights(List<SaveRoleFunctinalityAccessRightsDTO> request)
     {
         try
         {

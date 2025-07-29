@@ -13,14 +13,14 @@ public interface IAccessRightsRepository
 
     Task<bool> DeleteAccessRoles(int accessRoleId);
 
-    Task<List<EmployeeAccessRightsDTO>> GetAccessRightsByRoleType(int accessRoleId);
+    Task<List<AccessRightsByRoleTypeDTO>> GetAccessRightsByRoleType(int accessRoleId);
 
-    Task<bool> SaveRoleFunctinalityAccessRights(List<SaveEmployeeAccessRightsDTO> requests);
+    Task<bool> SaveRoleFunctinalityAccessRights(List<SaveRoleFunctinalityAccessRightsDTO> requests);
 
 
     Task<bool> SavePayFrequencyAccessRights(List<SavePayFrequencyAccessRightsDTO> requests);
 
     Task<List<PayFrequencyAccessRightsDTO>> GetPayFrequencyAccessRights(int accessRoleId);
 
-     Task<List<EmployeeAccessRightsDTO>> GetTransactionFunctionAccessRights(int accessRoleId);
+     Task<List<AccessRightsByRoleTypeDTO>> GetTransactionFunctionAccessRights(int accessRoleId);
 }

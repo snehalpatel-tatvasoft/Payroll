@@ -13,16 +13,12 @@ public interface IAccessRightsService
 
     Task<JsonResult> GetAccessRightsByRoleType(int accessRoleId);
 
-    Task<JsonResult> SaveRoleFunctinalityAccessRights(List<SaveEmployeeAccessRightsDTO> request);
+    Task<JsonResult> SaveRoleFunctinalityAccessRights(List<SaveRoleFunctinalityAccessRightsDTO> request);
 
-
-    // Admin - Pay frequencies 
     Task<JsonResult> GetPayFrequencyAccessRights(int accessRoleId);
 
     Task<JsonResult> SavePayFrequencyAccessRights(List<SavePayFrequencyAccessRightsDTO> request);
 
-
-    // Admin - Transaction Functions 
     Task<JsonResult> GetTransactionFunctionAccessRights(int accessRoleId);
 
 }

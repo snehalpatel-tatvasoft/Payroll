@@ -72,18 +72,18 @@ public class AccessRightsRepository : IAccessRightsRepository
     }
 
 
-    public async Task<List<EmployeeAccessRightsDTO>> GetAccessRightsByRoleType(int accessRoleId)
+    public async Task<List<AccessRightsByRoleTypeDTO>> GetAccessRightsByRoleType(int accessRoleId)
     {
         DynamicParameters parameters = new DynamicParameters();
         parameters.Add("@AccessRoleId", accessRoleId);
 
-        List<EmployeeAccessRightsDTO>? result = await _dapper.ExecuteStoredProcedure<EmployeeAccessRightsDTO>(
+        List<AccessRightsByRoleTypeDTO>? result = await _dapper.ExecuteStoredProcedure<AccessRightsByRoleTypeDTO>(
            "usp_GetAccessRightsByRoleType", parameters);
 
         return result;
     }
 
-    public async Task<bool> SaveRoleFunctinalityAccessRights(List<SaveEmployeeAccessRightsDTO> requests)
+    public async Task<bool> SaveRoleFunctinalityAccessRights(List<SaveRoleFunctinalityAccessRightsDTO> requests)
     {
         foreach (var request in requests)
         {
@@ -143,12 +143,12 @@ public class AccessRightsRepository : IAccessRightsRepository
     }
 
 
-    public async Task<List<EmployeeAccessRightsDTO>> GetTransactionFunctionAccessRights(int accessRoleId)
+    public async Task<List<AccessRightsByRoleTypeDTO>> GetTransactionFunctionAccessRights(int accessRoleId)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@AccessRoleId", accessRoleId);
 
-        var result = await _dapper.ExecuteStoredProcedure<EmployeeAccessRightsDTO>(
+        var result = await _dapper.ExecuteStoredProcedure<AccessRightsByRoleTypeDTO>(
             "usp_GetAccessRightsForTransactionFunctions", parameters);
 
         return result;

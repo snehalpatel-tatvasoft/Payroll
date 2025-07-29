@@ -10,7 +10,7 @@ public class AccessRoleResponseDTO
 }   
 
 
-public class EmployeeAccessRightsDTO
+public class AccessRightsByRoleTypeDTO
 {
     public int FunctionalityId { get; set; }
     public string FunctionalityName { get; set; } = string.Empty;
