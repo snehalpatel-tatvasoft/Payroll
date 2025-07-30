@@ -94,11 +94,11 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> CasualWageInformationSave(CasualWageInformation reqModel)
+        public async Task<ActionResult> UpdateCasualWageInformation(CasualWageInformation reqModel)
         {
             try
             {
-                return await _employeeService.CasualWageInformationSave(reqModel);
+                return await _employeeService.UpdateCasualWageInformation(reqModel);
             }
             catch (Exception)
             {

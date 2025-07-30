@@ -55,12 +55,12 @@ namespace PalladiumPayroll.Services.Employees
             return await _employeeRepository.GetCasualWageInformation(employeeId);
         }
 
-        public async Task<JsonResult> CasualWageInformationSave(CasualWageInformation reqModel)
+        public async Task<JsonResult> UpdateCasualWageInformation(CasualWageInformation reqModel)
         {
-            var result = await _employeeRepository.CasualWageInformationSave(reqModel);
+            var result = await _employeeRepository.UpdateCasualWageInformation(reqModel);
             if (result == true)
             {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Casual Wage Information", ActionType.Saved));
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success,string.Concat(ResponseMessages.Employee, " ", "Casual Wage Information"), ActionType.Updated));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }

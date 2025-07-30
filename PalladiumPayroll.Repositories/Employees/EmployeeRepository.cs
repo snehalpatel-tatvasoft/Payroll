@@ -121,7 +121,7 @@ namespace PalladiumPayroll.Repositories.Employees
             return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, "Casual Wage Information", ActionType.Retrieved));
         }
 
-        public async Task<bool> CasualWageInformationSave(CasualWageInformation reqModel)
+        public async Task<bool> UpdateCasualWageInformation(CasualWageInformation reqModel)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", reqModel.EmployeeId);
