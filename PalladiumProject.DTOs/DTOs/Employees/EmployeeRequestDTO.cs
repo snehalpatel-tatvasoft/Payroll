@@ -32,4 +32,18 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
         public decimal? SplitPercent1 { get; set; }
         public decimal? SplitPercent2 { get; set; }
     }
+
+    public class CasualWageInformation
+    {
+        public int EmployeeId { get; set; }
+        public decimal? NormalHour { get; set; }
+        public decimal? CasualOverTime { get; set; }
+        public decimal? HolidayRate { get; set; }
+        public decimal? SundayRate { get; set; }
+        public decimal? NightHour { get; set; }
+        public decimal? CasualNightOvertime { get; set; }
+        public decimal? HolidayNightRate { get; set; }
+        public decimal? SundayNightRate { get; set; }
+    }
+
 }

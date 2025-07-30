@@ -80,5 +80,31 @@ namespace PalladiumPayroll.Controllers.Employee
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetCasualWageInformation(int employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetCasualWageInformation(employeeId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> CasualWageInformationSave(CasualWageInformation reqModel)
+        {
+            try
+            {
+                return await _employeeService.CasualWageInformationSave(reqModel);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
     }
 }

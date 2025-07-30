@@ -49,5 +49,21 @@ namespace PalladiumPayroll.Services.Employees
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
+        
+        public async Task<JsonResult> GetCasualWageInformation(int employeeId)
+        {
+            return await _employeeRepository.GetCasualWageInformation(employeeId);
+        }
+
+        public async Task<JsonResult> CasualWageInformationSave(CasualWageInformation reqModel)
+        {
+            var result = await _employeeRepository.CasualWageInformationSave(reqModel);
+            if (result == true)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Casual Wage Information", ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
     }
 }

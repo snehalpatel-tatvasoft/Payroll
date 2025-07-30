@@ -111,5 +111,32 @@ namespace PalladiumPayroll.Repositories.Employees
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeePaymentDetail", parameters);
             return result;
         }
+
+        public async Task<JsonResult> GetCasualWageInformation(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<CasualWageInformation>("usp_GetCasualWageInformation", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, "Casual Wage Information", ActionType.Retrieved));
+        }
+
+        public async Task<bool> CasualWageInformationSave(CasualWageInformation reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@NormalHour", reqModel.NormalHour);
+            parameters.Add("@CasualOverTime", reqModel.CasualOverTime);
+            parameters.Add("@HolidayRate", reqModel.HolidayRate);
+            parameters.Add("@SundayRate", reqModel.SundayRate);
+            parameters.Add("@NightHour", reqModel.NightHour);
+            parameters.Add("@CasualNightOvertimeRate", reqModel.CasualNightOvertime);
+            parameters.Add("@HolidayNightRate", reqModel.HolidayNightRate);
+            parameters.Add("@SundayNightRate", reqModel.SundayNightRate);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCasualWageInformation", parameters);
+            return result;
+        }
+
     }
 }
