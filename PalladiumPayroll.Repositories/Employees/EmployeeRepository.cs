@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Employees;
+using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeGrievances;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -75,14 +76,13 @@ namespace PalladiumPayroll.Repositories.Employees
             return result;
         }
 
+
+        #region Payment info
         public async Task<JsonResult> GetEmployeePaymentDetail(int employeeId)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", employeeId);
             var result = await _dapper.ExecuteStoredProcedureSingle<EmployeePaymentDetail>("usp_GetEmployeePaymentDetail", parameters);
-            if (result == null) {
-                // return HttpStatusCodeResponse.NotFoundResponse("Payment info");
-            }
             return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Payment info", ActionType.Retrieved));
         }
 
@@ -111,5 +111,120 @@ namespace PalladiumPayroll.Repositories.Employees
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeePaymentDetail", parameters);
             return result;
         }
+        #endregion
+
+        #region Work Info
+        public async Task<JsonResult> GetEmployeeWorkDropDown(int companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            var result = await _dapper.ExecuteStoredProcedureMultipleAsync("usp_FetchEmployeeWorkInfoDropList", parameters, async (multi) =>
+            {
+                var cycleList = (await multi.ReadAsync<DropDownViewModel>()).ToList();
+                var managerList = (await multi.ReadAsync<DropDownViewModel>()).ToList();
+                var minimumWageList = (await multi.ReadAsync<DropDownViewModel>()).ToList();
+
+                return new
+                {
+                    CycleList = cycleList,
+                    ManagerList = managerList,
+                    MinimumWageList = minimumWageList
+                };
+            });
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "work info drop list", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> GetEmployeeWorkInformation(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            var result = await _dapper.ExecuteStoredProcedureSingle<EmployeeWorkInformation>("usp_GetEmployeeWorkInfo", parameters);
+            if(result != null)
+            {
+                var workDaySplit = result.StandardWorkingDays?
+                            .Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse)
+                            .ToList();
+                result.WorkingDay = workDaySplit;
+            }
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Work info", ActionType.Retrieved));
+
+        }
+
+        public async Task<bool> EmployeeWorkInfoSave(EmployeeWorkInformation reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@StartDate", reqModel.StartDate);
+            parameters.Add("@DepartmentId", reqModel.DepartmentId);
+            parameters.Add("@DesignationId", reqModel.DesignationId);
+            parameters.Add("@PayrollCycle", reqModel.CycleType);
+            //parameters.Add("@ReportTo", reqModel.ReportTo);
+            parameters.Add("@IsCommission", reqModel.IsCommission);
+            parameters.Add("@IsExcludeEFA", reqModel.IsExcludeEFA);
+            parameters.Add("@RepCode", reqModel.RepCode);
+            parameters.Add("@AnnualSalary", reqModel.AnnualSalary);
+            parameters.Add("@MonthlySalary", reqModel.MonthlySalary);
+            parameters.Add("@RatePerDay", reqModel.RatePerDay);
+            parameters.Add("@RatePerHour", reqModel.RatePerHour);
+            parameters.Add("@WorkingDay", string.Join(",", reqModel.WorkingDay));
+            parameters.Add("@HoursPerMonth", reqModel.HoursPerMonth);
+            parameters.Add("@HoursPerWeek", reqModel.HoursPerWeek);
+            parameters.Add("@HoursPerDay", reqModel.HoursPerDay);
+            parameters.Add("@DayPerMonth", reqModel.DayPerMonth);
+            parameters.Add("@DayPerWeek", reqModel.DayPerWeek);
+            parameters.Add("@MinimumWage", reqModel.MinimumWage);
+            parameters.Add("@LeavePeriod", reqModel.LeavePeriod);
+            parameters.Add("@LeaveYear", reqModel.LeaveYear);
+            parameters.Add("@BonusPeriod", reqModel.BonusPeriod);
+            parameters.Add("@BonusYear", reqModel.BonusYear);
+
+            parameters.Add("@BCEAMonthlySalary", reqModel.BCEAMonthlySalary);
+            parameters.Add("@BCEAVariableSalary", reqModel.BCEAVariableSalary);
+            parameters.Add("@BCEAOverMonth", reqModel.BCEAOverMonth);
+            parameters.Add("@BCEATotalRemuneration", reqModel.BCEATotalRemuneration);
+            parameters.Add("@BCEATermination", reqModel.BCEATermination);
+            parameters.Add("@BCEAPortionLeavePay", reqModel.BCEAPortionLeavePay);
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeWorkInformation", parameters);
+            return result;
+        }
+
+        public async Task<JsonResult> GetEmployeeWorkOrganizationalDropdownData(long companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            return await _dapper.ExecuteStoredProcedureMultipleAsync(
+                "usp_GetDropdownDataForWorkOrganization",
+                parameters,
+                async multi =>
+                {
+                    var dropdownsData = new
+                    {
+                        JobTitle = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        JobGrade = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        OccupationalLevels = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        OccupationalStatus = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        OccupationalCategories = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        WSPCategory = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        OFOCodes = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        MajorCostCenters = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        Region = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        Appointment = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        PayPoint = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        NICGrades = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        Branches = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        Division = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        SubDivision = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        Municipality = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        Location = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        Department = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        Provinces = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                        OperationalSupport = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
+                    };
+                    return HttpStatusCodeResponse.SuccessResponse(dropdownsData, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "work info drop list", ActionType.Retrieved));
+                }
+            );
+        }
+        #endregion
     }
 }
