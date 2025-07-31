@@ -231,7 +231,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@BranchCode", model.CompanyBankAccount?.BranchCode);
             parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
-            var isCreated = await _dapper.ExecuteStoredProcedureSingle<bool>("uusp_AddCompany", parameters);
+            var isCreated = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_AddCompany", parameters);
             if (isCreated)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Company, ActionType.Created));

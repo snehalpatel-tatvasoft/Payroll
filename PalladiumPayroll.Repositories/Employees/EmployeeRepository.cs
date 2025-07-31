@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
@@ -14,13 +15,14 @@ namespace PalladiumPayroll.Repositories.Employees
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly DapperContext _dapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public EmployeeRepository(IConfiguration configuration)
+        public EmployeeRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _dapper = new DapperContext(configuration);
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        
         public async Task<JsonResult> GetEmployeeFilters(int companyId)
         {
             var parameters = new DynamicParameters();
@@ -31,11 +33,11 @@ namespace PalladiumPayroll.Repositories.Employees
                 var departmentList = (await multi.ReadAsync<DropDownViewModel>()).ToList();
                 var designationList = (await multi.ReadAsync<DropDownViewModel>()).ToList();
 
-               return new
-               {
-                   DepartmentList = departmentList,
-                   DesignationList = designationList
-               };
+                return new
+                {
+                    DepartmentList = departmentList,
+                    DesignationList = designationList
+                };
             });
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Filter", ActionType.Retrieved));
         }
@@ -61,6 +63,53 @@ namespace PalladiumPayroll.Repositories.Employees
                 DataList = employeeData,
                 TotalCount = totalCount
             }, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieved));
+        }
+
+        public async Task<bool> DeleteEmployee(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteEmployee", parameters);
+            return result;
+        }
+
+        public async Task<JsonResult> GetEmployeePaymentDetail(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            var result = await _dapper.ExecuteStoredProcedureSingle<EmployeePaymentDetail>("usp_GetEmployeePaymentDetail", parameters);
+            if (result == null) {
+                // return HttpStatusCodeResponse.NotFoundResponse("Payment info");
+            }
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Payment info", ActionType.Retrieved));
+        }
+
+        public async Task<bool> EmployeePaymentDetailSave(EmployeePaymentDetail reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@PaymentTypeId", reqModel.PaymentMethod);
+            parameters.Add("@AccountName", reqModel.AccountHolderName);
+            parameters.Add("@AccountNumber", reqModel.AccountNumber);
+            parameters.Add("@AccountTypeId", reqModel.TypeofAccount);
+            parameters.Add("@BankId", reqModel.BankId);
+            parameters.Add("@BranchCode", reqModel.BranchCode);
+            parameters.Add("@AccountHolderRelation", reqModel.AccountHolderRelation);
+            parameters.Add("@SplitPayment", reqModel.SplitPayment);
+            parameters.Add("@AccountName1", reqModel.AccountHolderName1);
+            parameters.Add("@AccountNumber1", reqModel.AccountNumber1);
+            parameters.Add("@AccountTypeId1", reqModel.TypeofAccount1);
+            parameters.Add("@BankId1", reqModel.BankId1);
+            parameters.Add("@BranchCode1", reqModel.BranchCode1);
+            parameters.Add("@AccountHolderRelation1", reqModel.AccountHolderRelation1);
+            parameters.Add("@SplitAmount1", reqModel.SplitAmount1);
+            parameters.Add("@SplitPercent1", reqModel.SplitPercent1);
+            parameters.Add("@SplitAmount2", reqModel.SplitAmount2);
+            parameters.Add("@SplitPercent2", reqModel.SplitPercent2);
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeePaymentDetail", parameters);
+            return result;
         }
     }
 }
