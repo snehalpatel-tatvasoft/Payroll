@@ -59,14 +59,14 @@ namespace PalladiumPayroll.Controllers.Company
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> GetCompanyWithSubCompany(int companyId)
+        public async Task<ActionResult> GetCompanyWithSubCompany(int companyId, string userId)
         {
             try
             {
-                List<DropDownViewModel> companyWithSubCompanyList = await _companyService.GetCompanyWithSubCompany(companyId);
+                List<DropDownViewModel> companyWithSubCompanyList = await _companyService.GetCompanyWithSubCompany(companyId, userId);
                 return HttpStatusCodeResponse.SuccessResponse(companyWithSubCompanyList, string.Empty);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
