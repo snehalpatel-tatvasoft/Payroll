@@ -155,9 +155,9 @@ namespace PalladiumPayroll.Services.Company
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.AlreadyExist, "Branch"));
         }
 
-        public async Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId)
+        public async Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId, string userId)
         {
-            return await _companyRepository.GetCompanyWithSubCompany(companyId);
+            return await _companyRepository.GetCompanyWithSubCompany(companyId, userId);
         }
 
         public async Task<JsonResult> SetActiveCompanyId(int companyId)

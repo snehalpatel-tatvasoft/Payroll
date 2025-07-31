@@ -81,6 +81,59 @@ namespace PalladiumPayroll.Controllers.Employee
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeWorkDropDown(int companyId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeWorkDropDown(companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeWorkInformation(int employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeWorkInformation(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> EmployeeWorkInfoSave(EmployeeWorkInformation reqModel)
+        {
+            try
+            {
+                return await _employeeService.EmployeeWorkInfoSave(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeWorkOrganizationalDropdownData(long companyId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeWorkOrganizationalDropdownData(companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
         [HttpGet("[action]")]
         public async Task<ActionResult> GetCasualWageInformation(int employeeId)
         {
