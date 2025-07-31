@@ -12,5 +12,10 @@ namespace PalladiumPayroll.Services.Admin
         Task<JsonResult> GetUsersByCompanyId(long companyId);
         Task<JsonResult> GetAccessRolesNamesByCompanyId(long companyId);
         Task<JsonResult> GetUserById(Guid id, long companyId);
+        Task<JsonResult> GetUserFunctionalityById(Guid userId, long companyId);
+        Task<JsonResult> SaveUserFunctionalityAccessRights(List<SaveUserFunctionalityAccessRightsDTO> request);
+        Task<JsonResult> GetUserPayFrequenciesById(Guid userId, long companyId);
+        Task<JsonResult> SaveUserPayFrequenciesAccessRights(List<SaveUserPayFrequencyAccessRightsDTO> request);
+        Task<JsonResult> GetUserFunctionalityByIdForTransactionFunctions(Guid userId, long companyId);
     }
 }

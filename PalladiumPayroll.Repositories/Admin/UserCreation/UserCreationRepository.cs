@@ -108,5 +108,89 @@ namespace PalladiumPayroll.Repositories.Admin
                 "usp_GetUserById", parameters);
             return result ?? new UserCreationRequestDTO();
         }
+
+
+        public async Task<List<UserFunctionalityAccessRightsDTO>> GetUserFunctionalityById(Guid userId, long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserId", userId, DbType.Guid);
+            parameters.Add("@CompanyId", companyId, DbType.Int64);
+
+            var result = await _dapper.ExecuteStoredProcedure<UserFunctionalityAccessRightsDTO>(
+                "usp_GetUserFunctionalityById", parameters);
+
+            return result ?? new List<UserFunctionalityAccessRightsDTO>();
+        }
+
+        public async Task<bool> SaveUserFunctionalityAccessRights(List<SaveUserFunctionalityAccessRightsDTO> requests)
+        {
+            foreach (var request in requests)
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@UserId", request.UserId, DbType.Guid);
+                parameters.Add("@FunctionalityId", request.FunctionalityId, DbType.Int32);
+                parameters.Add("@View", request.View, DbType.Boolean);
+                parameters.Add("@Edit", request.Edit, DbType.Boolean);
+                parameters.Add("@New", request.New, DbType.Boolean);
+                parameters.Add("@Delete", request.Delete, DbType.Boolean);
+                parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+                await _dapper.ExecuteStoredProcedureSingle<object>(
+                    "usp_SaveUserFunctionalityAccessRights", parameters);
+
+                if (!parameters.Get<bool>("@IsSuccess"))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public async Task<List<UserPayFrequencyAccessRightsDTO>> GetUserPayFrequenciesById(Guid userId, long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserId", userId, DbType.Guid);
+            parameters.Add("@CompanyId", companyId, DbType.Int64);
+
+            var result = await _dapper.ExecuteStoredProcedure<UserPayFrequencyAccessRightsDTO>(
+                "usp_GetUserPayFrequenciesById", parameters);
+
+            return result ?? new List<UserPayFrequencyAccessRightsDTO>();
+        }
+
+        public async Task<bool> SaveUserPayFrequenciesAccessRights(List<SaveUserPayFrequencyAccessRightsDTO> requests)
+        {
+            foreach (var request in requests)
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@UserId", request.UserId, DbType.Guid);
+                parameters.Add("@CompanyPayrollId", request.CompanyPayrollId, DbType.Int64);
+                parameters.Add("@IsAllow", request.IsAllow, DbType.Boolean);
+                parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+                await _dapper.ExecuteStoredProcedureSingle<object>(
+                    "usp_SaveUserPayFrequenciesAccessRights", parameters);
+
+                if (!parameters.Get<bool>("@IsSuccess"))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public async Task<List<UserFunctionalityAccessRightsDTO>> GetUserFunctionalityByIdForTransactionFunctions(Guid userId, long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserId", userId, DbType.Guid);
+            parameters.Add("@CompanyId", companyId, DbType.Int64);
+
+            var result = await _dapper.ExecuteStoredProcedure<UserFunctionalityAccessRightsDTO>(
+                "usp_GetUserFunctionalityByIdForTransactionFunctions", parameters);
+
+            return result ?? new List<UserFunctionalityAccessRightsDTO>();
+        }
     }
 }

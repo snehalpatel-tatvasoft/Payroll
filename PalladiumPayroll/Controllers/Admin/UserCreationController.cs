@@ -3,6 +3,8 @@ using System.Net;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Admin;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Admin;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.CompanySettings
 {
@@ -134,6 +136,77 @@ namespace PalladiumPayroll.Controllers.CompanySettings
                     Message = ex.Message,
                     Data = null
                 });
+            }
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetUserFunctionalityById(Guid userId, long companyId)
+        {
+            try
+            {
+                return await _userCreationService.GetUserFunctionalityById(userId, companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.AccessRights, ex.Message));
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> SaveUserFunctionalityAccessRights(List<SaveUserFunctionalityAccessRightsDTO> request)
+        {
+            try
+            {
+                return await _userCreationService.SaveUserFunctionalityAccessRights(request);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.AccessRights, ex.Message));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetUserPayFrequenciesById(Guid userId, long companyId)
+        {
+            try
+            {
+                return await _userCreationService.GetUserPayFrequenciesById(userId, companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.AccessRights, ex.Message));
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> SaveUserPayFrequenciesAccessRights(List<SaveUserPayFrequencyAccessRightsDTO> request)
+        {
+            try
+            {
+                return await _userCreationService.SaveUserPayFrequenciesAccessRights(request);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.AccessRights, ex.Message));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetUserFunctionalityByIdForTransactionFunctions(Guid userId, long companyId)
+        {
+            try
+            {
+                return await _userCreationService.GetUserFunctionalityByIdForTransactionFunctions(userId, companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.AccessRights, ex.Message));
             }
         }
     }

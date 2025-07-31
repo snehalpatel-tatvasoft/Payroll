@@ -5,6 +5,7 @@ using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.Admin;
 using Microsoft.AspNetCore.Identity;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Services.Admin
 {
@@ -198,6 +199,104 @@ namespace PalladiumPayroll.Services.Admin
             catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching user: {ex.Message}");
+            }
+        }
+
+
+        public async Task<JsonResult> GetUserFunctionalityById(Guid userId, long companyId)
+        {
+            try
+            {
+                if (userId == Guid.Empty || companyId <= 0)
+                {
+                    return HttpStatusCodeResponse.BadRequestResponse();
+                }
+
+                var accessRights = await _userCreationRepository.GetUserFunctionalityById(userId, companyId);
+
+                return HttpStatusCodeResponse.SuccessResponse(accessRights, string.Format(ResponseMessages.Success, ResponseMessages.AccessRights, ActionType.Retrieved));
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching user functionality: {ex.Message}");
+            }
+        }
+
+        public async Task<JsonResult> SaveUserFunctionalityAccessRights(List<SaveUserFunctionalityAccessRightsDTO> request)
+        {
+            try
+            {
+                if (request == null || !request.Any())
+                {
+                    return HttpStatusCodeResponse.BadRequestResponse();
+                }
+
+                bool isSaved = await _userCreationRepository.SaveUserFunctionalityAccessRights(request);
+                return isSaved
+                    ? HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.AccessRights, ActionType.Saved))
+                    : HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnableToSaveAccessRights);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error saving user functionality access rights: {ex.Message}");
+            }
+        }
+
+        public async Task<JsonResult> GetUserPayFrequenciesById(Guid userId, long companyId)
+        {
+            try
+            {
+                if (userId == Guid.Empty || companyId <= 0)
+                {
+                    return HttpStatusCodeResponse.BadRequestResponse();
+                }
+
+                var accessRights = await _userCreationRepository.GetUserPayFrequenciesById(userId, companyId);
+
+                return HttpStatusCodeResponse.SuccessResponse(accessRights, string.Format(ResponseMessages.Success, ResponseMessages.AccessRights, ActionType.Retrieved));
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching user pay frequencies: {ex.Message}");
+            }
+        }
+
+        public async Task<JsonResult> SaveUserPayFrequenciesAccessRights(List<SaveUserPayFrequencyAccessRightsDTO> request)
+        {
+            try
+            {
+                if (request == null || !request.Any())
+                {
+                    return HttpStatusCodeResponse.BadRequestResponse();
+                }
+
+                bool isSaved = await _userCreationRepository.SaveUserPayFrequenciesAccessRights(request);
+                return isSaved
+                    ? HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.AccessRights, ActionType.Saved))
+                    : HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnableToSaveAccessRights);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error saving user pay frequency access rights: {ex.Message}");
+            }
+        }
+
+        public async Task<JsonResult> GetUserFunctionalityByIdForTransactionFunctions(Guid userId, long companyId)
+        {
+            try
+            {
+                if (userId == Guid.Empty || companyId <= 0)
+                {
+                    return HttpStatusCodeResponse.BadRequestResponse();
+                }
+
+                var accessRights = await _userCreationRepository.GetUserFunctionalityByIdForTransactionFunctions(userId, companyId);
+
+                return HttpStatusCodeResponse.SuccessResponse(accessRights, string.Format(ResponseMessages.Success, ResponseMessages.AccessRights, ActionType.Retrieved));
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching user transaction function access rights: {ex.Message}");
             }
         }
     }
