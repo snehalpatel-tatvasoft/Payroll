@@ -12,5 +12,7 @@ namespace PalladiumPayroll.Services.Employees
         Task<JsonResult> EmployeePaymentDetailSave(EmployeePaymentDetail reqModel);
         Task<JsonResult> GetCasualWageInformation(int employeeId);
         Task<JsonResult> UpdateCasualWageInformation(CasualWageInformation reqModel);
+        Task<TransactionTypeDropdownsDTO> GetTransactionTypesDropdownData(long companyId);
+        
     }
 }

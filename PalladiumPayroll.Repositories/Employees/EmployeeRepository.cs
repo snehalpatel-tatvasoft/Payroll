@@ -80,7 +80,8 @@ namespace PalladiumPayroll.Repositories.Employees
             var parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", employeeId);
             var result = await _dapper.ExecuteStoredProcedureSingle<EmployeePaymentDetail>("usp_GetEmployeePaymentDetail", parameters);
-            if (result == null) {
+            if (result == null)
+            {
                 // return HttpStatusCodeResponse.NotFoundResponse("Payment info");
             }
             return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Payment info", ActionType.Retrieved));
@@ -136,6 +137,24 @@ namespace PalladiumPayroll.Repositories.Employees
 
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCasualWageInformation", parameters);
             return result;
+        }
+        public async Task<TransactionTypeDropdownsDTO> GetTransactionTypesDropdownData(long companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            return await _dapper.ExecuteStoredProcedureMultipleAsync(
+                "usp_GetTransactionTypesDropdownData",
+                parameters,
+                async multi =>
+                {
+                    TransactionTypeDropdownsDTO? dropdownsData = new TransactionTypeDropdownsDTO
+                    {
+                        JobGrades = (await multi.ReadAsync<TransactionType>()).ToList(),
+                    };
+                    return dropdownsData;
+                }
+            );
         }
 
     }

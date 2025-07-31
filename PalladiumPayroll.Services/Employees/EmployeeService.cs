@@ -49,7 +49,7 @@ namespace PalladiumPayroll.Services.Employees
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
-        
+
         public async Task<JsonResult> GetCasualWageInformation(int employeeId)
         {
             return await _employeeRepository.GetCasualWageInformation(employeeId);
@@ -60,10 +60,21 @@ namespace PalladiumPayroll.Services.Employees
             var result = await _employeeRepository.UpdateCasualWageInformation(reqModel);
             if (result == true)
             {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success,string.Concat(ResponseMessages.Employee, " ", "Casual Wage Information"), ActionType.Updated));
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, string.Concat(ResponseMessages.Employee, " ", "Casual Wage Information"), ActionType.Updated));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
-
+        public async Task<TransactionTypeDropdownsDTO> GetTransactionTypesDropdownData(long companyId)
+        {
+            try
+            {
+                var data = await _employeeRepository.GetTransactionTypesDropdownData(companyId);
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

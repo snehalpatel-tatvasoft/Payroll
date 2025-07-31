@@ -12,4 +12,15 @@
         public string? Department { get; set; }
         public string? Designation { get; set; }
     }
+    public class TransactionType
+    {
+        public long PayrollProcessId { get; set; }
+        public string Description { get; set; } = "";
+    }
+
+    public class TransactionTypeDropdownsDTO
+    {
+        public List<TransactionType> JobGrades { get; set; } = new();
+    }
+
 }
