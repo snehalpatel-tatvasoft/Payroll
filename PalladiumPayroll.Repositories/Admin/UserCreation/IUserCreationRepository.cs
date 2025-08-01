@@ -11,7 +11,7 @@ namespace PalladiumPayroll.Repositories.Admin
         Task<List<UserListResponseDTO>> GetUsersByCompanyId(long companyId);
         Task<List<AccessRoleResponseDTO>> GetAccessRolesNamesByCompanyId(long companyId);
         Task<UserCreationRequestDTO> GetUserById(Guid id, long companyId);
-        Task<List<UserFunctionalityAccessRightsDTO>> GetUserFunctionalityById(Guid userId, long companyId);
+        Task<List<UserFunctionalityAccessRightsDTO>> GetUserFunctionalityById(Guid userId);
         Task<bool> SaveUserFunctionalityAccessRights(List<SaveUserFunctionalityAccessRightsDTO> requests);
         Task<List<UserPayFrequencyAccessRightsDTO>> GetUserPayFrequenciesById(Guid userId, long companyId);
         Task<bool> SaveUserPayFrequenciesAccessRights(List<SaveUserPayFrequencyAccessRightsDTO> requests);

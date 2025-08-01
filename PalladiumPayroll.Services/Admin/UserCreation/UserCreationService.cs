@@ -203,16 +203,16 @@ namespace PalladiumPayroll.Services.Admin
         }
 
 
-        public async Task<JsonResult> GetUserFunctionalityById(Guid userId, long companyId)
+        public async Task<JsonResult> GetUserFunctionalityById(Guid userId)
         {
             try
             {
-                if (userId == Guid.Empty || companyId <= 0)
+                if (userId == Guid.Empty )
                 {
                     return HttpStatusCodeResponse.BadRequestResponse();
                 }
 
-                var accessRights = await _userCreationRepository.GetUserFunctionalityById(userId, companyId);
+                var accessRights = await _userCreationRepository.GetUserFunctionalityById(userId);
 
                 return HttpStatusCodeResponse.SuccessResponse(accessRights, string.Format(ResponseMessages.Success, ResponseMessages.AccessRights, ActionType.Retrieved));
             }

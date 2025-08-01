@@ -110,11 +110,11 @@ namespace PalladiumPayroll.Repositories.Admin
         }
 
 
-        public async Task<List<UserFunctionalityAccessRightsDTO>> GetUserFunctionalityById(Guid userId, long companyId)
+        public async Task<List<UserFunctionalityAccessRightsDTO>> GetUserFunctionalityById(Guid userId)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@UserId", userId, DbType.Guid);
-            parameters.Add("@CompanyId", companyId, DbType.Int64);
+            // parameters.Add("@CompanyId", companyId, DbType.Int64);
 
             var result = await _dapper.ExecuteStoredProcedure<UserFunctionalityAccessRightsDTO>(
                 "usp_GetUserFunctionalityById", parameters);

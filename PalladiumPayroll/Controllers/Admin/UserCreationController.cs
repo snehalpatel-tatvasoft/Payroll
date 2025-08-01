@@ -141,11 +141,11 @@ namespace PalladiumPayroll.Controllers.CompanySettings
 
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> GetUserFunctionalityById(Guid userId, long companyId)
+        public async Task<ActionResult> GetUserFunctionalityById(Guid userId)
         {
             try
             {
-                return await _userCreationService.GetUserFunctionalityById(userId, companyId);
+                return await _userCreationService.GetUserFunctionalityById(userId);
             }
             catch (Exception ex)
             {
