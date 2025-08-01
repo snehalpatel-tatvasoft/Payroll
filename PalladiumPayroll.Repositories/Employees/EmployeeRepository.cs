@@ -268,12 +268,65 @@ namespace PalladiumPayroll.Repositories.Employees
                 {
                     TransactionTypeDropdownsDTO? dropdownsData = new TransactionTypeDropdownsDTO
                     {
-                        JobGrades = (await multi.ReadAsync<TransactionType>()).ToList(),
+                        TransactionType = (await multi.ReadAsync<TransactionType>()).ToList(),
                     };
                     return dropdownsData;
                 }
             );
         }
+        public async Task<bool> AddDirective(DirectiveRequest reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@DirectiveNo", reqModel.DirectiveNumber);
+            parameters.Add("@DirectiveDate", reqModel.DirectiveDate);
+            parameters.Add("@SourceCode", reqModel.SourceCode);
+            parameters.Add("@DirectiveAmount", reqModel.Amount);
+            parameters.Add("@TypeIndicator", reqModel.TypeIndicator);
+            parameters.Add("@IsActive", reqModel.IsActive);
+            parameters.Add("@PayrollProcessId", reqModel.TransactionType);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_AddEmployeeDirective", parameters);
+            return result;
+        }
+        public async Task<List<GetDirectiveResponse>> GetDirectivesByEmployeeId(long employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            var result = await _dapper.ExecuteStoredProcedure<GetDirectiveResponse>(
+                "usp_GetEmployeeDirectives",
+                parameters
+            );
+
+            return result.ToList();
+        }
+
+        public async Task<bool> UpdateDirective(long directiveId, DirectiveRequest reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@DirectiveId", directiveId);
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@DirectiveNo", reqModel.DirectiveNumber);
+            parameters.Add("@DirectiveDate", reqModel.DirectiveDate);
+            parameters.Add("@SourceCode", reqModel.SourceCode);
+            parameters.Add("@DirectiveAmount", reqModel.Amount);
+            parameters.Add("@TypeIndicator", reqModel.TypeIndicator);
+            parameters.Add("@IsActive", reqModel.IsActive);
+            parameters.Add("@PayrollProcessId", reqModel.TransactionType);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateEmployeeDirective", parameters);
+            return result;
+        }
+        public async Task<bool> DeleteDirective(long directiveId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@DirectiveId", directiveId);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteEmployeeDirective", parameters);
+            return result;
+        }
+
 
     }
 }

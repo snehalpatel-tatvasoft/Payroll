@@ -80,5 +80,15 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
         public decimal? HolidayNightRate { get; set; }
         public decimal? SundayNightRate { get; set; }
     }
-
+    public class DirectiveRequest
+    {
+        public long EmployeeId { get; set; }
+        public string DirectiveNumber { get; set; } = string.Empty;
+        public DateTime DirectiveDate { get; set; }
+        public int SourceCode { get; set; }
+        public decimal Amount { get; set; }
+        public string TypeIndicator { get; set; } = string.Empty;
+        public bool IsActive { get; set; }
+        public long? TransactionType { get; set; }
+    }
 }

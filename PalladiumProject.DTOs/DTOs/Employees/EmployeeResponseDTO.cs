@@ -20,7 +20,19 @@
 
     public class TransactionTypeDropdownsDTO
     {
-        public List<TransactionType> JobGrades { get; set; } = new();
+        public List<TransactionType> TransactionType { get; set; } = new();
     }
+    public class GetDirectiveResponse
+    {
+        public int Id { get; set; }
+        public string DirectiveNumber { get; set; } = string.Empty;
+        public DateTime DirectiveDate { get; set; }
+        public int SourceCode { get; set; } 
+        public decimal DirectiveAmount { get; set; }
+        public string TypeIndicator { get; set; } = string.Empty;
+        public string TransactionType { get; set; } = string.Empty;
+        public bool Status { get; set; }
+    }
+
 
 }

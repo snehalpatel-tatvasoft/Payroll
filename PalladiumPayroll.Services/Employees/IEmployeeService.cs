@@ -10,7 +10,6 @@ namespace PalladiumPayroll.Services.Employees
         Task<JsonResult> DeleteEmployee(int employeeId);
         Task<JsonResult> GetEmployeePaymentDetail(int employeeId);
         Task<JsonResult> EmployeePaymentDetailSave(EmployeePaymentDetail reqModel);
-
         Task<JsonResult> GetEmployeeWorkDropDown(int companyId);
         Task<JsonResult> GetEmployeeWorkInformation(int employeeId);
         Task<JsonResult> EmployeeWorkInfoSave(EmployeeWorkInformation reqModel);
@@ -18,6 +17,9 @@ namespace PalladiumPayroll.Services.Employees
         Task<JsonResult> GetCasualWageInformation(int employeeId);
         Task<JsonResult> UpdateCasualWageInformation(CasualWageInformation reqModel);
         Task<TransactionTypeDropdownsDTO> GetTransactionTypesDropdownData(long companyId);
-        
+        Task<JsonResult> AddDirective(DirectiveRequest reqModel);
+        Task<List<GetDirectiveResponse>> GetDirectivesByEmployeeId(long employeeId);
+        Task<JsonResult> UpdateDirective(long directiveId, DirectiveRequest reqModel);
+        Task<JsonResult> DeleteDirective(long directiveId);
     }
 }
