@@ -62,7 +62,7 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> EmployeeWorkInfoSave(EmployeeWorkInformation reqModel)
         {
-            reqModel.WorkingDay.Sort();
+            reqModel.WorkingDay?.Sort();
             var res = await _employeeRepository.EmployeeWorkInfoSave(reqModel);
             if (res)
             {
@@ -74,6 +74,26 @@ namespace PalladiumPayroll.Services.Employees
         public async Task<JsonResult> GetEmployeeWorkOrganizationalDropdownData(long companyId)
         {
             return await _employeeRepository.GetEmployeeWorkOrganizationalDropdownData(companyId);
+        }
+
+        public async Task<JsonResult> AddWorkOrganizationalDropdownItem(WorkOrgnizationItem reqItem)
+        {
+            return await _employeeRepository.AddWorkOrganizationalDropdownItem(reqItem);
+        }
+
+        public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type)
+        {
+            return await _employeeRepository.DeleteWorkOrganizationalDropdownItem(id, type);
+        }
+
+        public async Task<JsonResult> GetEmployeeWorkOrganizationalData(long employeeId)
+        {
+            return await _employeeRepository.GetEmployeeWorkOrganizationalData(employeeId);
+        }
+
+        public async Task<JsonResult> SaveEmployeeWorkOrganizationalData(EmployeeOrgnizationalModel reqModel)
+        {
+            return await _employeeRepository.SaveEmployeeWorkOrganizationalData(reqModel);
         }
     }
 }
