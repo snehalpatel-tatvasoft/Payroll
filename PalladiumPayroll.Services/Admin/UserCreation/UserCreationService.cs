@@ -27,7 +27,7 @@ namespace PalladiumPayroll.Services.Admin
                     string.IsNullOrWhiteSpace(request.Email) || 
                     string.IsNullOrWhiteSpace(request.Password) || 
                     request.CompanyId <= 0 || 
-                    request.AccessRoleID <= 0)
+                    request.AccessRoleId <= 0)
                 {
                     return HttpStatusCodeResponse.BadRequestResponse();
                 }
@@ -40,7 +40,7 @@ namespace PalladiumPayroll.Services.Admin
                     UserName = request.UserName,
                     SurName = request.SurName,
                     Email = request.Email,
-                    AccessRoleID = request.AccessRoleID,
+                    AccessRoleId = request.AccessRoleId,
                     Password = request.Password,
                     PasswordHash = passwordHash,
                     ContactNo = request.ContactNo,
@@ -73,7 +73,7 @@ namespace PalladiumPayroll.Services.Admin
                     string.IsNullOrWhiteSpace(request.SurName) || 
                     string.IsNullOrWhiteSpace(request.Email) || 
                     request.CompanyId <= 0 || 
-                    request.AccessRoleID <= 0)
+                    request.AccessRoleId <= 0)
                 {
                     return HttpStatusCodeResponse.BadRequestResponse();
                 }
@@ -88,7 +88,7 @@ namespace PalladiumPayroll.Services.Admin
                     UserName = request.UserName,
                     SurName = request.SurName,
                     Email = request.Email,
-                    AccessRoleID = request.AccessRoleID,
+                    AccessRoleId = request.AccessRoleId,
                     Password = request.Password,
                     PasswordHash = passwordHash,
                     ContactNo = request.ContactNo,

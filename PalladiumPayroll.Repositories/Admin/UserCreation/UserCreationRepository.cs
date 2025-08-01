@@ -20,7 +20,7 @@ namespace PalladiumPayroll.Repositories.Admin
             var parameters = new DynamicParameters();
             parameters.Add("@UserName", request.UserName, dbType: DbType.String);
             parameters.Add("@SurName", request.SurName, dbType: DbType.String);
-            parameters.Add("@AccessRoleID", request.AccessRoleID, dbType: DbType.Int32);
+            parameters.Add("@AccessRoleID", request.AccessRoleId, dbType: DbType.Int32);
             parameters.Add("@ContactNo", request.ContactNo, dbType: DbType.String);
             parameters.Add("@Email", request.Email, dbType: DbType.String);
             parameters.Add("@Password", request.Password, dbType: DbType.String);
@@ -46,7 +46,7 @@ namespace PalladiumPayroll.Repositories.Admin
             parameters.Add("@Id", id, dbType: DbType.Guid);
             parameters.Add("@UserName", request.UserName, dbType: DbType.String);
             parameters.Add("@SurName", request.SurName, dbType: DbType.String);
-            parameters.Add("@AccessRoleID", request.AccessRoleID, dbType: DbType.Int32);
+            parameters.Add("@AccessRoleID", request.AccessRoleId, dbType: DbType.Int32);
             parameters.Add("@ContactNo", request.ContactNo, dbType: DbType.String);
             parameters.Add("@Email", request.Email, dbType: DbType.String);
             parameters.Add("@Password", request.Password, dbType: DbType.String);
