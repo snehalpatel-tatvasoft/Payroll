@@ -185,5 +185,30 @@ namespace PalladiumPayroll.Controllers.Employee
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeTimeSheetSetup(long employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeTimeSheetSetup(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup reqModel)
+        {
+            try
+            {
+                return await _employeeService.SaveEmployeeTimeSheetSetup(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
     }
 }

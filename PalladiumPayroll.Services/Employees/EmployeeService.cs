@@ -95,5 +95,19 @@ namespace PalladiumPayroll.Services.Employees
         {
             return await _employeeRepository.SaveEmployeeWorkOrganizationalData(reqModel);
         }
+
+        public async Task<JsonResult> GetEmployeeTimeSheetSetup(long employeeId)
+        {
+            return await _employeeRepository.GetEmployeeTimeSheetSetup(employeeId);
+        }
+
+        public async Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup)
+        {
+            if(timeSheetSetup.TimeSheetPassword != timeSheetSetup.TimeSheetConfirmPassword)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse("Password is mismatch !");
+            }
+            return await _employeeRepository.SaveEmployeeTimeSheetSetup(timeSheetSetup);
+        }
     }
 }

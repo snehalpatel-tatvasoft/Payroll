@@ -39,4 +39,13 @@
 		public int? ProvinceId { get; set; }
 		public int? SupportFunctionId { get; set; }
     }
+
+	public class TimeSheetSetup
+	{
+		public int EmployeeId { get; set; }
+		public bool? EnableTimeSheet {  get; set; }
+		public string TimeSheetPassword { get; set; }
+		public string TimeSheetConfirmPassword {  get; set; }
+
+    }
 }

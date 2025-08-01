@@ -19,5 +19,7 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type);
         Task<JsonResult> GetEmployeeWorkOrganizationalData(long employeeId);
         Task<JsonResult> SaveEmployeeWorkOrganizationalData(EmployeeOrgnizationalModel reqModel);
+        Task<JsonResult> GetEmployeeTimeSheetSetup(long employeeId);
+        Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup);
     }
 }

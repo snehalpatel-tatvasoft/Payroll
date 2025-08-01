@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PalladiumPayroll.Repositories.Employees
 {
@@ -182,6 +184,7 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@BCEATotalRemuneration", reqModel.BCEATotalRemuneration);
             parameters.Add("@BCEATermination", reqModel.BCEATermination);
             parameters.Add("@BCEAPortionLeavePay", reqModel.BCEAPortionLeavePay);
+            parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeWorkInformation", parameters);
             return result;
         }
@@ -352,6 +355,28 @@ namespace PalladiumPayroll.Repositories.Employees
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
 
+        #endregion
+
+        #region TimeSheet SetUp
+        public async Task<JsonResult> GetEmployeeTimeSheetSetup(long employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            var data = await _dapper.ExecuteStoredProcedureSingle<TimeSheetSetup>("usp_GetEmployeeTimeSheetSetup", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Time Sheet", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", timeSheetSetup.EmployeeId);
+            parameters.Add("@EnableTimeSheet", timeSheetSetup.EnableTimeSheet);
+            parameters.Add("@TimeSheetPassword", timeSheetSetup.TimeSheetConfirmPassword);
+            parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeTimeSheetSetup", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Time Sheet", ActionType.Saved));
+        }
         #endregion
     }
 }
