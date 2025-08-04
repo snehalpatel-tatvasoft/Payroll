@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Employees;
-using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeGrievances;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PalladiumPayroll.Repositories.Employees
 {
@@ -143,7 +144,7 @@ namespace PalladiumPayroll.Repositories.Employees
             var parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", employeeId);
             var result = await _dapper.ExecuteStoredProcedureSingle<EmployeeWorkInformation>("usp_GetEmployeeWorkInfo", parameters);
-            if(result != null)
+            if (result != null)
             {
                 var workDaySplit = result.StandardWorkingDays?
                             .Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse)
@@ -162,7 +163,7 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@DepartmentId", reqModel.DepartmentId);
             parameters.Add("@DesignationId", reqModel.DesignationId);
             parameters.Add("@PayrollCycle", reqModel.CycleType);
-            //parameters.Add("@ReportTo", reqModel.ReportTo);
+            parameters.Add("@ReportTo", reqModel.ReportTo);
             parameters.Add("@IsCommission", reqModel.IsCommission);
             parameters.Add("@IsExcludeEFA", reqModel.IsExcludeEFA);
             parameters.Add("@RepCode", reqModel.RepCode);
@@ -181,13 +182,13 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@LeaveYear", reqModel.LeaveYear);
             parameters.Add("@BonusPeriod", reqModel.BonusPeriod);
             parameters.Add("@BonusYear", reqModel.BonusYear);
-
             parameters.Add("@BCEAMonthlySalary", reqModel.BCEAMonthlySalary);
             parameters.Add("@BCEAVariableSalary", reqModel.BCEAVariableSalary);
             parameters.Add("@BCEAOverMonth", reqModel.BCEAOverMonth);
             parameters.Add("@BCEATotalRemuneration", reqModel.BCEATotalRemuneration);
             parameters.Add("@BCEATermination", reqModel.BCEATermination);
             parameters.Add("@BCEAPortionLeavePay", reqModel.BCEAPortionLeavePay);
+            parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeWorkInformation", parameters);
             return result;
         }
@@ -228,6 +229,157 @@ namespace PalladiumPayroll.Repositories.Employees
                     return HttpStatusCodeResponse.SuccessResponse(dropdownsData, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "work info drop list", ActionType.Retrieved));
                 }
             );
+        }
+
+        public async Task<JsonResult> AddWorkOrganizationalDropdownItem(WorkOrgnizationItem reqItem)
+        {
+            var result = new List<DropDownViewModel>();
+            var parameters = new DynamicParameters();
+            parameters.Add("@Name", reqItem.Name);
+            parameters.Add("@CompanyId", reqItem.CompanyId);
+            switch (reqItem.Type)
+            {
+                case 2:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddJobGrade", parameters);
+                    break;
+                case 3:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddOccupationLevel", parameters);
+                    break;
+                case 4:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddOccupationStatus", parameters);
+                    break;
+                case 5:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddOccupationCategory", parameters);
+                    break;
+                case 6:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddWSPCategory", parameters);
+                    break;
+                case 7:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddOFOCode", parameters);
+                    break;
+                case 8:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddMajorCostCenter", parameters);
+                    break;
+                case 9:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddRegion", parameters);
+                    break;
+                case 10:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddAppointmentType", parameters);
+                    break;
+                case 11:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddPayPoint", parameters);
+                    break;
+                case 12:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddNICGrade", parameters);
+                    break;
+                case 13:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddBranch", parameters);
+                    break;
+                case 14:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddDivision", parameters);
+                    break;
+                case 15:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddSubDivision", parameters);
+                    break;
+                case 16:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddMunicipality", parameters);
+                    break;
+                case 17:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddLocation", parameters);
+                    break;
+                case 18:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddDepartment", parameters);
+                    break;
+                case 19:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddProvince", parameters);
+                    break;
+                case 20:
+                    result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddOperationSupport", parameters);
+                    break;
+            }
+            if (result.Count > 0 && result.FirstOrDefault()?.Id > 0)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, "Item", ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@id", id);
+            parameters.Add("@type", type);
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteOrgnizationDropDownItem", parameters);
+            if (result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Item", ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<JsonResult> GetEmployeeWorkOrganizationalData(long employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            var data = await _dapper.ExecuteStoredProcedureSingle<EmployeeOrgnizationalModel>("usp_GetEmployeeOrganization", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " organization", ActionType.Retrieving));
+        }
+
+        public async Task<JsonResult> SaveEmployeeWorkOrganizationalData(EmployeeOrgnizationalModel reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@StartDate", reqModel.StartDate);
+		    parameters.Add("@DesignationId", reqModel.DesignationId);
+		    parameters.Add("@JobGradeId", reqModel.JobGradeId);
+		    parameters.Add("@OccupationalLevelId", reqModel.OccupationalLevelId);
+		    parameters.Add("@OccupationalStatusId", reqModel.OccupationalStatusId);
+		    parameters.Add("@OccupationalCategoryId", reqModel.OccupationalCategoryId);
+		    parameters.Add("@WSPCategoryId", reqModel.WSPCategoryId);
+		    parameters.Add("@OFOCodeId", reqModel.OFOCodeId);
+		    parameters.Add("@MajorCostCenterId", reqModel.MajorCostCenterId);
+		    parameters.Add("@RegionId", reqModel.RegionId);
+		    parameters.Add("@AppointmentTypeId", reqModel.AppointmentTypeId);
+		    parameters.Add("@PayPointId", reqModel.PayPointId);
+		    parameters.Add("@NICGradeId", reqModel.NICGradeId);
+		    parameters.Add("@BranchId", reqModel.BranchId);
+		    parameters.Add("@DivisionId", reqModel.DivisionId);
+		    parameters.Add("@SubDivisionId", reqModel.SubDivisionId);
+		    parameters.Add("@MunicipalityId", reqModel.MunicipalityId);
+            parameters.Add("@LocationId", reqModel.LocationId);
+		    parameters.Add("@DepartmentId", reqModel.DepartmentId);
+		    parameters.Add("@ProvinceId", reqModel.ProvinceId);
+		    parameters.Add("@SupportFunctionId", reqModel.SupportFunctionId);
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeOrganization", parameters);
+            if (result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " organization", ActionType.Saving));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        #endregion
+
+        #region TimeSheet SetUp
+        public async Task<JsonResult> GetEmployeeTimeSheetSetup(long employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            var data = await _dapper.ExecuteStoredProcedureSingle<TimeSheetSetup>("usp_GetEmployeeTimeSheetSetup", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Time Sheet", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", timeSheetSetup.EmployeeId);
+            parameters.Add("@EnableTimeSheet", timeSheetSetup.EnableTimeSheet);
+            parameters.Add("@TimeSheetPassword", timeSheetSetup.TimeSheetConfirmPassword);
+            parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeTimeSheetSetup", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Time Sheet", ActionType.Saved));
         }
         #endregion
 

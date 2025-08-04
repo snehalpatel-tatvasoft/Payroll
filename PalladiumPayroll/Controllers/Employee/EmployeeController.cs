@@ -231,5 +231,82 @@ namespace PalladiumPayroll.Controllers.Employee
 
 
 
+        [HttpDelete("[action]")]
+        public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type)
+        {
+            try
+            {
+                return await _employeeService.DeleteWorkOrganizationalDropdownItem(id, type);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<JsonResult> AddWorkOrganizationalDropdownItem(WorkOrgnizationItem reqItem)
+        {
+            try
+            {
+                return await _employeeService.AddWorkOrganizationalDropdownItem(reqItem);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeWorkOrganizationalData(long employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeWorkOrganizationalData(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> SaveEmployeeWorkOrganizationalData(EmployeeOrgnizationalModel reqModel)
+        {
+            try
+            {
+                return await _employeeService.SaveEmployeeWorkOrganizationalData(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeTimeSheetSetup(long employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeTimeSheetSetup(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup reqModel)
+        {
+            try
+            {
+                return await _employeeService.SaveEmployeeTimeSheetSetup(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
     }
 }
