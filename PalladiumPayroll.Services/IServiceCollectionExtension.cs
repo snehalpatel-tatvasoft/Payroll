@@ -12,6 +12,9 @@ using PalladiumPayroll.Services.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Services.Department;
 using PalladiumPayroll.Services.Home;
 using PalladiumPayroll.Services.HRFunctions.EmployeeGrievances;
+using PalladiumPayroll.Services.HRFunctions.EmployeePromotions;
+using PalladiumPayroll.Services.HRFunctions.EmployeeTraining;
+using PalladiumPayroll.Services.HRFunctions.EmployeeTransfer;
 using PalladiumPayroll.Services.User;
 
 namespace PalladiumPayroll.Services
@@ -37,6 +40,10 @@ namespace PalladiumPayroll.Services
             services.AddScoped<ICreateTransactionService, CreateTransactionService>();
             services.AddScoped<IPasswordPolicyService, PasswordPolicyService>();
             services.AddScoped<IEmployeeGrievancesService, EmployeeGrievancesService>();
+            services.AddScoped<INotificationSetupService, NotificationSetupService>();
+            services.AddScoped<IEmployeePromotionsService, EmployeePromotionsService>();
+            services.AddScoped<IEmployeeTrainingService, EmployeeTrainingService>();
+            services.AddScoped<IEmployeeTransferService, EmployeeTransferService>();
             services.AddScoped<IAccessRightsService, AccessRightsService>();
             services.AddScoped<IUserCreationService, UserCreationService>();
             return services;

@@ -10,6 +10,9 @@ using PalladiumPayroll.Repositories.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Repositories.Department;
 using PalladiumPayroll.Repositories.Home;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeGrievances;
+using PalladiumPayroll.Repositories.HRFunctions.EmployeePromotions;
+using PalladiumPayroll.Repositories.HRFunctions.EmployeeTraining;
+using PalladiumPayroll.Repositories.HRFunctions.EmployeeTransfer;
 using PalladiumPayroll.Repositories.User;
 
 namespace PalladiumPayroll.Repositories
@@ -34,6 +37,10 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<ICreateTransactionRepository, CreateTransactionRepository>();
             services.AddScoped<IPasswordPolicyRepository, PasswordPolicyRepository>();
             services.AddScoped<IEmployeeGrievancesRepository, EmployeeGrievancesRepository>();
+            services.AddScoped<INotificationSetupRepository, NotificationSetupRepository>();
+            services.AddScoped<IEmployeePromotionsRepository, EmployeePromotionsRepository>();
+            services.AddScoped<IEmployeeTrainingRepository, EmployeeTrainingRepository>();
+            services.AddScoped<IEmployeeTransferRepository, EmployeeTransferRepository>();
             services.AddScoped<IAccessRightsRepository, AccessRightsRepository>();
             services.AddScoped<IUserCreationRepository, UserCreationRepository>();
             return services;
