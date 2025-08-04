@@ -3,14 +3,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
-using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PalladiumPayroll.Repositories.Employees
 {
@@ -327,26 +325,26 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@CompanyId", reqModel.CompanyId);
             parameters.Add("@EmployeeId", reqModel.EmployeeId);
             parameters.Add("@StartDate", reqModel.StartDate);
-		    parameters.Add("@DesignationId", reqModel.DesignationId);
-		    parameters.Add("@JobGradeId", reqModel.JobGradeId);
-		    parameters.Add("@OccupationalLevelId", reqModel.OccupationalLevelId);
-		    parameters.Add("@OccupationalStatusId", reqModel.OccupationalStatusId);
-		    parameters.Add("@OccupationalCategoryId", reqModel.OccupationalCategoryId);
-		    parameters.Add("@WSPCategoryId", reqModel.WSPCategoryId);
-		    parameters.Add("@OFOCodeId", reqModel.OFOCodeId);
-		    parameters.Add("@MajorCostCenterId", reqModel.MajorCostCenterId);
-		    parameters.Add("@RegionId", reqModel.RegionId);
-		    parameters.Add("@AppointmentTypeId", reqModel.AppointmentTypeId);
-		    parameters.Add("@PayPointId", reqModel.PayPointId);
-		    parameters.Add("@NICGradeId", reqModel.NICGradeId);
-		    parameters.Add("@BranchId", reqModel.BranchId);
-		    parameters.Add("@DivisionId", reqModel.DivisionId);
-		    parameters.Add("@SubDivisionId", reqModel.SubDivisionId);
-		    parameters.Add("@MunicipalityId", reqModel.MunicipalityId);
+            parameters.Add("@DesignationId", reqModel.DesignationId);
+            parameters.Add("@JobGradeId", reqModel.JobGradeId);
+            parameters.Add("@OccupationalLevelId", reqModel.OccupationalLevelId);
+            parameters.Add("@OccupationalStatusId", reqModel.OccupationalStatusId);
+            parameters.Add("@OccupationalCategoryId", reqModel.OccupationalCategoryId);
+            parameters.Add("@WSPCategoryId", reqModel.WSPCategoryId);
+            parameters.Add("@OFOCodeId", reqModel.OFOCodeId);
+            parameters.Add("@MajorCostCenterId", reqModel.MajorCostCenterId);
+            parameters.Add("@RegionId", reqModel.RegionId);
+            parameters.Add("@AppointmentTypeId", reqModel.AppointmentTypeId);
+            parameters.Add("@PayPointId", reqModel.PayPointId);
+            parameters.Add("@NICGradeId", reqModel.NICGradeId);
+            parameters.Add("@BranchId", reqModel.BranchId);
+            parameters.Add("@DivisionId", reqModel.DivisionId);
+            parameters.Add("@SubDivisionId", reqModel.SubDivisionId);
+            parameters.Add("@MunicipalityId", reqModel.MunicipalityId);
             parameters.Add("@LocationId", reqModel.LocationId);
-		    parameters.Add("@DepartmentId", reqModel.DepartmentId);
-		    parameters.Add("@ProvinceId", reqModel.ProvinceId);
-		    parameters.Add("@SupportFunctionId", reqModel.SupportFunctionId);
+            parameters.Add("@DepartmentId", reqModel.DepartmentId);
+            parameters.Add("@ProvinceId", reqModel.ProvinceId);
+            parameters.Add("@SupportFunctionId", reqModel.SupportFunctionId);
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeOrganization", parameters);
             if (result)
             {
@@ -377,6 +375,38 @@ namespace PalladiumPayroll.Repositories.Employees
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeTimeSheetSetup", parameters);
             return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Time Sheet", ActionType.Saved));
         }
+        #endregion
+
+        #region Take On Balance
+        public async Task<JsonResult> GetPayrollTransactionList(TransactionReqModel reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@AllowanceType", reqModel.AllowanceType);
+            parameters.Add("@SearchName", reqModel.SearchName);
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            var transactionList = await _dapper.ExecuteStoredProcedure<TransactionList>("usp_GetPayrollTransaction", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(transactionList, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
+        }
+
+        public async Task<bool> SaveEmployeeTransaction(TransactionSaveModel reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@PayrollProcessId", reqModel.PayrollProcessId);
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@AllowanceType", reqModel.AllowanceType);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SaveEmployeeTransaction", parameters);
+        }
+
+        public async Task<JsonResult> GetEmployeeTakeOnBalance(int employeeId, int allowanceType)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            parameters.Add("@AllowanceType", allowanceType);
+            var transactionList = await _dapper.ExecuteStoredProcedure<TransactionList>("usp_GetEmployeeTakeOnBalance", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(transactionList, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
+        }
+
         #endregion
     }
 }

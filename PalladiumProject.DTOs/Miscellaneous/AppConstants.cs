@@ -173,7 +173,7 @@ namespace PalladiumPayroll.Helper.Constants
             #endregion
 
             #region Create Transaction
-            
+            public static readonly string Transaction = "Transaction";
             public static readonly string CreateTransaction = "Create Transaction";
             public static readonly string TransactionCreatedSuccessfully = "Create transaction successfully.";
             public static readonly string TransactionCreationFailed = "Failed to create transaction.";

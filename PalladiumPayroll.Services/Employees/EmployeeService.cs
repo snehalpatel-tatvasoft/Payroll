@@ -109,5 +109,26 @@ namespace PalladiumPayroll.Services.Employees
             }
             return await _employeeRepository.SaveEmployeeTimeSheetSetup(timeSheetSetup);
         }
+
+        public async Task<JsonResult> GetPayrollTransactionList(TransactionReqModel reqModel)
+        {
+            return await _employeeRepository.GetPayrollTransactionList(reqModel);
+        }
+
+        public async Task<JsonResult> SaveEmployeeTransaction(TransactionSaveModel reqModel)
+        {
+            var result = await _employeeRepository.SaveEmployeeTransaction(reqModel);
+            if (result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<JsonResult> GetEmployeeTakeOnBalance(int employeeId, int allowanceType)
+        {
+            return await _employeeRepository.GetEmployeeTakeOnBalance(employeeId, allowanceType);
+        }
+
     }
 }

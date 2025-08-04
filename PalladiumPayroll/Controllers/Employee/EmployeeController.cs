@@ -210,5 +210,45 @@ namespace PalladiumPayroll.Controllers.Employee
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetPayrollTransactionList([FromQuery]TransactionReqModel reqModel)
+        {
+            try
+            {
+                return await _employeeService.GetPayrollTransactionList(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> SaveEmployeeTransaction(TransactionSaveModel reqModel)
+        {
+            try
+            {
+                return await _employeeService.SaveEmployeeTransaction(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeTakeOnBalance(int employeeId, int allowanceType)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeTakeOnBalance(employeeId, allowanceType);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
     }
 }

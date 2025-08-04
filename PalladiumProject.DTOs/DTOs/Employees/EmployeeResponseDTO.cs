@@ -1,23 +1,23 @@
 ﻿namespace PalladiumPayroll.DTOs.DTOs.Employees
 {
-    public class EmployeeDataViewModel
-    {
-        public string EmployeeId { get; set; }
-        public string EmployeeCode { get; set; }
-        public string EmployeeName { get; set; }
-        public string? ProfileUrl { get; set; }
-        public string IDNumber { get; set; }
-        public DateTime Dob { get; set; }
-        public string? PayrollCycle { get; set; }
-        public string? Department { get; set; }
-        public string? Designation { get; set; }
-    }
+	public class EmployeeDataViewModel
+	{
+		public string EmployeeId { get; set; }
+		public string EmployeeCode { get; set; }
+		public string EmployeeName { get; set; }
+		public string? ProfileUrl { get; set; }
+		public string IDNumber { get; set; }
+		public DateTime Dob { get; set; }
+		public string? PayrollCycle { get; set; }
+		public string? Department { get; set; }
+		public string? Designation { get; set; }
+	}
 
-    public class EmployeeOrgnizationalModel
-    {
-		public int CompanyId {  get; set; }
+	public class EmployeeOrgnizationalModel
+	{
+		public int CompanyId { get; set; }
 		public int EmployeeId { get; set; }
-        public DateTime? StartDate { get; set; }
+		public DateTime? StartDate { get; set; }
 		public int? DesignationId { get; set; }
 		public int? JobGradeId { get; set; }
 		public int? OccupationalLevelId { get; set; }
@@ -38,14 +38,22 @@
 		public int? DepartmentId { get; set; }
 		public int? ProvinceId { get; set; }
 		public int? SupportFunctionId { get; set; }
-    }
+	}
 
 	public class TimeSheetSetup
 	{
 		public int EmployeeId { get; set; }
-		public bool? EnableTimeSheet {  get; set; }
+		public bool? EnableTimeSheet { get; set; }
 		public string TimeSheetPassword { get; set; }
-		public string TimeSheetConfirmPassword {  get; set; }
+		public string TimeSheetConfirmPassword { get; set; }
 
+	}
+
+	public class TransactionList
+	{
+        public int? PayrollProcessId { get; set; }
+		public int? TakeOnBalanaceId { get; set; }
+
+        public string Description { get; set; }
     }
 }

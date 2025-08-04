@@ -21,5 +21,8 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<JsonResult> SaveEmployeeWorkOrganizationalData(EmployeeOrgnizationalModel reqModel);
         Task<JsonResult> GetEmployeeTimeSheetSetup(long employeeId);
         Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup);
+        Task<JsonResult> GetPayrollTransactionList(TransactionReqModel reqModel);
+        Task<bool> SaveEmployeeTransaction(TransactionSaveModel reqModel);
+        Task<JsonResult> GetEmployeeTakeOnBalance(int employeeId, int allowanceType);
     }
 }

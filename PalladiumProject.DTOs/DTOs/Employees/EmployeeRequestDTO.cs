@@ -74,4 +74,19 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
         public string Name { get; set; }
         public int Type { get; set; }
     }
+
+    public class TransactionReqModel
+    {
+        public string? SearchName { get; set; }
+        public int CompanyId { get; set; }
+        public int AllowanceType { get; set; }
+        public int? EmployeeId { get; set; }
+    }
+
+    public class TransactionSaveModel
+    {
+        public List<int>? PayrollProcessId { get; set; }
+        public int AllowanceType { get; set; }
+        public int EmployeeId { get; set; }
+    }
 }
