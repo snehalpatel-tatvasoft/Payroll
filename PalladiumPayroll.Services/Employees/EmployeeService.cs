@@ -109,5 +109,77 @@ namespace PalladiumPayroll.Services.Employees
             }
             return await _employeeRepository.SaveEmployeeTimeSheetSetup(timeSheetSetup);
         }
+
+        public async Task<JsonResult> GetCasualWageInformation(int employeeId)
+        {
+            return await _employeeRepository.GetCasualWageInformation(employeeId);
+        }
+
+        public async Task<JsonResult> UpdateCasualWageInformation(CasualWageInformation reqModel)
+        {
+            var result = await _employeeRepository.UpdateCasualWageInformation(reqModel);
+            if (result == true)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, string.Concat(ResponseMessages.Employee, " ", "Casual Wage Information"), ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+        public async Task<TransactionTypeDropdownsDTO> GetTransactionTypesDropdownData(long companyId)
+        {
+            try
+            {
+                var data = await _employeeRepository.GetTransactionTypesDropdownData(companyId);
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<JsonResult> AddDirective(DirectiveRequest reqModel)
+        {
+            var result = await _employeeRepository.AddDirective(reqModel);
+            if (result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(
+                    string.Empty,
+                    string.Format(ResponseMessages.Success,
+                    $"{ResponseMessages.Employee} Directive Information", ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<List<GetDirectiveResponse>> GetDirectivesByEmployeeId(long employeeId)
+        {
+            return await _employeeRepository.GetDirectivesByEmployeeId(employeeId);
+        }
+
+        public async Task<JsonResult> UpdateDirective(long directiveId, DirectiveRequest reqModel)
+        {
+            var result = await _employeeRepository.UpdateDirective(directiveId, reqModel);
+            if (result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(
+                    string.Empty,
+                    string.Format(ResponseMessages.Success, $"{ResponseMessages.Employee} Directive Information", ActionType.Updated));
+            }
+
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<JsonResult> DeleteDirective(long directiveId)
+        {
+            var result = await _employeeRepository.DeleteDirective(directiveId);
+            if (result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(
+                    string.Empty,
+                    string.Format(ResponseMessages.Success, $"{ResponseMessages.Employee} Directive", ActionType.Deleted));
+            }
+
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+
     }
 }

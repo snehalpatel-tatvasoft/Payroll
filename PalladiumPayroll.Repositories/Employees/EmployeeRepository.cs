@@ -84,6 +84,10 @@ namespace PalladiumPayroll.Repositories.Employees
             var parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", employeeId);
             var result = await _dapper.ExecuteStoredProcedureSingle<EmployeePaymentDetail>("usp_GetEmployeePaymentDetail", parameters);
+            if (result == null)
+            {
+                // return HttpStatusCodeResponse.NotFoundResponse("Payment info");
+            }
             return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Payment info", ActionType.Retrieved));
         }
 
@@ -378,5 +382,103 @@ namespace PalladiumPayroll.Repositories.Employees
             return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Time Sheet", ActionType.Saved));
         }
         #endregion
+
+        public async Task<JsonResult> GetCasualWageInformation(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<CasualWageInformation>("usp_GetCasualWageInformation", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, "Casual Wage Information", ActionType.Retrieved));
+        }
+
+        public async Task<bool> UpdateCasualWageInformation(CasualWageInformation reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@NormalHour", reqModel.NormalHour);
+            parameters.Add("@CasualOverTime", reqModel.CasualOverTime);
+            parameters.Add("@HolidayRate", reqModel.HolidayRate);
+            parameters.Add("@SundayRate", reqModel.SundayRate);
+            parameters.Add("@NightHour", reqModel.NightHour);
+            parameters.Add("@CasualNightOvertimeRate", reqModel.CasualNightOvertime);
+            parameters.Add("@HolidayNightRate", reqModel.HolidayNightRate);
+            parameters.Add("@SundayNightRate", reqModel.SundayNightRate);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCasualWageInformation", parameters);
+            return result;
+        }
+        public async Task<TransactionTypeDropdownsDTO> GetTransactionTypesDropdownData(long companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            return await _dapper.ExecuteStoredProcedureMultipleAsync(
+                "usp_GetTransactionTypesDropdownData",
+                parameters,
+                async multi =>
+                {
+                    TransactionTypeDropdownsDTO? dropdownsData = new TransactionTypeDropdownsDTO
+                    {
+                        TransactionType = (await multi.ReadAsync<TransactionType>()).ToList(),
+                    };
+                    return dropdownsData;
+                }
+            );
+        }
+        public async Task<bool> AddDirective(DirectiveRequest reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@DirectiveNo", reqModel.DirectiveNumber);
+            parameters.Add("@DirectiveDate", reqModel.DirectiveDate);
+            parameters.Add("@SourceCode", reqModel.SourceCode);
+            parameters.Add("@DirectiveAmount", reqModel.Amount);
+            parameters.Add("@TypeIndicator", reqModel.TypeIndicator);
+            parameters.Add("@IsActive", reqModel.IsActive);
+            parameters.Add("@PayrollProcessId", reqModel.TransactionType);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_AddEmployeeDirective", parameters);
+            return result;
+        }
+        public async Task<List<GetDirectiveResponse>> GetDirectivesByEmployeeId(long employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            var result = await _dapper.ExecuteStoredProcedure<GetDirectiveResponse>(
+                "usp_GetEmployeeDirectives",
+                parameters
+            );
+
+            return result.ToList();
+        }
+
+        public async Task<bool> UpdateDirective(long directiveId, DirectiveRequest reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@DirectiveId", directiveId);
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@DirectiveNo", reqModel.DirectiveNumber);
+            parameters.Add("@DirectiveDate", reqModel.DirectiveDate);
+            parameters.Add("@SourceCode", reqModel.SourceCode);
+            parameters.Add("@DirectiveAmount", reqModel.Amount);
+            parameters.Add("@TypeIndicator", reqModel.TypeIndicator);
+            parameters.Add("@IsActive", reqModel.IsActive);
+            parameters.Add("@PayrollProcessId", reqModel.TransactionType);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateEmployeeDirective", parameters);
+            return result;
+        }
+        public async Task<bool> DeleteDirective(long directiveId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@DirectiveId", directiveId);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteEmployeeDirective", parameters);
+            return result;
+        }
+
+
     }
 }

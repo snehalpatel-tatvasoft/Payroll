@@ -21,5 +21,13 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<JsonResult> SaveEmployeeWorkOrganizationalData(EmployeeOrgnizationalModel reqModel);
         Task<JsonResult> GetEmployeeTimeSheetSetup(long employeeId);
         Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup);
+        Task<JsonResult> GetCasualWageInformation(int employeeId);
+        Task<bool> UpdateCasualWageInformation(CasualWageInformation reqModel);
+        Task<TransactionTypeDropdownsDTO> GetTransactionTypesDropdownData(long companyId);
+        Task<bool> AddDirective(DirectiveRequest reqModel);
+        Task<List<GetDirectiveResponse>> GetDirectivesByEmployeeId(long employeeId);
+        Task<bool> UpdateDirective(long directiveId, DirectiveRequest reqModel);
+        Task<bool> DeleteDirective(long directiveId);
     }
+
 }
