@@ -3,6 +3,7 @@ using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Employees;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.Employee
 {
@@ -130,6 +131,103 @@ namespace PalladiumPayroll.Controllers.Employee
             catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetCasualWageInformation(int employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetCasualWageInformation(employeeId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpdateCasualWageInformation(CasualWageInformation reqModel)
+        {
+            try
+            {
+                return await _employeeService.UpdateCasualWageInformation(reqModel);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetTransactionTypesDropdownData(long companyId)
+        {
+            try
+            {
+                if (companyId <= 0)
+                {
+                    return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+                }
+
+                var response = await _employeeService.GetTransactionTypesDropdownData(companyId);
+                return HttpStatusCodeResponse.SuccessResponse(response, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTransfer, ActionType.Retrieved));
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeTransfer, ex.Message));
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> AddDirective(DirectiveRequest reqModel)
+        {
+            try
+            {
+                return await _employeeService.AddDirective(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.EmployeeTransfer, ex.Message));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetDirectivesByEmployeeId(int employeeId)
+        {
+            var result = await _employeeService.GetDirectivesByEmployeeId(employeeId);
+            return HttpStatusCodeResponse.SuccessResponse(
+                result,
+                string.Format(ResponseMessages.Success, $"{ResponseMessages.Employee} Directive Information", ActionType.Retrieved)
+            );
+        }
+
+        [HttpPut("[action]")]
+        public async Task<ActionResult> UpdateDirective(long directiveId, DirectiveRequest reqModel)
+        {
+            try
+            {
+                return await _employeeService.UpdateDirective(directiveId, reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Updating, $"{ResponseMessages.Employee} Directive Information", ex.Message));
+            }
+        }
+
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeleteDirective(long directiveId)
+        {
+            try
+            {
+                return await _employeeService.DeleteDirective(directiveId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Deleting,  $"{ResponseMessages.Employee} Directive Information", ex.Message));
             }
         }
 
