@@ -29,9 +29,11 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<List<GetDirectiveResponse>> GetDirectivesByEmployeeId(long employeeId);
         Task<bool> UpdateDirective(long directiveId, DirectiveRequest reqModel);
         Task<bool> DeleteDirective(long directiveId);
-        Task<List<TransactionList>> GetPayrollTransactionList(TransactionReqModel reqModel);
-        Task<bool> SaveEmployeeTransaction(TransactionSaveModel reqModel);
-        Task<List<TransactionList>> GetEmployeeTakeOnBalance(int employeeId, int allowanceType);
+        Task<List<PayrollTransactionList>> GetPayrollTransactionList(TransactionReqModel reqModel);
+        Task<bool> SaveEmployeeTakeOnBalance(TransactionSaveModel reqModel);
+        Task<TakeOnBalanceListWithTakeOnComplete> GetEmployeeTakeOnBalance(int employeeId, int allowanceType);
+        Task<bool> DeleteEmployeeTakeOnBalance(List<int> takeOnBalanceIds);
+        Task<bool> SetTakeOnComplete(int employeeId);
     }
 
 }

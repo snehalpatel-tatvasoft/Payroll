@@ -466,31 +466,74 @@ namespace PalladiumPayroll.Repositories.Employees
 
         #region TakeOnBalance
 
-        public async Task<List<TransactionList>> GetPayrollTransactionList(TransactionReqModel reqModel)
+        public async Task<List<PayrollTransactionList>> GetPayrollTransactionList(TransactionReqModel reqModel)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", reqModel.CompanyId);
             parameters.Add("@AllowanceType", reqModel.AllowanceType);
             parameters.Add("@SearchName", reqModel.SearchName);
             parameters.Add("@EmployeeId", reqModel.EmployeeId);
-            return await _dapper.ExecuteStoredProcedure<TransactionList>("usp_GetPayrollTransaction", parameters);
+            return await _dapper.ExecuteStoredProcedure<PayrollTransactionList>("usp_GetPayrollTransaction", parameters);
         }
 
-        public async Task<bool> SaveEmployeeTransaction(TransactionSaveModel reqModel)
+        public async Task<bool> SaveEmployeeTakeOnBalance(TransactionSaveModel reqModel)
         {
+            var takeOnBalanceTransactionTable = new DataTable();
+            takeOnBalanceTransactionTable.Columns.Add("PayrollProcessId", typeof(int));
+            takeOnBalanceTransactionTable.Columns.Add("TakeOnBalanceId", typeof(int));
+            takeOnBalanceTransactionTable.Columns.Add("Amount", typeof(decimal));
+            takeOnBalanceTransactionTable.Columns.Add("Description", typeof(string));
+            if (reqModel.PayrollProcess != null)
+            {
+                foreach (var item in reqModel.PayrollProcess)
+                {
+                    DataRow row = takeOnBalanceTransactionTable.NewRow();
+                    row["PayrollProcessId"] = item.PayrollProcessId ?? (object)DBNull.Value;
+                    row["TakeOnBalanceId"] = item.TakeOnBalanceId ?? (object)DBNull.Value;
+                    row["Amount"] = item.Amount ?? 0.00m;
+                    row["Description"] = item.Description;
+                    takeOnBalanceTransactionTable.Rows.Add(row);
+                }
+            }
             var parameters = new DynamicParameters();
-            parameters.Add("@PayrollProcessId", reqModel.PayrollProcessId);
+            parameters.Add("@EditMode", reqModel.PayrollProcess?.FirstOrDefault()?.TakeOnBalanceId > 0);
             parameters.Add("@EmployeeId", reqModel.EmployeeId);
             parameters.Add("@AllowanceType", reqModel.AllowanceType);
-            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SaveEmployeeTransaction", parameters);
+            parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+            parameters.Add("@PayrollProcess", takeOnBalanceTransactionTable.AsTableValuedParameter("EmployeeTakeOnBalanceTransactionType"));
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeTakeOnBalance", parameters);
         }
 
-        public async Task<List<TransactionList>> GetEmployeeTakeOnBalance(int employeeId, int allowanceType)
+        public async Task<TakeOnBalanceListWithTakeOnComplete> GetEmployeeTakeOnBalance(int employeeId, int allowanceType)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", employeeId);
             parameters.Add("@AllowanceType", allowanceType);
-            return await _dapper.ExecuteStoredProcedure<TransactionList>("usp_GetEmployeeTakeOnBalance", parameters);
+            parameters.Add("@TakeOnComplete", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+            var takeOnBalanceList = await _dapper.ExecuteStoredProcedure<TakeOnBalanceTransaction>("usp_GetEmployeeTakeOnBalance", parameters);
+            var takeOnComplete = parameters.Get<bool>("@TakeOnComplete");
+            return new TakeOnBalanceListWithTakeOnComplete() { TakeBalanceList = takeOnBalanceList, TakeOnComplete = takeOnComplete };
+        }
+
+        public async Task<bool> DeleteEmployeeTakeOnBalance(List<int> takeOnBalanceIds)
+        {
+            var takeOnBalanceIdTable = new DataTable();
+            takeOnBalanceIdTable.Columns.Add("Id", typeof(int));
+            foreach (var id in takeOnBalanceIds)
+            {
+                takeOnBalanceIdTable.Rows.Add(id);
+            }
+            var parameters = new DynamicParameters();
+            parameters.Add("@TakeOnBalanceIds", takeOnBalanceIdTable.AsTableValuedParameter("IntListType"));
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteEmployeeTakeOnBalance", parameters);
+        }
+
+        public async Task<bool> SetTakeOnComplete(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SetEmployeeTakeOnComplete", parameters);
         }
         #endregion
 

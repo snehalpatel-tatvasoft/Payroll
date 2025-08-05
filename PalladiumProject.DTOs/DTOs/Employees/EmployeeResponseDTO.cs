@@ -49,13 +49,28 @@
 
 	}
 
-	public class TransactionList
+	public class PayrollTransactionList
 	{
+        public int? TakeOnBalanceId { get; set; }
         public int? PayrollProcessId { get; set; }
-		public int? TakeOnBalanaceId { get; set; }
         public string Description { get; set; }
-    }
-    public class TransactionType
+        public decimal? Amount { get; set; }
+	}
+
+	public class TakeOnBalanceTransaction
+	{
+		public int TakeOnBalanceId { get; set; }
+		public string Description { get; set; }
+		public decimal? Amount { get; set; }
+	}
+
+	public class TakeOnBalanceListWithTakeOnComplete
+	{
+		public List<TakeOnBalanceTransaction> TakeBalanceList { get; set; } = new();
+		public bool TakeOnComplete { get; set; }
+	}
+
+	public class TransactionType
     {
         public long PayrollProcessId { get; set; }
         public string Description { get; set; } = "";

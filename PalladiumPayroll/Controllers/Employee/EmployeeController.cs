@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Employees;
@@ -7,8 +8,8 @@ using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.Employee
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
@@ -323,11 +324,11 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> SaveEmployeeTransaction(TransactionSaveModel reqModel)
+        public async Task<ActionResult> SaveEmployeeTakeOnBalance(TransactionSaveModel reqModel)
         {
             try
             {
-                return await _employeeService.SaveEmployeeTransaction(reqModel);
+                return await _employeeService.SaveEmployeeTakeOnBalance(reqModel);
             }
             catch (Exception ex)
             {
@@ -341,6 +342,32 @@ namespace PalladiumPayroll.Controllers.Employee
             try
             {
                 return await _employeeService.GetEmployeeTakeOnBalance(employeeId, allowanceType);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> DeleteEmployeeTakeOnBalance(List<int> takeOnBalanceIds)
+        {
+            try
+            {
+                return await _employeeService.DeleteEmployeeTakeOnBalance(takeOnBalanceIds);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> SetTakeOnComplete(int employeeId)
+        {
+            try
+            {
+                return await _employeeService.SetTakeOnComplete(employeeId);
             }
             catch (Exception ex)
             {

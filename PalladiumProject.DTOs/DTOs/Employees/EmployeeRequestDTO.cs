@@ -109,7 +109,7 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
 
     public class TransactionSaveModel
     {
-        public List<int>? PayrollProcessId { get; set; }
+        public List<PayrollTransactionList> PayrollProcess { get; set; }
         public int AllowanceType { get; set; }
         public int EmployeeId { get; set; }
     }

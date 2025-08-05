@@ -204,9 +204,9 @@ namespace PalladiumPayroll.Services.Employees
             return HttpStatusCodeResponse.SuccessResponse(transactionList, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
         }
 
-        public async Task<JsonResult> SaveEmployeeTransaction(TransactionSaveModel reqModel)
+        public async Task<JsonResult> SaveEmployeeTakeOnBalance(TransactionSaveModel reqModel)
         {
-            var result = await _employeeRepository.SaveEmployeeTransaction(reqModel);
+            var result = await _employeeRepository.SaveEmployeeTakeOnBalance(reqModel);
             if (result)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Saved));
@@ -216,9 +216,28 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> GetEmployeeTakeOnBalance(int employeeId, int allowanceType)
         {
-            var transactionList = await _employeeRepository.GetEmployeeTakeOnBalance(employeeId, allowanceType);
-            return HttpStatusCodeResponse.SuccessResponse(transactionList, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
+            var data = await _employeeRepository.GetEmployeeTakeOnBalance(employeeId, allowanceType);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
         }
 
+        public async Task<JsonResult> DeleteEmployeeTakeOnBalance(List<int> takeOnBalanceIds)
+        {
+            var result = await _employeeRepository.DeleteEmployeeTakeOnBalance(takeOnBalanceIds);
+            if (result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Take on Balance " + ResponseMessages.Transaction, ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<JsonResult> SetTakeOnComplete(int employeeId)
+        {
+            var result = await _employeeRepository.SetTakeOnComplete(employeeId);
+            if (result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Take on complete", ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
     }
 }
