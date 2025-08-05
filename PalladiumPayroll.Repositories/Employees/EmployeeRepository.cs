@@ -327,26 +327,26 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@CompanyId", reqModel.CompanyId);
             parameters.Add("@EmployeeId", reqModel.EmployeeId);
             parameters.Add("@StartDate", reqModel.StartDate);
-		    parameters.Add("@DesignationId", reqModel.DesignationId);
-		    parameters.Add("@JobGradeId", reqModel.JobGradeId);
-		    parameters.Add("@OccupationalLevelId", reqModel.OccupationalLevelId);
-		    parameters.Add("@OccupationalStatusId", reqModel.OccupationalStatusId);
-		    parameters.Add("@OccupationalCategoryId", reqModel.OccupationalCategoryId);
-		    parameters.Add("@WSPCategoryId", reqModel.WSPCategoryId);
-		    parameters.Add("@OFOCodeId", reqModel.OFOCodeId);
-		    parameters.Add("@MajorCostCenterId", reqModel.MajorCostCenterId);
-		    parameters.Add("@RegionId", reqModel.RegionId);
-		    parameters.Add("@AppointmentTypeId", reqModel.AppointmentTypeId);
-		    parameters.Add("@PayPointId", reqModel.PayPointId);
-		    parameters.Add("@NICGradeId", reqModel.NICGradeId);
-		    parameters.Add("@BranchId", reqModel.BranchId);
-		    parameters.Add("@DivisionId", reqModel.DivisionId);
-		    parameters.Add("@SubDivisionId", reqModel.SubDivisionId);
-		    parameters.Add("@MunicipalityId", reqModel.MunicipalityId);
+            parameters.Add("@DesignationId", reqModel.DesignationId);
+            parameters.Add("@JobGradeId", reqModel.JobGradeId);
+            parameters.Add("@OccupationalLevelId", reqModel.OccupationalLevelId);
+            parameters.Add("@OccupationalStatusId", reqModel.OccupationalStatusId);
+            parameters.Add("@OccupationalCategoryId", reqModel.OccupationalCategoryId);
+            parameters.Add("@WSPCategoryId", reqModel.WSPCategoryId);
+            parameters.Add("@OFOCodeId", reqModel.OFOCodeId);
+            parameters.Add("@MajorCostCenterId", reqModel.MajorCostCenterId);
+            parameters.Add("@RegionId", reqModel.RegionId);
+            parameters.Add("@AppointmentTypeId", reqModel.AppointmentTypeId);
+            parameters.Add("@PayPointId", reqModel.PayPointId);
+            parameters.Add("@NICGradeId", reqModel.NICGradeId);
+            parameters.Add("@BranchId", reqModel.BranchId);
+            parameters.Add("@DivisionId", reqModel.DivisionId);
+            parameters.Add("@SubDivisionId", reqModel.SubDivisionId);
+            parameters.Add("@MunicipalityId", reqModel.MunicipalityId);
             parameters.Add("@LocationId", reqModel.LocationId);
-		    parameters.Add("@DepartmentId", reqModel.DepartmentId);
-		    parameters.Add("@ProvinceId", reqModel.ProvinceId);
-		    parameters.Add("@SupportFunctionId", reqModel.SupportFunctionId);
+            parameters.Add("@DepartmentId", reqModel.DepartmentId);
+            parameters.Add("@ProvinceId", reqModel.ProvinceId);
+            parameters.Add("@SupportFunctionId", reqModel.SupportFunctionId);
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeOrganization", parameters);
             if (result)
             {
@@ -377,6 +377,90 @@ namespace PalladiumPayroll.Repositories.Employees
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeTimeSheetSetup", parameters);
             return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Time Sheet", ActionType.Saved));
         }
+        #endregion
+
+        #region Employee Self Service
+
+        public async Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            parameters.Add("@CompanyId", companyId);
+
+            var flatList = await _dapper.ExecuteStoredProcedure<EmployeeDetailForEmployeeSelfservice>(
+                "usp_GetEmployeeByEmployeeIdForEmployeeSelfservice", parameters);
+
+            if (flatList == null || !flatList.Any())
+                return HttpStatusCodeResponse.NotFoundResponse("Employee not found.");
+
+            var first = flatList.First();
+
+            var response = new EmployeeSelfServiceResponse
+            {
+                Email = first.Email,
+                Password = first.Password,
+                AccessRoleID = first.AccessRoleID,
+                AccessRoleName = first.AccessRoleName,
+                IsManager = first.IsManager,
+                SecondApprovalId = first.SecondApprovalId,
+                SecondApprovalFullName = first.SecondApprovalFullName,
+                Functionalities = flatList.Select(f => new FunctionalityPermissionDto
+                {
+                    FunctionalityId = f.FunctionalityId,
+                    FunctionalityName = f.FunctionalityName,
+                    View = f.View,
+                    Edit = f.Edit,
+                    Delete = f.Delete
+                }).ToList()
+            };
+
+            return HttpStatusCodeResponse.SuccessResponse(response, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            var data = await _dapper.ExecuteStoredProcedure<SecondApprovalEmployeeDTO>("usp_GetSecondApprovalEmployeeListByCompanyId", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Second Approval Employees", ActionType.Retrieved));
+        }
+
+
+        public async Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", model.EmployeeId);
+            parameters.Add("@CompanyId", model.CompanyId);
+            parameters.Add("@IsManager", model.IsManager);
+            parameters.Add("@SecondApprovalId", model.SecondApprovalId);
+
+            // Create a DataTable for the TVP
+            var functionalityTable = new DataTable();
+            functionalityTable.Columns.Add("FunctionalityID", typeof(int));
+            functionalityTable.Columns.Add("View", typeof(bool));
+            functionalityTable.Columns.Add("Edit", typeof(bool));
+            functionalityTable.Columns.Add("Delete", typeof(bool));
+
+            // Populate the DataTable with the functionality list
+            foreach (var functionality in model.FunctionalityList)
+            {
+                functionalityTable.Rows.Add(functionality.FunctionalityId, functionality.View, functionality.Edit, functionality.Delete);
+            }
+
+            parameters.Add("@FunctionalityList", functionalityTable.AsTableValuedParameter("UserFunctionalityListType"));
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<dynamic>("usp_UpdateEmployeeSelfService", parameters);
+            if (result.Result == 1)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(true, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Updated));
+            }
+            else
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error: {result.ErrorMessage} (Error Number: {result.ErrorNumber})");
+            }
+        }
+
         #endregion
     }
 }

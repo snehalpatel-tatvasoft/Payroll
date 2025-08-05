@@ -21,5 +21,8 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<JsonResult> SaveEmployeeWorkOrganizationalData(EmployeeOrgnizationalModel reqModel);
         Task<JsonResult> GetEmployeeTimeSheetSetup(long employeeId);
         Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup);
+        Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId);
+        Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId);
+        Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model);
     }
 }

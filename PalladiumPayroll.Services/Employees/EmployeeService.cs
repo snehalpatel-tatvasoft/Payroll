@@ -103,11 +103,26 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup)
         {
-            if(timeSheetSetup.TimeSheetPassword != timeSheetSetup.TimeSheetConfirmPassword)
+            if (timeSheetSetup.TimeSheetPassword != timeSheetSetup.TimeSheetConfirmPassword)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse("Password is mismatch !");
             }
             return await _employeeRepository.SaveEmployeeTimeSheetSetup(timeSheetSetup);
+        }
+
+        public async Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId)
+        {
+            return await _employeeRepository.GetEmployeeByEmployeeId(employeeId, companyId);
+        }
+
+        public async Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId)
+        {
+            return await _employeeRepository.GetSecondApprovalEmployeeListByCompanyId(companyId);
+        }
+
+        public async Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model)
+        {
+            return await _employeeRepository.UpdateEmployeeSelfService(model);
         }
     }
 }
