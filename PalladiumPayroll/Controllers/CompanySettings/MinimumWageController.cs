@@ -19,8 +19,8 @@ public class MinimumWageController : ControllerBase
     }
 
 
-    [HttpPost("CreateMinimumWage")]
-    public async Task<ActionResult> SaveMinimumWage(MinimumWageRequestDTO request)
+    [HttpPost("[action]")]
+    public async Task<ActionResult> CreateMinimumWage(MinimumWageRequestDTO request)
     {
         try
         {
@@ -35,7 +35,7 @@ public class MinimumWageController : ControllerBase
     }
 
 
-    [HttpGet("company/{companyId}")]
+    [HttpGet("[action]")]
     public async Task<ActionResult> GetMinimumWagesByCompanyId(int companyId)
     {
         try
@@ -45,7 +45,7 @@ public class MinimumWageController : ControllerBase
                 return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
             }
 
-           return await _minimumWageService.GetMinimumWagesByCompanyId(companyId);
+            return await _minimumWageService.GetMinimumWagesByCompanyId(companyId);
         }
         catch (Exception ex)
         {
@@ -54,7 +54,7 @@ public class MinimumWageController : ControllerBase
     }
 
 
-    [HttpPatch("UpdateMinimumWage")]
+    [HttpPut("[action]")]
     public async Task<ActionResult> UpdateMinimumWage(MinimumWageRequestDTO request)
     {
         try
@@ -63,7 +63,7 @@ public class MinimumWageController : ControllerBase
             {
                 return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.WageIdNotFound);
             }
-            return await _minimumWageService.UpdateMinimumWage(request);      
+            return await _minimumWageService.UpdateMinimumWage(request);
         }
         catch (Exception ex)
         {
@@ -72,7 +72,7 @@ public class MinimumWageController : ControllerBase
     }
 
 
-    [HttpDelete("DeleteMinimumWage/{wageId}")]
+    [HttpDelete("[action]")]
     public async Task<ActionResult> DeleteMinimumWage(int wageId)
     {
         try
