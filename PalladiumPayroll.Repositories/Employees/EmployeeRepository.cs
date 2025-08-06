@@ -332,32 +332,11 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@DivisionId", reqModel.DivisionId);
             parameters.Add("@SubDivisionId", reqModel.SubDivisionId);
             parameters.Add("@MunicipalityId", reqModel.MunicipalityId);
-            parameters.Add("@DesignationId", reqModel.DesignationId);
-            parameters.Add("@JobGradeId", reqModel.JobGradeId);
-            parameters.Add("@OccupationalLevelId", reqModel.OccupationalLevelId);
-            parameters.Add("@OccupationalStatusId", reqModel.OccupationalStatusId);
-            parameters.Add("@OccupationalCategoryId", reqModel.OccupationalCategoryId);
-            parameters.Add("@WSPCategoryId", reqModel.WSPCategoryId);
-            parameters.Add("@OFOCodeId", reqModel.OFOCodeId);
-            parameters.Add("@MajorCostCenterId", reqModel.MajorCostCenterId);
-            parameters.Add("@RegionId", reqModel.RegionId);
-            parameters.Add("@AppointmentTypeId", reqModel.AppointmentTypeId);
-            parameters.Add("@PayPointId", reqModel.PayPointId);
-            parameters.Add("@NICGradeId", reqModel.NICGradeId);
-            parameters.Add("@BranchId", reqModel.BranchId);
-            parameters.Add("@DivisionId", reqModel.DivisionId);
-            parameters.Add("@SubDivisionId", reqModel.SubDivisionId);
-            parameters.Add("@MunicipalityId", reqModel.MunicipalityId);
             parameters.Add("@LocationId", reqModel.LocationId);
             parameters.Add("@DepartmentId", reqModel.DepartmentId);
             parameters.Add("@ProvinceId", reqModel.ProvinceId);
             parameters.Add("@SupportFunctionId", reqModel.SupportFunctionId);
-            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeOrganization", parameters);
-            if (result)
-            {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " organization", ActionType.Saving));
-            }
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeOrganization", parameters);
         }
 
         #endregion
