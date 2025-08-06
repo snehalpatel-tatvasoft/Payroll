@@ -160,7 +160,6 @@ namespace PalladiumPayroll.Controllers.Employee
             }
         }
 
-
         [HttpGet("[action]")]
         public async Task<ActionResult> GetTransactionTypesDropdownData(long companyId)
         {
@@ -202,6 +201,7 @@ namespace PalladiumPayroll.Controllers.Employee
                 string.Format(ResponseMessages.Success, $"{ResponseMessages.Employee} Directive Information", ActionType.Retrieved)
             );
         }
+
         [HttpPut("[action]")]
         public async Task<ActionResult> UpdateDirective(long directiveId, DirectiveRequest reqModel)
         {
@@ -215,6 +215,7 @@ namespace PalladiumPayroll.Controllers.Employee
                     string.Format(ResponseMessages.Exception, ActionType.Updating, $"{ResponseMessages.Employee} Directive Information", ex.Message));
             }
         }
+
         [HttpDelete("[action]")]
         public async Task<ActionResult> DeleteDirective(long directiveId)
         {
@@ -225,11 +226,9 @@ namespace PalladiumPayroll.Controllers.Employee
             catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    string.Format(ResponseMessages.Exception, ActionType.Deleting,  $"{ResponseMessages.Employee} Directive Information", ex.Message));
+                    string.Format(ResponseMessages.Exception, ActionType.Deleting, $"{ResponseMessages.Employee} Directive Information", ex.Message));
             }
         }
-
-
 
         [HttpDelete("[action]")]
         public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type)
@@ -308,5 +307,46 @@ namespace PalladiumPayroll.Controllers.Employee
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetTaxInformationDropdownData()
+        {
+            try
+            {
+                var response = await _employeeService.GetTaxInformationDropdownData();
+                return HttpStatusCodeResponse.SuccessResponse(response, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTransfer, ActionType.Retrieved));
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<JsonResult> GetTaxInformation(int employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetTaxInformation(employeeId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpdateTaxInformation(TaxInformation reqModel)
+        {
+            try
+            {
+                return await _employeeService.UpdateTaxInformation(reqModel);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
     }
 }

@@ -103,7 +103,7 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup)
         {
-            if(timeSheetSetup.TimeSheetPassword != timeSheetSetup.TimeSheetConfirmPassword)
+            if (timeSheetSetup.TimeSheetPassword != timeSheetSetup.TimeSheetConfirmPassword)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse("Password is mismatch !");
             }
@@ -180,6 +180,33 @@ namespace PalladiumPayroll.Services.Employees
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
 
+        public async Task<TaxInformationDropdownData> GetTaxInformationDropdownData()
+        {
+            try
+            {
+                var data = await _employeeRepository.GetTaxInformationDropdownData();
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        
+        public async Task<JsonResult> GetTaxInformation(int employeeId)
+        {
+            return await _employeeRepository.GetTaxInformation(employeeId);
+        }
+
+        public async Task<JsonResult> UpdateTaxInformation(TaxInformation reqModel)
+        {
+            var result = await _employeeRepository.UpdateTaxInformation(reqModel);
+            if (result == true)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, string.Concat(ResponseMessages.Employee, " ", "Tax Information"), ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
 
     }
 }

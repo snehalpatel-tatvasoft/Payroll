@@ -28,6 +28,10 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<List<GetDirectiveResponse>> GetDirectivesByEmployeeId(long employeeId);
         Task<bool> UpdateDirective(long directiveId, DirectiveRequest reqModel);
         Task<bool> DeleteDirective(long directiveId);
+        Task<TaxInformationDropdownData> GetTaxInformationDropdownData();
+        Task<JsonResult> GetTaxInformation(int employeeId);
+        Task<bool> UpdateTaxInformation(TaxInformation reqModel);
+
     }
 
 }
