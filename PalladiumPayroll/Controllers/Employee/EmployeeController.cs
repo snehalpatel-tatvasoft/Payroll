@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Employees;
@@ -7,8 +8,8 @@ using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.Employee
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
@@ -192,7 +193,7 @@ namespace PalladiumPayroll.Controllers.Employee
             }
         }
 
-        [HttpGet("GetDirectivesByEmployeeId")]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetDirectivesByEmployeeId(int employeeId)
         {
             var result = await _employeeService.GetDirectivesByEmployeeId(employeeId);
@@ -201,6 +202,7 @@ namespace PalladiumPayroll.Controllers.Employee
                 string.Format(ResponseMessages.Success, $"{ResponseMessages.Employee} Directive Information", ActionType.Retrieved)
             );
         }
+
 
         [HttpPut("[action]")]
         public async Task<ActionResult> UpdateDirective(long directiveId, DirectiveRequest reqModel)
@@ -215,6 +217,7 @@ namespace PalladiumPayroll.Controllers.Employee
                     string.Format(ResponseMessages.Exception, ActionType.Updating, $"{ResponseMessages.Employee} Directive Information", ex.Message));
             }
         }
+
 
         [HttpDelete("[action]")]
         public async Task<ActionResult> DeleteDirective(long directiveId)
@@ -307,6 +310,72 @@ namespace PalladiumPayroll.Controllers.Employee
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetPayrollTransactionList([FromQuery]TransactionReqModel reqModel)
+        {
+            try
+            {
+                return await _employeeService.GetPayrollTransactionList(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> SaveEmployeeTakeOnBalance(TransactionSaveModel reqModel)
+        {
+            try
+            {
+                return await _employeeService.SaveEmployeeTakeOnBalance(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeTakeOnBalance(int employeeId, int allowanceType)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeTakeOnBalance(employeeId, allowanceType);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> DeleteEmployeeTakeOnBalance(List<int> takeOnBalanceIds)
+        {
+            try
+            {
+                return await _employeeService.DeleteEmployeeTakeOnBalance(takeOnBalanceIds);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> SetTakeOnComplete(int employeeId)
+        {
+            try
+            {
+                return await _employeeService.SetTakeOnComplete(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
 
         [HttpGet("[action]")]
         public async Task<ActionResult> GetTaxInformationDropdownData()

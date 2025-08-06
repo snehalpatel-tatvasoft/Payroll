@@ -3,14 +3,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
-using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PalladiumPayroll.Repositories.Employees
 {
@@ -84,10 +82,6 @@ namespace PalladiumPayroll.Repositories.Employees
             var parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", employeeId);
             var result = await _dapper.ExecuteStoredProcedureSingle<EmployeePaymentDetail>("usp_GetEmployeePaymentDetail", parameters);
-            if (result == null)
-            {
-                // return HttpStatusCodeResponse.NotFoundResponse("Payment info");
-            }
             return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Payment info", ActionType.Retrieved));
         }
 
@@ -150,7 +144,7 @@ namespace PalladiumPayroll.Repositories.Employees
                             .Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse)
                             .ToList();
                 result.WorkingDay = workDaySplit;
-            }
+            };
             return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Work info", ActionType.Retrieved));
 
         }
@@ -231,7 +225,7 @@ namespace PalladiumPayroll.Repositories.Employees
             );
         }
 
-        public async Task<JsonResult> AddWorkOrganizationalDropdownItem(WorkOrgnizationItem reqItem)
+        public async Task<List<DropDownViewModel>> AddWorkOrganizationalDropdownItem(WorkOrgnizationItem reqItem)
         {
             var result = new List<DropDownViewModel>();
             var parameters = new DynamicParameters();
@@ -297,24 +291,15 @@ namespace PalladiumPayroll.Repositories.Employees
                     result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddOperationSupport", parameters);
                     break;
             }
-            if (result.Count > 0 && result.FirstOrDefault()?.Id > 0)
-            {
-                return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, "Item", ActionType.Saved));
-            }
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return result;
         }
 
-        public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type)
+        public async Task<bool> DeleteWorkOrganizationalDropdownItem(int id, int type)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@id", id);
             parameters.Add("@type", type);
-            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteOrgnizationDropDownItem", parameters);
-            if (result)
-            {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Item", ActionType.Deleted));
-            }
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteOrgnizationDropDownItem", parameters);
         }
 
         public async Task<JsonResult> GetEmployeeWorkOrganizationalData(long employeeId)
@@ -325,12 +310,28 @@ namespace PalladiumPayroll.Repositories.Employees
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " organization", ActionType.Retrieving));
         }
 
-        public async Task<JsonResult> SaveEmployeeWorkOrganizationalData(EmployeeOrgnizationalModel reqModel)
+        public async Task<bool> SaveEmployeeWorkOrganizationalData(EmployeeOrgnizationalModel reqModel)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", reqModel.CompanyId);
             parameters.Add("@EmployeeId", reqModel.EmployeeId);
             parameters.Add("@StartDate", reqModel.StartDate);
+            parameters.Add("@DesignationId", reqModel.DesignationId);
+            parameters.Add("@JobGradeId", reqModel.JobGradeId);
+            parameters.Add("@OccupationalLevelId", reqModel.OccupationalLevelId);
+            parameters.Add("@OccupationalStatusId", reqModel.OccupationalStatusId);
+            parameters.Add("@OccupationalCategoryId", reqModel.OccupationalCategoryId);
+            parameters.Add("@WSPCategoryId", reqModel.WSPCategoryId);
+            parameters.Add("@OFOCodeId", reqModel.OFOCodeId);
+            parameters.Add("@MajorCostCenterId", reqModel.MajorCostCenterId);
+            parameters.Add("@RegionId", reqModel.RegionId);
+            parameters.Add("@AppointmentTypeId", reqModel.AppointmentTypeId);
+            parameters.Add("@PayPointId", reqModel.PayPointId);
+            parameters.Add("@NICGradeId", reqModel.NICGradeId);
+            parameters.Add("@BranchId", reqModel.BranchId);
+            parameters.Add("@DivisionId", reqModel.DivisionId);
+            parameters.Add("@SubDivisionId", reqModel.SubDivisionId);
+            parameters.Add("@MunicipalityId", reqModel.MunicipalityId);
             parameters.Add("@DesignationId", reqModel.DesignationId);
             parameters.Add("@JobGradeId", reqModel.JobGradeId);
             parameters.Add("@OccupationalLevelId", reqModel.OccupationalLevelId);
@@ -371,18 +372,18 @@ namespace PalladiumPayroll.Repositories.Employees
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Time Sheet", ActionType.Retrieved));
         }
 
-        public async Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup)
+        public async Task<bool> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", timeSheetSetup.EmployeeId);
             parameters.Add("@EnableTimeSheet", timeSheetSetup.EnableTimeSheet);
             parameters.Add("@TimeSheetPassword", timeSheetSetup.TimeSheetConfirmPassword);
             parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
-            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeTimeSheetSetup", parameters);
-            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Time Sheet", ActionType.Saved));
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeTimeSheetSetup", parameters);
         }
         #endregion
 
+        #region Casual Wage
         public async Task<JsonResult> GetCasualWageInformation(int employeeId)
         {
             var parameters = new DynamicParameters();
@@ -426,6 +427,9 @@ namespace PalladiumPayroll.Repositories.Employees
                 }
             );
         }
+        #endregion
+
+        #region Directive
         public async Task<bool> AddDirective(DirectiveRequest reqModel)
         {
             var parameters = new DynamicParameters();
@@ -441,6 +445,7 @@ namespace PalladiumPayroll.Repositories.Employees
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_AddEmployeeDirective", parameters);
             return result;
         }
+
         public async Task<List<GetDirectiveResponse>> GetDirectivesByEmployeeId(long employeeId)
         {
             var parameters = new DynamicParameters();
@@ -478,6 +483,81 @@ namespace PalladiumPayroll.Repositories.Employees
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteEmployeeDirective", parameters);
             return result;
         }
+        #endregion
+
+        #region TakeOnBalance
+
+        public async Task<List<PayrollTransactionList>> GetPayrollTransactionList(TransactionReqModel reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@AllowanceType", reqModel.AllowanceType);
+            parameters.Add("@SearchName", reqModel.SearchName);
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            return await _dapper.ExecuteStoredProcedure<PayrollTransactionList>("usp_GetPayrollTransaction", parameters);
+        }
+
+        public async Task<bool> SaveEmployeeTakeOnBalance(TransactionSaveModel reqModel)
+        {
+            var takeOnBalanceTransactionTable = new DataTable();
+            takeOnBalanceTransactionTable.Columns.Add("PayrollProcessId", typeof(int));
+            takeOnBalanceTransactionTable.Columns.Add("TakeOnBalanceId", typeof(int));
+            takeOnBalanceTransactionTable.Columns.Add("Amount", typeof(decimal));
+            takeOnBalanceTransactionTable.Columns.Add("Description", typeof(string));
+            if (reqModel.PayrollProcess != null)
+            {
+                foreach (var item in reqModel.PayrollProcess)
+                {
+                    DataRow row = takeOnBalanceTransactionTable.NewRow();
+                    row["PayrollProcessId"] = item.PayrollProcessId ?? (object)DBNull.Value;
+                    row["TakeOnBalanceId"] = item.TakeOnBalanceId ?? (object)DBNull.Value;
+                    row["Amount"] = item.Amount ?? 0.00m;
+                    row["Description"] = item.Description;
+                    takeOnBalanceTransactionTable.Rows.Add(row);
+                }
+            }
+            var parameters = new DynamicParameters();
+            parameters.Add("@EditMode", reqModel.PayrollProcess?.FirstOrDefault()?.TakeOnBalanceId > 0);
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@AllowanceType", reqModel.AllowanceType);
+            parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+            parameters.Add("@PayrollProcess", takeOnBalanceTransactionTable.AsTableValuedParameter("EmployeeTakeOnBalanceTransactionType"));
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeTakeOnBalance", parameters);
+        }
+
+        public async Task<TakeOnBalanceListWithTakeOnComplete> GetEmployeeTakeOnBalance(int employeeId, int allowanceType)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            parameters.Add("@AllowanceType", allowanceType);
+            parameters.Add("@TakeOnComplete", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+            var takeOnBalanceList = await _dapper.ExecuteStoredProcedure<TakeOnBalanceTransaction>("usp_GetEmployeeTakeOnBalance", parameters);
+            var takeOnComplete = parameters.Get<bool>("@TakeOnComplete");
+            return new TakeOnBalanceListWithTakeOnComplete() { TakeBalanceList = takeOnBalanceList, TakeOnComplete = takeOnComplete };
+        }
+
+        public async Task<bool> DeleteEmployeeTakeOnBalance(List<int> takeOnBalanceIds)
+        {
+            var takeOnBalanceIdTable = new DataTable();
+            takeOnBalanceIdTable.Columns.Add("Id", typeof(int));
+            foreach (var id in takeOnBalanceIds)
+            {
+                takeOnBalanceIdTable.Rows.Add(id);
+            }
+            var parameters = new DynamicParameters();
+            parameters.Add("@TakeOnBalanceIds", takeOnBalanceIdTable.AsTableValuedParameter("IntListType"));
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteEmployeeTakeOnBalance", parameters);
+        }
+
+        public async Task<bool> SetTakeOnComplete(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SetEmployeeTakeOnComplete", parameters);
+        }
+        #endregion
+
 
         public async Task<TaxInformationDropdownData> GetTaxInformationDropdownData()
         {

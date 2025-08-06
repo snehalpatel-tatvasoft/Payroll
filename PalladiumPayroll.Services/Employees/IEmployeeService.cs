@@ -27,6 +27,11 @@ namespace PalladiumPayroll.Services.Employees
         Task<List<GetDirectiveResponse>> GetDirectivesByEmployeeId(long employeeId);
         Task<JsonResult> UpdateDirective(long directiveId, DirectiveRequest reqModel);
         Task<JsonResult> DeleteDirective(long directiveId);
+        Task<JsonResult> GetPayrollTransactionList(TransactionReqModel reqModel);
+        Task<JsonResult> SaveEmployeeTakeOnBalance(TransactionSaveModel reqModel);
+        Task<JsonResult> GetEmployeeTakeOnBalance(int employeeId, int allowanceType);
+        Task<JsonResult> DeleteEmployeeTakeOnBalance(List<int> takeOnBalanceIds);
+        Task<JsonResult> SetTakeOnComplete(int employeeId);
         Task<TaxInformationDropdownData> GetTaxInformationDropdownData();
         Task<JsonResult> GetTaxInformation(int employeeId);
         Task<JsonResult> UpdateTaxInformation(TaxInformation reqModel);
