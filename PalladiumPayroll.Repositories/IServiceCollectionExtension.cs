@@ -6,14 +6,15 @@ using PalladiumPayroll.Repositories.Company;
 using PalladiumPayroll.Repositories.CompanySettings;
 using PalladiumPayroll.Repositories.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Repositories.Department;
+using PalladiumPayroll.Repositories.Employees;
 using PalladiumPayroll.Repositories.EmployeesLoan;
 using PalladiumPayroll.Repositories.Employees;
 using PalladiumPayroll.Repositories.Home;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeGrievances;
+using PalladiumPayroll.Repositories.User;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeePromotions;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeTraining;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeTransfer;
-using PalladiumPayroll.Repositories.User;
 
 namespace PalladiumPayroll.Repositories
 {

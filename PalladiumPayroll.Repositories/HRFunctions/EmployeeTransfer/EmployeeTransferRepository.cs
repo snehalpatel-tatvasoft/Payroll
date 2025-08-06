@@ -1,6 +1,7 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeTransfer;
 using PalladiumPayroll.DTOs.HRFunctions.EmployeeTransfer;
 
@@ -39,12 +40,12 @@ public class EmployeeTransferRepository : IEmployeeTransferRepository
                     Provinces = (await multi.ReadAsync<ProvinceDto>()).ToList(),
                     SupportFunctions = (await multi.ReadAsync<SupportFunctionDto>()).ToList(),
                     Departments = (await multi.ReadAsync<DepartmentDto>()).ToList(),
-                    Employees = (await multi.ReadAsync<EmployeeDropdownDto>()).ToList(),
+                    Employees = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
                     DesignationCodes = (await multi.ReadAsync<DesignationCodeDto>()).ToList(),
                     OccupationalStatuses = (await multi.ReadAsync<OccupationalStatusDto>()).ToList(),
                     AppointmentTypes = (await multi.ReadAsync<AppointmentTypeDto>()).ToList(),
                     Designations = (await multi.ReadAsync<DesignationDto>()).ToList(),
-                    ReportToEmployees = (await multi.ReadAsync<EmployeeDropdownDto>()).ToList()
+                    ReportToEmployees = (await multi.ReadAsync<DropDownViewModel>()).ToList()
                 };
                 return dropdownsData;
             }
