@@ -269,10 +269,11 @@ namespace PalladiumPayroll.Repositories.Company
             return isAdded;
         }
 
-        public async Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId)
+        public async Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId, string userId)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
+            parameters.Add("@UserId", userId);
 
             List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_GetCompanyWithChildren", parameters);
             return response;

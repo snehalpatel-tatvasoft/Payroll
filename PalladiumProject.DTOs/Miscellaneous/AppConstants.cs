@@ -5,7 +5,7 @@ namespace PalladiumPayroll.Helper.Constants
 {
     public static class AppConstants
     {
-        public const int DefaultPageSize = 999999999;
+        public const int DefaultPageSize = 10;
 
         public const int AuthTokenExpiryInMinutes = 10;
 
@@ -21,6 +21,9 @@ namespace PalladiumPayroll.Helper.Constants
         
         public const string DefaultConnectionString = "Data Source={0}; initial catalog={1}; User ID={2}; Password={3}; TrustServerCertificate=True;";
 
+
+        public const string SortAsc = "ASC";
+        public const string SortDesc = "DESC";
 
         public static class ResponseMessages
         {
@@ -170,7 +173,7 @@ namespace PalladiumPayroll.Helper.Constants
             #endregion
 
             #region Create Transaction
-            
+            public static readonly string Transaction = "Transaction";
             public static readonly string CreateTransaction = "Create Transaction";
             public static readonly string TransactionCreatedSuccessfully = "Create transaction successfully.";
             public static readonly string TransactionCreationFailed = "Failed to create transaction.";
