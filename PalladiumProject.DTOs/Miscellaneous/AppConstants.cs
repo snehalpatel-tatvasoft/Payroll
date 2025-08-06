@@ -5,7 +5,7 @@ namespace PalladiumPayroll.Helper.Constants
 {
     public static class AppConstants
     {
-        public const int DefaultPageSize = 999999999;
+        public const int DefaultPageSize = 10;
 
         public const int AuthTokenExpiryInMinutes = 10;
 
@@ -21,6 +21,9 @@ namespace PalladiumPayroll.Helper.Constants
         
         public const string DefaultConnectionString = "Data Source={0}; initial catalog={1}; User ID={2}; Password={3}; TrustServerCertificate=True;";
 
+
+        public const string SortAsc = "ASC";
+        public const string SortDesc = "DESC";
 
         public static class ResponseMessages
         {
@@ -156,7 +159,7 @@ namespace PalladiumPayroll.Helper.Constants
 
             public static readonly string EmployeeCode = "Employee Code";
 
-            public const string EmployeeCodeSaveFailed  = "Failed to save employee code";
+            public const string EmployeeCodeSaveFailed = "Failed to save employee code";
 
             #endregion
 
@@ -165,12 +168,12 @@ namespace PalladiumPayroll.Helper.Constants
 
             public static readonly string PayslipDisplaySetup = "Payslip Display Settings";
 
-            public const string PayslipDisplaySetupSaveFailed  = "Failed to save Payslip Display Settings";
+            public const string PayslipDisplaySetupSaveFailed = "Failed to save Payslip Display Settings";
 
             #endregion
 
             #region Create Transaction
-            
+            public static readonly string Transaction = "Transaction";
             public static readonly string CreateTransaction = "Create Transaction";
             public static readonly string TransactionCreatedSuccessfully = "Create transaction successfully.";
             public static readonly string TransactionCreationFailed = "Failed to create transaction.";
@@ -183,16 +186,17 @@ namespace PalladiumPayroll.Helper.Constants
 
             #endregion
 
-            #region Payslip Display Setup
+            #region Employee Grievances
 
             public static readonly string EmployeeGrievances = "Employee Grievances";
 
             public static readonly string NatureOfGrievances = "Nature of Grievances";
-            public const string EmployeeGrievanceSaveFailed  = "Failed to save Employee Grievances";
+            public const string EmployeeGrievanceSaveFailed = "Failed to save Employee Grievances";
             public const string InvalidEmployeeGrievanceId = "Employee Grievance Id is Invalid.";
             public const string EmployeeGrievanceNotFound = "Employee Grievance was not found.";
 
             #endregion
+
 
             #region Employees Loan
 
@@ -206,7 +210,38 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string LoanPaidSuccessfully = "Full Loan paid successfully.";
             public static readonly string LoanPaidFailed = "Failed to pay full loan.";
 
+            #endregion
 
+            
+            #region Employee Promotions
+
+
+            public static readonly string EmployeePromotions = "Employee Promotions";
+            public const string EmployeePromotionSaveFailed  = "Failed to save Employee Promotion";
+
+            public static readonly string NatureOfPromotions = "Nature of Promotions";
+            public const string InvalidEmployeePromotionId = "Employee Promotion Id is Invalid.";
+            public const string EmployeePromotionNotFound = "Employee Promotion was not found.";
+
+            #endregion
+
+            #region Employee Training
+
+            public static readonly string EmployeeTraining = "Employee Training";
+            public const string EmployeeTrainingSaveFailed  = "Failed to save Employee Training";
+            public const string InvalidEmployeeTrainingnId = "Employee Training Id is Invalid.";
+            public const string EmployeeTrainingNotFound = "Employee Training was not found.";
+
+            #endregion
+
+            #region Employee Transfer
+
+            public static readonly string EmployeeTransfer = "Employee Transfer";
+            public static readonly string EmployeeTransferCreatedSuccessfully = "Employee Transfer Created Successfully";
+            public static readonly string EmployeeTransferCreationFailed = "Employee Transfer Creation Failed";
+            public static readonly string EmployeeOrCompanyIdInvalid = "EmployeeId Or CompanyId is Invalid";
+            public static readonly string EmployeeNotFound = "Employee Not Found";
+            public static readonly string InvalidEmployeeOrCompanyId = "Invalid Employee Or CompanyId";
 
             #endregion
         }
