@@ -17,23 +17,38 @@ public class EmployeePromotionsController : ControllerBase
     {
         _employeePromotionsService = employeePromotionsService;
     }
-    
+
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> UpsertEmployeePromotions(EmployeePromotionsUpsertData request)
+    public async Task<ActionResult> AddEmployeePromotion(EmployeePromotionsUpsertData request)
     {
         try
         {
-            if (request.EmployeePromotionsId < 0)
-            {
-                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidEmployeePromotionId);
-            }
-            return await _employeePromotionsService.UpsertEmployeePromotions(request);
+            return await _employeePromotionsService.AddEmployeePromotion(request);
         }
         catch (Exception ex)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.EmployeePromotions, ex.Message)
+            );
+        }
+    }
+
+    [HttpPut("[action]")]
+    public async Task<ActionResult> UpdateEmployeePromotion(EmployeePromotionsUpsertData request)
+    {
+        try
+        {
+            if (request.EmployeePromotionsId <= 0 || request.EmployeePromotionsId == null)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidEmployeePromotionId);
+            }
+            return await _employeePromotionsService.UpdateEmployeePromotion(request);
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Updating, ResponseMessages.EmployeePromotions, ex.Message)
             );
         }
     }
@@ -108,6 +123,24 @@ public class EmployeePromotionsController : ControllerBase
                 return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidEmployeePromotionId);
             }
             return await _employeePromotionsService.GetEmployeePromotionById(promotionId);
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeePromotions, ex.Message));
+        }
+    }
+
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetEmployeePromotionAutofillData(long employeeId, long companyId)
+    {
+        try
+        {
+            if (employeeId <= 0 || companyId<=0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+            }
+            return await _employeePromotionsService.GetEmployeePromotionAutofillData(employeeId,companyId);
         }
         catch (Exception ex)
         {

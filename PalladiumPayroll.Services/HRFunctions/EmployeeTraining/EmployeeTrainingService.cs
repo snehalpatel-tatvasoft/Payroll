@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeTraining;
 using PalladiumPayroll.DTOs.Miscellaneous;
@@ -10,6 +11,7 @@ namespace PalladiumPayroll.Services.HRFunctions.EmployeeTraining;
 public class EmployeeTrainingService : IEmployeeTrainingService
 {
     private readonly IEmployeeTrainingRepository _employeeTrainingRepository;
+    private readonly string _fileUploadPath = @"E:\PCTR25\Payroll-final-Project\PremiumPayProject-Frontend\Payroll-UI\src\assets\employee-training-documents\";
 
     public EmployeeTrainingService(IEmployeeTrainingRepository employeeTrainingRepository)
     {
@@ -67,11 +69,11 @@ public class EmployeeTrainingService : IEmployeeTrainingService
         }
     }
 
-     public async Task<JsonResult> GetEmployeeTrainings(long companyId)
+    public async Task<JsonResult> GetEmployeeTrainings(long companyId)
     {
         try
         {
-            List<EmployeeTrainingDisplayDataDTO> employeeTrainings= await _employeeTrainingRepository.GetEmployeeTrainingDisplayData(companyId);
+            List<EmployeeTrainingDisplayDataDTO> employeeTrainings = await _employeeTrainingRepository.GetEmployeeTrainingDisplayData(companyId);
 
             return HttpStatusCodeResponse.SuccessResponse(employeeTrainings, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTraining, ActionType.Retrieved));
         }
@@ -94,6 +96,36 @@ public class EmployeeTrainingService : IEmployeeTrainingService
         {
             return HttpStatusCodeResponse.BadRequestResponse();
         }
+    }
+
+
+    public async Task<string?> UploadTrainingFile(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return null;
+
+        var allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg", ".png", ".gif"  };
+        var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+        if (!allowedExtensions.Contains(extension))
+            return null;
+
+        if (file.Length > 2 * 1024 * 1024)
+            return null;
+
+        if (!Directory.Exists(_fileUploadPath))
+            Directory.CreateDirectory(_fileUploadPath);
+
+        var fileName = $"{Guid.NewGuid()}{extension}";
+        var fullPath = Path.Combine(_fileUploadPath, fileName);
+
+        using (var stream = new FileStream(fullPath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+
+        var relativePath = $"E:/PCTR25/Payroll-final-Project/PremiumPayProject-Frontend/Payroll-UI/src/assets/disciplinary-log-documents/{fileName}";
+        return relativePath;
     }
 
 }

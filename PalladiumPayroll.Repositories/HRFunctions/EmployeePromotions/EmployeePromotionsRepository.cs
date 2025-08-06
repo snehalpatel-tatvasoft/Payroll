@@ -14,10 +14,37 @@ public class EmployeePromotionsRepository : IEmployeePromotionsRepository
     {
         _dapper = new DapperContext(configuration);
     }
-
-    public async Task<bool> UpsertEmployeePromotions(EmployeePromotionsUpsertData request)
+    public async Task<bool> AddEmployeePromotion(EmployeePromotionsUpsertData request)
     {
+        DynamicParameters? parameters = new DynamicParameters();
 
+        parameters.Add("@EmployeeId", request.EmployeeId);
+        parameters.Add("@ReportToId", request.ReportToId);
+        parameters.Add("@EmployeeInitialsSurname", request.EmployeeInitialsSurname);
+        parameters.Add("@DesignationId", request.DesignationId);
+        parameters.Add("@JobGradeId", request.JobGradeId);
+        parameters.Add("@WSPCategoryId", request.WSPCategoryId);
+        parameters.Add("@OFOCodeId", request.OFOCodeId);
+        parameters.Add("@MajorCostCentreId", request.MajorCostCentreId);
+        parameters.Add("@NICGradeId", request.NICGradeId);
+        parameters.Add("@OccupationalCategoryId", request.OccupationalCategoryId);
+        parameters.Add("@OccupationalLevelId", request.OccupationalLevelId);
+        parameters.Add("@EffectiveDate", request.EffectiveDate);
+        parameters.Add("@BranchId", request.BranchId);
+        parameters.Add("@DepartmentId", request.DepartmentId);
+        parameters.Add("@ProvinceId", request.ProvinceId);
+        parameters.Add("@SupportFunctionId", request.SupportFunctionId);
+        parameters.Add("@CompanyId", request.CompanyId);
+        parameters.Add("@UserId", request.UserId);
+        parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_AddEmployeePromotion", parameters);
+
+        return parameters.Get<bool>("@IsSuccess");
+    }
+
+    public async Task<bool> UpdateEmployeePromotion(EmployeePromotionsUpsertData request)
+    {
         DynamicParameters? parameters = new DynamicParameters();
 
         parameters.Add("@EmployeePromotionsId", request.EmployeePromotionsId);
@@ -41,11 +68,10 @@ public class EmployeePromotionsRepository : IEmployeePromotionsRepository
         parameters.Add("@UserId", request.UserId);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-        await _dapper.ExecuteStoredProcedureSingle<object>("usp_UpsertEmployeePromotion", parameters);
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_UpdateEmployeePromotion", parameters);
 
         return parameters.Get<bool>("@IsSuccess");
     }
-
 
     public async Task<bool> DeleteEmployeePromotion(long employeePromotionId, string userId)
     {
@@ -113,5 +139,19 @@ public class EmployeePromotionsRepository : IEmployeePromotionsRepository
         return await _dapper.ExecuteStoredProcedureSingle<EmployeePromotionDetailDTO>(
             "usp_GetEmployeePromotionById", parameters);
     }
+
+
+    public async Task<EmployeePromotionAutoFillDTO?> GetEmployeePromotionAutofillData(long employeeId, long companyId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@employee_id", employeeId);
+        parameters.Add("@company_id", companyId);
+
+
+        return await _dapper.ExecuteStoredProcedureSingle<EmployeePromotionAutoFillDTO>(
+            "usp_GetEmployeeTransferAutofilldata", parameters);
+
+    }
+
 
 }

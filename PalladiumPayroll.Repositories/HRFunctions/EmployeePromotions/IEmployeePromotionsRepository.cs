@@ -4,7 +4,9 @@ namespace PalladiumPayroll.Repositories.HRFunctions.EmployeePromotions;
 
 public interface IEmployeePromotionsRepository
 {
-    Task<bool> UpsertEmployeePromotions(EmployeePromotionsUpsertData request);
+    Task<bool> AddEmployeePromotion(EmployeePromotionsUpsertData request);
+
+    Task<bool> UpdateEmployeePromotion(EmployeePromotionsUpsertData request);
 
     Task<bool> DeleteEmployeePromotion(long employeePromotionId, string userId);
 
@@ -13,4 +15,6 @@ public interface IEmployeePromotionsRepository
     Task<List<EmployeePromotionsdisplayDataDTO>> GetEmployeePromotionsDisplayData(long companyId);
 
     Task<EmployeePromotionDetailDTO?> GetEmployeePromotioneById(long employeePromotionId);
+
+    Task<EmployeePromotionAutoFillDTO?> GetEmployeePromotionAutofillData(long employeeId, long companyId);
 }

@@ -4,7 +4,7 @@ public class EmployeeTrainingDisplayDataDTO
 {
     public long EmployeeTrainingId { get; set; }
     public string EmployeeCode { get; set; } = string.Empty;
-    public string EmployeeNameSurname { get; set; } = string.Empty;
+    public string EmployeeName { get; set; } = string.Empty;
     public string Date { get; set; } = string.Empty;         
     public string Course { get; set; } = string.Empty;
     public string CourseType { get; set; } = string.Empty;
@@ -106,3 +106,4 @@ public class EmployeeTrainingDropdownsDTO
     public List<CourseStatusDto> CourseStatuses { get; set; } = new();
     public List<EmployeeDto> Employees { get; set; } = new();
 }
+
