@@ -2,6 +2,7 @@ using System.Data;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeePromotions;
 
 namespace PalladiumPayroll.Repositories.HRFunctions.EmployeePromotions;
@@ -83,7 +84,7 @@ public class EmployeePromotionsRepository : IEmployeePromotionsRepository
                     Provinces = (await multi.ReadAsync<ProvinceDto>()).ToList(),
                     SupportFunctions = (await multi.ReadAsync<SupportFunctionDto>()).ToList(),
                     Departments = (await multi.ReadAsync<DepartmentDto>()).ToList(),
-                    Employees = (await multi.ReadAsync<EmployeeDropdownDto>()).ToList(),
+                    Employees = (await multi.ReadAsync<DropDownViewModel>()).ToList(),
                     Designations = (await multi.ReadAsync<DesignationDto>()).ToList(),
                     ReportTos = (await multi.ReadAsync<ReportToEmployeeDto>()).ToList(),
                 };
