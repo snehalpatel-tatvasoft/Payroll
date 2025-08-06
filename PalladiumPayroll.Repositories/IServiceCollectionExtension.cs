@@ -6,6 +6,7 @@ using PalladiumPayroll.Repositories.Company;
 using PalladiumPayroll.Repositories.CompanySettings;
 using PalladiumPayroll.Repositories.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Repositories.Department;
+using PalladiumPayroll.Repositories.Employees;
 using PalladiumPayroll.Repositories.Home;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeGrievances;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeePromotions;
@@ -23,6 +24,7 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ICommonRepository, CommonRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IApplicationadminRepository, ApplicationadminRepository>();
             services.AddScoped<IDesignationsRepository, DesignationsRepository>();

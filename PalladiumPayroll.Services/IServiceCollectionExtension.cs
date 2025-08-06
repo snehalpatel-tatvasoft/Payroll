@@ -6,6 +6,7 @@ using PalladiumPayroll.Services.Company_Settings;
 using PalladiumPayroll.Services.CompanySettings;
 using PalladiumPayroll.Services.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Services.Department;
+using PalladiumPayroll.Services.Employees;
 using PalladiumPayroll.Services.Home;
 using PalladiumPayroll.Services.HRFunctions.EmployeeGrievances;
 using PalladiumPayroll.Services.HRFunctions.EmployeePromotions;
@@ -23,6 +24,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICommonService, CommonService>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IApplicationadminService, ApplicationadminService>();
             services.AddScoped<EmailService>();
