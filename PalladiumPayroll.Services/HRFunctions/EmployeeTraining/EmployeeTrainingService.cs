@@ -104,8 +104,8 @@ public class EmployeeTrainingService : IEmployeeTrainingService
         if (file == null || file.Length == 0)
             return null;
 
-        var allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg", ".png", ".gif"  };
-        var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        string[]? allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
+        string? extension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
         if (!allowedExtensions.Contains(extension))
             return null;
@@ -116,16 +116,22 @@ public class EmployeeTrainingService : IEmployeeTrainingService
         if (!Directory.Exists(_fileUploadPath))
             Directory.CreateDirectory(_fileUploadPath);
 
-        var fileName = $"{Guid.NewGuid()}{extension}";
-        var fullPath = Path.Combine(_fileUploadPath, fileName);
+        string? originalFileNameWithoutExt = Path.GetFileNameWithoutExtension(file.FileName);
+        string? sanitizedFileName = string.Concat(originalFileNameWithoutExt.Split(Path.GetInvalidFileNameChars()));
+
+        string? shortId = Guid.NewGuid().ToString("N")[..8];
+
+        string? fileName = $"{sanitizedFileName}_{shortId}{extension}";
+        string? fullPath = Path.Combine(_fileUploadPath, fileName);
 
         using (var stream = new FileStream(fullPath, FileMode.Create))
         {
             await file.CopyToAsync(stream);
         }
 
-        var relativePath = $"E:/PCTR25/Payroll-final-Project/PremiumPayProject-Frontend/Payroll-UI/src/assets/disciplinary-log-documents/{fileName}";
+        string? relativePath = $"assets/employee-training-documents/{fileName}";
         return relativePath;
     }
+
 
 }
