@@ -2,6 +2,7 @@ using System.Data;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeTraining;
 
 namespace PalladiumPayroll.Repositories.HRFunctions.EmployeeTraining;
@@ -110,6 +111,42 @@ public class EmployeeTrainingRepository : IEmployeeTrainingRepository
                 return dropdownsData;
             }
         );
+    }
+
+    public async Task<List<DropDownViewModel>> AddEmployeeTrainingDropdownItem(EmployeeTrainingDropdownItem reqItem)
+    {
+        List<DropDownViewModel>? result = new List<DropDownViewModel>();
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@Name", reqItem.Name);
+        parameters.Add("@CompanyId", reqItem.CompanyId);
+
+        switch (reqItem.Type)
+        {
+            case 1:
+                result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddCourse", parameters);
+                break;
+            case 2:
+                result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddCourseType", parameters);
+                break;
+            case 3:
+                result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddInstitution", parameters);
+                break;
+            case 4:
+                result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddNQFLevel", parameters);
+                break;
+            case 5:
+                result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddUnitStandard", parameters);
+                break;
+        }
+        return result;
+    }
+
+    public async Task<bool> DeleteEmployeeTrainingDropdownItem(int id, int type)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@id", id);
+        parameters.Add("@type", type);
+        return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteEmployeeTrainingDropdownItem", parameters);
     }
 
 }

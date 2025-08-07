@@ -16,5 +16,9 @@ public interface IEmployeeTrainingService
 
     Task<JsonResult> GetEmployeeTrainingById(long trainingId);
 
-     Task<string?> UploadTrainingFile(IFormFile file);
+    Task<string?> UploadTrainingFile(IFormFile file);
+
+    Task<JsonResult> AddEmployeeTrainingDropdownItem(EmployeeTrainingDropdownItem reqItem);
+
+    Task<JsonResult> DeleteEmployeeTrainingDropdownItem(int id, int type);
 }

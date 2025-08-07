@@ -24,3 +24,11 @@ public class EmployeeTrainingUpsertData
     public string? FilePath { get; set; }
     public string UserId { get; set; } = null!;
 }
+
+
+public class EmployeeTrainingDropdownItem
+{
+    public string Name { get; set; }="";
+    public long CompanyId { get; set; }
+    public int Type { get; set; }
+}

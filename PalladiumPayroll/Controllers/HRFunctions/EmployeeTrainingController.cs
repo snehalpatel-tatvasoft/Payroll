@@ -123,9 +123,9 @@ public class EmployeeTrainingController : ControllerBase
             string? relativePath = await _employeeTrainingService.UploadTrainingFile(file);
 
             if (string.IsNullOrEmpty(relativePath))
-               return HttpStatusCodeResponse.NotFoundResponse("File upload failed.");
+                return HttpStatusCodeResponse.NotFoundResponse("File upload failed.");
 
-          return HttpStatusCodeResponse.SuccessResponse(relativePath, "File uploaded successfully.");
+            return HttpStatusCodeResponse.SuccessResponse(relativePath, "File uploaded successfully.");
         }
         catch (Exception ex)
         {
@@ -133,4 +133,29 @@ public class EmployeeTrainingController : ControllerBase
         }
     }
 
+    [HttpPost("[action]")]
+    public async Task<JsonResult> AddEmployeeTrainingDropdownItem(EmployeeTrainingDropdownItem reqItem)
+    {
+        try
+        {
+            return await _employeeTrainingService.AddEmployeeTrainingDropdownItem(reqItem);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+    }
+
+    [HttpDelete("[action]")]
+    public async Task<JsonResult> DeleteEmployeeTrainingDropdownItem(int id, int type)
+    {
+        try
+        {
+            return await _employeeTrainingService.DeleteEmployeeTrainingDropdownItem(id, type);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+    }
 }

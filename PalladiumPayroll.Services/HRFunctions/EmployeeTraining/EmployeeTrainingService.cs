@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeTraining;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeTraining;
@@ -131,6 +132,40 @@ public class EmployeeTrainingService : IEmployeeTrainingService
 
         string? relativePath = $"assets/employee-training-documents/{fileName}";
         return relativePath;
+    }
+
+    public async Task<JsonResult> AddEmployeeTrainingDropdownItem(EmployeeTrainingDropdownItem reqItem)
+    {
+        try
+        {
+            List<DropDownViewModel> result = await _employeeTrainingRepository.AddEmployeeTrainingDropdownItem(reqItem);
+            if (result.Count > 0 && result.FirstOrDefault()?.Id > 0)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, "Item", ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
+
+    public async Task<JsonResult> DeleteEmployeeTrainingDropdownItem(int id, int type)
+    {
+        try
+        {
+            bool result = await _employeeTrainingRepository.DeleteEmployeeTrainingDropdownItem(id, type);
+            if (result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Item", ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
     }
 
 
