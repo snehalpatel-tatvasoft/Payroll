@@ -461,6 +461,16 @@ namespace PalladiumPayroll.Repositories.Employees
             }
         }
 
+        public async Task<JsonResult> GetAccessRolesByCompanyId(long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            var data = await _dapper.ExecuteStoredProcedure<AccessRoleDto>(
+                "usp_GetAccessRolesNamesByCompanyId", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Access Roles", ActionType.Retrieved));
+        }
+
         #endregion
     }
 }

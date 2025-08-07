@@ -124,5 +124,10 @@ namespace PalladiumPayroll.Services.Employees
         {
             return await _employeeRepository.UpdateEmployeeSelfService(model);
         }
+
+        public async Task<JsonResult> GetAccessRolesByCompanyId(long companyId)
+        {
+            return await _employeeRepository.GetAccessRolesByCompanyId(companyId);
+        }
     }
 }

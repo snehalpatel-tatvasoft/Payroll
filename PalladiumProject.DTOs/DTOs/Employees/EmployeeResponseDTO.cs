@@ -88,9 +88,15 @@
 	}
 
 	public class SecondApprovalEmployeeDTO
-    {
-        public long EmployeeId { get; set; }
-        public string EmployeeFullname { get; set; }
-    }
+	{
+		public long EmployeeId { get; set; }
+		public string EmployeeFullname { get; set; }
+	}
+
+	public class AccessRoleDto
+	{
+		public int AccessRoleId { get; set; }
+		public string AccessRoleName { get; set; }
+	}
 
 }

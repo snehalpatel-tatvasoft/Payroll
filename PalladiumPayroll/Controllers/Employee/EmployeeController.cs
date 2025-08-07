@@ -253,5 +253,18 @@ namespace PalladiumPayroll.Controllers.Employee
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetAccessRolesByCompanyId(long companyId)
+        {
+            try
+            {
+                return await _employeeService.GetAccessRolesByCompanyId(companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
     }
 }
