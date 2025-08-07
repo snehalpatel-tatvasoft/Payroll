@@ -5,7 +5,7 @@ namespace PalladiumPayroll.Helper.Constants
 {
     public static class AppConstants
     {
-        public const int DefaultPageSize = 999999999;
+        public const int DefaultPageSize = 10;
 
         public const int AuthTokenExpiryInMinutes = 10;
 
@@ -21,6 +21,9 @@ namespace PalladiumPayroll.Helper.Constants
 
         public const string DefaultConnectionString = "Data Source={0}; initial catalog={1}; User ID={2}; Password={3}; TrustServerCertificate=True;";
 
+
+        public const string SortAsc = "ASC";
+        public const string SortDesc = "DESC";
 
         public static class ResponseMessages
         {
@@ -170,7 +173,7 @@ namespace PalladiumPayroll.Helper.Constants
             #endregion
 
             #region Create Transaction
-            
+            public static readonly string Transaction = "Transaction";
             public static readonly string CreateTransaction = "Create Transaction";
             public static readonly string TransactionCreatedSuccessfully = "Create transaction successfully.";
             public static readonly string TransactionCreationFailed = "Failed to create transaction.";
@@ -193,6 +196,22 @@ namespace PalladiumPayroll.Helper.Constants
             public const string EmployeeGrievanceNotFound = "Employee Grievance was not found.";
 
             #endregion
+
+
+            #region Employees Loan
+
+            public static readonly string LoanPausedSuccessfully = "Loan paused successfully.";
+            public static readonly string LoanPausedFailed = "Failed to pause the loan.";
+            public static readonly string LoanCreatedSuccessfully = "Loan created successfully.";
+            public static readonly string LoanCreationFailed = "Loan creation failed.";
+            public static readonly string LoanUpdatedSuccessfully = "Loan updated successfully.";
+            public static readonly string LoanUpdatedFailed = "Loan update failed.";
+            public static readonly string LoanDataFetchedSuccessfully = "Loan data fetched successfully.";
+            public static readonly string LoanPaidSuccessfully = "Full Loan paid successfully.";
+            public static readonly string LoanPaidFailed = "Failed to pay full loan.";
+
+            #endregion
+
             
             #region Employee Promotions
 
