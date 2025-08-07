@@ -51,10 +51,10 @@
 
 	public class PayrollTransactionList
 	{
-        public int? TakeOnBalanceId { get; set; }
-        public int? PayrollProcessId { get; set; }
-        public string Description { get; set; }
-        public decimal? Amount { get; set; }
+		public int? TakeOnBalanceId { get; set; }
+		public int? PayrollProcessId { get; set; }
+		public string Description { get; set; }
+		public decimal? Amount { get; set; }
 	}
 
 	public class TakeOnBalanceTransaction
@@ -71,26 +71,111 @@
 	}
 
 	public class TransactionType
-    {
-        public long PayrollProcessId { get; set; }
-        public string Description { get; set; } = "";
-    }
+	{
+		public long PayrollProcessId { get; set; }
+		public string Description { get; set; } = "";
+	}
 
-    public class TransactionTypeDropdownsDTO
-    {
-        public List<TransactionType> TransactionType { get; set; } = new();
-    }
-    public class GetDirectiveResponse
-    {
-        public int Id { get; set; }
-        public string DirectiveNumber { get; set; } = string.Empty;
-        public DateTime DirectiveDate { get; set; }
-        public int SourceCode { get; set; } 
-        public decimal DirectiveAmount { get; set; }
-        public string TypeIndicator { get; set; } = string.Empty;
-        public string TransactionType { get; set; } = string.Empty;
-        public bool Status { get; set; }
-    }
+	public class TransactionTypeDropdownsDTO
+	{
+		public List<TransactionType> TransactionType { get; set; } = new();
+	}
+	public class GetDirectiveResponse
+	{
+		public int Id { get; set; }
+		public string DirectiveNumber { get; set; } = string.Empty;
+		public DateTime DirectiveDate { get; set; }
+		public int SourceCode { get; set; }
+		public decimal DirectiveAmount { get; set; }
+		public string TypeIndicator { get; set; } = string.Empty;
+		public string TransactionType { get; set; } = string.Empty;
+		public bool Status { get; set; }
+	}
 
+	public class EmployeeLoanInfoDto
+	{
+		public long EmployeeLoanId { get; set; }
+		public long EmployeeId { get; set; }
+		public string EmployeeCode { get; set; } = "";
+		public string EmployeeName { get; set; } = "";
+		public DateTime RepaymentStartDate { get; set; }
+		public DateTime LoanGrantDate { get; set; }
+		public int NumberOfRepayment { get; set; }
+		public decimal CurrentRepaymentAmount { get; set; }
+		public decimal LoanAmount { get; set; }
+		public decimal LoanPaidAmount { get; set; }
+		public decimal OutstandingAmount { get; set; }
+		public string LoanStatusName { get; set; } = "";
+		public decimal LoanMaxDeduction { get; set; }
+		public decimal InterestRate { get; set; }
+		public decimal TotalLoanAmount { get; set; }
+		public string LoanIntegration { get; set; } = "";
+		public bool IsPaushed { get; set; }
+	}
+
+	public class LoanSummaryDto
+	{
+		public decimal TotalOutstandingAmount { get; set; }
+		public int TotalLoanTransactions { get; set; }
+	}
+
+	public class EmployeeLoanResponse
+	{
+		public List<EmployeeLoanInfoDto> Loans { get; set; } = new List<EmployeeLoanInfoDto>();
+		public LoanSummaryDto Summary { get; set; } = new LoanSummaryDto();
+	}
+
+	public class AccountTypeDto
+	{
+		public int AccountTypeId { get; set; }
+		public string AccountTypeName { get; set; } = "";
+	}
+
+	public class BankDto
+	{
+		public int BankId { get; set; }
+		public string BankName { get; set; } = "";
+		public string BranchCode { get; set; } = "";
+	}
+
+	public class GarnisheeDropdownListDto
+	{
+		public List<AccountTypeDto> AccountTypes { get; set; } = new List<AccountTypeDto>();
+		public List<BankDto> Banks { get; set; } = new List<BankDto>();
+	}
+
+	public class GarnishDetails
+	{
+		public long GarnishesId { get; set; }
+		public long EmployeeId { get; set; }
+		public DateTime? GarnishesStartDate { get; set; }
+		public decimal? GarnishesAmount { get; set; }
+		public int? NumberOfRepayment { get; set; }
+		public decimal? CurrentRepayment { get; set; }
+		public decimal? ClosingBalance { get; set; }
+		public decimal? GarnishesPaidAmount { get; set; }
+		public DateTime? GarnishesPaidStartDate { get; set; }
+		public DateTime? GarnishesPaidEndDate { get; set; }
+		public string AccountName { get; set; } = "";
+		public int? AccountTypeId { get; set; }
+		public string? AccountTypeName { get; set; }
+		public int? BankId { get; set; }
+		public string? BankName { get; set; }
+		public string BranchCode { get; set; } = "";
+		public int? IsLinkAccount { get; set; }
+		public string AccountNumber { get; set; } = "";
+	}
+
+	public class SavingsDetails
+	{
+		public long SavingId { get; set; }
+		public long EmployeeId { get; set; }
+		public DateTime SavingsStartDate { get; set; }
+		public DateTime? SavingsEndDate { get; set; }
+		public decimal SavingsAmount { get; set; }
+		public decimal CurrentRepayment { get; set; }
+		public long NumberOfRepayment { get; set; }
+		public decimal? ClosingBalance { get; set; }
+	}
 
 }

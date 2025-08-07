@@ -113,4 +113,32 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
         public int AllowanceType { get; set; }
         public int EmployeeId { get; set; }
     }
+
+    public class EmployeeGarnisheeRequest
+    {
+        public long? GarnishesId { get; set; }
+        public long EmployeeId { get; set; }
+        public DateTime? GarnishesStartDate { get; set; }
+        public decimal GarnishesAmount { get; set; }
+        public long NumberOfRepayment { get; set; }
+        public decimal CurrentRepayment { get; set; }
+        public bool IsLinkAccount { get; set; }
+        public string AccountName { get; set; } = "";
+        public string? AccountNumber { get; set; }
+        public long? AccountTypeId { get; set; }
+        public long? BankId { get; set; }
+        public string BranchCode { get; set; } = "";
+        public long UserId { get; set; }
+    }
+
+    public class EmployeeSavingsRequest
+    {
+        public long? SavingsId { get; set; }
+        public long EmployeeId { get; set; }
+        public DateTime SavingsStartDate { get; set; }
+        public decimal SavingsAmount { get; set; }
+        public long NumberOfRepayment { get; set; }
+        public decimal CurrentRepayment { get; set; }
+        public long UserId { get; set; }
+    }
 }
