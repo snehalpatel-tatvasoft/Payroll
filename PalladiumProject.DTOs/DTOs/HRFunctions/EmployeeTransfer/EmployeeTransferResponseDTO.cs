@@ -114,12 +114,12 @@ public class EmployeeTransferDropdownsDTO
     public List<ProvinceDto> Provinces { get; set; } = new();
     public List<SupportFunctionDto> SupportFunctions { get; set; } = new();
     public List<DepartmentDto> Departments { get; set; } = new();
-    public List<DropDownViewModel> Employees { get; set; } = new();
+    public List<EmployeeDropdownDto> Employees { get; set; } = new();
     public List<DesignationCodeDto> DesignationCodes { get; set; } = new();
     public List<OccupationalStatusDto> OccupationalStatuses { get; set; } = new();
     public List<AppointmentTypeDto> AppointmentTypes { get; set; } = new();
     public List<DesignationDto> Designations { get; set; } = new();
-    public List<DropDownViewModel> ReportToEmployees { get; set; } = new();
+    public List<EmployeeDropdownDto> ReportToEmployees { get; set; } = new();
 }
 
 public class EmployeeTransferResponseDTO

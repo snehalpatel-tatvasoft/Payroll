@@ -105,7 +105,7 @@ public class EmployeePromotionDropdownsDTO
     public List<ProvinceDto> Provinces { get; set; } = new();
     public List<SupportFunctionDto> SupportFunctions { get; set; } = new();
     public List<DepartmentDto> Departments { get; set; } = new();
-    public List<DropDownViewModel> Employees { get; set; } = new();
+    public List<EmployeeDropdownDto> Employees { get; set; } = new();
     public List<DesignationDto> Designations { get; set; } = new();
      public List<ReportToEmployeeDto> ReportTos { get; set; } = new();
 }

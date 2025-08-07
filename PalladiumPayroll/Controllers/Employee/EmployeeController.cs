@@ -228,7 +228,7 @@ namespace PalladiumPayroll.Controllers.Employee
             catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    string.Format(ResponseMessages.Exception, ActionType.Deleting,  $"{ResponseMessages.Employee} Directive Information", ex.Message));
+                    string.Format(ResponseMessages.Exception, ActionType.Deleting, $"{ResponseMessages.Employee} Directive Information", ex.Message));
             }
         }
 
@@ -311,7 +311,7 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> GetPayrollTransactionList([FromQuery]TransactionReqModel reqModel)
+        public async Task<ActionResult> GetPayrollTransactionList([FromQuery] TransactionReqModel reqModel)
         {
             try
             {
@@ -372,6 +372,107 @@ namespace PalladiumPayroll.Controllers.Employee
             catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeleteEmployeeLoan(int employeeLoanId)
+        {
+            try
+            {
+                if (employeeLoanId <= 0)
+                {
+                    return HttpStatusCodeResponse.NotFoundResponse("Invalid Loan Id.");
+                }
+                return await _employeeService.DeleteEmployeeLoan(employeeLoanId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.Employee + " Loan", ex.Message)
+                );
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeLoanDetail(long employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeLoanDetail(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee + " Loan", ex.Message));
+            }
+        }
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetGarnisheeDropdownData(long companyId)
+        {
+            try
+            {
+                return await _employeeService.GetGarnisheeDropdownData(companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee + "  Garnishee DropList", ex.Message));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetGarnisheeDetails(long employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetGarnisheeDetails(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee + "  Garnishee", ex.Message));
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpsertGarnishee([FromBody]EmployeeGarnisheeRequest request)
+        {
+            try
+            {
+                return await _employeeService.UpsertGarnishee(request);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Employee+" Garnishee", ex.Message)
+                );
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetSavingsDetails(long employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetSavingsDetails(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee + "  Savings", ex.Message));
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpsertSaving(EmployeeSavingsRequest request)
+        {
+            try
+            {
+                return await _employeeService.UpsertSaving(request);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Employee+" Saving", ex.Message)
+                );
             }
         }
 
