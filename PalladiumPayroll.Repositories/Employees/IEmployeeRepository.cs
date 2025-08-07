@@ -34,6 +34,13 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<TakeOnBalanceListWithTakeOnComplete> GetEmployeeTakeOnBalance(int employeeId, int allowanceType);
         Task<bool> DeleteEmployeeTakeOnBalance(List<int> takeOnBalanceIds);
         Task<bool> SetTakeOnComplete(int employeeId);
+        Task<EmployeeLoanResponse> GetEmployeeLoanDetail(long employeeId);
+         Task<bool> DeleteEmployeeLoan(int employeeLoanId);
+         Task<GarnisheeDropdownListDto> GetGarnisheeDropdownData(long companyId);
+         Task<bool> UpsertGarnishee(EmployeeGarnisheeRequest request);
+         Task<List<GarnishDetails>> GetGarnisheeDetails(long employeeId);
+        Task<bool> UpsertSaving(EmployeeSavingsRequest request);
+        Task<List<SavingsDetails>> GetSavingsDetails(long employeeId);
         Task<List<EmployeeDocuments>> GetEmployeeDocument(int employeeId);
         Task<bool> UploadDocumentsSave(List<EmployeeDocuments> employeeDocuments, int employeeId);
         Task<bool> DeleteDocuments(int documentId);

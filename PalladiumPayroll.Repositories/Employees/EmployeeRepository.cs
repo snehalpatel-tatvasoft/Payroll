@@ -144,7 +144,8 @@ namespace PalladiumPayroll.Repositories.Employees
                             .Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse)
                             .ToList();
                 result.WorkingDay = workDaySplit;
-            };
+            }
+            ;
             return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Work info", ActionType.Retrieved));
 
         }
@@ -534,6 +535,131 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@EmployeeId", employeeId);
             parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
             return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SetEmployeeTakeOnComplete", parameters);
+        }
+        #endregion
+
+        #region Loan Info
+        public async Task<EmployeeLoanResponse> GetEmployeeLoanDetail(long employeeId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            return await _dapper.ExecuteStoredProcedureMultipleAsync(
+                "usp_GetLoanDetailsByEmployeeId",
+                parameters,
+                async multi =>
+                {
+                    List<EmployeeLoanInfoDto>? loans = (await multi.ReadAsync<EmployeeLoanInfoDto>()).ToList();
+                    LoanSummaryDto? summary = (await multi.ReadAsync<LoanSummaryDto>()).FirstOrDefault() ?? new LoanSummaryDto();
+
+                    return new EmployeeLoanResponse
+                    {
+                        Loans = loans,
+                        Summary = summary
+                    };
+                }
+            );
+        }
+
+        public async Task<bool> DeleteEmployeeLoan(int employeeLoanId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@LoanId", employeeLoanId);
+            parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+            await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeleteEmployeeLoan", parameters);
+
+            return parameters.Get<bool>("@IsSuccess");
+        }
+        #endregion
+
+        #region Savings & Garnishee
+        public async Task<GarnisheeDropdownListDto> GetGarnisheeDropdownData(long companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            return await _dapper.ExecuteStoredProcedureMultipleAsync(
+                "usp_GetDropdownDataForGarnishee",
+                parameters,
+                async multi =>
+                {
+                    List<AccountTypeDto>? accountTypes = (await multi.ReadAsync<AccountTypeDto>()).ToList();
+                    List<BankDto>? banks = (await multi.ReadAsync<BankDto>()).ToList();
+
+                    return new GarnisheeDropdownListDto
+                    {
+                        AccountTypes = accountTypes,
+                        Banks = banks
+                    };
+                }
+            );
+        }
+
+        public async Task<bool> UpsertGarnishee(EmployeeGarnisheeRequest request)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+
+            parameters.Add("@GarnishesId", request.GarnishesId);
+            parameters.Add("@EmployeeId", request.EmployeeId);
+            parameters.Add("@GarnishesStartDate", request.GarnishesStartDate);
+            parameters.Add("@GarnishesAmount", request.GarnishesAmount);
+            parameters.Add("@NumberOfRepayment", request.NumberOfRepayment);
+            parameters.Add("@CurrentRepayment", request.CurrentRepayment);
+            parameters.Add("@IsLinkAccount", request.IsLinkAccount);
+            parameters.Add("@AccountName", request.AccountName);
+            parameters.Add("@AccountNumber", request.AccountNumber);
+            parameters.Add("@AccountTypeId", request.AccountTypeId);
+            parameters.Add("@BankId", request.BankId);
+            parameters.Add("@BranchCode", request.BranchCode);
+            parameters.Add("@UserId", request.UserId);
+            parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+            await _dapper.ExecuteStoredProcedureSingle<object>("usp_UpsertGarnishee", parameters);
+
+            return parameters.Get<bool>("@IsSuccess");
+        }
+
+        public async Task<List<GarnishDetails>> GetGarnisheeDetails(long employeeId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            List<GarnishDetails>? result = await _dapper.ExecuteStoredProcedure<GarnishDetails>(
+                "usp_GetGarnisheeDetails",
+                parameters
+            );
+            return result;
+        }
+
+        public async Task<bool> UpsertSaving(EmployeeSavingsRequest request)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+
+            parameters.Add("@SavingsId", request.SavingsId);
+            parameters.Add("@EmployeeId", request.EmployeeId);
+            parameters.Add("@SavingsStartDate", request.SavingsStartDate);
+            parameters.Add("@SavingsAmount", request.SavingsAmount);
+            parameters.Add("@NumberOfRepayments", request.NumberOfRepayment);
+            parameters.Add("@CurrentRepayment", request.CurrentRepayment);
+            parameters.Add("@UserId", request.UserId);
+            parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+            await _dapper.ExecuteStoredProcedureSingle<object>("usp_UpsertSavings", parameters);
+
+            return parameters.Get<bool>("@IsSuccess");
+        }
+
+        public async Task<List<SavingsDetails>> GetSavingsDetails(long employeeId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            List<SavingsDetails>? result = await _dapper.ExecuteStoredProcedure<SavingsDetails>(
+                "usp_GetSavingsDetails",
+                parameters
+            );
+            return result;
         }
         #endregion
 
