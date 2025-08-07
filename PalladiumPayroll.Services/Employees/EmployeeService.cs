@@ -93,7 +93,6 @@ namespace PalladiumPayroll.Services.Employees
         public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type)
         {
             var result = await _employeeRepository.DeleteWorkOrganizationalDropdownItem(id, type);
-            var result = await _employeeRepository.DeleteWorkOrganizationalDropdownItem(id, type);
             if (result)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Item", ActionType.Deleted));
@@ -123,7 +122,6 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup)
         {
-            if (timeSheetSetup.TimeSheetPassword != timeSheetSetup.TimeSheetConfirmPassword)
             if (timeSheetSetup.TimeSheetPassword != timeSheetSetup.TimeSheetConfirmPassword)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse("Password is mismatch !");
