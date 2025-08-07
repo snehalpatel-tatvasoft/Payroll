@@ -1,9 +1,11 @@
+using PalladiumPayroll.DTOs.DTOs.Common;
+
 namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.EmployeesLoan;
 
 public class EmployeeLoanRequestDTO
 {
     public long? EmployeeLoanId { get; set; }
-    public int EmployeeId { get; set; } 
+    public int EmployeeId { get; set; }
     public string? EmployeeCode { get; set; }
     public DateTime? RepaymentStartDate { get; set; }
     public DateTime? LoanGrantedDate { get; set; }
@@ -17,3 +19,9 @@ public class EmployeeLoanRequestDTO
     public int? UserId { get; set; }
 
 }
+public class LoanFilterViewModel : TableFilterViewModel
+{
+    public long CompanyId { get; set; }
+    public string? LoanStatus { get; set; }
+}
+

@@ -1,7 +1,9 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.EmployeesLoan;
+using System.Data;
 
 namespace PalladiumPayroll.Repositories.EmployeesLoan;
 
@@ -61,7 +63,7 @@ public class EmployeesLoanRepository : IEmployeesLoanRepository
 
         return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_PauseEmployeeLoan", parameters);
     }
-    
+
     public async Task<bool> FullPaidEmployeeLoan(long employeeLoanId, long updatedBy)
     {
         var parameters = new DynamicParameters();
@@ -70,15 +72,29 @@ public class EmployeesLoanRepository : IEmployeesLoanRepository
 
         return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_FullPaidEmployeeLoan", parameters);
     }
-
-    public async Task<List<EmployeeLoanResponseDTO>> GetLoansByCompanyId(long companyId)
+    public async Task<TableDataModel<EmployeeLoanResponseDTO>> GetLoansByCompanyId(LoanFilterViewModel reqModel)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("@CompanyId", companyId);
+        parameters.Add("@CompanyId", reqModel.CompanyId);
+        parameters.Add("@LoanStatus", reqModel.LoanStatus);
+        parameters.Add("@CurrentPage", reqModel.CurrentPage);
+        parameters.Add("@PageSize", reqModel.PageSize);
+        parameters.Add("@SortBy", reqModel.SortBy ?? "LoanGrantedDate");
+        parameters.Add("@SortType", reqModel.sortType == true ? "ASC" : "DESC");
+        parameters.Add("@Search", reqModel.Search ?? "");
+        parameters.Add("@TotalCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-        return await _dapper.ExecuteStoredProcedure<EmployeeLoanResponseDTO>(
-            "usp_GetLoanDetailsByCompanyId", parameters);
+        var data = await _dapper.ExecuteStoredProcedure<EmployeeLoanResponseDTO>("usp_GetLoanDetailsByCompanyId", parameters);
+        var total = parameters.Get<int>("@TotalCount");
+
+        return new TableDataModel<EmployeeLoanResponseDTO>
+        {
+            DataList = data,
+            TotalCount = total
+        };
     }
+
+
     public async Task<EmployeeLoanDropdownsDTO> GetEmployeeLoanDropdowns(long companyId)
     {
         var parameters = new DynamicParameters();

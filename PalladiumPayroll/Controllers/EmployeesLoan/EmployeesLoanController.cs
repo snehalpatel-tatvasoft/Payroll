@@ -73,18 +73,19 @@ public class EmployeesLoanController : ControllerBase
     }
 
     [HttpGet("GetLoansByCompany")]
-    public async Task<ActionResult> GetLoansByCompany(long companyId)
+    public async Task<ActionResult> GetLoansByCompany([FromQuery] LoanFilterViewModel reqModel)
     {
         try
         {
-            var res = await _service.GetLoansByCompanyId(companyId);
+            var res = await _service.GetLoansByCompanyId(reqModel);
             return res;
         }
         catch (Exception ex)
-        { 
+        {
             return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
         }
     }
+
     [HttpGet("GetEmployeeLoanDropdowns")]
     public async Task<IActionResult> GetEmployeeLoanDropdowns(long companyId)
     {

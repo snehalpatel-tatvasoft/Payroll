@@ -22,7 +22,7 @@ public class EmployeesLoanService : IEmployeesLoanService
             var result = await _repository.CreateEmployeeLoan(request);
             if (result)
             {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty,ResponseMessages.LoanCreatedSuccessfully);
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.LoanCreatedSuccessfully);
             }
 
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.LoanCreationFailed);
@@ -39,14 +39,14 @@ public class EmployeesLoanService : IEmployeesLoanService
             var result = await _repository.UpdateEmployeeLoan(request);
             if (result)
             {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty,ResponseMessages.LoanUpdatedSuccessfully);
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.LoanUpdatedSuccessfully);
             }
 
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.LoanUpdatedFailed );
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.LoanUpdatedFailed);
         }
         catch (Exception ex)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ex.Message); 
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ex.Message);
         }
     }
     public async Task<JsonResult> PauseEmployeeLoan(long employeeLoanId, long updatedBy)
@@ -56,7 +56,7 @@ public class EmployeesLoanService : IEmployeesLoanService
             var result = await _repository.PauseEmployeeLoan(employeeLoanId, updatedBy);
             if (result)
             {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty,ResponseMessages.LoanPausedSuccessfully );
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.LoanPausedSuccessfully);
             }
 
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.LoanPausedFailed);
@@ -73,7 +73,7 @@ public class EmployeesLoanService : IEmployeesLoanService
             var result = await _repository.FullPaidEmployeeLoan(employeeLoanId, updatedBy);
             if (result)
             {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty,ResponseMessages.LoanPaidSuccessfully );
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.LoanPaidSuccessfully);
             }
 
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.LoanPaidFailed);
@@ -83,11 +83,11 @@ public class EmployeesLoanService : IEmployeesLoanService
             return HttpStatusCodeResponse.InternalServerErrorResponse(ex.Message);
         }
     }
-    public async Task<JsonResult> GetLoansByCompanyId(long companyId)
+    public async Task<JsonResult> GetLoansByCompanyId(LoanFilterViewModel reqModel)
     {
         try
         {
-            var result = await _repository.GetLoansByCompanyId(companyId);
+            var result = await _repository.GetLoansByCompanyId(reqModel);
             return HttpStatusCodeResponse.SuccessResponse(result, ResponseMessages.LoanDataFetchedSuccessfully);
         }
         catch (Exception ex)
@@ -95,6 +95,7 @@ public class EmployeesLoanService : IEmployeesLoanService
             return HttpStatusCodeResponse.InternalServerErrorResponse(ex.Message);
         }
     }
+
     public async Task<EmployeeLoanDropdownsDTO> GetEmployeeLoanDropdowns(long companyId)
     {
         try
