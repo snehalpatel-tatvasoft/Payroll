@@ -663,5 +663,100 @@ namespace PalladiumPayroll.Repositories.Employees
         }
         #endregion
 
+
+        public async Task<TaxInformationDropdownData> GetTaxInformationDropdownData()
+        {
+            return await _dapper.ExecuteStoredProcedureMultipleAsync(
+                "usp_GetTaxInformationDropdownData",
+                null,
+                async multi =>
+                {
+                    TaxInformationDropdownData? dropdownsData = new TaxInformationDropdownData
+                    {
+                        TaxMethod = (await multi.ReadAsync<TaxMethod>()).ToList(),
+                        IT3aReasonCode = (await multi.ReadAsync<IT3aReasonCode>()).ToList(),
+                        UIFExempts = (await multi.ReadAsync<UIFExempts>()).ToList(),
+                    };
+                    return dropdownsData;
+                }
+            );
+        }
+
+        public async Task<JsonResult> GetTaxInformation(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<TaxInformation>("usp_GetEmployeeTaxInformation", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, "Tax Information", ActionType.Retrieved));
+        }
+
+        public async Task<bool> UpdateTaxInformation(TaxInformation reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@IncomeTaxNumber", reqModel.IncomeTaxNumber);
+            parameters.Add("@TaxOffice", reqModel.TaxOffice);
+            parameters.Add("@TaxMethod", reqModel.TaxMethod);
+            parameters.Add("@IT3aReasonCodes", reqModel.IT3aReasonCodes);
+            parameters.Add("@ExemptFromUIF", reqModel.ExemptFromUIF);
+            parameters.Add("@MedicalAidBeneficiaries", reqModel.MedicalAidBeneficiaries);
+            parameters.Add("@IsOIDReportExclude", reqModel.IsOIDReportExclude);
+            parameters.Add("@IsSDLExempt", reqModel.IsSDLExempt);
+            parameters.Add("@IsPrivateBenefit", reqModel.IsPrivateBenefit);
+            parameters.Add("@IsCompanyorClose", reqModel.IsCompanyorClose);
+            parameters.Add("@IsTrust", reqModel.IsTrust);
+            parameters.Add("@IsETIQualifies", reqModel.IsETIQualifies);
+            parameters.Add("@MinimumWage", reqModel.MinimumWage);
+            parameters.Add("@ValidId", reqModel.ValidId);
+            parameters.Add("@IsAverageWorkingHours", reqModel.IsAverageWorkingHours);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertTaxInformation", parameters);
+            return result;
+        }
+        #region Documents
+
+        public async Task<List<EmployeeDocuments>> GetEmployeeDocument(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            return await _dapper.ExecuteStoredProcedure<EmployeeDocuments>("usp_GetEmployeeDocument", parameters);
+        }
+
+        public async Task<bool> UploadDocumentsSave(List<EmployeeDocuments> employeeDocuments, int employeeId)
+        {
+            var employeeDocumentTable = new DataTable();
+            employeeDocumentTable.Columns.Add("DocumentId", typeof(int));
+            employeeDocumentTable.Columns.Add("DocumentName", typeof(string));
+            employeeDocumentTable.Columns.Add("DocumentUrl", typeof(string));
+            employeeDocumentTable.Columns.Add("DocumentSize", typeof(long));
+            employeeDocumentTable.Columns.Add("DocumentType", typeof(string));
+            if (employeeDocuments != null)
+            {
+                foreach (var item in employeeDocuments)
+                {
+                    DataRow row = employeeDocumentTable.NewRow();
+                    row["DocumentId"] = item.DocumentId ?? (object)DBNull.Value;
+                    row["DocumentName"] = item.DocumentName;
+                    row["DocumentUrl"] = item.DocumentUrl;
+                    row["DocumentSize"] = item.DocumentSize;
+                    row["DocumentType"] = item.DocumentType;
+                    employeeDocumentTable.Rows.Add(row);
+                }
+            }
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            parameters.Add("@EmployeeDocument", employeeDocumentTable.AsTableValuedParameter("EmployeeDocumentType"));
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeDocument", parameters);
+        }
+
+        public async Task<bool> DeleteDocuments(int documentId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@DocumentId", documentId);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteEmployeeDocument", parameters);
+        }
+        #endregion
+
     }
 }
