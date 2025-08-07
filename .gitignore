@@ -484,6 +484,7 @@ $RECYCLE.BIN/
 *.swp
 
 # Ignore build output and VS-specific folders
+**/.vscode/
 **/.vs/
 **/bin/
 **/obj/
