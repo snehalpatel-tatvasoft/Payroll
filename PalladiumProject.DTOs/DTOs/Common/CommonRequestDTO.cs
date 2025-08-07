@@ -17,10 +17,4 @@ namespace PalladiumPayroll.DTOs.DTOs.Common
         public string? SortBy { get; set; }
         public bool? sortType { get; set; } = false;
     }
-
-    public class TableDataModel<T>
-    {
-        public List<T> DataList { get; set; } = new List<T>();
-        public int TotalCount { get; set; }
-    }
 }

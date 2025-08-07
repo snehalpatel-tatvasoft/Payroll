@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Employees;
-using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.Employees;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -11,9 +12,11 @@ namespace PalladiumPayroll.Services.Employees
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
-        public EmployeeService(IEmployeeRepository employeeRepository)
+        private readonly DirectoryPathSetting _directorySettings;
+        public EmployeeService(IEmployeeRepository employeeRepository, IOptions<DirectoryPathSetting> settings)
         {
             _employeeRepository = employeeRepository;
+            _directorySettings = settings.Value;
         }
 
         public async Task<JsonResult> GetEmployeeFilters(int companyId)
@@ -376,6 +379,87 @@ namespace PalladiumPayroll.Services.Employees
             {
                 return HttpStatusCodeResponse.BadRequestResponse();
             }
+        }
+
+        public async Task<JsonResult> GetEmployeeDocument(int employeeId)
+        {
+            var data = await _employeeRepository.GetEmployeeDocument(employeeId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Employee Document", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> UploadDocuments(EmployeeDocumentUpload employeeDocument)
+        {
+            var basePath = _directorySettings.EmployeeDocument;
+            if (!string.IsNullOrEmpty(basePath))
+            {
+                List<EmployeeDocuments> dbFileList = new List<EmployeeDocuments>();
+                var employeeFolder = $"Employee_{employeeDocument.EmployeeId}";
+                var finalPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, employeeFolder).Replace("/", Path.DirectorySeparatorChar.ToString());
+                if (!Directory.Exists(finalPath))
+                {
+                    Directory.CreateDirectory(finalPath);
+                }
+                foreach (var file in employeeDocument.Document)
+                {
+                    var isFileReplced = false;
+                    var filePath = Path.Combine(finalPath, file.FileName);
+                    if (File.Exists(filePath))
+                    {
+                        isFileReplced = true;
+                        File.Delete(filePath);
+                    }
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    if(!isFileReplced)
+                    {
+                        var relativePath = Path.Combine(employeeFolder, file.FileName).Replace(Path.DirectorySeparatorChar.ToString(), "/");
+                        dbFileList.Add(new EmployeeDocuments() { 
+                            DocumentName = file.FileName, 
+                            DocumentUrl = relativePath, 
+                            DocumentType = file.ContentType, 
+                            DocumentSize = file.Length 
+                        });
+                    }
+                }
+                var result = await _employeeRepository.UploadDocumentsSave(dbFileList, employeeDocument.EmployeeId);
+                if (result)
+                {
+                    return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Employee Document", ActionType.uploaded));
+                }
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<JsonResult> DeleteDocuments(EmployeeDocumentDelete reqModel)
+        {
+            var result = await _employeeRepository.DeleteDocuments(reqModel.DocumentId);
+            if (result)
+            {
+                var basePath = _directorySettings.EmployeeDocument.Replace("/", Path.DirectorySeparatorChar.ToString());
+                var existFilePath = Path.Combine(Directory.GetCurrentDirectory(), basePath, reqModel.DocumentUrl);
+                if (File.Exists(existFilePath))
+                {
+                    File.Delete(existFilePath);
+                }
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Document", ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<byte[]> DownloadDocument(string documentUrl)
+        {
+            byte[] result = { };
+            var basePath = _directorySettings.EmployeeDocument;
+            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, documentUrl).Replace("/", Path.DirectorySeparatorChar.ToString());
+            if (File.Exists(fullPath))
+            {
+                result = await File.ReadAllBytesAsync(fullPath);
+            }
+            return result;
         }
     }
 }

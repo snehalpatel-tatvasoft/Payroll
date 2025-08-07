@@ -45,6 +45,9 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<JsonResult> GetTaxInformation(int employeeId);
         Task<bool> UpdateTaxInformation(TaxInformation reqModel);
 
+        Task<List<EmployeeDocuments>> GetEmployeeDocument(int employeeId);
+        Task<bool> UploadDocumentsSave(List<EmployeeDocuments> employeeDocuments, int employeeId);
+        Task<bool> DeleteDocuments(int documentId);
     }
 
 }

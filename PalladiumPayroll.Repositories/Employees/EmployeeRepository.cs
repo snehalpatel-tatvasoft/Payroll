@@ -714,5 +714,49 @@ namespace PalladiumPayroll.Repositories.Employees
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertTaxInformation", parameters);
             return result;
         }
+        #region Documents
+
+        public async Task<List<EmployeeDocuments>> GetEmployeeDocument(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            return await _dapper.ExecuteStoredProcedure<EmployeeDocuments>("usp_GetEmployeeDocument", parameters);
+        }
+
+        public async Task<bool> UploadDocumentsSave(List<EmployeeDocuments> employeeDocuments, int employeeId)
+        {
+            var employeeDocumentTable = new DataTable();
+            employeeDocumentTable.Columns.Add("DocumentId", typeof(int));
+            employeeDocumentTable.Columns.Add("DocumentName", typeof(string));
+            employeeDocumentTable.Columns.Add("DocumentUrl", typeof(string));
+            employeeDocumentTable.Columns.Add("DocumentSize", typeof(long));
+            employeeDocumentTable.Columns.Add("DocumentType", typeof(string));
+            if (employeeDocuments != null)
+            {
+                foreach (var item in employeeDocuments)
+                {
+                    DataRow row = employeeDocumentTable.NewRow();
+                    row["DocumentId"] = item.DocumentId ?? (object)DBNull.Value;
+                    row["DocumentName"] = item.DocumentName;
+                    row["DocumentUrl"] = item.DocumentUrl;
+                    row["DocumentSize"] = item.DocumentSize;
+                    row["DocumentType"] = item.DocumentType;
+                    employeeDocumentTable.Rows.Add(row);
+                }
+            }
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            parameters.Add("@EmployeeDocument", employeeDocumentTable.AsTableValuedParameter("EmployeeDocumentType"));
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeDocument", parameters);
+        }
+
+        public async Task<bool> DeleteDocuments(int documentId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@DocumentId", documentId);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteEmployeeDocument", parameters);
+        }
+        #endregion
+
     }
 }
