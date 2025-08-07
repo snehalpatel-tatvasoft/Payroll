@@ -1,4 +1,5 @@
-﻿using PalladiumPayroll.DTOs.DTOs.Common;
+﻿using Microsoft.AspNetCore.Http;
+using PalladiumPayroll.DTOs.DTOs.Common;
 
 namespace PalladiumPayroll.DTOs.DTOs.Employees
 {
@@ -46,20 +47,20 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
         public long? RepCode { get; set; }
         public decimal? AnnualSalary { get; set; }
         public decimal? MonthlySalary { get; set; }
-        public int? RatePerDay { get; set; }
-        public int? RatePerHour { get; set; }
+        public decimal? RatePerDay { get; set; }
+        public decimal? RatePerHour { get; set; }
         public List<int>? WorkingDay { get; set; }
         public string? StandardWorkingDays { get; set; }
-        public int? HoursPerMonth { get; set; }
-        public int? HoursPerWeek { get; set; }
-        public int? HoursPerDay { get; set; }
-        public int? DayPerMonth { get; set; }
-        public int? DayPerWeek { get; set; }
+        public decimal? HoursPerMonth { get; set; }
+        public decimal? HoursPerWeek { get; set; }
+        public decimal? HoursPerDay { get; set; }
+        public decimal? DayPerMonth { get; set; }
+        public decimal? DayPerWeek { get; set; }
         public int? MinimumWage { get; set; }
-        public int? LeavePeriod { get; set; }
-        public int? LeaveYear { get; set; }
-        public int? BonusPeriod { get; set; }
-        public int? BonusYear { get; set; }
+        public decimal? LeavePeriod { get; set; }
+        public decimal? LeaveYear { get; set; }
+        public decimal? BonusPeriod { get; set; }
+        public decimal? BonusYear { get; set; }
         public decimal? BCEAMonthlySalary { get; set; }
         public decimal? BCEAVariableSalary { get; set; }
         public int? BCEAOverMonth { get; set; }
@@ -112,5 +113,11 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
         public List<PayrollTransactionList> PayrollProcess { get; set; }
         public int AllowanceType { get; set; }
         public int EmployeeId { get; set; }
+    }
+
+    public class EmployeeDocumentUpload
+    {
+        public int EmployeeId { get; set; }
+        public List<IFormFile> Document { get; set; }
     }
 }
