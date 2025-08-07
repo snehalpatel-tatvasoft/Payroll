@@ -39,6 +39,11 @@ namespace PalladiumPayroll.Services.Employees
         Task<JsonResult> UpsertGarnishee(EmployeeGarnisheeRequest request);
         Task<JsonResult> GetSavingsDetails(long employeeId);
         Task<JsonResult> UpsertSaving(EmployeeSavingsRequest request);
+        Task<TaxInformationDropdownData> GetTaxInformationDropdownData();
+        Task<JsonResult> GetTaxInformation(int employeeId);
+        Task<JsonResult> UpdateTaxInformation(TaxInformation reqModel);
+
+
         Task<JsonResult> GetEmployeeDocument(int employeeId);
         Task<JsonResult> UploadDocuments(EmployeeDocumentUpload employeeDocument);
         Task<JsonResult> DeleteDocuments(EmployeeDocumentDelete reqModel);

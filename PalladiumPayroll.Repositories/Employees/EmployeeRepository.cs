@@ -663,6 +663,57 @@ namespace PalladiumPayroll.Repositories.Employees
         }
         #endregion
 
+
+        public async Task<TaxInformationDropdownData> GetTaxInformationDropdownData()
+        {
+            return await _dapper.ExecuteStoredProcedureMultipleAsync(
+                "usp_GetTaxInformationDropdownData",
+                null,
+                async multi =>
+                {
+                    TaxInformationDropdownData? dropdownsData = new TaxInformationDropdownData
+                    {
+                        TaxMethod = (await multi.ReadAsync<TaxMethod>()).ToList(),
+                        IT3aReasonCode = (await multi.ReadAsync<IT3aReasonCode>()).ToList(),
+                        UIFExempts = (await multi.ReadAsync<UIFExempts>()).ToList(),
+                    };
+                    return dropdownsData;
+                }
+            );
+        }
+
+        public async Task<JsonResult> GetTaxInformation(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<TaxInformation>("usp_GetEmployeeTaxInformation", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, "Tax Information", ActionType.Retrieved));
+        }
+
+        public async Task<bool> UpdateTaxInformation(TaxInformation reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@IncomeTaxNumber", reqModel.IncomeTaxNumber);
+            parameters.Add("@TaxOffice", reqModel.TaxOffice);
+            parameters.Add("@TaxMethod", reqModel.TaxMethod);
+            parameters.Add("@IT3aReasonCodes", reqModel.IT3aReasonCodes);
+            parameters.Add("@ExemptFromUIF", reqModel.ExemptFromUIF);
+            parameters.Add("@MedicalAidBeneficiaries", reqModel.MedicalAidBeneficiaries);
+            parameters.Add("@IsOIDReportExclude", reqModel.IsOIDReportExclude);
+            parameters.Add("@IsSDLExempt", reqModel.IsSDLExempt);
+            parameters.Add("@IsPrivateBenefit", reqModel.IsPrivateBenefit);
+            parameters.Add("@IsCompanyorClose", reqModel.IsCompanyorClose);
+            parameters.Add("@IsTrust", reqModel.IsTrust);
+            parameters.Add("@IsETIQualifies", reqModel.IsETIQualifies);
+            parameters.Add("@MinimumWage", reqModel.MinimumWage);
+            parameters.Add("@ValidId", reqModel.ValidId);
+            parameters.Add("@IsAverageWorkingHours", reqModel.IsAverageWorkingHours);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertTaxInformation", parameters);
+            return result;
+        }
         #region Documents
 
         public async Task<List<EmployeeDocuments>> GetEmployeeDocument(int employeeId)

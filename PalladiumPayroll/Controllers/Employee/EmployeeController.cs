@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿﻿using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Employees;
@@ -433,7 +433,7 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> UpsertGarnishee([FromBody]EmployeeGarnisheeRequest request)
+        public async Task<ActionResult> UpsertGarnishee([FromBody] EmployeeGarnisheeRequest request)
         {
             try
             {
@@ -442,7 +442,7 @@ namespace PalladiumPayroll.Controllers.Employee
             catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Employee+" Garnishee", ex.Message)
+                    string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Employee + " Garnishee", ex.Message)
                 );
             }
         }
@@ -470,8 +470,48 @@ namespace PalladiumPayroll.Controllers.Employee
             catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Employee+" Saving", ex.Message)
+                    string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Employee + " Saving", ex.Message)
                 );
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetTaxInformationDropdownData()
+        {
+            try
+            {
+                var response = await _employeeService.GetTaxInformationDropdownData();
+                return HttpStatusCodeResponse.SuccessResponse(response, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTransfer, ActionType.Retrieved));
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<JsonResult> GetTaxInformation(int employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetTaxInformation(employeeId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpdateTaxInformation(TaxInformation reqModel)
+        {
+            try
+            {
+                return await _employeeService.UpdateTaxInformation(reqModel);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
 
@@ -489,7 +529,7 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> UploadDocuments([FromForm]EmployeeDocumentUpload employeeDocument)
+        public async Task<ActionResult> UploadDocuments([FromForm] EmployeeDocumentUpload employeeDocument)
         {
             try
             {
@@ -502,7 +542,7 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpDelete("[action]")]
-        public async Task<ActionResult> DeleteDocuments([FromQuery]EmployeeDocumentDelete reqModel)
+        public async Task<ActionResult> DeleteDocuments([FromQuery] EmployeeDocumentDelete reqModel)
         {
             try
             {
