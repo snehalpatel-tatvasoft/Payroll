@@ -6,13 +6,19 @@ public class EmployeeGrievanceUpsertData
     public long EmployeeId { get; set; }
     public long CompanyId { get; set; }
     public DateTime? Date { get; set; }
-    public string? Accused { get; set; }=null;
+    public string? Accused { get; set; } = null;
     public long? NatureOfGrievanceId { get; set; }
     public DateTime? Stage1Date { get; set; }
-    public string? Stage1Outcome { get; set; }=null;
-    public string? Stage1Chairperson { get; set; }=null;
+    public string? Stage1Outcome { get; set; } = null;
+    public string? Stage1Chairperson { get; set; } = null;
     public DateTime? Stage2Date { get; set; }
-    public string? Stage2Outcome { get; set; }=null;
-    public string? Stage2Chairperson { get; set; }=null;
-    public string UserId { get; set; }="";
+    public string? Stage2Outcome { get; set; } = null;
+    public string? Stage2Chairperson { get; set; } = null;
+    public string UserId { get; set; } = "";
+}
+
+public class NatureOfGrievancesDto
+{
+    public int CompanyId { get; set; }
+    public string Name { get; set; }="";
 }

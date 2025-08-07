@@ -2,6 +2,7 @@ using System.Data;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeGrievances;
 
 namespace PalladiumPayroll.Repositories.HRFunctions.EmployeeGrievances;
@@ -81,7 +82,7 @@ public class EmployeeGrievancesRepository : IEmployeeGrievancesRepository
 
     public async Task<List<EmployeeGrievanceDTO>> GetEmployeeGrievances(long companyId)
     {
-         DynamicParameters? parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@CompanyId", companyId);
 
         List<EmployeeGrievanceDTO>? result = await _dapper.ExecuteStoredProcedure<EmployeeGrievanceDTO>(
@@ -101,6 +102,28 @@ public class EmployeeGrievancesRepository : IEmployeeGrievancesRepository
             "usp_GetEmployeeGrievanceById", parameters);
     }
 
+    public async Task<List<DropDownViewModel>> AddNatureOfGrievance(NatureOfGrievancesDto request)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@Name", request.Name);
+        parameters.Add("@CompanyId", request.CompanyId);
 
+        List<DropDownViewModel>? result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>(
+            "usp_AddNatureOfGrievance", parameters
+        );
+
+        return result ?? new List<DropDownViewModel>();
+    }
+
+    public async Task<bool> DeleteNatureOfGrievance(int natureOfGrievanceId)
+    {
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("@NatureOfGrievanceId", natureOfGrievanceId);
+        parameters.Add("@IsDeleted", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeleteNatureOfGrievance", parameters);
+
+        return parameters.Get<bool>("@IsDeleted");
+    }
 
 }

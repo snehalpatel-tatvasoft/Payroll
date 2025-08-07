@@ -16,4 +16,8 @@ public interface IEmployeeGrievancesService
     Task<JsonResult> GetEmployeeGrievances(long companyId);
 
     Task<JsonResult> GetEmployeeGrievanceById(long grievanceId);
+
+     Task<JsonResult> AddNatureOfGrievance(NatureOfGrievancesDto request);
+
+    Task<JsonResult> DeleteNatureOfGrievance(int natureOfGrievanceId);
 }

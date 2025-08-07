@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeGrievances;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeGrievances;
@@ -51,7 +52,6 @@ public class EmployeeGrievancesService : IEmployeeGrievancesService
         {
             return HttpStatusCodeResponse.BadRequestResponse();
         }
-
     }
 
     public async Task<JsonResult> GetEmployeesForGrievances(long companyId)
@@ -96,7 +96,7 @@ public class EmployeeGrievancesService : IEmployeeGrievancesService
         }
     }
 
-     public async Task<JsonResult> GetEmployeeGrievanceById(long grievanceId)
+    public async Task<JsonResult> GetEmployeeGrievanceById(long grievanceId)
     {
         try
         {
@@ -108,5 +108,45 @@ public class EmployeeGrievancesService : IEmployeeGrievancesService
         {
             return HttpStatusCodeResponse.BadRequestResponse();
         }
+    }
+
+    public async Task<JsonResult> AddNatureOfGrievance(NatureOfGrievancesDto request)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(request.Name))
+                return HttpStatusCodeResponse.NotFoundResponse("Name is required.");
+
+            List<DropDownViewModel>? result = await _employeeGrievancesRepository.AddNatureOfGrievance(request);
+
+            if (result.Count == 1 && result[0].Id == -1 && result[0].Value == "Duplicate")
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse("This Nature of Grievance already exists for the selected company.");
+            }
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.NatureOfGrievances, ActionType.Saved));
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+    }
+
+    public async Task<JsonResult> DeleteNatureOfGrievance(int natureOfGrievanceId)
+    {
+        try
+        {
+            bool isDeleted = await _employeeGrievancesRepository.DeleteNatureOfGrievance(natureOfGrievanceId);
+
+            if (!isDeleted)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse("Nature of Grievance not found or already deleted.");
+            }
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.NatureOfGrievances, ActionType.Deleted));
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.BadRequestResponse();
+        }
+
     }
 }

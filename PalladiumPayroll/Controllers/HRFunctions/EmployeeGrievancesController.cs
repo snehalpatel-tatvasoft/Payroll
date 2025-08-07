@@ -129,4 +129,44 @@ public class EmployeeGrievancesController : ControllerBase
         }
     }
 
+    [HttpPost("[action]")]
+    public async Task<ActionResult> AddNatureOfGrievance([FromBody] NatureOfGrievancesDto  request)
+    {
+        try
+        {
+            if (request.CompanyId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+            }
+
+            return await _employeeGrievancesService.AddNatureOfGrievance(request);
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.NatureOfGrievances, ex.Message)
+            );
+        }
+    }
+
+    [HttpDelete("[action]")]
+    public async Task<ActionResult> DeleteNatureOfGrievance(int natureOfGrievanceId)
+    {
+        try
+        {
+            if (natureOfGrievanceId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse("Invalid nature of grievances id.");
+            }
+
+            return await _employeeGrievancesService.DeleteNatureOfGrievance(natureOfGrievanceId);
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.NatureOfGrievances, ex.Message)
+            );
+        }
+    }
+
 }
