@@ -337,12 +337,7 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@DepartmentId", reqModel.DepartmentId);
             parameters.Add("@ProvinceId", reqModel.ProvinceId);
             parameters.Add("@SupportFunctionId", reqModel.SupportFunctionId);
-            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeOrganization", parameters);
-            if (result)
-            {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " organization", ActionType.Saving));
-            }
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeOrganization", parameters);
         }
 
         #endregion
