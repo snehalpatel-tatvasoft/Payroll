@@ -120,4 +120,20 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
         public int EmployeeId { get; set; }
         public List<IFormFile> Document { get; set; }
     }
+
+    public class EmployeeDocuments
+    {
+        public int? DocumentId { get; set; }
+        public string DocumentName { get; set; }
+        public string DocumentUrl { get; set; }
+        public long DocumentSize { get; set; }
+        public string DocumentType { get; set; }
+    }
+
+    public class EmployeeDocumentDelete
+    {
+        public int EmployeeId { get; set; }
+        public int DocumentId { get; set; }
+        public string DocumentUrl { get; set; }
+    }
 }

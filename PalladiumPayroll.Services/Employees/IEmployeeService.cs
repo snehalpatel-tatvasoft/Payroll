@@ -32,5 +32,9 @@ namespace PalladiumPayroll.Services.Employees
         Task<JsonResult> GetEmployeeTakeOnBalance(int employeeId, int allowanceType);
         Task<JsonResult> DeleteEmployeeTakeOnBalance(List<int> takeOnBalanceIds);
         Task<JsonResult> SetTakeOnComplete(int employeeId);
+        Task<JsonResult> GetEmployeeDocument(int employeeId);
+        Task<JsonResult> UploadDocuments(EmployeeDocumentUpload employeeDocument);
+        Task<JsonResult> DeleteDocuments(EmployeeDocumentDelete reqModel);
+        Task<byte[]> DownloadDocument(string documentUrl);
     }
 }

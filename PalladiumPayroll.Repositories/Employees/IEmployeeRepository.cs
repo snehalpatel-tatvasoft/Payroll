@@ -34,6 +34,9 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<TakeOnBalanceListWithTakeOnComplete> GetEmployeeTakeOnBalance(int employeeId, int allowanceType);
         Task<bool> DeleteEmployeeTakeOnBalance(List<int> takeOnBalanceIds);
         Task<bool> SetTakeOnComplete(int employeeId);
+        Task<List<EmployeeDocuments>> GetEmployeeDocument(int employeeId);
+        Task<bool> UploadDocumentsSave(List<EmployeeDocuments> employeeDocuments, int employeeId);
+        Task<bool> DeleteDocuments(int documentId);
     }
 
 }
