@@ -230,7 +230,6 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(
                     string.Format(ResponseMessages.Exception, ActionType.Deleting, $"{ResponseMessages.Employee} Directive Information", ex.Message));
-                    string.Format(ResponseMessages.Exception, ActionType.Deleting, $"{ResponseMessages.Employee} Directive Information", ex.Message));
             }
         }
 
