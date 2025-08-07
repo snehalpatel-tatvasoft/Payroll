@@ -48,7 +48,6 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<List<EmployeeDocuments>> GetEmployeeDocument(int employeeId);
         Task<bool> UploadDocumentsSave(List<EmployeeDocuments> employeeDocuments, int employeeId);
         Task<bool> DeleteDocuments(int documentId);
-        Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup);
         Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId);
         Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId);
         Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model);

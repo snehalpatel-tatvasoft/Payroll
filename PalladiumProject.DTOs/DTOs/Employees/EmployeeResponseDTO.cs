@@ -225,17 +225,10 @@
         public string? ValidId { get; set; }
         public bool IsAverageWorkingHours { get; set; }
         
-    }
-	}
-
-	public class TimeSheetSetup
-	{
-		public int EmployeeId { get; set; }
-		public bool? EnableTimeSheet { get; set; }
-		public string TimeSheetPassword { get; set; }
-		public string TimeSheetConfirmPassword { get; set; }
 
 	}
+
+
 
 	public class EmployeeDetailForEmployeeSelfservice
 	{
