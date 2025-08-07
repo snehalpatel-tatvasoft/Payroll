@@ -461,5 +461,25 @@ namespace PalladiumPayroll.Services.Employees
             }
             return result;
         }
+
+        public async Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId)
+        {
+            return await _employeeRepository.GetEmployeeByEmployeeId(employeeId, companyId);
+        }
+
+        public async Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId)
+        {
+            return await _employeeRepository.GetSecondApprovalEmployeeListByCompanyId(companyId);
+        }
+
+        public async Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model)
+        {
+            return await _employeeRepository.UpdateEmployeeSelfService(model);
+        }
+
+        public async Task<JsonResult> GetAccessRolesByCompanyId(long companyId)
+        {
+            return await _employeeRepository.GetAccessRolesByCompanyId(companyId);
+        }
     }
 }

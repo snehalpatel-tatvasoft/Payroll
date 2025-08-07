@@ -48,5 +48,9 @@ namespace PalladiumPayroll.Services.Employees
         Task<JsonResult> UploadDocuments(EmployeeDocumentUpload employeeDocument);
         Task<JsonResult> DeleteDocuments(EmployeeDocumentDelete reqModel);
         Task<byte[]> DownloadDocument(string documentUrl);
+        Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId);
+        Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId);
+        Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model);
+        Task<JsonResult> GetAccessRolesByCompanyId(long companyId);
     }
 }
