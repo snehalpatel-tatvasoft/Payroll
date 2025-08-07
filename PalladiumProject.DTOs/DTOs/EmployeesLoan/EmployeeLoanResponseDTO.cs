@@ -22,9 +22,9 @@ public class EmployeeLoanResponseDTO
 
 public class EmployeeLoanDropdownsDTO
 {
-    public List<EmployeeDropdownDto> Employees { get; set; } = new();
+    public List<EmployeeLoanDataDropdownDto> Employees { get; set; } = new();
 }
-public class EmployeeDropdownDto
+public class EmployeeLoanDataDropdownDto
 {
     public long EmployeeId { get; set; }
     public string EmployeeCode { get; set; } = string.Empty;
