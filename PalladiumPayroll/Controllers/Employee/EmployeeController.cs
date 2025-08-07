@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿﻿using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Employees;
@@ -160,6 +160,7 @@ namespace PalladiumPayroll.Controllers.Employee
             }
         }
 
+
         [HttpGet("[action]")]
         public async Task<ActionResult> GetTransactionTypesDropdownData(long companyId)
         {
@@ -202,7 +203,6 @@ namespace PalladiumPayroll.Controllers.Employee
             );
         }
 
-
         [HttpPut("[action]")]
         public async Task<ActionResult> UpdateDirective(long directiveId, DirectiveRequest reqModel)
         {
@@ -216,7 +216,6 @@ namespace PalladiumPayroll.Controllers.Employee
                     string.Format(ResponseMessages.Exception, ActionType.Updating, $"{ResponseMessages.Employee} Directive Information", ex.Message));
             }
         }
-
 
         [HttpDelete("[action]")]
         public async Task<ActionResult> DeleteDirective(long directiveId)
@@ -376,6 +375,106 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
 
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeleteEmployeeLoan(int employeeLoanId)
+        {
+            try
+            {
+                if (employeeLoanId <= 0)
+                {
+                    return HttpStatusCodeResponse.NotFoundResponse("Invalid Loan Id.");
+                }
+                return await _employeeService.DeleteEmployeeLoan(employeeLoanId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.Employee + " Loan", ex.Message)
+                );
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeLoanDetail(long employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeLoanDetail(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee + " Loan", ex.Message));
+            }
+        }
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetGarnisheeDropdownData(long companyId)
+        {
+            try
+            {
+                return await _employeeService.GetGarnisheeDropdownData(companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee + "  Garnishee DropList", ex.Message));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetGarnisheeDetails(long employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetGarnisheeDetails(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee + "  Garnishee", ex.Message));
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpsertGarnishee([FromBody] EmployeeGarnisheeRequest request)
+        {
+            try
+            {
+                return await _employeeService.UpsertGarnishee(request);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Employee + " Garnishee", ex.Message)
+                );
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetSavingsDetails(long employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetSavingsDetails(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee + "  Savings", ex.Message));
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpsertSaving(EmployeeSavingsRequest request)
+        {
+            try
+            {
+                return await _employeeService.UpsertSaving(request);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Employee + " Saving", ex.Message)
+                );
+            }
+        }
+
         [HttpGet("[action]")]
         public async Task<ActionResult> GetTaxInformationDropdownData()
         {
@@ -430,7 +529,7 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> UploadDocuments([FromForm]EmployeeDocumentUpload employeeDocument)
+        public async Task<ActionResult> UploadDocuments([FromForm] EmployeeDocumentUpload employeeDocument)
         {
             try
             {
@@ -443,7 +542,7 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpDelete("[action]")]
-        public async Task<ActionResult> DeleteDocuments([FromQuery]EmployeeDocumentDelete reqModel)
+        public async Task<ActionResult> DeleteDocuments([FromQuery] EmployeeDocumentDelete reqModel)
         {
             try
             {
