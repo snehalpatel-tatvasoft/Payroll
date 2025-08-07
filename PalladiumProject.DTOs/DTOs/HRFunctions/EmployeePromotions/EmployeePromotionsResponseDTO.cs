@@ -1,3 +1,5 @@
+using PalladiumPayroll.DTOs.DTOs.Common;
+
 namespace PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeePromotions;
 
 public class JobGradeDto

@@ -230,6 +230,7 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(
                     string.Format(ResponseMessages.Exception, ActionType.Deleting, $"{ResponseMessages.Employee} Directive Information", ex.Message));
+                    string.Format(ResponseMessages.Exception, ActionType.Deleting, $"{ResponseMessages.Employee} Directive Information", ex.Message));
             }
         }
 
@@ -312,7 +313,7 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> GetPayrollTransactionList([FromQuery]TransactionReqModel reqModel)
+        public async Task<ActionResult> GetPayrollTransactionList([FromQuery] TransactionReqModel reqModel)
         {
             try
             {
