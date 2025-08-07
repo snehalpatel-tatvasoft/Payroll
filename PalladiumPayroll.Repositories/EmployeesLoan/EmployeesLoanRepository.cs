@@ -91,7 +91,7 @@ public class EmployeesLoanRepository : IEmployeesLoanRepository
             {
                 var dto = new EmployeeLoanDropdownsDTO
                 {
-                    Employees = (await multi.ReadAsync<EmployeeDropdownDto>()).ToList()
+                    Employees = (await multi.ReadAsync<EmployeeLoanDataDropdownDto>()).ToList()
                 };
                 return dto;
             });
