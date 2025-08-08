@@ -663,5 +663,193 @@ namespace PalladiumPayroll.Repositories.Employees
         }
         #endregion
 
+
+        public async Task<TaxInformationDropdownData> GetTaxInformationDropdownData()
+        {
+            return await _dapper.ExecuteStoredProcedureMultipleAsync(
+                "usp_GetTaxInformationDropdownData",
+                null,
+                async multi =>
+                {
+                    TaxInformationDropdownData? dropdownsData = new TaxInformationDropdownData
+                    {
+                        TaxMethod = (await multi.ReadAsync<TaxMethod>()).ToList(),
+                        IT3aReasonCode = (await multi.ReadAsync<IT3aReasonCode>()).ToList(),
+                        UIFExempts = (await multi.ReadAsync<UIFExempts>()).ToList(),
+                    };
+                    return dropdownsData;
+                }
+            );
+        }
+
+        public async Task<JsonResult> GetTaxInformation(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<TaxInformation>("usp_GetEmployeeTaxInformation", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, "Tax Information", ActionType.Retrieved));
+        }
+
+        public async Task<bool> UpdateTaxInformation(TaxInformation reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@IncomeTaxNumber", reqModel.IncomeTaxNumber);
+            parameters.Add("@TaxOffice", reqModel.TaxOffice);
+            parameters.Add("@TaxMethod", reqModel.TaxMethod);
+            parameters.Add("@IT3aReasonCodes", reqModel.IT3aReasonCodes);
+            parameters.Add("@ExemptFromUIF", reqModel.ExemptFromUIF);
+            parameters.Add("@MedicalAidBeneficiaries", reqModel.MedicalAidBeneficiaries);
+            parameters.Add("@IsOIDReportExclude", reqModel.IsOIDReportExclude);
+            parameters.Add("@IsSDLExempt", reqModel.IsSDLExempt);
+            parameters.Add("@IsPrivateBenefit", reqModel.IsPrivateBenefit);
+            parameters.Add("@IsCompanyorClose", reqModel.IsCompanyorClose);
+            parameters.Add("@IsTrust", reqModel.IsTrust);
+            parameters.Add("@IsETIQualifies", reqModel.IsETIQualifies);
+            parameters.Add("@MinimumWage", reqModel.MinimumWage);
+            parameters.Add("@ValidId", reqModel.ValidId);
+            parameters.Add("@IsAverageWorkingHours", reqModel.IsAverageWorkingHours);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertTaxInformation", parameters);
+            return result;
+        }
+        #region Documents
+
+        public async Task<List<EmployeeDocuments>> GetEmployeeDocument(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            return await _dapper.ExecuteStoredProcedure<EmployeeDocuments>("usp_GetEmployeeDocument", parameters);
+        }
+
+        public async Task<bool> UploadDocumentsSave(List<EmployeeDocuments> employeeDocuments, int employeeId)
+        {
+            var employeeDocumentTable = new DataTable();
+            employeeDocumentTable.Columns.Add("DocumentId", typeof(int));
+            employeeDocumentTable.Columns.Add("DocumentName", typeof(string));
+            employeeDocumentTable.Columns.Add("DocumentUrl", typeof(string));
+            employeeDocumentTable.Columns.Add("DocumentSize", typeof(long));
+            employeeDocumentTable.Columns.Add("DocumentType", typeof(string));
+            if (employeeDocuments != null)
+            {
+                foreach (var item in employeeDocuments)
+                {
+                    DataRow row = employeeDocumentTable.NewRow();
+                    row["DocumentId"] = item.DocumentId ?? (object)DBNull.Value;
+                    row["DocumentName"] = item.DocumentName;
+                    row["DocumentUrl"] = item.DocumentUrl;
+                    row["DocumentSize"] = item.DocumentSize;
+                    row["DocumentType"] = item.DocumentType;
+                    employeeDocumentTable.Rows.Add(row);
+                }
+            }
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            parameters.Add("@EmployeeDocument", employeeDocumentTable.AsTableValuedParameter("EmployeeDocumentType"));
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeDocument", parameters);
+        }
+
+        public async Task<bool> DeleteDocuments(int documentId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@DocumentId", documentId);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteEmployeeDocument", parameters);
+        }
+        #endregion
+
+        #region Employee Self Service
+
+        public async Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            parameters.Add("@CompanyId", companyId);
+
+            var flatList = await _dapper.ExecuteStoredProcedure<EmployeeDetailForEmployeeSelfservice>(
+                "usp_GetEmployeeByEmployeeIdForEmployeeSelfservice", parameters);
+
+            if (flatList == null || !flatList.Any())
+                return HttpStatusCodeResponse.NotFoundResponse("Employee not found.");
+
+            var first = flatList.First();
+
+            var response = new EmployeeSelfServiceResponse
+            {
+                Email = first.Email,
+                Password = first.Password,
+                AccessRoleID = first.AccessRoleID,
+                AccessRoleName = first.AccessRoleName,
+                IsManager = first.IsManager,
+                SecondApprovalId = first.SecondApprovalId,
+                SecondApprovalFullName = first.SecondApprovalFullName,
+                Functionalities = flatList.Select(f => new FunctionalityPermissionDto
+                {
+                    FunctionalityId = f.FunctionalityId,
+                    FunctionalityName = f.FunctionalityName,
+                    View = f.View,
+                    Edit = f.Edit,
+                    Delete = f.Delete
+                }).ToList()
+            };
+
+            return HttpStatusCodeResponse.SuccessResponse(response, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            var data = await _dapper.ExecuteStoredProcedure<SecondApprovalEmployeeDTO>("usp_GetSecondApprovalEmployeeListByCompanyId", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Second Approval Employees", ActionType.Retrieved));
+        }
+
+
+        public async Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", model.EmployeeId);
+            parameters.Add("@CompanyId", model.CompanyId);
+            parameters.Add("@IsManager", model.IsManager);
+            parameters.Add("@SecondApprovalId", model.SecondApprovalId);
+
+            // Create a DataTable for the TVP
+            var functionalityTable = new DataTable();
+            functionalityTable.Columns.Add("FunctionalityID", typeof(int));
+            functionalityTable.Columns.Add("View", typeof(bool));
+            functionalityTable.Columns.Add("Edit", typeof(bool));
+            functionalityTable.Columns.Add("Delete", typeof(bool));
+
+            // Populate the DataTable with the functionality list
+            foreach (var functionality in model.FunctionalityList)
+            {
+                functionalityTable.Rows.Add(functionality.FunctionalityId, functionality.View, functionality.Edit, functionality.Delete);
+            }
+
+            parameters.Add("@FunctionalityList", functionalityTable.AsTableValuedParameter("UserFunctionalityListType"));
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<dynamic>("usp_UpdateEmployeeSelfService", parameters);
+            if (result.Result == 1)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(true, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Updated));
+            }
+            else
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error: {result.ErrorMessage} (Error Number: {result.ErrorNumber})");
+            }
+        }
+
+        public async Task<JsonResult> GetAccessRolesByCompanyId(long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            var data = await _dapper.ExecuteStoredProcedure<AccessRoleDto>(
+                "usp_GetAccessRolesNamesByCompanyId", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Access Roles", ActionType.Retrieved));
+        }
+
+        #endregion
     }
 }

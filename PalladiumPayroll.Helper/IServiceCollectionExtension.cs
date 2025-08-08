@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.Helper.License;
 using PalladiumPayroll.Helper.Log4net;
 
@@ -12,9 +13,11 @@ namespace PalladiumPayroll.Helper
         {
             // Register strongly-typed config
             services.Configure<PayrollMachineData>(configuration.GetSection("PayrollMachine"));
+            services.Configure<DirectoryPathSetting>(configuration.GetSection("DirectoryPathSetting"));
 
             // Register class that uses it
             services.AddScoped<PayrollMachine>();
+            services.AddSingleton<AppSettingDirectoryPath>();
 
             services.AddTransient<ILog4net, Log4net.Log4net>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

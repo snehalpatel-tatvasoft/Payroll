@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Employees;
-using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.Employees;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -11,9 +11,11 @@ namespace PalladiumPayroll.Services.Employees
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
-        public EmployeeService(IEmployeeRepository employeeRepository)
+        private readonly DirectoryPathSetting _directoryPathSetting;
+        public EmployeeService(IEmployeeRepository employeeRepository, AppSettingDirectoryPath directoryPathSetting)
         {
             _employeeRepository = employeeRepository;
+            _directoryPathSetting = directoryPathSetting.GetAppSettingDirectoryPath();
         }
 
         public async Task<JsonResult> GetEmployeeFilters(int companyId)
@@ -196,6 +198,26 @@ namespace PalladiumPayroll.Services.Employees
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
 
+        public async Task<TaxInformationDropdownData> GetTaxInformationDropdownData()
+        {
+            var data = await _employeeRepository.GetTaxInformationDropdownData();
+            return data;
+        }
+        
+        public async Task<JsonResult> GetTaxInformation(int employeeId)
+        {
+            return await _employeeRepository.GetTaxInformation(employeeId);
+        }
+
+        public async Task<JsonResult> UpdateTaxInformation(TaxInformation reqModel)
+        {
+            var result = await _employeeRepository.UpdateTaxInformation(reqModel);
+            if (result == true)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, string.Concat(ResponseMessages.Employee, " ", "Tax Information"), ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
 
 
         public async Task<JsonResult> GetPayrollTransactionList(TransactionReqModel reqModel)
@@ -242,61 +264,30 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> DeleteEmployeeLoan(int employeeLoanId)
         {
-            try
-            {
-                bool isDeleted = await _employeeRepository.DeleteEmployeeLoan(employeeLoanId);
+            bool isDeleted = await _employeeRepository.DeleteEmployeeLoan(employeeLoanId);
 
-                if (!isDeleted)
-                {
-                    return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.Employee + " loan not found.");
-                }
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Loan", ActionType.Deleted));
-            }
-            catch (Exception)
+            if (!isDeleted)
             {
-                return HttpStatusCodeResponse.BadRequestResponse();
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.Employee + " loan not found.");
             }
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Loan", ActionType.Deleted));
         }
 
         public async Task<JsonResult> GetEmployeeLoanDetail(long employeeId)
         {
-            try
-            {
-                EmployeeLoanResponse? data = await _employeeRepository.GetEmployeeLoanDetail(employeeId);
-
-                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Loan", ActionType.Retrieved));
-            }
-            catch (Exception)
-            {
-                return HttpStatusCodeResponse.BadRequestResponse();
-            }
+            EmployeeLoanResponse? data = await _employeeRepository.GetEmployeeLoanDetail(employeeId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Loan", ActionType.Retrieved));
         }
         public async Task<JsonResult> GetGarnisheeDropdownData(long companyId)
         {
-            try
-            {
-                GarnisheeDropdownListDto? data = await _employeeRepository.GetGarnisheeDropdownData(companyId);
-
-                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishee DropList", ActionType.Retrieved));
-            }
-            catch (Exception)
-            {
-                return HttpStatusCodeResponse.BadRequestResponse();
-            }
+            GarnisheeDropdownListDto? data = await _employeeRepository.GetGarnisheeDropdownData(companyId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishee DropList", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetGarnisheeDetails(long employeeId)
         {
-            try
-            {
-                List<GarnishDetails>? data = await _employeeRepository.GetGarnisheeDetails(employeeId);
-
-                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishes", ActionType.Retrieved));
-            }
-            catch (Exception)
-            {
-                return HttpStatusCodeResponse.BadRequestResponse();
-            }
+            List<GarnishDetails>? data = await _employeeRepository.GetGarnisheeDetails(employeeId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishes", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> UpsertGarnishee(EmployeeGarnisheeRequest request)
@@ -349,6 +340,107 @@ namespace PalladiumPayroll.Services.Employees
             {
                 return HttpStatusCodeResponse.BadRequestResponse();
             }
+        }
+
+        public async Task<JsonResult> GetEmployeeDocument(int employeeId)
+        {
+            var data = await _employeeRepository.GetEmployeeDocument(employeeId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Employee Document", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> UploadDocuments(EmployeeDocumentUpload employeeDocument)
+        {
+            var basePath = _directoryPathSetting.EmployeeDocument;
+            if (!string.IsNullOrEmpty(basePath))
+            {
+                List<EmployeeDocuments> dbFileList = new List<EmployeeDocuments>();
+                var employeeFolder = $"Employee_{employeeDocument.EmployeeId}";
+                var finalPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, employeeFolder).Replace("/", Path.DirectorySeparatorChar.ToString());
+                if (!Directory.Exists(finalPath))
+                {
+                    Directory.CreateDirectory(finalPath);
+                }
+                foreach (var file in employeeDocument.Document)
+                {
+                    var isFileReplced = false;
+                    var filePath = Path.Combine(finalPath, file.FileName);
+                    if (File.Exists(filePath))
+                    {
+                        isFileReplced = true;
+                        File.Delete(filePath);
+                    }
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    if(!isFileReplced)
+                    {
+                        var relativePath = Path.Combine(employeeFolder, file.FileName).Replace(Path.DirectorySeparatorChar.ToString(), "/");
+                        dbFileList.Add(new EmployeeDocuments() { 
+                            DocumentName = file.FileName, 
+                            DocumentUrl = relativePath, 
+                            DocumentType = file.ContentType, 
+                            DocumentSize = file.Length 
+                        });
+                    }
+                }
+                var result = await _employeeRepository.UploadDocumentsSave(dbFileList, employeeDocument.EmployeeId);
+                if (result)
+                {
+                    return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Employee Document", ActionType.uploaded));
+                }
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<JsonResult> DeleteDocuments(EmployeeDocumentDelete reqModel)
+        {
+            var result = await _employeeRepository.DeleteDocuments(reqModel.DocumentId);
+            if (result)
+            {
+                var basePath = _directoryPathSetting.EmployeeDocument.Replace("/", Path.DirectorySeparatorChar.ToString());
+                var existFilePath = Path.Combine(Directory.GetCurrentDirectory(), basePath, reqModel.DocumentUrl);
+                if (File.Exists(existFilePath))
+                {
+                    File.Delete(existFilePath);
+                }
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Document", ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<byte[]> DownloadDocument(string documentUrl)
+        {
+            byte[] result = { };
+            var basePath = _directoryPathSetting.EmployeeDocument;
+            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, documentUrl).Replace("/", Path.DirectorySeparatorChar.ToString());
+            if (File.Exists(fullPath))
+            {
+                result = await File.ReadAllBytesAsync(fullPath);
+            }
+            return result;
+        }
+
+        public async Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId)
+        {
+            return await _employeeRepository.GetEmployeeByEmployeeId(employeeId, companyId);
+        }
+
+        public async Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId)
+        {
+            return await _employeeRepository.GetSecondApprovalEmployeeListByCompanyId(companyId);
+        }
+
+        public async Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model)
+        {
+            return await _employeeRepository.UpdateEmployeeSelfService(model);
+        }
+
+        public async Task<JsonResult> GetAccessRolesByCompanyId(long companyId)
+        {
+            return await _employeeRepository.GetAccessRolesByCompanyId(companyId);
         }
     }
 }
