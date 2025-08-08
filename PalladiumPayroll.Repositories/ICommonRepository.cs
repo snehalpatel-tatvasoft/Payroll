@@ -14,6 +14,7 @@ namespace PalladiumPayroll.Repositories
         Task<List<DropDownViewModel>> GetStandardIndustryCode();
         Task<List<DropDownViewModel>> GetTradeClassification();
         Task<List<TransactionList>> GetTransactionList();
+        Task<List<DropDownViewModel>> GetCompanyCycle(int companyId);
         Task<bool> CheckDBConnection(DBConnectionModel dbConnectionModel);
     }
 }
