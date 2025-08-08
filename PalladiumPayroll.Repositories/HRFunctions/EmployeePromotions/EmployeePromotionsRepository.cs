@@ -2,6 +2,7 @@ using System.Data;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeePromotions;
 
 namespace PalladiumPayroll.Repositories.HRFunctions.EmployeePromotions;
@@ -99,7 +100,7 @@ public class EmployeePromotionsRepository : IEmployeePromotionsRepository
         parameters.Add("@CompanyId", companyId);
 
         List<EmployeePromotionsdisplayDataDTO>? result = await _dapper.ExecuteStoredProcedure<EmployeePromotionsdisplayDataDTO>(
-            "usp_GetEmployeePromotionDisplayData",
+            "usp_GetEmployeePromotions",
             parameters
         );
         return result;
