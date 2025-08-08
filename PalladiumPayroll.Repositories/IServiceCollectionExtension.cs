@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PalladiumPayroll.Repositories.Admin.AccessRights;
-using PalladiumPayroll.Repositories.Admin.NetcashSetup;
 using PalladiumPayroll.Repositories.Applicationadmin;
 using PalladiumPayroll.Repositories.Auth;
 using PalladiumPayroll.Repositories.Comany_Settings;
@@ -36,7 +35,6 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<IPasswordPolicyRepository, PasswordPolicyRepository>();
             services.AddScoped<IEmployeeGrievancesRepository, EmployeeGrievancesRepository>();
             services.AddScoped<IAccessRightsRepository, AccessRightsRepository>();
-            services.AddScoped<INetcashSetupRepository, NetcashSetupRepository>();
             return services;
         }
     }
