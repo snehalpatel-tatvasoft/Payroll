@@ -12,31 +12,62 @@ namespace PalladiumPayroll.Services.HRFunctions.EmployeeTraining;
 public class EmployeeTrainingService : IEmployeeTrainingService
 {
     private readonly IEmployeeTrainingRepository _employeeTrainingRepository;
-    private readonly string _fileUploadPath = @"E:\PCTR25\Payroll-final-Project\PremiumPayProject-Frontend\Payroll-UI\src\assets\employee-training-documents\";
+    private readonly DirectoryPathSetting _directoryPathSetting;
 
-    public EmployeeTrainingService(IEmployeeTrainingRepository employeeTrainingRepository)
+    public EmployeeTrainingService(IEmployeeTrainingRepository employeeTrainingRepository, AppSettingDirectoryPath directoryPathSetting)
     {
         _employeeTrainingRepository = employeeTrainingRepository;
+        _directoryPathSetting = directoryPathSetting.GetAppSettingDirectoryPath();
     }
 
     public async Task<JsonResult> UpsertEmployeeTraining(EmployeeTrainingUpsertData request)
     {
         try
         {
+            if (request.File != null && request.File.Length > 0)
+            {
+                var basePath = _directoryPathSetting.TrainingDocument;
+                var finalPath = Path.Combine(Directory.GetCurrentDirectory(), basePath);
+
+                if (!Directory.Exists(finalPath))
+                    Directory.CreateDirectory(finalPath);
+
+                var filePath = Path.Combine(finalPath, request.File.FileName);
+
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await request.File.CopyToAsync(stream);
+                }
+
+                var relativePath = Path.Combine(basePath, request.File.FileName).Replace("\\", "/");
+
+                request.FileName = request.File.FileName;
+                request.FilePath = relativePath;
+                request.FileSize = request.File.Length;
+                request.FileType = request.File.ContentType;
+            }
+
             bool isSaved = await _employeeTrainingRepository.UpsertEmployeeTraining(request);
 
             if (!isSaved)
             {
                 return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeTrainingSaveFailed);
             }
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTraining, ActionType.Saved));
 
+            return HttpStatusCodeResponse.SuccessResponse(
+                string.Empty,
+                string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTraining, ActionType.Saved)
+            );
         }
         catch (Exception)
         {
             return HttpStatusCodeResponse.BadRequestResponse();
         }
     }
+
 
     public async Task<JsonResult> DeleteEmployeeTraining(long employeeTrainingId, string userId)
     {
@@ -99,39 +130,16 @@ public class EmployeeTrainingService : IEmployeeTrainingService
         }
     }
 
-
-    public async Task<string?> UploadTrainingFile(IFormFile file)
+    public async Task<byte[]> DownloadDocument(string documentUrl)
     {
-        if (file == null || file.Length == 0)
-            return null;
-
-        string[]? allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
-        string? extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-
-        if (!allowedExtensions.Contains(extension))
-            return null;
-
-        if (file.Length > 2 * 1024 * 1024)
-            return null;
-
-        if (!Directory.Exists(_fileUploadPath))
-            Directory.CreateDirectory(_fileUploadPath);
-
-        string? originalFileNameWithoutExt = Path.GetFileNameWithoutExtension(file.FileName);
-        string? sanitizedFileName = string.Concat(originalFileNameWithoutExt.Split(Path.GetInvalidFileNameChars()));
-
-        string? shortId = Guid.NewGuid().ToString("N")[..8];
-
-        string? fileName = $"{sanitizedFileName}_{shortId}{extension}";
-        string? fullPath = Path.Combine(_fileUploadPath, fileName);
-
-        using (var stream = new FileStream(fullPath, FileMode.Create))
+        byte[] result = { };
+        var basePath = _directoryPathSetting.EmployeeDocument;
+        var fullPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, documentUrl).Replace("/", Path.DirectorySeparatorChar.ToString());
+        if (File.Exists(fullPath))
         {
-            await file.CopyToAsync(stream);
+            result = await File.ReadAllBytesAsync(fullPath);
         }
-
-        string? relativePath = $"assets/employee-training-documents/{fileName}";
-        return relativePath;
+        return result;
     }
 
     public async Task<JsonResult> AddEmployeeTrainingDropdownItem(EmployeeTrainingDropdownItem reqItem)

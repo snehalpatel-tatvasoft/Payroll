@@ -20,7 +20,7 @@ public class EmployeeTrainingController : ControllerBase
 
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> UpsertEmployeeTraining(EmployeeTrainingUpsertData request)
+    public async Task<ActionResult> UpsertEmployeeTraining([FromForm]EmployeeTrainingUpsertData request)
     {
         try
         {
@@ -30,10 +30,10 @@ public class EmployeeTrainingController : ControllerBase
             }
             return await _employeeTrainingService.UpsertEmployeeTraining(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.EmployeeTraining, ex.Message)
+                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.EmployeeTraining)
             );
         }
     }
@@ -116,24 +116,6 @@ public class EmployeeTrainingController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> UploadFile(IFormFile file)
-    {
-        try
-        {
-            string? relativePath = await _employeeTrainingService.UploadTrainingFile(file);
-
-            if (string.IsNullOrEmpty(relativePath))
-                return HttpStatusCodeResponse.NotFoundResponse("File upload failed.");
-
-            return HttpStatusCodeResponse.SuccessResponse(relativePath, "File uploaded successfully.");
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"An error occurred while uploading the file: {ex.Message}");
-        }
-    }
-
-    [HttpPost("[action]")]
     public async Task<JsonResult> AddEmployeeTrainingDropdownItem(EmployeeTrainingDropdownItem reqItem)
     {
         try
@@ -158,4 +140,18 @@ public class EmployeeTrainingController : ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
     }
+
+      [HttpGet("[action]")]
+        public async Task<ActionResult> DownloadDocument(string fileUrl)
+        {
+            try
+            {
+                return File(await _employeeTrainingService.DownloadDocument(fileUrl), "application/octet-stream", fileUrl.Split("\\").LastOrDefault());
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+
+        }
 }

@@ -40,6 +40,9 @@ public class EmployeeTrainingRepository : IEmployeeTrainingRepository
         parameters.Add("@SAQARequired", request.SAQARequired);
         parameters.Add("@Comments", request.Comments);
         parameters.Add("@FilePath", request.FilePath);
+        parameters.Add("@FileName", request.FileName);
+        parameters.Add("@FileType", request.FileType);
+        parameters.Add("@FileSize", request.FileSize);
         parameters.Add("@UserId", request.UserId);
 
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
