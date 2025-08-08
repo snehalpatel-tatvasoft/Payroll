@@ -114,6 +114,19 @@ namespace PalladiumPayroll.Controllers
         }
 
         [HttpGet("[action]")]
+        public async Task<ActionResult> GetCompanyCycle(int companyId)
+        {
+            try
+            {
+                return await _commonService.GetCompanyCycle(companyId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetTransactionList()
         {
             try

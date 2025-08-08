@@ -55,9 +55,18 @@ namespace PalladiumPayroll.Repositories
             List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchTradeClassification");
             return response;
         }
+
         public async Task<List<TransactionList>> GetTransactionList()
         {
             List<TransactionList> response = await _dapper.ExecuteStoredProcedure<TransactionList>("usp_GetTransactionList");
+            return response;
+        }
+
+        public async Task<List<DropDownViewModel>> GetCompanyCycle(int companyId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_FetchCompanyCycles", parameters);
             return response;
         }
 

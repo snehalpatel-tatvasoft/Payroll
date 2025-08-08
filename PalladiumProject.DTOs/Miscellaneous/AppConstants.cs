@@ -1,9 +1,11 @@
 ﻿
+using System.Runtime.CompilerServices;
+
 namespace PalladiumPayroll.Helper.Constants
 {
     public static class AppConstants
     {
-        public const int DefaultPageSize = 999999999;
+        public const int DefaultPageSize = 10;
 
         public const int AuthTokenExpiryInMinutes = 10;
 
@@ -19,6 +21,9 @@ namespace PalladiumPayroll.Helper.Constants
 
         public const string DefaultConnectionString = "Data Source={0}; initial catalog={1}; User ID={2}; Password={3}; TrustServerCertificate=True;";
 
+
+        public const string SortAsc = "ASC";
+        public const string SortDesc = "DESC";
 
         public static class ResponseMessages
         {
@@ -82,6 +87,7 @@ namespace PalladiumPayroll.Helper.Constants
             public const string TokenGeneratedSuccessfully = "Token Generated Successfully";
             public const string InternalServerError = "Internal Server Error!!";
 
+
             #endregion
 
             #region Home
@@ -102,6 +108,163 @@ namespace PalladiumPayroll.Helper.Constants
 
             #region Application Admin
             public static readonly string AppAdminDashboard = "Application Admin Dashboard Data";
+
+
+            #endregion
+
+            #region Dashboard
+
+            public static readonly string Dashboard = "Dashboard data";
+
+            #endregion
+
+            #region Designation
+
+            public const string DesignationsCreatedSuccessfully = "Designation created successfully";
+            public const string DesignationsCreationFailed = "Failed to create designation";
+            public const string DataFetchSuccess = "Data fetched successfully";
+            public const string DesignationsDeletedSuccessfully = "Designation deleted successfully";
+            public const string DesignationsUpdatedSuccessfully = "Designation updated successfully";
+            public const string DesignationsUpdateFailed = "Failed to update designation";
+            public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
+
+            #endregion
+
+            #region Minimum Wage 
+
+            public static readonly string MinimumWage = "Minimum Wage";
+            public const string DuplicateMinimumWage = "Duplicate minimum wage name for this company.";
+            public const string UnableToSaveMinimumWage = "Unable to save minimum wage.";
+            public const string MinimumWageNotFound = "Minimum Wage entry could not be deleted or was not found.";
+            public const string WageIdNotFound = "Wage Id is not found.";
+            public const string CompanyIdNotFound = "Company Id is not found.";
+
+            #endregion
+
+            #region Department
+
+            public static readonly string DepartmentsRetrievedSuccessfully = "Departments retrieved successfully.";
+            public static readonly string NoDepartmentsForThisCompanyId = "No departments found for the specified company.";
+            public static readonly string ErrorRetrievingDepartments = "Error retrieving departments.";
+            public static readonly string CheckDuplicateDepartment = "This department name already exists. Please choose a different one.";
+            public static readonly string DepartmentCreateSuccessfully = "Department created successfully.";
+            public static readonly string DepartmentNameRequired = "Department name is required.";
+            public static readonly string ErrorCreatingDepartment = "Error while creating the department.";
+            public static readonly string DepartmentUpdateSuccessfully = "Department updated successfully.";
+            public static readonly string ErrorUpdatingDepartment = "Error updating department.";
+            public static readonly string ErrorDeletingDepartment = "Error deleting department.";
+            public static readonly string DepartmentDeleteSuccessfully = "Department deleted successfully.";
+
+
+            #endregion
+
+
+            #region Employee Code
+
+            public static readonly string EmployeeCode = "Employee Code";
+
+            public const string EmployeeCodeSaveFailed = "Failed to save employee code";
+
+            #endregion
+
+
+            #region Payslip Display Setup
+
+            public static readonly string PayslipDisplaySetup = "Payslip Display Settings";
+
+            public const string PayslipDisplaySetupSaveFailed = "Failed to save Payslip Display Settings";
+
+            #endregion
+
+            #region Create Transaction
+            public static readonly string Transaction = "Transaction";
+            public static readonly string CreateTransaction = "Create Transaction";
+            public static readonly string TransactionCreatedSuccessfully = "Create transaction successfully.";
+            public static readonly string TransactionCreationFailed = "Failed to create transaction.";
+            public static readonly string DuplicateTransaction = "Transaction exists with the same type and description.";
+            public static readonly string TransactionUpdatedSuccessfully = "Transaction updated successfully.";
+            public static readonly string TransactionUpdateFailed = "Failed to update transaction.";
+            public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
+            public static readonly string TransactionImportedSuccessfully = "Transaction imported successfully.";
+            public static readonly string TransactionImportFailed = "Error occurred while importing the data";
+
+            #endregion
+
+            #region Employee Grievances
+
+            public static readonly string EmployeeGrievances = "Employee Grievances";
+
+            public static readonly string NatureOfGrievances = "Nature of Grievances";
+            public const string EmployeeGrievanceSaveFailed = "Failed to save Employee Grievances";
+            public const string InvalidEmployeeGrievanceId = "Employee Grievance Id is Invalid.";
+            public const string EmployeeGrievanceNotFound = "Employee Grievance was not found.";
+
+            #endregion
+
+
+            #region Employees Loan
+
+            public static readonly string LoanPausedSuccessfully = "Loan paused successfully.";
+            public static readonly string LoanPausedFailed = "Failed to pause the loan.";
+            public static readonly string LoanCreatedSuccessfully = "Loan created successfully.";
+            public static readonly string LoanCreationFailed = "Loan creation failed.";
+            public static readonly string LoanUpdatedSuccessfully = "Loan updated successfully.";
+            public static readonly string LoanUpdatedFailed = "Loan update failed.";
+            public static readonly string LoanDataFetchedSuccessfully = "Loan data fetched successfully.";
+            public static readonly string LoanPaidSuccessfully = "Full Loan paid successfully.";
+            public static readonly string LoanPaidFailed = "Failed to pay full loan.";
+
+            #endregion
+
+            
+            #region Employee Promotions
+
+
+            public static readonly string EmployeePromotions = "Employee Promotions";
+            public const string EmployeePromotionSaveFailed  = "Failed to save Employee Promotion";
+
+            public static readonly string NatureOfPromotions = "Nature of Promotions";
+            public const string InvalidEmployeePromotionId = "Employee Promotion Id is Invalid.";
+            public const string EmployeePromotionNotFound = "Employee Promotion was not found.";
+
+            #endregion
+
+            #region Employee Training
+
+            public static readonly string EmployeeTraining = "Employee Training";
+            public const string EmployeeTrainingSaveFailed  = "Failed to save Employee Training";
+            public const string InvalidEmployeeTrainingnId = "Employee Training Id is Invalid.";
+            public const string EmployeeTrainingNotFound = "Employee Training was not found.";
+
+            #endregion
+
+            #region Employee Transfer
+
+            public static readonly string EmployeeTransfer = "Employee Transfer";
+            public static readonly string EmployeeTransferCreatedSuccessfully = "Employee Transfer Created Successfully";
+            public static readonly string EmployeeTransferCreationFailed = "Employee Transfer Creation Failed";
+            public static readonly string EmployeeOrCompanyIdInvalid = "EmployeeId Or CompanyId is Invalid";
+            public static readonly string EmployeeNotFound = "Employee Not Found";
+            public static readonly string InvalidEmployeeOrCompanyId = "Invalid Employee Or CompanyId";
+
+            #endregion
+
+
+            #region access rights
+
+            public static readonly string AccessRole = "Access Role";
+
+            public const string AcceessRoleAlreadyExists = "Access Role with this name is alreasy exists.";
+            public const string UnableToSaveAccessRole = "Unable to save Access Role";
+            public const string AccessRoleNotFound = "Access Role could not be deleted or was not found.";
+
+            public const string InvalidAccessRoleId = "Access Role Id is Invalid.";
+
+            public static readonly string AccessRights = "Access Rights";
+
+            public const string UnableToSaveAccessRights = "Unable to save Access Rights";
+
+
             #endregion
         }
     }

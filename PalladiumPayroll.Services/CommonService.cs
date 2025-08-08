@@ -59,6 +59,12 @@ namespace PalladiumPayroll.Services
             return HttpStatusCodeResponse.SuccessResponse(transactionList, string.Empty);
         }
 
+        public async Task<JsonResult> GetCompanyCycle(int companyId)
+        {
+            List<DropDownViewModel> cycleList = await _commonRepository.GetCompanyCycle(companyId);
+            return HttpStatusCodeResponse.SuccessResponse(cycleList, string.Empty);
+        }
+
         public async Task<JsonResult> CheckDBConnection(DBConnectionModel dbConnectionModel)
         {
             bool isConnected = await _commonRepository.CheckDBConnection(dbConnectionModel);

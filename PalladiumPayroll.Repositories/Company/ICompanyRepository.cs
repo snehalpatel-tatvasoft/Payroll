@@ -14,7 +14,7 @@ namespace PalladiumPayroll.Repositories.Company
         Task<bool> CheckCompanyExist(CheckCompanyExistModel reqModel);
         Task<JsonResult> CompanyCreation(CompanyModels model);
         Task<bool> AddNewBank(BankModel bankModel);
-        Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId);
+        Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId, string userId);
         Task<bool> SetActiveCompanyId(int companyId);
         Task<List<CompanyInfo>> GetCompanyInformation(int companyId);
         Task<List<GLSetup>> GetCompanyGLInfo(int companyId);
