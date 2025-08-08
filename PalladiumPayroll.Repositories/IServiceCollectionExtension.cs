@@ -10,7 +10,6 @@ using PalladiumPayroll.Repositories.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Repositories.Department;
 using PalladiumPayroll.Repositories.Employees;
 using PalladiumPayroll.Repositories.EmployeesLoan;
-using PalladiumPayroll.Repositories.Employees;
 using PalladiumPayroll.Repositories.Home;
 using PalladiumPayroll.Repositories.HRFunctions.DisciplinaryLog;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeGrievances;
