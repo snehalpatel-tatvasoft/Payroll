@@ -14,6 +14,26 @@ namespace PalladiumPayroll.Services.Company
         Task<JsonResult> AddNewBank(BankModel bankModel);
         Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId, string userId);
         Task<JsonResult> SetActiveCompanyId(int companyId);
+        Task<List<CompanyInfo>> GetCompanyInformation(int companyId);
+        Task<List<GLSetup>> GetCompanyGLInfo(int companyId);
+        Task<JsonResult> UpdateCompanyInformation(CompanyInfo companyInfo);
+        Task<List<CompanyRepresentative>> GetCompanyRepresentativeInfo(int companyId);
+        Task<JsonResult> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo);
+        Task<List<CompanyBankAccount>> GetBankDetailsInfo(int companyId);
+        Task<JsonResult> UpdateBankDetailsInfo(CompanyBankAccount companyBankAccount);
+        Task<List<CompanyPayrollCycle>> GetPayrollCycleInfo(int companyId, int taxYearId);
+        Task<List<CompanyCoidaSetup>> GetCOIDASetupInfo(int companyId, int yearId);
+        Task<List<EmploymentEquityInformation>> GetEmploymentEquityInfo(int companyId);
+        Task<List<PayrollMedicalAidList>> GetMedicalAidFundInfo(int companyId);
+        Task<List<PayrollBenefitFundList>> GetCompanyBenefitFundInfo(int companyId);
+        Task<JsonResult> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle);
+        Task<JsonResult> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList);
+        Task<JsonResult> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation);
+        Task<JsonResult> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup);
+        Task<JsonResult> AddMedicalAidFundInfo(PayrollMedicalAidList payrollMedicalAidList);
+        Task<JsonResult> DeletePayrollCycleInfo(int cycleId);
+        Task<JsonResult> DeleteMedicalAidFund(int fundId);
+        Task<JsonResult> DeleteCompanyBenefitFund(int fundId);
         Task<JsonResult> GetGLSetup(DBConnectionModel dbConnectionModel);
     }
 }
