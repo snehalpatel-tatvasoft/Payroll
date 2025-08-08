@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-
-namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
+﻿namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
 {
 
     public class CompanyInfo
     {
         public Int64 CompanyId { get; set; }
         public string? CompanyLogo { get; set; }
-        public string CompanyName { get; set; }
+        public string CompanyName { get; set; } = null!;
         public int CompanyTypeId { get; set; }
         public string CompanyRegNumber { get; set; }
         public long? TaxRegNumber { get; set; }
@@ -44,32 +42,37 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public string? Pos_Address3 { get; set; }
         public string? Pos_AddPinCode { get; set; }
     }
+    public class BasicCompanyInfo
+    {
+        public Int64? CompanyId { get; set; }
+        public int? TaxYearId { get; set; }
+    }
 
-    public class CompanyRepresentative
+    public class CompanyRepresentative : BasicCompanyInfo
     {
         public string SARSName { get; set; }
         public string SARSContactNo { get; set; }
         public string SARSContactEmail { get; set; }
     }
 
-    public class CompanyPayrollCycle
+    public class CompanyPayrollCycle : BasicCompanyInfo
     {
-        public int CycleID { get; set; }
+        public int? CycleId { get; set; }
         public string CycleName { get; set; }
         public DateTime CycleEndDate { get; set; }
         public int CycleType { get; set; }
     }
 
-    public class PayrollMedicalAidList
+    public class PayrollMedicalAidList : BasicCompanyInfo
     {
-        public int FundId { get; set; }
+        public int? FundId { get; set; }
         public string FundName { get; set; }
         public string SchemeName { get; set; }
     }
 
-    public class PayrollBenefitFundList
+    public class PayrollBenefitFundList : BasicCompanyInfo
     {
-        public int FundId { get; set; }
+        public int? FundId { get; set; }
         public string FundName { get; set; }
         public int FundType { get; set; }
         public string ClearanceNo { get; set; }
@@ -82,7 +85,7 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public decimal? ComCon { get; set; }
     }
 
-    public class CompanyBankAccount
+    public class CompanyBankAccount : BasicCompanyInfo
     {
         public string? AccountHolderName { get; set; }
         public string? AccountNumber { get; set; }
@@ -111,7 +114,7 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public List<PayrollBenefitFundList>? PayrollBenefitFundList { get; set; }
         public CompanyBankAccount? CompanyBankAccount { get; set; }
         public List<TransactionList>? TransactionList { get; set; }
-        public GLSetup? GlSetup {  get; set; }
+        public GLSetup? GlSetup { get; set; }
 
     }
 
@@ -122,14 +125,41 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company
         public string CompanyName { get; set; } = null!;
     }
 
-    public class GLSetup
+    public class GLSetup : BasicCompanyInfo
     {
         public string? DatabaseServerName { get; set; }
         public string? DatabaseUserName { get; set; }
         public string? DatabaseName { get; set; }
         public string? Password { get; set; }
         public string? SalaryClearingAccountNumber { get; set; }
-        public string? PalladiumDepartment { get; set; } 
+        public string? PalladiumDepartment { get; set; }
     }
 
+    public class CompanyCoidaSetup : BasicCompanyInfo
+    {
+        public int? CoidaId { get; set; }
+        public decimal AnnualCeiling { get; set; }
+        public decimal RatesPerR100 { get; set; }
+        public decimal Percentage { get; set; }
+        public bool IsIncludeOvertime { get; set; }
+        public int YearId { get; set; }
+    }
+
+    public class EmploymentEquityInformation : BasicCompanyInfo
+    {
+        public int? EmploymentEquityInfoId { get; set; }
+        public int? EeReferenceNumber { get; set; }
+        public string? SetaClassification { get; set; }
+        public string? AccountingOfficerNameAndSurname { get; set; }
+        public string? AccountingOfficerTelephoneNumber { get; set; }
+        public string? AccountingOfficerFaxNumber { get; set; }
+        public string? AccountingOfficerEmail { get; set; }
+        public string? EquityManagerNameSurname { get; set; }
+        public string? EquityManagerTelephone { get; set; }
+        public string? EquityManagerFax { get; set; }
+        public string? EquityManagerEmail { get; set; }
+        public int IndustrySectorControlId { get; set; }
+        public int BusinessTypeControlId { get; set; }
+        public int NumberOfEmployeeControlId { get; set; }
+    }
 }
