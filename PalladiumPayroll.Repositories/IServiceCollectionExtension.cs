@@ -12,6 +12,7 @@ using PalladiumPayroll.Repositories.Employees;
 using PalladiumPayroll.Repositories.EmployeesLoan;
 using PalladiumPayroll.Repositories.Employees;
 using PalladiumPayroll.Repositories.Home;
+using PalladiumPayroll.Repositories.HRFunctions.DisciplinaryLog;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeGrievances;
 using PalladiumPayroll.Repositories.User;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeePromotions;
@@ -48,6 +49,7 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<IEmployeeTransferRepository, EmployeeTransferRepository>();
             services.AddScoped<IAccessRightsRepository, AccessRightsRepository>();
             services.AddScoped<IUserCreationRepository, UserCreationRepository>();
+            services.AddScoped<IDisciplinaryLogRepository, DisciplinaryLogRepository>();
             return services;
         }
     }

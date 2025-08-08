@@ -12,7 +12,9 @@ using PalladiumPayroll.Services.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Services.Department;
 using PalladiumPayroll.Services.EmployeesLoan;
 using PalladiumPayroll.Services.Employees;
+using PalladiumPayroll.Services.DisciplinaryLog;
 using PalladiumPayroll.Services.Home;
+using PalladiumPayroll.Services.HRFunctions.DisciplinaryLog;
 using PalladiumPayroll.Services.HRFunctions.EmployeeGrievances;
 using PalladiumPayroll.Services.HRFunctions.EmployeePromotions;
 using PalladiumPayroll.Services.HRFunctions.EmployeeTraining;
@@ -50,6 +52,8 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IEmployeeTransferService, EmployeeTransferService>();
             services.AddScoped<IAccessRightsService, AccessRightsService>();
             services.AddScoped<IUserCreationService, UserCreationService>();
+            services.AddScoped<IDisciplinaryLogService, DisciplinaryLogService>();
+            services.AddHttpContextAccessor();
             return services;
         }
     }
