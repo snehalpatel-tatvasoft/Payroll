@@ -27,14 +27,14 @@ namespace PalladiumPayroll.Repositories.Company
         public async Task<List<DropDownViewModelWithString>> GetGLAccounts(DBConnectionModel dbConnectionModel)
         {
             string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
-      
+
             string query = "SELECT intGLNumber as ID ,intGLNumber AS [KEY], intGLNumber AS [VALUE] from dbo.tblAccounts"; // Adjust as needed
             return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
         }
         public async Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel)
         {
             string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
-      
+
             string query = "SELECT strDesc as ID ,strDesc AS [KEY], strDesc AS [VALUE] from dbo.tblDepartments"; // Adjust as needed
             return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
         }
@@ -134,7 +134,7 @@ namespace PalladiumPayroll.Repositories.Company
                 foreach (var item in model.PayrollCycles)
                 {
                     DataRow row = payRollCycle.NewRow();
-                    row["CycleID"] = item.CycleID;
+                    row["CycleID"] = item.CycleId;
                     row["CycleName"] = item.CycleName;
                     row["CycleTypeId"] = item.CycleType;
                     row["CycleEndDate"] = item.CycleEndDate;
@@ -145,13 +145,13 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@CycleRecord", payRollCycle.AsTableValuedParameter("dbo.CycleRecordType"));
 
             // step-4 general ledger
-            DataTable glTransaction= new DataTable();
+            DataTable glTransaction = new DataTable();
             glTransaction.Columns.Add("TransactionOrders", typeof(string));
             glTransaction.Columns.Add("DebitAccountNumber", typeof(string));
             glTransaction.Columns.Add("CreditAccountNumber", typeof(string));
             glTransaction.Columns.Add("ContraAccountNumber", typeof(string));
 
-            if(model.TransactionList != null)
+            if (model.TransactionList != null)
             {
                 foreach (var item in model.TransactionList)
                 {
@@ -289,6 +289,275 @@ namespace PalladiumPayroll.Repositories.Company
 
             bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SetActiveCompanyId", parameters);
             return isAdded;
+        }
+
+        public async Task<bool> UpdateCompanyInformation(CompanyInfo companyInfo)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyInfo.CompanyId);
+            parameters.Add("@CompanyName", companyInfo.CompanyName);
+            parameters.Add("@CompanyLogo", companyInfo.CompanyLogo);
+            parameters.Add("@CompanyType", companyInfo.CompanyTypeId);
+            parameters.Add("@CompanyRegNumber", companyInfo.CompanyRegNumber);
+            parameters.Add("@TaxRegNumber", companyInfo.TaxRegNumber);
+            parameters.Add("@StdIndustryCode", companyInfo.StdIndustryCode);
+            parameters.Add("@PAYEReferenceNumber", companyInfo.PAYEReferenceNumber);
+            parameters.Add("@TradeClassificationId", companyInfo.TradeClassificationId);
+            parameters.Add("@UIFRegNumber", companyInfo.UIFRegNumber);
+            parameters.Add("@SplEcoZoneId", companyInfo.SplEcoZoneId);
+            parameters.Add("@UIFRefNumber", companyInfo.UIFRefNumber);
+            parameters.Add("@CurrencyID", companyInfo.CurrencyID);
+            parameters.Add("@SDLRefNumber", companyInfo.SDLRefNumber);
+            parameters.Add("@CountryID", companyInfo.CountryID);
+            parameters.Add("@IsExemptSDL", companyInfo.IsExemptSDL);
+            parameters.Add("@UseBCEARemuneration", companyInfo.UseBCEARemuneration);
+            parameters.Add("@EmployerDisentitlementId", companyInfo.EmployerDisentitlementId);
+
+            // Physical Address
+            parameters.Add("@UnitNumber", companyInfo.UnitNumber);
+            parameters.Add("@ComplexName", companyInfo.ComplexName);
+            parameters.Add("@StreetNumber", companyInfo.StreetNumber);
+            parameters.Add("@StreetName", companyInfo.Street);
+            parameters.Add("@District", companyInfo.District);
+            parameters.Add("@City", companyInfo.City);
+            parameters.Add("@PinCode", companyInfo.PinCode);
+            bool isPostalSame = companyInfo.sameAddress;
+            parameters.Add("@IsPostalSame", isPostalSame);
+
+            // Postal Address
+            parameters.Add("@Pos_UnitNumber", isPostalSame ? companyInfo.UnitNumber : null);
+            parameters.Add("@Pos_ComplexName", isPostalSame ? companyInfo.ComplexName : null);
+            parameters.Add("@Pos_StreetNumber", isPostalSame ? companyInfo.StreetNumber : null);
+            parameters.Add("@Pos_StreetName", isPostalSame ? companyInfo.Street : null);
+            parameters.Add("@Pos_District", isPostalSame ? companyInfo.District : null);
+            parameters.Add("@Pos_City", isPostalSame ? companyInfo.City : null);
+            parameters.Add("@Pos_PostalCode", isPostalSame ? companyInfo.PinCode : null);
+            parameters.Add("@Pos_Address1", companyInfo.Pos_Address1);
+            parameters.Add("@Pos_Address2", companyInfo.Pos_Address2);
+            parameters.Add("@Pos_Address3", companyInfo.Pos_Address3);
+            parameters.Add("@Pos_AddressPostalCode", companyInfo.Pos_PinCode);
+            parameters.Add("@Pos_CountryId", companyInfo.Pos_CountryId);
+
+            bool isUpdated = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateCompanyDetails", parameters);
+            return isUpdated;
+        }
+        public async Task<List<CompanyInfo>> GetCompanyInformation(int companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            List<CompanyInfo> response = await _dapper.ExecuteStoredProcedure<CompanyInfo>("usp_GetCompanyInfoByCompanyId ", parameters);
+            return response;
+        }
+
+        public async Task<List<GLSetup>> GetCompanyGLInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            List<GLSetup> response = await _dapper.ExecuteStoredProcedure<GLSetup>("usp_GetGLSetupByCompanyId", parameters);
+            return response;
+        }
+
+        public async Task<bool> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyRepresentativeInfo.CompanyId);
+            parameters.Add("@SARSName", companyRepresentativeInfo.SARSName);
+            parameters.Add("@SARSContactNo", companyRepresentativeInfo.SARSContactNo);
+            parameters.Add("@SARSContactEmail", companyRepresentativeInfo.SARSContactEmail);
+
+            bool isUpdated = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateCompanyRepresentative", parameters);
+            return isUpdated;
+        }
+
+        public async Task<List<CompanyRepresentative>> GetCompanyRepresentativeInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            List<CompanyRepresentative> response = await _dapper.ExecuteStoredProcedure<CompanyRepresentative>("usp_GetCompanyRepresentativeInfoByCompanyId ", parameters);
+            return response;
+        }
+
+        public async Task<List<CompanyBankAccount>> GetBankDetailsInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            var result = await _dapper.ExecuteStoredProcedure<CompanyBankAccount>("usp_GetCompanyBankDetailsByCompanyId", parameters);
+            return result;
+        }
+
+        public async Task<bool> UpdateBankDetailsInfo(CompanyBankAccount companyBankAccount)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyBankAccount.CompanyId);
+            parameters.Add("@AccountName", companyBankAccount.AccountHolderName);
+            parameters.Add("@AccountNumber", companyBankAccount.AccountNumber);
+            parameters.Add("@AccountTypeId", companyBankAccount.TypeofAccount);
+            parameters.Add("@BankId", companyBankAccount.BankId);
+            parameters.Add("@BranchCode", companyBankAccount.BranchCode);
+
+            bool isUpdated = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateCompanyBankDetails", parameters);
+            return isUpdated;
+        }
+
+        public async Task<List<CompanyPayrollCycle>> GetPayrollCycleInfo(int companyId, int taxYearId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            parameters.Add("@TaxYearId", taxYearId);
+
+            List<CompanyPayrollCycle>? result = await _dapper.ExecuteStoredProcedure<CompanyPayrollCycle>("usp_GetCompanyPayrollCycleByCompanyId", parameters);
+            return result;
+        }
+
+        public async Task<List<CompanyCoidaSetup>> GetCOIDASetupInfo(int companyId, int taxYearId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            parameters.Add("@YearId", taxYearId);
+
+            List<CompanyCoidaSetup>? result = await _dapper.ExecuteStoredProcedure<CompanyCoidaSetup>("usp_GetCompanyCOIDASetupInfoByCompanyId", parameters);
+            return result;
+        }
+
+        public async Task<List<PayrollMedicalAidList>> GetMedicalAidFundInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            List<PayrollMedicalAidList>? result = await _dapper.ExecuteStoredProcedure<PayrollMedicalAidList>("usp_GetCompanyMedicalAidFundByCompanyId", parameters);
+            return result;
+        }
+
+        public async Task<List<PayrollBenefitFundList>> GetCompanyBenefitFundInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            List<PayrollBenefitFundList>? result = await _dapper.ExecuteStoredProcedure<PayrollBenefitFundList>("usp_GetCompanyBenefitFundsByCompanyId", parameters);
+            return result;
+        }
+
+        public async Task<bool> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CycleId", companyPayrollCycle.CycleId);
+            parameters.Add("@CompanyId", companyPayrollCycle.CompanyId);
+            parameters.Add("@TaxYear", companyPayrollCycle.TaxYearId);
+            parameters.Add("@PayrollCycleName", companyPayrollCycle.CycleName);
+            parameters.Add("@PayrollCycleTypeId", companyPayrollCycle.CycleType);
+            parameters.Add("@CycleEndDate", companyPayrollCycle.CycleEndDate);
+
+            bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCompanyPayrollCycle", parameters);
+            return isUpsert;
+        }
+
+        public async Task<bool> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@BenId", payrollBenefitFundList.FundId);
+            parameters.Add("@CompanyId", payrollBenefitFundList.CompanyId);
+            parameters.Add("@BenFundName", payrollBenefitFundList.FundName);
+            parameters.Add("@BenFundType", payrollBenefitFundList.FundType);
+            parameters.Add("@ProvidentFund", payrollBenefitFundList.ProvidentFund);
+            parameters.Add("@PensionFund", payrollBenefitFundList.PensionFund);
+            parameters.Add("@ClearanceNo", payrollBenefitFundList.ClearanceNo);
+            parameters.Add("@CatFactor", payrollBenefitFundList.CatFactor);
+            parameters.Add("@FundCalType", payrollBenefitFundList.FundCal);
+            parameters.Add("@EmpCon", payrollBenefitFundList.EmpCon);
+            parameters.Add("@ComCon", payrollBenefitFundList.ComCon);
+            parameters.Add("@RFIPercent", payrollBenefitFundList.RFIPercent);
+
+            bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCompanyBenefitFund", parameters);
+            return isUpsert;
+        }
+
+        public async Task<bool> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CoidaId", companyCoidaSetup.CoidaId);
+            parameters.Add("@CompanyId", companyCoidaSetup.CompanyId);
+            parameters.Add("@AnnualCeiling", companyCoidaSetup.AnnualCeiling);
+            parameters.Add("@RatesPerR100", companyCoidaSetup.RatesPerR100);
+            parameters.Add("@Percentage", companyCoidaSetup.Percentage);
+            parameters.Add("@IsIncludeOvertime", companyCoidaSetup.IsIncludeOvertime);
+            parameters.Add("@YearId", companyCoidaSetup.YearId);
+
+            bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCompanyCoidaSetup", parameters);
+            return isUpsert;
+        }
+
+        public async Task<bool> AddMedicalAidFundInfo(PayrollMedicalAidList payrollMedicalAidList)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", payrollMedicalAidList.CompanyId);
+            parameters.Add("@MedicalAidFundName", payrollMedicalAidList.FundName);
+            parameters.Add("@MedicalAidSchemeName", payrollMedicalAidList.SchemeName);
+
+            bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_AddCompanyMedicalAidFund", parameters);
+            return isAdded;
+        }
+
+        public async Task<bool> DeletePayrollCycleInfo(int cycleId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CycleId", cycleId);
+
+            bool isDeleted = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteCompanyPayrollCycle", parameters);
+            return isDeleted;
+        }
+
+        public async Task<bool> DeleteMedicalAidFund(int fundId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@FundId", fundId);
+
+            bool isDeleted = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteMedicalAidFund", parameters);
+            return isDeleted;
+        }
+
+        public async Task<bool> DeleteCompanyBenefitFund(int fundId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@FundId", fundId);
+
+            bool isDeleted = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteCompanyBenefitFund", parameters);
+            return isDeleted;
+        }
+
+        public async Task<List<EmploymentEquityInformation>> GetEmploymentEquityInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            List<EmploymentEquityInformation>? result = await _dapper.ExecuteStoredProcedure<EmploymentEquityInformation>("usp_GetEmploymentEquityInfoByCompanyId", parameters);
+            return result;
+        }
+
+        public async Task<bool> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@EmploymentEquityInfoId", employmentEquityInformation.EmploymentEquityInfoId);
+            parameters.Add("@CompanyId", employmentEquityInformation.CompanyId);
+            parameters.Add("@EeReferenceNumber", employmentEquityInformation.EeReferenceNumber);
+            parameters.Add("@SetaClassification", employmentEquityInformation.SetaClassification);
+            parameters.Add("@AccountingOfficerNameAndSurname", employmentEquityInformation.AccountingOfficerNameAndSurname);
+            parameters.Add("@AccountingOfficerTelephoneNumber", employmentEquityInformation.AccountingOfficerTelephoneNumber);
+            parameters.Add("@AccountingOfficerFaxNumber", employmentEquityInformation.AccountingOfficerFaxNumber);
+            parameters.Add("@AccountingOfficerEmail", employmentEquityInformation.AccountingOfficerEmail);
+            parameters.Add("@EquityManagerNameAndSurname", employmentEquityInformation.AccountingOfficerNameAndSurname);
+            parameters.Add("@EquityManagerTelephone", employmentEquityInformation.EquityManagerTelephone);
+            parameters.Add("@EquityManagerFax", employmentEquityInformation.AccountingOfficerFaxNumber);
+            parameters.Add("@EquityManagerEmail", employmentEquityInformation.EquityManagerEmail);
+            parameters.Add("@IndustrySectorControlId", employmentEquityInformation.IndustrySectorControlId);
+            parameters.Add("@BusinessTypeControlId", employmentEquityInformation.BusinessTypeControlId);
+            parameters.Add("@NumberOfEmployeeControlId", employmentEquityInformation.NumberOfEmployeeControlId);
+
+            bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmploymentEquityInformation", parameters);
+            return isUpsert;
         }
     }
 }

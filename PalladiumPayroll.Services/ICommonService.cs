@@ -14,5 +14,10 @@ namespace PalladiumPayroll.Services
         Task<JsonResult> GetTransactionList();
         Task<JsonResult> GetCompanyCycle(int companyId);
         Task<JsonResult> CheckDBConnection(DBConnectionModel dbConnectionModel);
+        Task<JsonResult> GetBusinessTypeList();
+        Task<JsonResult> GetNumberOfEmployeesList();
+        Task<JsonResult> GetIndustryOrSectorTypeList();
+        Task<ActionResult> AddIndustrySectorType(string industrySector);
+        Task<JsonResult> DeleteIndustrySector(int industrySectorId);
     }
 }
