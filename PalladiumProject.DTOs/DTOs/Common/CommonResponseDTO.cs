@@ -18,7 +18,7 @@ namespace PalladiumPayroll.DTOs.DTOs.Common
     }
     public class DirectoryPathSetting
     {
-        public string? EmployeeDocument { get; set; }
+        public string EmployeeDocument { get; set; } = null!;
     }
 
     public class DropDownViewModel
