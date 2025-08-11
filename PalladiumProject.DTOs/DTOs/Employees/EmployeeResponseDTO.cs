@@ -225,6 +225,60 @@
         public string? ValidId { get; set; }
         public bool IsAverageWorkingHours { get; set; }
         
+
+	}
+
+
+	public class EmployeeDetailForEmployeeSelfservice
+	{
+		public string Email { get; set; }
+		public string Password { get; set; }
+		public int? AccessRoleID { get; set; }
+		public string AccessRoleName { get; set; }
+		public int FunctionalityId { get; set; }
+		public string FunctionalityName { get; set; }
+		public bool? View { get; set; }
+		public bool? Edit { get; set; }
+		public bool? Delete { get; set; }
+		public bool? IsManager { get; set; }
+		public int? SecondApprovalId { get; set; }
+		public string SecondApprovalFullName { get; set; }
+	}
+
+	public class FunctionalityPermissionDto
+	{
+		public int FunctionalityId { get; set; }
+		public string FunctionalityName { get; set; }
+		public bool? View { get; set; }
+		public bool? Edit { get; set; }
+		public bool? Delete { get; set; }
+	}
+
+	public class EmployeeSelfServiceResponse
+	{
+		public string Email { get; set; }
+		public string Password { get; set; }
+		public int? AccessRoleID { get; set; }
+		public string AccessRoleName { get; set; }
+		public bool? IsManager { get; set; }
+		public int? SecondApprovalId { get; set; }
+		public string SecondApprovalFullName { get; set; }
+
+		public List<FunctionalityPermissionDto> Functionalities { get; set; }
+	}
+
+	public class SecondApprovalEmployeeDTO
+	{
+		public long EmployeeId { get; set; }
+		public string EmployeeFullname { get; set; }
+	}
+
+	public class AccessRoleDto
+	{
+		public int AccessRoleId { get; set; }
+		public string AccessRoleName { get; set; }
+	}
+
     }
 
 	public class EmployeePreviousService
