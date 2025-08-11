@@ -1,5 +1,9 @@
+using PalladiumPayroll.DTOs.DTOs.Common;
+using PalladiumPayroll.DTOs.DTOs.Utilities.DataImport;
+
 namespace PalladiumPayroll.Repositories.Utilities.DataImport;
 
 public interface IDataImportRepository
 {
+    Task<TableDataModel<PayrollProcessingTransactionDto>> GetPayrollProcessingTransactionsByCompany(PayrollTransactionFilterViewModel reqModel);
 }

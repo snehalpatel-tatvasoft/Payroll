@@ -1,5 +1,8 @@
 namespace PalladiumPayroll.DTOs.DTOs.Utilities.DataImport;
 
-public class DataImportResponseDTO
+public class PayrollProcessingTransactionDto
 {
+    public long PayrollProcessId { get; set; }
+    public string Description { get; set; }="";
+    public long? Irp5Code { get; set; }
 }
