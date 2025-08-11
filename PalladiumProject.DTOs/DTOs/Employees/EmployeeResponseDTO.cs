@@ -229,7 +229,6 @@
 	}
 
 
-
 	public class EmployeeDetailForEmployeeSelfservice
 	{
 		public string Email { get; set; }
@@ -280,4 +279,12 @@
 		public string AccessRoleName { get; set; }
 	}
 
+    }
+
+	public class EmployeePreviousService
+	{
+		public string EmployeeCode { get; set; } = null!;
+		public DateTime PreviousStartDate { get; set; }
+        public DateOnly TerminationDate { get; set; }
+    }
 }

@@ -663,7 +663,7 @@ namespace PalladiumPayroll.Repositories.Employees
         }
         #endregion
 
-
+        #region TaxInfo
         public async Task<TaxInformationDropdownData> GetTaxInformationDropdownData()
         {
             return await _dapper.ExecuteStoredProcedureMultipleAsync(
@@ -714,6 +714,8 @@ namespace PalladiumPayroll.Repositories.Employees
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertTaxInformation", parameters);
             return result;
         }
+        #endregion
+
         #region Documents
 
         public async Task<List<EmployeeDocuments>> GetEmployeeDocument(int employeeId)
@@ -851,5 +853,12 @@ namespace PalladiumPayroll.Repositories.Employees
         }
 
         #endregion
+        public async Task<List<EmployeePreviousService>> GetPreviousService(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            return await _dapper.ExecuteStoredProcedure<EmployeePreviousService>("usp_GetPreviousServiceData", parameters);
+        }
+
     }
 }
