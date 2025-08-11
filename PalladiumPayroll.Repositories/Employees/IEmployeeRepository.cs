@@ -9,6 +9,7 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<JsonResult> GetEmployeeFilters(int companyId);
         Task<JsonResult> GetEmployeeList(EmployeeFilterViewModel reqModel);
         Task<bool> DeleteEmployee(int employeeId);
+
         Task<JsonResult> GetEmployeePaymentDetail(int employeeId);
         Task<bool> EmployeePaymentDetailSave(EmployeePaymentDetail reqModel);
 
@@ -20,8 +21,10 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<bool> DeleteWorkOrganizationalDropdownItem(int id, int type);
         Task<JsonResult> GetEmployeeWorkOrganizationalData(long employeeId);
         Task<bool> SaveEmployeeWorkOrganizationalData(EmployeeOrgnizationalModel reqModel);
+
         Task<JsonResult> GetEmployeeTimeSheetSetup(long employeeId);
         Task<bool> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup);
+
         Task<JsonResult> GetCasualWageInformation(int employeeId);
         Task<bool> UpdateCasualWageInformation(CasualWageInformation reqModel);
         Task<TransactionTypeDropdownsDTO> GetTransactionTypesDropdownData(long companyId);
@@ -35,10 +38,10 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<bool> DeleteEmployeeTakeOnBalance(List<int> takeOnBalanceIds);
         Task<bool> SetTakeOnComplete(int employeeId);
         Task<EmployeeLoanResponse> GetEmployeeLoanDetail(long employeeId);
-         Task<bool> DeleteEmployeeLoan(int employeeLoanId);
-         Task<GarnisheeDropdownListDto> GetGarnisheeDropdownData(long companyId);
-         Task<bool> UpsertGarnishee(EmployeeGarnisheeRequest request);
-         Task<List<GarnishDetails>> GetGarnisheeDetails(long employeeId);
+        Task<bool> DeleteEmployeeLoan(int employeeLoanId);
+        Task<GarnisheeDropdownListDto> GetGarnisheeDropdownData(long companyId);
+        Task<bool> UpsertGarnishee(EmployeeGarnisheeRequest request);
+        Task<List<GarnishDetails>> GetGarnisheeDetails(long employeeId);
         Task<bool> UpsertSaving(EmployeeSavingsRequest request);
         Task<List<SavingsDetails>> GetSavingsDetails(long employeeId);
         Task<TaxInformationDropdownData> GetTaxInformationDropdownData();
@@ -48,6 +51,13 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<List<EmployeeDocuments>> GetEmployeeDocument(int employeeId);
         Task<bool> UploadDocumentsSave(List<EmployeeDocuments> employeeDocuments, int employeeId);
         Task<bool> DeleteDocuments(int documentId);
+
+        Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId);
+        Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId);
+        Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model);
+        Task<JsonResult> GetAccessRolesByCompanyId(long companyId);
+
+        Task<List<EmployeePreviousService>> GetPreviousService(int employeeId);
     }
 
 }

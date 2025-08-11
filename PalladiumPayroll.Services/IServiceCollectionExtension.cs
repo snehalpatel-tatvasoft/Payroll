@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PalladiumPayroll.Repositories.Admin.AccessRights;
 using PalladiumPayroll.Services.Admin.AccessRights;
-using PalladiumPayroll.Repositories.Admin;
 using PalladiumPayroll.Services.Admin;
 using PalladiumPayroll.Services.Applicationadmin;
 using PalladiumPayroll.Services.Auth;
@@ -12,7 +10,9 @@ using PalladiumPayroll.Services.CompanySettings.CreateTransaction;
 using PalladiumPayroll.Services.Department;
 using PalladiumPayroll.Services.EmployeesLoan;
 using PalladiumPayroll.Services.Employees;
+using PalladiumPayroll.Services.DisciplinaryLog;
 using PalladiumPayroll.Services.Home;
+using PalladiumPayroll.Services.HRFunctions.DisciplinaryLog;
 using PalladiumPayroll.Services.HRFunctions.EmployeeGrievances;
 using PalladiumPayroll.Services.HRFunctions.EmployeePromotions;
 using PalladiumPayroll.Services.HRFunctions.EmployeeTraining;
@@ -50,6 +50,8 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IEmployeeTransferService, EmployeeTransferService>();
             services.AddScoped<IAccessRightsService, AccessRightsService>();
             services.AddScoped<IUserCreationService, UserCreationService>();
+            services.AddScoped<IDisciplinaryLogService, DisciplinaryLogService>();
+            services.AddHttpContextAccessor();
             return services;
         }
     }
