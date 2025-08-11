@@ -16,7 +16,7 @@ public class DataImportRepository : IDataImportRepository
         _dapper = new DapperContext(configuration);
     }
 
-   public async Task<TableDataModel<PayrollProcessingTransactionDto>> GetPayrollProcessingTransactionsByCompany(PayrollTransactionFilterViewModel reqModel)
+    public async Task<TableDataModel<PayrollProcessingTransactionDto>> GetPayrollProcessingTransactionsByCompany(PayrollTransactionFilterViewModel reqModel)
     {
         DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@CompanyId", reqModel.CompanyId);
@@ -35,6 +35,19 @@ public class DataImportRepository : IDataImportRepository
             DataList = data,
             TotalCount = total
         };
+    }
+
+
+    public async Task<bool> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", request.CompanyId);
+        parameters.Add("@TemplateName", request.TemplateName);
+        parameters.Add("@TransactionList", request.TransactionList);
+        parameters.Add("@Result", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_AddImportYearToDateTemplate", parameters);
+         return parameters.Get<bool>("@IsSuccess");
     }
 
 }

@@ -23,4 +23,14 @@ public class DataImportService : IDataImportService
 
         return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
     }
+
+    public async Task<JsonResult> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request)
+    {
+        bool isAdded = await _dataImportRepository.AddImportYearToDateTemplate(request);
+
+        if (isAdded)
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Import Year to Date Template ", ActionType.Retrieved));
+
+        return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+    }
 }

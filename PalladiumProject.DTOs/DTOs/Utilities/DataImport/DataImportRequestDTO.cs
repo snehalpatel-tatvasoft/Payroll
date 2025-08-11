@@ -13,3 +13,10 @@ public class PayrollTransactionFilterViewModel
     public bool SortType { get; set; } = true; 
     public string Search { get; set; } = "";
 }
+
+public class ImportYearToDateTemplateDto
+{
+    public long CompanyId { get; set; }
+    public string TemplateName { get; set; } = string.Empty;
+    public string TransactionList { get; set; } = string.Empty;
+}

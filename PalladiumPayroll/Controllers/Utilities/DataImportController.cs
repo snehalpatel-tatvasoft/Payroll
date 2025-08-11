@@ -18,16 +18,31 @@ public class DataImportController : ControllerBase
         _dataImportService = dataImportService;
     }
 
-     [HttpPost("[action]")]
-    public async Task<ActionResult> GetPayrollProcessingTransactions([FromQuery]PayrollTransactionFilterViewModel reqModel)
+    [HttpPost("[action]")]
+    public async Task<ActionResult> GetPayrollProcessingTransactions([FromQuery] PayrollTransactionFilterViewModel reqModel)
     {
         try
         {
             return await _dataImportService.GetPayrollProcessingTransactionsByCompany(reqModel);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction));
+        }
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request)
+    {
+        try
+        {
+            return await _dataImportService.AddImportYearToDateTemplate(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Saving, "Import year to date template.")
+            );
         }
     }
 }
