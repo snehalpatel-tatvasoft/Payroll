@@ -279,8 +279,6 @@
 		public string AccessRoleName { get; set; }
 	}
 
-    }
-
 	public class EmployeePreviousService
 	{
 		public string EmployeeCode { get; set; } = null!;

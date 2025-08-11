@@ -853,6 +853,7 @@ namespace PalladiumPayroll.Repositories.Employees
         }
 
         #endregion
+
         public async Task<List<EmployeePreviousService>> GetPreviousService(int employeeId)
         {
             var parameters = new DynamicParameters();
