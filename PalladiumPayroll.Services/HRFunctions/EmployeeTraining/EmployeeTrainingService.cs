@@ -133,7 +133,7 @@ public class EmployeeTrainingService : IEmployeeTrainingService
     public async Task<byte[]> DownloadDocument(string documentUrl)
     {
         byte[] result = { };
-        var basePath = _directoryPathSetting.EmployeeDocument;
+        var basePath = _directoryPathSetting.TrainingDocument;
         var fullPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, documentUrl).Replace("/", Path.DirectorySeparatorChar.ToString());
         if (File.Exists(fullPath))
         {
@@ -141,6 +141,26 @@ public class EmployeeTrainingService : IEmployeeTrainingService
         }
         return result;
     }
+
+    public async Task<JsonResult> DeleteTrainingDocument(string documentUrl)
+    {
+        string basePath = _directoryPathSetting.TrainingDocument
+            .Replace("/", Path.DirectorySeparatorChar.ToString());
+
+        string filePath = Path.Combine(Directory.GetCurrentDirectory(), basePath, documentUrl);
+
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+            return HttpStatusCodeResponse.SuccessResponse(
+                string.Empty,
+                string.Format(ResponseMessages.Success, "Document", ActionType.Deleted)
+            );
+        }
+
+        return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+    }
+
 
     public async Task<JsonResult> AddEmployeeTrainingDropdownItem(EmployeeTrainingDropdownItem reqItem)
     {

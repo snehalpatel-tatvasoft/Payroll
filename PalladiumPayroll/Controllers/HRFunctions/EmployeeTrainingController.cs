@@ -20,7 +20,7 @@ public class EmployeeTrainingController : ControllerBase
 
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> UpsertEmployeeTraining([FromForm]EmployeeTrainingUpsertData request)
+    public async Task<ActionResult> UpsertEmployeeTraining([FromForm] EmployeeTrainingUpsertData request)
     {
         try
         {
@@ -141,17 +141,29 @@ public class EmployeeTrainingController : ControllerBase
         }
     }
 
-      [HttpGet("[action]")]
-        public async Task<ActionResult> DownloadDocument(string fileUrl)
+    [HttpGet("[action]")]
+    public async Task<ActionResult> DownloadDocument(string fileUrl)
+    {
+        try
         {
-            try
-            {
-                return File(await _employeeTrainingService.DownloadDocument(fileUrl), "application/octet-stream", fileUrl.Split("\\").LastOrDefault());
-            }
-            catch (Exception)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
-            }
-
+            return File(await _employeeTrainingService.DownloadDocument(fileUrl), "application/octet-stream", fileUrl.Split("\\").LastOrDefault());
         }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+    }
+
+    [HttpDelete("[action]")]
+    public async Task<ActionResult> DeleteDocument([FromQuery] TrainingDocumentDelete reqModel)
+    {
+        try
+        {
+            return await _employeeTrainingService.DeleteTrainingDocument(reqModel.DocumentUrl);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+    }
 }

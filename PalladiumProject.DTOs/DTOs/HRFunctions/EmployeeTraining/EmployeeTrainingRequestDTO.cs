@@ -38,3 +38,9 @@ public class EmployeeTrainingDropdownItem
     public long CompanyId { get; set; }
     public int Type { get; set; }
 }
+
+
+public class TrainingDocumentDelete
+{
+    public string DocumentUrl { get; set; }="";
+}

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeTraining;
 
@@ -21,4 +20,6 @@ public interface IEmployeeTrainingService
     Task<JsonResult> DeleteEmployeeTrainingDropdownItem(int id, int type);
 
     Task<byte[]> DownloadDocument(string documentUrl);
+
+     Task<JsonResult> DeleteTrainingDocument(string documentUrl);
 }
