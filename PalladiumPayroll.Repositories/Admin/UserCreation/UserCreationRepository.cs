@@ -94,7 +94,7 @@ namespace PalladiumPayroll.Repositories.Admin
             parameters.Add("@CompanyId", companyId, dbType: DbType.Int64);
 
             var result = await _dapper.ExecuteStoredProcedure<AccessRoleResponseDTO>(
-                "usp_GetAccessRolesNamesByCompanyId", parameters);
+                "usp_GetAccessRolesNamesByCompanyIdForAdmin", parameters);
             return result.ToList();
         }
 
