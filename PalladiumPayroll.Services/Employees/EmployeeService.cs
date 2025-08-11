@@ -401,11 +401,11 @@ namespace PalladiumPayroll.Services.Employees
                 }
                 foreach (var file in employeeDocument.Document)
                 {
-                    var isFileReplced = false;
+                    var isFileReplaced = false;
                     var filePath = Path.Combine(finalPath, file.FileName);
                     if (File.Exists(filePath))
                     {
-                        isFileReplced = true;
+                        isFileReplaced = true;
                         File.Delete(filePath);
                     }
                     using (var stream = new FileStream(filePath, FileMode.Create))
@@ -413,7 +413,7 @@ namespace PalladiumPayroll.Services.Employees
                         await file.CopyToAsync(stream);
                     }
 
-                    if(!isFileReplced)
+                    if(!isFileReplaced)
                     {
                         var relativePath = Path.Combine(employeeFolder, file.FileName).Replace(Path.DirectorySeparatorChar.ToString(), "/");
                         dbFileList.Add(new EmployeeDocuments() { 
@@ -460,6 +460,12 @@ namespace PalladiumPayroll.Services.Employees
                 result = await File.ReadAllBytesAsync(fullPath);
             }
             return result;
+        }
+
+        public async Task<JsonResult> GetPreviousService(int employeeId)
+        {
+            var previousServiceList = await _employeeRepository.GetPreviousService(employeeId);
+            return HttpStatusCodeResponse.SuccessResponse(previousServiceList, string.Format(ResponseMessages.Success, "Previous Service", ActionType.Retrieved));
         }
     }
 }

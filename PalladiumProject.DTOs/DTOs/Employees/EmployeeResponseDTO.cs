@@ -226,4 +226,11 @@
         public bool IsAverageWorkingHours { get; set; }
         
     }
+
+	public class EmployeePreviousService
+	{
+		public string EmployeeCode { get; set; } = null!;
+		public DateTime PreviousStartDate { get; set; }
+        public DateOnly TerminationDate { get; set; }
+    }
 }
