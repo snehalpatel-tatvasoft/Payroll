@@ -12,3 +12,9 @@ public class YTDTemplateDropdownDto
     public int TemplateId { get; set; }
     public string TemplateName { get; set; }="";
 }
+
+public class TransactionForExcelGenerateDto
+{
+    public long PayrollProcessId { get; set; }
+    public string? Description { get; set; }
+}

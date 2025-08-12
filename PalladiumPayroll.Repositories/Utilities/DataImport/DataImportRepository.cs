@@ -62,5 +62,17 @@ public class DataImportRepository : IDataImportRepository
         return result ?? new List<YTDTemplateDropdownDto>();
     }
 
+    public async Task<List<TransactionForExcelGenerateDto>> GetTransactionForExcelGenerate(int templateId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@TemplateId", templateId);
+
+        List<TransactionForExcelGenerateDto>? result = await _dapper.ExecuteStoredProcedure<TransactionForExcelGenerateDto>(
+            "usp_GetTransactionDescriptionsByTemplateId",
+            parameters
+        );
+
+        return result ?? new List<TransactionForExcelGenerateDto>();
+    }
 
 }

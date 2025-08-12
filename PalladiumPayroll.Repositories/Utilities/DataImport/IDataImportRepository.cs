@@ -10,4 +10,6 @@ public interface IDataImportRepository
     Task<bool> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request);
 
     Task<List<YTDTemplateDropdownDto>> GetDropDownForYearToDateTemplate(long companyId);
+
+    Task<List<TransactionForExcelGenerateDto>> GetTransactionForExcelGenerate(int templateId);
 }

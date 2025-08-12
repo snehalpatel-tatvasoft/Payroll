@@ -41,4 +41,11 @@ public class DataImportService : IDataImportService
         return HttpStatusCodeResponse.SuccessResponse(template, string.Format(ResponseMessages.Success, "Year to date Template", ActionType.Retrieved));
     }
 
+    public async Task<JsonResult> GetTransactionForExcelGenerate(int templateId)
+    {
+        List<TransactionForExcelGenerateDto> transactions = await _dataImportRepository.GetTransactionForExcelGenerate(templateId);
+
+        return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
+    }
+
 }

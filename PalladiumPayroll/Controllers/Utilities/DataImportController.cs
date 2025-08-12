@@ -62,4 +62,17 @@ public class DataImportController : ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, "Year to date Template" ));
         }
     }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetTransactionForExcelGenerate(int templateId)
+    {
+        try
+        {
+            return await _dataImportService.GetTransactionForExcelGenerate(templateId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction));
+        }
+    }
 }
