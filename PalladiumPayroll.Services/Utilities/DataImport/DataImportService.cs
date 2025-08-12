@@ -29,8 +29,8 @@ public class DataImportService : IDataImportService
         bool isAdded = await _dataImportRepository.AddImportYearToDateTemplate(request);
 
         if (isAdded)
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Import Year to Date Template ", ActionType.Retrieved));
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Import Year to Date Template ", ActionType.Saved));
 
-        return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.AlreadyExist, "Template with this name"));
     }
 }

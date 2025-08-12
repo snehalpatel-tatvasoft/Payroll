@@ -44,7 +44,7 @@ public class DataImportRepository : IDataImportRepository
         parameters.Add("@CompanyId", request.CompanyId);
         parameters.Add("@TemplateName", request.TemplateName);
         parameters.Add("@TransactionList", request.TransactionList);
-        parameters.Add("@Result", dbType: DbType.Int32, direction: ParameterDirection.Output);
+       parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_AddImportYearToDateTemplate", parameters);
          return parameters.Get<bool>("@IsSuccess");
