@@ -37,17 +37,30 @@ public class DataImportRepository : IDataImportRepository
         };
     }
 
-
     public async Task<bool> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request)
     {
         DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@CompanyId", request.CompanyId);
         parameters.Add("@TemplateName", request.TemplateName);
         parameters.Add("@TransactionList", request.TransactionList);
-       parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+        parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_AddImportYearToDateTemplate", parameters);
-         return parameters.Get<bool>("@IsSuccess");
+        return parameters.Get<bool>("@IsSuccess");
     }
+
+    public async Task<List<YTDTemplateDropdownDto>> GetDropDownForYearToDateTemplate(long companyId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", companyId);
+
+        List<YTDTemplateDropdownDto>? result = await _dapper.ExecuteStoredProcedure<YTDTemplateDropdownDto>(
+            "usp_GetDropDownForYearToDateTemplate",
+            parameters
+        );
+
+        return result ?? new List<YTDTemplateDropdownDto>();
+    }
+
 
 }

@@ -8,4 +8,6 @@ public interface IDataImportRepository
     Task<TableDataModel<PayrollProcessingTransactionDto>> GetPayrollProcessingTransactionsByCompany(PayrollTransactionFilterViewModel reqModel);
 
     Task<bool> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request);
+
+    Task<List<YTDTemplateDropdownDto>> GetDropDownForYearToDateTemplate(long companyId);
 }

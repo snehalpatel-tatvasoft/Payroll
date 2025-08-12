@@ -8,4 +8,6 @@ public interface IDataImportService
     Task<JsonResult> GetPayrollProcessingTransactionsByCompany(PayrollTransactionFilterViewModel reqModel);
 
     Task<JsonResult> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request);
+
+    Task<JsonResult> GetDropDownForYearToDateTemplate(long companyId);
 }

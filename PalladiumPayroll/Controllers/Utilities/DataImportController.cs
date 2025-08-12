@@ -45,4 +45,21 @@ public class DataImportController : ControllerBase
             );
         }
     }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetDropDownForYearToDateTemplate(long companyId)
+    {
+        try
+        {
+            if (companyId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+            }
+            return await _dataImportService.GetDropDownForYearToDateTemplate(companyId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, "Year to date Template" ));
+        }
+    }
 }

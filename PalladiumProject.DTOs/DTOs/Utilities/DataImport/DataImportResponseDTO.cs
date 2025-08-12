@@ -6,3 +6,9 @@ public class PayrollProcessingTransactionDto
     public string Description { get; set; }="";
     public long? Irp5Code { get; set; }
 }
+
+public class YTDTemplateDropdownDto
+{
+    public int TemplateId { get; set; }
+    public string TemplateName { get; set; }="";
+}

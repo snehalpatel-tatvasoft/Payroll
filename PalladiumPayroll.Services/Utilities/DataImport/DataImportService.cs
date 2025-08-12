@@ -33,4 +33,12 @@ public class DataImportService : IDataImportService
 
         return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.AlreadyExist, "Template with this name"));
     }
+
+    public async Task<JsonResult> GetDropDownForYearToDateTemplate(long companyId)
+    {
+        List<YTDTemplateDropdownDto> template = await _dataImportRepository.GetDropDownForYearToDateTemplate(companyId);
+
+        return HttpStatusCodeResponse.SuccessResponse(template, string.Format(ResponseMessages.Success, "Year to date Template", ActionType.Retrieved));
+    }
+
 }
