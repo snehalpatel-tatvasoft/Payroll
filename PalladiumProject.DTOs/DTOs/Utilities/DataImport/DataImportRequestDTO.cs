@@ -32,5 +32,5 @@ public class YearToDateRecordDTO
 public class ImportYTDRecordRequestDTO
 {
     public int CreatedBy { get; set; } = 1; 
-    public List<YearToDateRecordDTO> yearToDateRecords { get; set; } = new List<YearToDateRecordDTO>();
+    public List<YearToDateRecordDTO> YearToDateRecords { get; set; } = new List<YearToDateRecordDTO>();
 }

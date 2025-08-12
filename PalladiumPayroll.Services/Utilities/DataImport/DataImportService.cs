@@ -50,7 +50,7 @@ public class DataImportService : IDataImportService
 
     public async Task<JsonResult> ImportYTDRecord(ImportYTDRecordRequestDTO request)
     {
-        foreach (var record in request.yearToDateRecords)
+        foreach (var record in request.YearToDateRecords)
         {
             bool isAdded = await _dataImportRepository.ImportYTDRecord(record, request.CreatedBy);
 
