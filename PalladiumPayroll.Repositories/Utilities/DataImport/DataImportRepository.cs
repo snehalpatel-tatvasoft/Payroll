@@ -58,7 +58,6 @@ public class DataImportRepository : IDataImportRepository
             "usp_GetDropDownForYearToDateTemplate",
             parameters
         );
-
         return result ?? new List<YTDTemplateDropdownDto>();
     }
 
@@ -71,8 +70,21 @@ public class DataImportRepository : IDataImportRepository
             "usp_GetTransactionDescriptionsByTemplateId",
             parameters
         );
-
         return result ?? new List<TransactionForExcelGenerateDto>();
+    }
+
+    public async Task<bool> ImportYTDRecord(YearToDateRecordDTO record, int createdBy)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@EmployeeCode", record.EmployeeCode);
+        parameters.Add("@Description", record.Description);
+        parameters.Add("@Amount", record.Amount);
+        parameters.Add("@CreatedBy", createdBy);
+        parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_InsertYearToDateRecord", parameters);
+
+       return parameters.Get<bool>("@IsSuccess");
     }
 
 }

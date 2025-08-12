@@ -12,4 +12,6 @@ public interface IDataImportRepository
     Task<List<YTDTemplateDropdownDto>> GetDropDownForYearToDateTemplate(long companyId);
 
     Task<List<TransactionForExcelGenerateDto>> GetTransactionForExcelGenerate(int templateId);
+
+    Task<bool> ImportYTDRecord(YearToDateRecordDTO record, int createdBy);
 }

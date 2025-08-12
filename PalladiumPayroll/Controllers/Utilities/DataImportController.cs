@@ -75,4 +75,17 @@ public class DataImportController : ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction));
         }
     }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> ImportYTDRecord(ImportYTDRecordRequestDTO request)
+    {
+        try
+        {
+            return await _dataImportService.ImportYTDRecord(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Transaction));
+        }
+    }
 }

@@ -48,4 +48,18 @@ public class DataImportService : IDataImportService
         return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
     }
 
+    public async Task<JsonResult> ImportYTDRecord(ImportYTDRecordRequestDTO request)
+    {
+        foreach (var record in request.yearToDateRecords)
+        {
+            bool isAdded = await _dataImportRepository.ImportYTDRecord(record, request.CreatedBy);
+
+            if (!isAdded)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse("Failed to import year to date transactions.");
+            }
+        }
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.Transaction + "imported successfully.");
+    }
+
 }

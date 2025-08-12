@@ -12,4 +12,8 @@ public interface IDataImportService
     Task<JsonResult> GetDropDownForYearToDateTemplate(long companyId);
 
     Task<JsonResult> GetTransactionForExcelGenerate(int templateId);
+
+    Task<JsonResult> ImportYTDRecord(ImportYTDRecordRequestDTO request);
 }
+
+

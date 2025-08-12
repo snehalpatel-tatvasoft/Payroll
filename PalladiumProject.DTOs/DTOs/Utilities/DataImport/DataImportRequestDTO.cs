@@ -20,3 +20,17 @@ public class ImportYearToDateTemplateDto
     public string TemplateName { get; set; } = string.Empty;
     public string TransactionList { get; set; } = string.Empty;
 }
+
+
+public class YearToDateRecordDTO
+{
+    public string EmployeeCode { get; set; } = null!;
+    public string Description { get; set; } = null!;
+    public decimal Amount { get; set; }
+}
+
+public class ImportYTDRecordRequestDTO
+{
+    public int CreatedBy { get; set; } = 1; 
+    public List<YearToDateRecordDTO> yearToDateRecords { get; set; } = new List<YearToDateRecordDTO>();
+}
