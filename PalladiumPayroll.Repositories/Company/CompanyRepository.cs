@@ -27,16 +27,17 @@ namespace PalladiumPayroll.Repositories.Company
         public async Task<List<DropDownViewModelWithString>> GetGLAccounts(DBConnectionModel dbConnectionModel)
         {
             string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
+            string query = string.Format(DefaultSQLQuery, "intGLNumber as [ID] ,intGLNumber AS [KEY], intGLNumber AS [VALUE]", "[tblAccounts]");
 
-            string query = "SELECT intGLNumber as ID ,intGLNumber AS [KEY], intGLNumber AS [VALUE] from dbo.tblAccounts"; // Adjust as needed
-            return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
+            return await DapperContext.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
         }
+
         public async Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel)
         {
             string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
+            string query = string.Format(DefaultSQLQuery, "strDesc as [ID] ,strDesc AS [KEY], strDesc AS [VALUE]", "[tblDepartments]");
 
-            string query = "SELECT strDesc as ID ,strDesc AS [KEY], strDesc AS [VALUE] from dbo.tblDepartments"; // Adjust as needed
-            return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
+            return await DapperContext.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
         }
 
         public async Task<bool> CheckGLDBConnection(DBConnectionModel dbConnectionModel)
@@ -281,11 +282,9 @@ namespace PalladiumPayroll.Repositories.Company
 
         public async Task<bool> SetActiveCompanyId(int companyId)
         {
-            string userId = _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value;
-
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
-            parameters.Add("@UserId", userId);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
             bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SetActiveCompanyId", parameters);
             return isAdded;

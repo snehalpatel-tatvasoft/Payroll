@@ -9,38 +9,47 @@ namespace PalladiumPayroll.DataContext
     public class DapperContext
     {
         private readonly string? _connectionString;
+        private static readonly int SQLCommandTimeOut = 30;
 
         public DapperContext(IConfiguration configuration)
         {
             _connectionString = AppSettingsConfig.GetConnectionString(configuration);
         }
 
-        public IDbConnection CreateConnection() => new SqlConnection(_connectionString);
+        private IDbConnection CreateConnection() => new SqlConnection(_connectionString);
 
         public async Task<List<T>> ExecuteStoredProcedure<T>(string storedProcedureName, DynamicParameters? parameters = null)
         {
-            using (IDbConnection db = new SqlConnection(_connectionString))
+            using (IDbConnection db = CreateConnection())
             {
-                return (await db.QueryAsync<T>(storedProcedureName, parameters, commandType: CommandType.StoredProcedure)).ToList();
+                return (await db.QueryAsync<T>(storedProcedureName, parameters, commandTimeout: SQLCommandTimeOut, commandType: CommandType.StoredProcedure)).ToList();
             }
         }
 
         public async Task<T?> ExecuteStoredProcedureSingle<T>(string storedProcedureName, DynamicParameters? parameters = null)
         {
-            using (IDbConnection db = new SqlConnection(_connectionString))
+            using (IDbConnection db = CreateConnection())
             {
-                return await db.QueryFirstOrDefaultAsync<T>(storedProcedureName, parameters, commandType: CommandType.StoredProcedure);
+                return await db.QueryFirstOrDefaultAsync<T>(storedProcedureName, parameters, commandTimeout: SQLCommandTimeOut, commandType: CommandType.StoredProcedure);
             }
         }
 
         public async Task<T> ExecuteStoredProcedureMultipleAsync<T>(string storedProcedureName, DynamicParameters? parameters, Func<SqlMapper.GridReader, Task<T>> mapFunc)
         {
-            using (IDbConnection db = new SqlConnection(_connectionString))
+            using (IDbConnection db = CreateConnection())
             {
-                using (var multi = await db.QueryMultipleAsync(storedProcedureName, parameters, commandType: CommandType.StoredProcedure))
+                using (var multi = await db.QueryMultipleAsync(storedProcedureName, parameters, commandTimeout: SQLCommandTimeOut, commandType: CommandType.StoredProcedure))
                 {
                     return await mapFunc(multi);
                 }
+            }
+        }
+
+        public async Task<int> ExecuteAsync(string storedProcedureName, DynamicParameters? parameters = null)
+        {
+            using (IDbConnection db = CreateConnection())
+            {
+                return await db.ExecuteAsync(storedProcedureName, parameters, commandTimeout: SQLCommandTimeOut, commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -59,12 +68,14 @@ namespace PalladiumPayroll.DataContext
                 return false;
             }
         }
-        public async Task<List<T>> ExecuteQueryWithConnection<T>(string query, string connectionString)
+
+        public static async Task<List<T>> ExecuteQueryWithConnection<T>(string query, string connectionString)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return (await db.QueryAsync<T>(query)).ToList();
+                return (await db.QueryAsync<T>(query, commandTimeout: SQLCommandTimeOut)).ToList();
             }
         }
+
     }
 }

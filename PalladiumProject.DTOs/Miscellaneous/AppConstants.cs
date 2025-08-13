@@ -20,7 +20,7 @@ namespace PalladiumPayroll.Helper.Constants
         public const int PageNumber = 1;
 
         public const string DefaultConnectionString = "Data Source={0}; initial catalog={1}; User ID={2}; Password={3}; TrustServerCertificate=True;";
-
+        public const string DefaultSQLQuery = "SELECT {0} FROM [dbo].{1}";
 
         public const string SortAsc = "ASC";
         public const string SortDesc = "DESC";

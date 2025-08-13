@@ -145,9 +145,7 @@ namespace PalladiumPayroll.Repositories.Employees
                             .ToList();
                 result.WorkingDay = workDaySplit;
             }
-            ;
             return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Work info", ActionType.Retrieved));
-
         }
 
         public async Task<bool> EmployeeWorkInfoSave(EmployeeWorkInformation reqModel)
