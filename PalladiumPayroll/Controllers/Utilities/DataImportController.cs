@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.Utilities.DataImport;
 using PalladiumPayroll.DTOs.Miscellaneous;
@@ -18,12 +19,25 @@ public class DataImportController : ControllerBase
         _dataImportService = dataImportService;
     }
 
-     [HttpPost("[action]")]
-    public async Task<ActionResult> GetPayrollProcessingTransactions([FromQuery]PayrollTransactionFilterViewModel reqModel)
+    [HttpPost("[action]")]
+    public async Task<ActionResult> GetPayrollProcessingTransactions([FromQuery] PayrollTransactionFilterViewModel reqModel)
     {
         try
         {
             return await _dataImportService.GetPayrollProcessingTransactionsByCompany(reqModel);
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction, ex.Message));
+        }
+    }
+    [HttpPost("[action]")]
+    public async Task<ActionResult> EmployeeMasterfileImport([FromBody] EmployeeMasterImportRequestDTO request)
+    {
+        try
+        {
+            JsonResult? res = await _dataImportService.EmployeeMasterfileImport(request);
+            return res;
         }
         catch (Exception ex)
         {
