@@ -73,11 +73,11 @@ public class DataImportService : IDataImportService
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.Transaction + "imported successfully.");
     }
 
-    public async Task<JsonResult> ImportWorkInformation(ImportWorkInformationRequestDTO request)
+    public async Task<JsonResult> ImportWorkInformation(List<WorkInformationDTO> workInformations)
     {
-        foreach (var record in request.WorkInformations)
+        foreach (var record in workInformations)
         {
-            bool isAdded = await _dataImportRepository.ImportWorkInformation(record, request.UserId);
+            bool isAdded = await _dataImportRepository.ImportWorkInformation(record);
 
             if (!isAdded)
             {

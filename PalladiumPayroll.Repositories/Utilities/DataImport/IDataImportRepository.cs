@@ -16,5 +16,5 @@ public interface IDataImportRepository
 
     Task<bool> ImportYTDRecord(YearToDateRecordDTO record, int createdBy);
 
-    Task<bool> ImportWorkInformation(WorkInformationDTO record, string userId);
+    Task<bool> ImportWorkInformation(WorkInformationDTO record);
 }

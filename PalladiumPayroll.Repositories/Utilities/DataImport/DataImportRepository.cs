@@ -1,5 +1,4 @@
 using System.Data;
-using System.Text;
 using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -175,7 +174,7 @@ public class DataImportRepository : IDataImportRepository
         return parameters.Get<bool>("@IsSuccess");
     }
 
-    public async Task<bool> ImportWorkInformation(WorkInformationDTO record, string userId)
+    public async Task<bool> ImportWorkInformation(WorkInformationDTO record)
     {
         DynamicParameters parameters = new DynamicParameters();
         parameters.Add("@EmployeeCode", record.EmployeeCode);
@@ -187,7 +186,7 @@ public class DataImportRepository : IDataImportRepository
         parameters.Add("@HoursPerWeek", record.HoursPerWeek);
         parameters.Add("@HoursPerDay", record.HoursPerDay);
         parameters.Add("@StandardWorkingDays", record.StandardWorkingDays);
-        parameters.Add("@UserId", userId);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_ImportWorkInformation", parameters);
