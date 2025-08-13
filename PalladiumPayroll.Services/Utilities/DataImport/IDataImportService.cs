@@ -6,6 +6,7 @@ namespace PalladiumPayroll.Services.Utilities.DataImport;
 public interface IDataImportService
 {
     Task<JsonResult> GetPayrollProcessingTransactionsByCompany(PayrollTransactionFilterViewModel reqModel);
+    Task<JsonResult> EmployeeMasterfileImport(EmployeeMasterImportRequestDTO request);
 
     Task<JsonResult> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request);
 
