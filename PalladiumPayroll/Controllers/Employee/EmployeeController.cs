@@ -623,6 +623,26 @@ namespace PalladiumPayroll.Controllers.Employee
             }
         }
 
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpsertEmployeeUser([FromBody] UpsertUserRequestDTO request)
+        {
+            try
+            {
+                if (request == null || string.IsNullOrWhiteSpace(request.Email) ||
+                    string.IsNullOrWhiteSpace(request.Password) || request.CompanyId <= 0 ||
+                    request.AccessRoleId <= 0 || request.EmployeeId <= 0)
+                {
+                    return HttpStatusCodeResponse.BadRequestResponse();
+                }
+
+                return await _employeeService.UpsertEmployeeUser(request);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
         [HttpGet("[action]")]
         public async Task<ActionResult> GetPreviousService(int employeeId)
         {

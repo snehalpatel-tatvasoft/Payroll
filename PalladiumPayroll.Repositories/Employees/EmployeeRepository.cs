@@ -848,8 +848,38 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@CompanyId", companyId);
 
             var data = await _dapper.ExecuteStoredProcedure<AccessRoleDto>(
-                "usp_GetAccessRolesNamesByCompanyId", parameters);
+                "usp_GetAccessRolesNamesByCompanyIdForEmployee", parameters);
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Access Roles", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> UpsertEmployeeUser(UpsertUserRequestDTO request)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@AccessRoleId", request.AccessRoleId);
+            parameters.Add("@Email", request.Email);
+            parameters.Add("@Password", request.Password);
+            parameters.Add("@PasswordHash", request.PasswordHash);
+            parameters.Add("@CompanyId", request.CompanyId);
+            parameters.Add("@EmployeeId", request.EmployeeId);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<dynamic>("usp_UpsertEmployeeUser", parameters);
+
+            var response = new UpsertUserResponseDTO
+            {
+                Result = result.Result == 1,
+                UserId = result.UserId,
+                ErrorNumber = result.ErrorNumber,
+                ErrorMessage = result.ErrorMessage
+            };
+
+            if (response.Result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(response, "User upserted successfully.");
+            }
+            else
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error: {response.ErrorMessage} (Error Number: {response.ErrorNumber})");
+            }
         }
 
         #endregion
