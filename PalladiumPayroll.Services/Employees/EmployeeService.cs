@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Helper;
@@ -13,7 +12,7 @@ namespace PalladiumPayroll.Services.Employees
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly DirectoryPathSetting _directoryPathSetting;
-        public EmployeeService(IEmployeeRepository employeeRepository, AppSettingDirectoryPath directoryPathSetting)
+        public EmployeeService(IEmployeeRepository employeeRepository, AppSettingPathHelper directoryPathSetting)
         {
             _employeeRepository = employeeRepository;
             _directoryPathSetting = directoryPathSetting.GetAppSettingDirectoryPath();
