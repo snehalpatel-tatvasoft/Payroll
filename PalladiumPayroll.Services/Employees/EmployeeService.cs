@@ -203,7 +203,7 @@ namespace PalladiumPayroll.Services.Employees
             var data = await _employeeRepository.GetTaxInformationDropdownData();
             return data;
         }
-        
+
         public async Task<JsonResult> GetTaxInformation(int employeeId)
         {
             return await _employeeRepository.GetTaxInformation(employeeId);
@@ -292,54 +292,28 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> UpsertGarnishee(EmployeeGarnisheeRequest request)
         {
-            try
+            bool isSaved = await _employeeRepository.UpsertGarnishee(request);
+            if (!isSaved)
             {
-                bool isSaved = await _employeeRepository.UpsertGarnishee(request);
-
-                if (!isSaved)
-                {
-                    return HttpStatusCodeResponse.NotFoundResponse("Failed to save "+ ResponseMessages.Employee + " Garnishee");
-                }
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishee", ActionType.Saved));
-
+                return HttpStatusCodeResponse.NotFoundResponse("Failed to save " + ResponseMessages.Employee + " Garnishee");
             }
-            catch (Exception)
-            {
-                return HttpStatusCodeResponse.BadRequestResponse();
-            }
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishee", ActionType.Saved));
         }
 
         public async Task<JsonResult> GetSavingsDetails(long employeeId)
         {
-            try
-            {
-                List<SavingsDetails>? data = await _employeeRepository.GetSavingsDetails(employeeId);
-
-                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Savings", ActionType.Retrieved));
-            }
-            catch (Exception)
-            {
-                return HttpStatusCodeResponse.BadRequestResponse();
-            }
+            List<SavingsDetails>? data = await _employeeRepository.GetSavingsDetails(employeeId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Savings", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> UpsertSaving(EmployeeSavingsRequest request)
         {
-            try
+            bool isSaved = await _employeeRepository.UpsertSaving(request);
+            if (!isSaved)
             {
-                bool isSaved = await _employeeRepository.UpsertSaving(request);
-
-                if (!isSaved)
-                {
-                    return HttpStatusCodeResponse.NotFoundResponse("Failed to save "+ ResponseMessages.Employee + " Saving");
-                }
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Savings", ActionType.Saved));
-
+                return HttpStatusCodeResponse.NotFoundResponse("Failed to save " + ResponseMessages.Employee + " Saving");
             }
-            catch (Exception)
-            {
-                return HttpStatusCodeResponse.BadRequestResponse();
-            }
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Savings", ActionType.Saved));
         }
 
         public async Task<JsonResult> GetEmployeeDocument(int employeeId)
@@ -374,14 +348,15 @@ namespace PalladiumPayroll.Services.Employees
                         await file.CopyToAsync(stream);
                     }
 
-                    if(!isFileReplced)
+                    if (!isFileReplced)
                     {
                         var relativePath = Path.Combine(employeeFolder, file.FileName).Replace(Path.DirectorySeparatorChar.ToString(), "/");
-                        dbFileList.Add(new EmployeeDocuments() { 
-                            DocumentName = file.FileName, 
-                            DocumentUrl = relativePath, 
-                            DocumentType = file.ContentType, 
-                            DocumentSize = file.Length 
+                        dbFileList.Add(new EmployeeDocuments()
+                        {
+                            DocumentName = file.FileName,
+                            DocumentUrl = relativePath,
+                            DocumentType = file.ContentType,
+                            DocumentSize = file.Length
                         });
                     }
                 }
