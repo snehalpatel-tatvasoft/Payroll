@@ -82,9 +82,29 @@ public class DataImportRepository : IDataImportRepository
         parameters.Add("@CreatedBy", createdBy);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-        await _dapper.ExecuteStoredProcedureSingle<object>("usp_InsertYearToDateRecord", parameters);
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_ImportYearToDateTransactions", parameters);
 
-       return parameters.Get<bool>("@IsSuccess");
+        return parameters.Get<bool>("@IsSuccess");
+    }
+
+    public async Task<bool> ImportWorkInformation(WorkInformationDTO record, string userId)
+    {
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("@EmployeeCode", record.EmployeeCode);
+        parameters.Add("@AnnualSalary", record.AnnualSalary);
+        parameters.Add("@MonthlySalary", record.MonthlySalary);
+        parameters.Add("@RatePerDay", record.RatePerDay);
+        parameters.Add("@RatePerHour", record.RatePerHour);
+        parameters.Add("@DaysPerWeek", record.DaysPerWeek);
+        parameters.Add("@HoursPerWeek", record.HoursPerWeek);
+        parameters.Add("@HoursPerDay", record.HoursPerDay);
+        parameters.Add("@StandardWorkingDays", record.StandardWorkingDays);
+        parameters.Add("@UserId", userId);
+        parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_ImportWorkInformation", parameters);
+
+        return parameters.Get<bool>("@IsSuccess");
     }
 
 }

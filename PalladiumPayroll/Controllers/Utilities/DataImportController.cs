@@ -88,4 +88,17 @@ public class DataImportController : ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Transaction));
         }
     }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> ImportWorkInformation(ImportWorkInformationRequestDTO request)
+    {
+        try
+        {
+            return await _dataImportService.ImportWorkInformation(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, "Work Information"));
+        }
+    }
 }
