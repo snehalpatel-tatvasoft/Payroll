@@ -69,6 +69,44 @@ namespace PalladiumPayroll.Controllers.Employee
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<JsonResult> GetEmployeePersonalInfo(int employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeePersonalInfo(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<JsonResult> GetEmployeePersonalInfoDropDown(int companyId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeePersonalInfoDropDown(companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<JsonResult> SaveEmployeePersonalInfo(EmployeePersonalInformation reqModel)
+        {
+            try
+            {
+                return await _employeeService.SaveEmployeePersonalInfo(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
         [HttpPost("[action]")]
         public async Task<ActionResult> EmployeePaymentDetailSave(EmployeePaymentDetail reqModel)
         {

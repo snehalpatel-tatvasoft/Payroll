@@ -3,6 +3,7 @@ using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.Employees;
+using System.ComponentModel.Design;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 
@@ -35,12 +36,27 @@ namespace PalladiumPayroll.Services.Employees
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
-
         public async Task<JsonResult> GetEmployeePaymentDetail(int employeeId)
         {
             return await _employeeRepository.GetEmployeePaymentDetail(employeeId);
         }
-
+        public async Task<JsonResult> GetEmployeePersonalInfo(int employeeId)
+        {
+            return await _employeeRepository.GetEmployeePersonalInfo(employeeId);
+        }
+        public async Task<JsonResult> GetEmployeePersonalInfoDropDown(int companyId)
+        {
+            return await _employeeRepository.GetEmployeePersonalInfoDropDown(companyId);
+        }
+        public async Task<JsonResult> SaveEmployeePersonalInfo(EmployeePersonalInformation reqModel)
+        {
+            var res = await _employeeRepository.SaveEmployeePersonalInfo(reqModel);
+            if (res)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, string.Concat(ResponseMessages.Employee, " ", " Personal Information"), ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
         public async Task<JsonResult> EmployeePaymentDetailSave(EmployeePaymentDetail reqModel)
         {
             var res = await _employeeRepository.EmployeePaymentDetailSave(reqModel);
