@@ -16,7 +16,7 @@ namespace PalladiumPayroll.DataContext
             _connectionString = AppSettingsConfig.GetConnectionString(configuration);
         }
 
-        private IDbConnection CreateConnection() => new SqlConnection(_connectionString);
+        private IDbConnection CreateConnection(string? connectionString = null) => new SqlConnection(string.IsNullOrEmpty(connectionString) ? _connectionString :  connectionString);
 
         public async Task<List<T>> ExecuteStoredProcedure<T>(string storedProcedureName, DynamicParameters? parameters = null)
         {
@@ -69,9 +69,9 @@ namespace PalladiumPayroll.DataContext
             }
         }
 
-        public static async Task<List<T>> ExecuteQueryWithConnection<T>(string query, string connectionString)
+        public async Task<List<T>> ExecuteQueryWithConnection<T>(string query, string connectionString)
         {
-            using (IDbConnection db = new SqlConnection(connectionString))
+            using (IDbConnection db = CreateConnection(connectionString))
             {
                 return (await db.QueryAsync<T>(query, commandTimeout: SQLCommandTimeOut)).ToList();
             }

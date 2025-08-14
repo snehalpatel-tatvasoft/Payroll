@@ -29,7 +29,7 @@ namespace PalladiumPayroll.Repositories.Company
             string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
             string query = string.Format(DefaultSQLQuery, "intGLNumber as [ID] ,intGLNumber AS [KEY], intGLNumber AS [VALUE]", "[tblAccounts]");
 
-            return await DapperContext.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
+            return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
         }
 
         public async Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel)
@@ -37,7 +37,7 @@ namespace PalladiumPayroll.Repositories.Company
             string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
             string query = string.Format(DefaultSQLQuery, "strDesc as [ID] ,strDesc AS [KEY], strDesc AS [VALUE]", "[tblDepartments]");
 
-            return await DapperContext.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
+            return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
         }
 
         public async Task<bool> CheckGLDBConnection(DBConnectionModel dbConnectionModel)
