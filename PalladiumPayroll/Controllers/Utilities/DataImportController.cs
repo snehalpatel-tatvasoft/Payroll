@@ -26,9 +26,80 @@ public class DataImportController : ControllerBase
         {
             return await _dataImportService.GetPayrollProcessingTransactionsByCompany(reqModel);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction));
+        }
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request)
+    {
+        try
+        {
+            return await _dataImportService.AddImportYearToDateTemplate(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, ActionType.Saving, "Import year to date template.")
+            );
+        }
+    }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetDropDownForYearToDateTemplate(long companyId)
+    {
+        try
+        {
+            if (companyId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+            }
+            return await _dataImportService.GetDropDownForYearToDateTemplate(companyId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, "Year to date Template" ));
+        }
+    }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetTransactionForExcelGenerate(int templateId)
+    {
+        try
+        {
+            return await _dataImportService.GetTransactionForExcelGenerate(templateId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction));
+        }
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> ImportYTDRecord(ImportYTDRecordRequestDTO request)
+    {
+        try
+        {
+            return await _dataImportService.ImportYTDRecord(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Transaction));
+        }
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> ImportWorkInformation(ImportWorkInformationRequestDTO request)
+    {
+        try
+        {
+            return await _dataImportService.ImportWorkInformation(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, "Work Information"));
         }
     }
     [HttpPost("[action]")]
@@ -41,7 +112,7 @@ public class DataImportController : ControllerBase
         }
         catch (Exception ex)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving,"Employee Masterfile Import", ex.Message));
         }
     }
     [HttpPost("[action]")]

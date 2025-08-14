@@ -9,4 +9,15 @@ public interface IDataImportService
     Task<JsonResult> EmployeeMasterfileImport(EmployeeMasterImportRequestDTO request);
     Task<JsonResult> UpsertESSUser(UpsertESSUserRequestDTO request);
 
+    Task<JsonResult> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request);
+
+    Task<JsonResult> GetDropDownForYearToDateTemplate(long companyId);
+
+    Task<JsonResult> GetTransactionForExcelGenerate(int templateId);
+
+    Task<JsonResult> ImportYTDRecord(ImportYTDRecordRequestDTO request);
+
+    Task<JsonResult> ImportWorkInformation(ImportWorkInformationRequestDTO request);
 }
+
+

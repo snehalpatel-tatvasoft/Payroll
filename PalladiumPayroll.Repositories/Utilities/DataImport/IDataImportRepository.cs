@@ -9,4 +9,13 @@ public interface IDataImportRepository
     Task<string?> EmployeeMasterfileImport(EmployeeMasterImportRequestDTO request);
     Task<string> UpsertESSUser(UpsertESSUserRequestDTO request);
 
+    Task<bool> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request);
+
+    Task<List<YTDTemplateDropdownDto>> GetDropDownForYearToDateTemplate(long companyId);
+
+    Task<List<TransactionForExcelGenerateDto>> GetTransactionForExcelGenerate(int templateId);
+
+    Task<bool> ImportYTDRecord(YearToDateRecordDTO record, int createdBy);
+
+    Task<bool> ImportWorkInformation(WorkInformationDTO record, string userId);
 }
