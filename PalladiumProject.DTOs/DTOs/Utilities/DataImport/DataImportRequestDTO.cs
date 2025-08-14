@@ -1,9 +1,5 @@
 namespace PalladiumPayroll.DTOs.DTOs.Utilities.DataImport;
 
-public class DataImportRequestDTO
-{
-}
-
 public class PayrollTransactionFilterViewModel
 {
     public long CompanyId { get; set; }
@@ -101,12 +97,6 @@ public class YearToDateRecordDTO
     public string EmployeeCode { get; set; } = null!;
     public string Description { get; set; } = null!;
     public decimal Amount { get; set; }
-}
-
-public class ImportYTDRecordRequestDTO
-{
-    public int CreatedBy { get; set; } = 1;
-    public List<YearToDateRecordDTO> YearToDateRecords { get; set; } = new List<YearToDateRecordDTO>();
 }
 
 public class WorkInformationDTO

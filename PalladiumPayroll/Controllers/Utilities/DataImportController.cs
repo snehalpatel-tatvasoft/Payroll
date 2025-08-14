@@ -75,7 +75,7 @@ public class DataImportController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> ImportYTDRecord(ImportYTDRecordRequestDTO request)
+    public async Task<ActionResult> ImportYTDRecord([FromBody] List<YearToDateRecordDTO>  request)
     {
         try
         {

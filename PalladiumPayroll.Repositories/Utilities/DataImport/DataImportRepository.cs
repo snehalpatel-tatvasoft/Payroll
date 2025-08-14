@@ -115,7 +115,7 @@ public class DataImportRepository : IDataImportRepository
             var result = await _dapper.ExecuteStoredProcedureSingle<string>("usp_ImportEmployeesMasterFile", parameters);
 
             if (result == "DUPLICATE")
-                return "Duplicate employee code";                 
+                return "Duplicate employee code";
 
             if (result == "ERROR")
                 return "Error importing employee";
@@ -160,13 +160,13 @@ public class DataImportRepository : IDataImportRepository
         return result ?? new List<TransactionForExcelGenerateDto>();
     }
 
-    public async Task<bool> ImportYTDRecord(YearToDateRecordDTO record, int createdBy)
+    public async Task<bool> ImportYTDRecord(YearToDateRecordDTO record)
     {
         DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmployeeCode", record.EmployeeCode);
         parameters.Add("@Description", record.Description);
         parameters.Add("@Amount", record.Amount);
-        parameters.Add("@CreatedBy", createdBy);
+        parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_ImportYearToDateTransactions", parameters);
@@ -174,24 +174,51 @@ public class DataImportRepository : IDataImportRepository
         return parameters.Get<bool>("@IsSuccess");
     }
 
-    public async Task<bool> ImportWorkInformation(WorkInformationDTO record)
+    private DataTable ConvertToDataTable(List<WorkInformationDTO> workInformations)
     {
+        DataTable table = new DataTable();
+        table.Columns.Add("EmployeeCode", typeof(string));
+        table.Columns.Add("AnnualSalary", typeof(decimal));
+        table.Columns.Add("MonthlySalary", typeof(decimal));
+        table.Columns.Add("RatePerDay", typeof(decimal));
+        table.Columns.Add("RatePerHour", typeof(decimal));
+        table.Columns.Add("DaysPerWeek", typeof(decimal));
+        table.Columns.Add("HoursPerWeek", typeof(decimal));
+        table.Columns.Add("HoursPerDay", typeof(decimal));
+        table.Columns.Add("StandardWorkingDays", typeof(string));
+
+        foreach (var item in workInformations)
+        {
+            table.Rows.Add(
+                item.EmployeeCode,
+                item.AnnualSalary,
+                item.MonthlySalary,
+                item.RatePerDay,
+                item.RatePerHour,
+                item.DaysPerWeek,
+                item.HoursPerWeek,
+                item.HoursPerDay,
+                item.StandardWorkingDays
+            );
+        }
+
+        return table;
+    }
+
+
+    public async Task<string> ImportWorkInformation(List<WorkInformationDTO> records)
+    {   
+        DataTable? table = ConvertToDataTable(records);
         DynamicParameters parameters = new DynamicParameters();
-        parameters.Add("@EmployeeCode", record.EmployeeCode);
-        parameters.Add("@AnnualSalary", record.AnnualSalary);
-        parameters.Add("@MonthlySalary", record.MonthlySalary);
-        parameters.Add("@RatePerDay", record.RatePerDay);
-        parameters.Add("@RatePerHour", record.RatePerHour);
-        parameters.Add("@DaysPerWeek", record.DaysPerWeek);
-        parameters.Add("@HoursPerWeek", record.HoursPerWeek);
-        parameters.Add("@HoursPerDay", record.HoursPerDay);
-        parameters.Add("@StandardWorkingDays", record.StandardWorkingDays);
+
+        parameters.Add("@WorkInfoTable", table.AsTableValuedParameter("dbo.WorkInformationTableType"));
         parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
-        parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-        await _dapper.ExecuteStoredProcedureSingle<object>("usp_ImportWorkInformation", parameters);
+        var resultMessage = await _dapper.ExecuteStoredProcedureSingle<string>(
+       "usp_ImportWorkInformation",
+       parameters);
 
-        return parameters.Get<bool>("@IsSuccess");
+        return resultMessage ?? "No response from procedure";
     }
 
 }
