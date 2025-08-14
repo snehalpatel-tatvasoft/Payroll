@@ -8,6 +8,7 @@ using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
+using PalladiumPayroll.Helper;
 using PalladiumPayroll.Helper.Constants;
 using PalladiumPayroll.Helper.JWTToken;
 using PalladiumPayroll.Repositories.Company;
@@ -104,8 +105,8 @@ namespace PalladiumPayroll.Services.Company
                     // Append the token directly to the URL
                     string finalUrl = $"{webUrl}{loginUrl}?token={token}";
 
-                    string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EmailTemplate", "WelcomeEmail.html");
-                    string bodyTemplate = await File.ReadAllTextAsync(templatePath);
+                    string templatePath = FileHandler.EmailTemplatePath("WelcomeEmail.html");
+                    string bodyTemplate = await FileHandler.ReadFileContent(templatePath);
 
                     string emailBody = bodyTemplate
                                     .Replace("{UserName}", request.FirstName ?? "User")

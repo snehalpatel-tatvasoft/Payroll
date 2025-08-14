@@ -91,5 +91,20 @@ namespace PalladiumPayroll.Helper
             return fileBytes;
         }
 
+        public static string EmailTemplatePath(string fileName)
+        {
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EmailTemplate", fileName);
+        }
+
+        public static async Task<string> ReadFileContent(string filePath)
+        {
+            string content = string.Empty;
+            if (FileExists(filePath))
+            {
+                content = await File.ReadAllTextAsync(filePath);
+            }
+            return content;
+        }
+
     }
 }
