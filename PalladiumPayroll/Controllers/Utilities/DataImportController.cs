@@ -44,4 +44,17 @@ public class DataImportController : ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction, ex.Message));
         }
     }
+    [HttpPost("[action]")]
+    public async Task<ActionResult> UpsertESSUser([FromBody] UpsertESSUserRequestDTO request)
+    {
+        try
+        {
+            JsonResult? res = await _dataImportService.UpsertESSUser(request);
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Updating, "ESS User", ex.Message));
+        }
+    }
 }

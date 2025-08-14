@@ -116,12 +116,23 @@ public class DataImportRepository : IDataImportRepository
             var result = await _dapper.ExecuteStoredProcedureSingle<string>("usp_ImportEmployeesMasterFile", parameters);
 
             if (result == "DUPLICATE")
-                return "Duplicate employee code";                 
+                return "Duplicate employee code";
 
             if (result == "ERROR")
                 return "Error importing employee";
         }
 
         return null;
+    }
+    
+
+    public async Task<string> UpsertESSUser(UpsertESSUserRequestDTO request)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", request.CompanyId);
+        parameters.Add("@EmployeesData", Newtonsoft.Json.JsonConvert.SerializeObject(request.Data));
+
+        var result = await _dapper.ExecuteStoredProcedureSingle<string>("usp_UpsertESSUser", parameters);
+        return result;
     }
 }

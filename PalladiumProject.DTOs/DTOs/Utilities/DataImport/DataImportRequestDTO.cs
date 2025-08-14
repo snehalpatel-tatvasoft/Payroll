@@ -87,3 +87,36 @@ public class EmployeeMasterImportRequestDTO
     public long CompanyId { get; set; }
     public List<EmployeeMasterImport> Data { get; set; } = new();
 }
+
+public class ESSUserData
+{
+    public string EmployeeCode { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
+    public string? PasswordHash { get; set; }
+    public string AccessRoleName { get; set; }
+    public string? ApprovalManager { get; set; }
+    public string? SecondApproval { get; set; }
+    public bool? IsManager { get; set; }
+    public bool? ApplyLeaveView { get; set; }
+    public bool? ApplyLeaveSave { get; set; }
+    public bool? ApplyLeaveDelete { get; set; }
+    public bool? PayslipsView { get; set; }
+    public bool? PayslipsSave { get; set; }
+    public bool? PayslipsDelete { get; set; }
+    public bool? ManageLeaveView { get; set; }
+    public bool? ManageLeaveSave { get; set; }
+    public bool? ManageLeaveDelete { get; set; }
+    public bool? ClaimsOnBehalfView { get; set; }
+    public bool? ClaimsOnBehalfSave { get; set; }
+    public bool? ClaimsOnBehalfDelete { get; set; }
+    public bool? ESSEMPLOYEESView { get; set; }
+    public bool? ESSEMPLOYEESSave { get; set; }
+    public bool? ESSEMPLOYEESDelete { get; set; }
+}
+
+public class UpsertESSUserRequestDTO
+{
+    public long CompanyId { get; set; }
+    public List<ESSUserData> Data { get; set; } = new();
+}
