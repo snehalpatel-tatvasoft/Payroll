@@ -112,7 +112,7 @@ public class DataImportController : ControllerBase
         }
         catch (Exception ex)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving,"Employee Masterfile Import", ex.Message));
         }
     }
 }
