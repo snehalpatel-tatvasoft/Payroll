@@ -8,6 +8,7 @@
             Saved,
             Deleted,
             Updated,
+            uploaded,
             Retrieved,
             Saving,
             Retrieving,

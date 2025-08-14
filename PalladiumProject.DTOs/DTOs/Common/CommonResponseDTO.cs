@@ -14,4 +14,12 @@
         public string? Key { get; set; }
         public string? Value { get; set; }
     }
+
+    public class TableDataModel<T>
+    {
+        public List<T> DataList { get; set; } = new List<T>();
+        public int TotalCount { get; set; }
+    }
+
+
 }

@@ -31,7 +31,30 @@ namespace PalladiumPayroll.Services.Employees
         Task<JsonResult> UpdateDirective(long directiveId, DirectiveRequest reqModel);
         Task<JsonResult> DeleteDirective(long directiveId);
         Task<JsonResult> GetPayrollTransactionList(TransactionReqModel reqModel);
-        Task<JsonResult> SaveEmployeeTransaction(TransactionSaveModel reqModel);
+        Task<JsonResult> SaveEmployeeTakeOnBalance(TransactionSaveModel reqModel);
         Task<JsonResult> GetEmployeeTakeOnBalance(int employeeId, int allowanceType);
+        Task<JsonResult> DeleteEmployeeTakeOnBalance(List<int> takeOnBalanceIds);
+        Task<JsonResult> SetTakeOnComplete(int employeeId);
+        Task<JsonResult> DeleteEmployeeLoan(int employeeLoanId);
+        Task<JsonResult> GetEmployeeLoanDetail(long employeeId);
+        Task<JsonResult> GetGarnisheeDropdownData(long companyId);
+        Task<JsonResult> GetGarnisheeDetails(long employeeId);
+        Task<JsonResult> UpsertGarnishee(EmployeeGarnisheeRequest request);
+        Task<JsonResult> GetSavingsDetails(long employeeId);
+        Task<JsonResult> UpsertSaving(EmployeeSavingsRequest request);
+        Task<TaxInformationDropdownData> GetTaxInformationDropdownData();
+        Task<JsonResult> GetTaxInformation(int employeeId);
+        Task<JsonResult> UpdateTaxInformation(TaxInformation reqModel);
+
+
+        Task<JsonResult> GetEmployeeDocument(int employeeId);
+        Task<JsonResult> UploadDocuments(EmployeeDocumentUpload employeeDocument);
+        Task<JsonResult> DeleteDocuments(EmployeeDocumentDelete reqModel);
+        Task<byte[]> DownloadDocument(string documentUrl);
+        Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId);
+        Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId);
+        Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model);
+        Task<JsonResult> GetAccessRolesByCompanyId(long companyId);
+        Task<JsonResult> GetPreviousService(int employeeId);
     }
 }

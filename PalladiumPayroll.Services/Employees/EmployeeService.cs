@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.Employees;
-using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using PalladiumPayroll.Helper;
 using PalladiumPayroll.Repositories.Employees;
 using System.ComponentModel.Design;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -12,9 +12,11 @@ namespace PalladiumPayroll.Services.Employees
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
-        public EmployeeService(IEmployeeRepository employeeRepository)
+        private readonly DirectoryPathSetting _directoryPathSetting;
+        public EmployeeService(IEmployeeRepository employeeRepository, AppSettingPathHelper directoryPathSetting)
         {
             _employeeRepository = employeeRepository;
+            _directoryPathSetting = directoryPathSetting.GetAppSettingDirectoryPath();
         }
 
         public async Task<JsonResult> GetEmployeeFilters(int companyId)
@@ -105,7 +107,7 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type)
         {
-            var result =  await _employeeRepository.DeleteWorkOrganizationalDropdownItem(id, type);
+            var result = await _employeeRepository.DeleteWorkOrganizationalDropdownItem(id, type);
             if (result)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Item", ActionType.Deleted));
@@ -135,7 +137,7 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup)
         {
-            if(timeSheetSetup.TimeSheetPassword != timeSheetSetup.TimeSheetConfirmPassword)
+            if (timeSheetSetup.TimeSheetPassword != timeSheetSetup.TimeSheetConfirmPassword)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse("Password is mismatch !");
             }
@@ -212,6 +214,26 @@ namespace PalladiumPayroll.Services.Employees
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
 
+        public async Task<TaxInformationDropdownData> GetTaxInformationDropdownData()
+        {
+            var data = await _employeeRepository.GetTaxInformationDropdownData();
+            return data;
+        }
+        
+        public async Task<JsonResult> GetTaxInformation(int employeeId)
+        {
+            return await _employeeRepository.GetTaxInformation(employeeId);
+        }
+
+        public async Task<JsonResult> UpdateTaxInformation(TaxInformation reqModel)
+        {
+            var result = await _employeeRepository.UpdateTaxInformation(reqModel);
+            if (result == true)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, string.Concat(ResponseMessages.Employee, " ", "Tax Information"), ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
 
 
         public async Task<JsonResult> GetPayrollTransactionList(TransactionReqModel reqModel)
@@ -220,9 +242,9 @@ namespace PalladiumPayroll.Services.Employees
             return HttpStatusCodeResponse.SuccessResponse(transactionList, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
         }
 
-        public async Task<JsonResult> SaveEmployeeTransaction(TransactionSaveModel reqModel)
+        public async Task<JsonResult> SaveEmployeeTakeOnBalance(TransactionSaveModel reqModel)
         {
-            var result = await _employeeRepository.SaveEmployeeTransaction(reqModel);
+            var result = await _employeeRepository.SaveEmployeeTakeOnBalance(reqModel);
             if (result)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Saved));
@@ -232,9 +254,196 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> GetEmployeeTakeOnBalance(int employeeId, int allowanceType)
         {
-            var transactionList = await _employeeRepository.GetEmployeeTakeOnBalance(employeeId, allowanceType);
-            return HttpStatusCodeResponse.SuccessResponse(transactionList, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
+            var data = await _employeeRepository.GetEmployeeTakeOnBalance(employeeId, allowanceType);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
         }
 
+        public async Task<JsonResult> DeleteEmployeeTakeOnBalance(List<int> takeOnBalanceIds)
+        {
+            var result = await _employeeRepository.DeleteEmployeeTakeOnBalance(takeOnBalanceIds);
+            if (result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Take on Balance " + ResponseMessages.Transaction, ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<JsonResult> SetTakeOnComplete(int employeeId)
+        {
+            var result = await _employeeRepository.SetTakeOnComplete(employeeId);
+            if (result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Take on complete", ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<JsonResult> DeleteEmployeeLoan(int employeeLoanId)
+        {
+            bool isDeleted = await _employeeRepository.DeleteEmployeeLoan(employeeLoanId);
+
+            if (!isDeleted)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.Employee + " loan not found.");
+            }
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Loan", ActionType.Deleted));
+        }
+
+        public async Task<JsonResult> GetEmployeeLoanDetail(long employeeId)
+        {
+            EmployeeLoanResponse? data = await _employeeRepository.GetEmployeeLoanDetail(employeeId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Loan", ActionType.Retrieved));
+        }
+        public async Task<JsonResult> GetGarnisheeDropdownData(long companyId)
+        {
+            GarnisheeDropdownListDto? data = await _employeeRepository.GetGarnisheeDropdownData(companyId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishee DropList", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> GetGarnisheeDetails(long employeeId)
+        {
+            List<GarnishDetails>? data = await _employeeRepository.GetGarnisheeDetails(employeeId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishes", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> UpsertGarnishee(EmployeeGarnisheeRequest request)
+        {
+            try
+            {
+                bool isSaved = await _employeeRepository.UpsertGarnishee(request);
+
+                if (!isSaved)
+                {
+                    return HttpStatusCodeResponse.NotFoundResponse("Failed to save "+ ResponseMessages.Employee + " Garnishee");
+                }
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishee", ActionType.Saved));
+
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.BadRequestResponse();
+            }
+        }
+
+        public async Task<JsonResult> GetSavingsDetails(long employeeId)
+        {
+            try
+            {
+                List<SavingsDetails>? data = await _employeeRepository.GetSavingsDetails(employeeId);
+
+                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Savings", ActionType.Retrieved));
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.BadRequestResponse();
+            }
+        }
+
+        public async Task<JsonResult> UpsertSaving(EmployeeSavingsRequest request)
+        {
+            try
+            {
+                bool isSaved = await _employeeRepository.UpsertSaving(request);
+
+                if (!isSaved)
+                {
+                    return HttpStatusCodeResponse.NotFoundResponse("Failed to save "+ ResponseMessages.Employee + " Saving");
+                }
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Savings", ActionType.Saved));
+
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.BadRequestResponse();
+            }
+        }
+
+        public async Task<JsonResult> GetEmployeeDocument(int employeeId)
+        {
+            var data = await _employeeRepository.GetEmployeeDocument(employeeId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Employee Document", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> UploadDocuments(EmployeeDocumentUpload employeeDocument)
+        {
+            var basePath = _directoryPathSetting.EmployeeDocument;
+            if (!string.IsNullOrEmpty(basePath))
+            {
+                List<EmployeeDocuments> dbFileList = new List<EmployeeDocuments>();
+                var employeeFolder = $"Employee_{employeeDocument.EmployeeId}";
+                var finalPath = FileHandler.CombinePath(basePath, employeeFolder);
+                FileHandler.CreateDirectory(finalPath);
+
+                foreach (var file in employeeDocument.Document)
+                {
+                    var isFileReplaced = false;
+                    var filePath = Path.Combine(finalPath, file.FileName);
+                    isFileReplaced =  FileHandler.DeleteFile(filePath);
+                    await FileHandler.UploadFile(filePath, file);
+
+                    if(!isFileReplaced)
+                    {
+                        var relativePath = Path.Combine(employeeFolder, file.FileName).Replace(Path.DirectorySeparatorChar.ToString(), "/");
+                        dbFileList.Add(new EmployeeDocuments() { 
+                            DocumentName = file.FileName, 
+                            DocumentUrl = relativePath, 
+                            DocumentType = file.ContentType, 
+                            DocumentSize = file.Length 
+                        });
+                    }
+                }
+                var result = await _employeeRepository.UploadDocumentsSave(dbFileList, employeeDocument.EmployeeId);
+                if (result)
+                {
+                    return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Employee Document", ActionType.uploaded));
+                }
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<JsonResult> DeleteDocuments(EmployeeDocumentDelete reqModel)
+        {
+            var result = await _employeeRepository.DeleteDocuments(reqModel.DocumentId);
+            if (result)
+            {
+                var basePath = _directoryPathSetting.EmployeeDocument;
+                FileHandler.DeleteFile(FileHandler.CombinePath(basePath, reqModel.DocumentUrl));
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Document", ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<byte[]> DownloadDocument(string documentUrl)
+        {
+            var basePath = _directoryPathSetting.EmployeeDocument;
+            return await FileHandler.ReadFileBytes(FileHandler.CombinePath(basePath, documentUrl));
+        }
+
+        public async Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId)
+        {
+            return await _employeeRepository.GetEmployeeByEmployeeId(employeeId, companyId);
+        }
+
+        public async Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId)
+        {
+            return await _employeeRepository.GetSecondApprovalEmployeeListByCompanyId(companyId);
+        }
+
+        public async Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model)
+        {
+            return await _employeeRepository.UpdateEmployeeSelfService(model);
+        }
+
+        public async Task<JsonResult> GetAccessRolesByCompanyId(long companyId)
+        {
+            return await _employeeRepository.GetAccessRolesByCompanyId(companyId);
+        }
+
+        public async Task<JsonResult> GetPreviousService(int employeeId)
+        {
+            var previousServiceList = await _employeeRepository.GetPreviousService(employeeId);
+            return HttpStatusCodeResponse.SuccessResponse(previousServiceList, string.Format(ResponseMessages.Success, "Previous Service", ActionType.Retrieved));
+        }
     }
 }

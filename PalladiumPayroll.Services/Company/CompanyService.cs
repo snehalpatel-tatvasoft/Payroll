@@ -8,6 +8,7 @@ using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
+using PalladiumPayroll.Helper;
 using PalladiumPayroll.Helper.Constants;
 using PalladiumPayroll.Helper.JWTToken;
 using PalladiumPayroll.Repositories.Company;
@@ -104,8 +105,8 @@ namespace PalladiumPayroll.Services.Company
                     // Append the token directly to the URL
                     string finalUrl = $"{webUrl}{loginUrl}?token={token}";
 
-                    string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EmailTemplate", "WelcomeEmail.html");
-                    string bodyTemplate = await File.ReadAllTextAsync(templatePath);
+                    string templatePath = FileHandler.EmailTemplatePath("WelcomeEmail.html");
+                    string bodyTemplate = await FileHandler.ReadFileContent(templatePath);
 
                     string emailBody = bodyTemplate
                                     .Replace("{UserName}", request.FirstName ?? "User")
@@ -170,6 +171,145 @@ namespace PalladiumPayroll.Services.Company
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.AlreadyExist, "Branch"));
         }
 
+        public async Task<List<CompanyInfo>> GetCompanyInformation(int companyId)
+        {
+            return await _companyRepository.GetCompanyInformation(companyId);
+        } 
+        
+        public async Task<List<GLSetup>> GetCompanyGLInfo(int companyId)
+        {
+            return await _companyRepository.GetCompanyGLInfo(companyId);
+        }
+        public async Task<JsonResult> UpdateCompanyInformation(CompanyInfo companyInfo)
+        {
+            bool isAdded = await _companyRepository.UpdateCompanyInformation(companyInfo);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyInfo, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<List<CompanyRepresentative>> GetCompanyRepresentativeInfo(int companyId)
+        {
+            return await _companyRepository.GetCompanyRepresentativeInfo(companyId);
+        }
+
+        public async Task<JsonResult> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo)
+        {
+            bool isAdded = await _companyRepository.UpdateCompanyRepresentativeInfo(companyRepresentativeInfo);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyRepresentativeInfo, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<List<CompanyBankAccount>> GetBankDetailsInfo(int companyId)
+        {
+            return await _companyRepository.GetBankDetailsInfo(companyId);
+        }
+
+        public async Task<JsonResult> UpdateBankDetailsInfo(CompanyBankAccount companyBankAccount)
+        {
+            bool isAdded = await _companyRepository.UpdateBankDetailsInfo(companyBankAccount);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<List<CompanyPayrollCycle>> GetPayrollCycleInfo(int companyId, int taxYearId)
+        {
+            return await _companyRepository.GetPayrollCycleInfo(companyId, taxYearId);
+        }
+
+        public async Task<List<CompanyCoidaSetup>> GetCOIDASetupInfo(int companyId, int yearId)
+        {
+            return await _companyRepository.GetCOIDASetupInfo(companyId, yearId);
+        }
+
+        public async Task<List<PayrollMedicalAidList>> GetMedicalAidFundInfo(int companyId)
+        {
+            return await _companyRepository.GetMedicalAidFundInfo(companyId);
+        }
+
+        public async Task<List<PayrollBenefitFundList>> GetCompanyBenefitFundInfo(int companyId)
+        {
+            return await _companyRepository.GetCompanyBenefitFundInfo(companyId);
+        }
+
+        public async Task<JsonResult> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle)
+        {
+            bool isAdded = await _companyRepository.UpsertPayrollCycleInfo(companyPayrollCycle);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<JsonResult> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList)
+        {
+            bool isAdded = await _companyRepository.UpsertCompanyBenefitFund(payrollBenefitFundList);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<JsonResult> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup)
+        {
+            bool isAdded = await _companyRepository.UpsertCOIDASetupInfo(companyCoidaSetup);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<JsonResult> AddMedicalAidFundInfo(PayrollMedicalAidList payrollMedicalAidList)
+        {
+            bool isAdded = await _companyRepository.AddMedicalAidFundInfo(payrollMedicalAidList);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<JsonResult> DeletePayrollCycleInfo(int cycleId)
+        {
+            bool isDeleted = await _companyRepository.DeletePayrollCycleInfo(cycleId);
+            if (isDeleted)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<JsonResult> DeleteMedicalAidFund(int fundId)
+        {
+            bool isDeleted = await _companyRepository.DeleteMedicalAidFund(fundId);
+            if (isDeleted)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<JsonResult> DeleteCompanyBenefitFund(int fundId)
+        {
+            bool isDeleted = await _companyRepository.DeleteCompanyBenefitFund(fundId);
+            if (isDeleted)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CompanyBankDetails, ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
         public async Task<JsonResult> GetGLSetup(DBConnectionModel dbConnectionModel)
         {
             GLConnRes glSetup = new();
@@ -183,6 +323,21 @@ namespace PalladiumPayroll.Services.Company
                 glSetup.GlDepartmentList = await _companyRepository.GetGLDepartments(dbConnectionModel);
             }
             return HttpStatusCodeResponse.SuccessResponse(glSetup, string.Format(ResponseMessages.Success, "GL Account", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation)
+        {
+            bool isAdded = await _companyRepository.UpsertEmploymentEquityInfo(employmentEquityInformation);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmploymentEquityInformation, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<List<EmploymentEquityInformation>> GetEmploymentEquityInfo(int companyId)
+        {
+            return await _companyRepository.GetEmploymentEquityInfo(companyId);
         }
     }
 }

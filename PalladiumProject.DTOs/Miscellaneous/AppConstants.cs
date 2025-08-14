@@ -18,9 +18,9 @@ namespace PalladiumPayroll.Helper.Constants
         public const int ResetPasswordTokenLength = 100;
 
         public const int PageNumber = 1;
-        
-        public const string DefaultConnectionString = "Data Source={0}; initial catalog={1}; User ID={2}; Password={3}; TrustServerCertificate=True;";
 
+        public const string DefaultConnectionString = "Data Source={0}; initial catalog={1}; User ID={2}; Password={3}; TrustServerCertificate=True;";
+        public const string DefaultSQLQuery = "SELECT {0} FROM [dbo].{1}";
 
         public const string SortAsc = "ASC";
         public const string SortDesc = "DESC";
@@ -51,11 +51,15 @@ namespace PalladiumPayroll.Helper.Constants
             #region Company
 
             public static readonly string Company = "Company";
+            public static readonly string CompanyInfo = "Company Information";
+            public static readonly string CompanyRepresentativeInfo = "Company Representative";
+            public static readonly string CompanyBankDetails = "Company Bank Details";
+            public static readonly string EmploymentEquityInformation = "Employment Equity Information";
             public const string CompanyAlreadyExists = "Company Already Exists";
             public const string CompanyRegisteredSuccessfully = "Company Registered Successfully";
             public const string ErrorCreatingCompany = "Error While Creating Company!!";
             public const string GLSetupError = "Error while connecting GL Database!!";
-            public const string GLSetupSuccess = "GL database connected succssfully!!";
+            public const string GLSetupSuccess = "GL database connected successfully!!";
 
             #endregion
 
@@ -196,6 +200,22 @@ namespace PalladiumPayroll.Helper.Constants
             public const string EmployeeGrievanceNotFound = "Employee Grievance was not found.";
 
             #endregion
+
+
+            #region Employees Loan
+
+            public static readonly string LoanPausedSuccessfully = "Loan paused successfully.";
+            public static readonly string LoanPausedFailed = "Failed to pause the loan.";
+            public static readonly string LoanCreatedSuccessfully = "Loan created successfully.";
+            public static readonly string LoanCreationFailed = "Loan creation failed.";
+            public static readonly string LoanUpdatedSuccessfully = "Loan updated successfully.";
+            public static readonly string LoanUpdatedFailed = "Loan update failed.";
+            public static readonly string LoanDataFetchedSuccessfully = "Loan data fetched successfully.";
+            public static readonly string LoanPaidSuccessfully = "Full Loan paid successfully.";
+            public static readonly string LoanPaidFailed = "Failed to pay full loan.";
+
+            #endregion
+
             
             #region Employee Promotions
 
@@ -226,6 +246,24 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string EmployeeOrCompanyIdInvalid = "EmployeeId Or CompanyId is Invalid";
             public static readonly string EmployeeNotFound = "Employee Not Found";
             public static readonly string InvalidEmployeeOrCompanyId = "Invalid Employee Or CompanyId";
+
+            #endregion
+
+
+            #region access rights
+
+            public static readonly string AccessRole = "Access Role";
+
+            public const string AcceessRoleAlreadyExists = "Access Role with this name is alreasy exists.";
+            public const string UnableToSaveAccessRole = "Unable to save Access Role";
+            public const string AccessRoleNotFound = "Access Role could not be deleted or was not found.";
+
+            public const string InvalidAccessRoleId = "Access Role Id is Invalid.";
+
+            public static readonly string AccessRights = "Access Rights";
+
+            public const string UnableToSaveAccessRights = "Unable to save Access Rights";
+
 
             #endregion
         }
