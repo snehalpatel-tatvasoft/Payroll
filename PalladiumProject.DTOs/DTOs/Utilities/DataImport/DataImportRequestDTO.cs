@@ -137,6 +137,6 @@ public class ImportStatusFilterViewModel
     public string? TemplateName { get; set; }
     public int CurrentPage { get; set; }
     public int PageSize { get; set; }
-    public string? SortBy { get; set; }
-    public bool SortType { get; set; } = false; 
+    public string? SortBy { get; set; } = "StatusId";
+    public bool SortType { get; set; } = true; 
 }
