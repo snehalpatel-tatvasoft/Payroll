@@ -26,10 +26,10 @@ public class MinimumWageController : ControllerBase
         {
             return await _minimumWageService.CreateMinimumWage(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.MinimumWage, ex.Message)
+                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.MinimumWage)
             );
         }
     }
@@ -47,9 +47,9 @@ public class MinimumWageController : ControllerBase
 
             return await _minimumWageService.GetMinimumWagesByCompanyId(companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.MinimumWage, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.MinimumWage));
         }
     }
 
@@ -65,9 +65,9 @@ public class MinimumWageController : ControllerBase
             }
             return await _minimumWageService.UpdateMinimumWage(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Updating, ResponseMessages.MinimumWage, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Updating, ResponseMessages.MinimumWage));
         }
     }
 
@@ -84,10 +84,10 @@ public class MinimumWageController : ControllerBase
 
             return await _minimumWageService.DeleteMinimumWage(wageId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.MinimumWage, ex.Message)
+                string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.MinimumWage)
             );
         }
     }
