@@ -73,9 +73,9 @@ public class DataImportService : IDataImportService
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.Transaction + "imported successfully.");
     }
 
-    public async Task<JsonResult> ImportWorkInformation(List<WorkInformationDTO> workInformations)
+    public async Task<JsonResult> ImportWorkInformation(WorkInformationImportRequestDTO request)
     {
-        string resultMessage = await _dataImportRepository.ImportWorkInformation(workInformations);
+        string resultMessage = await _dataImportRepository.ImportWorkInformation(request);
 
         if (resultMessage == "SUCCESS")
         {

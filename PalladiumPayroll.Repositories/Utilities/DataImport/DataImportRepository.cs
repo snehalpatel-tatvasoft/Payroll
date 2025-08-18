@@ -205,20 +205,23 @@ public class DataImportRepository : IDataImportRepository
         return table;
     }
 
-
-    public async Task<string> ImportWorkInformation(List<WorkInformationDTO> records)
-    {   
-        DataTable? table = ConvertToDataTable(records);
+    public async Task<string> ImportWorkInformation(WorkInformationImportRequestDTO importDto)
+    {
+        DataTable? table = ConvertToDataTable(importDto.Records);
         DynamicParameters parameters = new DynamicParameters();
 
         parameters.Add("@WorkInfoTable", table.AsTableValuedParameter("dbo.WorkInformationTableType"));
         parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+        parameters.Add("@TemplateName", importDto.TemplateName);
+        parameters.Add("@ImportFileName", importDto.ImportFileName);
+        parameters.Add("@CompanyId", importDto.CompanyId);
 
         var resultMessage = await _dapper.ExecuteStoredProcedureSingle<string>(
-       "usp_ImportWorkInformation",
-       parameters);
+            "usp_ImportWorkInformation",
+            parameters);
 
         return resultMessage ?? "No response from procedure";
     }
+
 
 }

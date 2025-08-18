@@ -88,11 +88,11 @@ public class DataImportController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> ImportWorkInformation([FromBody] List<WorkInformationDTO> workInformations)
+    public async Task<ActionResult> ImportWorkInformation([FromBody]  WorkInformationImportRequestDTO request)
     {
         try
         {
-            return await _dataImportService.ImportWorkInformation(workInformations);
+            return await _dataImportService.ImportWorkInformation(request);
         }
         catch (Exception)
         {

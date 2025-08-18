@@ -16,5 +16,5 @@ public interface IDataImportRepository
 
     Task<bool> ImportYTDRecord(YearToDateRecordDTO record);
 
-    Task<string> ImportWorkInformation(List<WorkInformationDTO> records);
+    Task<string> ImportWorkInformation(WorkInformationImportRequestDTO importDto);
 }

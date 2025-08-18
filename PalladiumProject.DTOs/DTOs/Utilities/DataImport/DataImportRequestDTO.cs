@@ -111,3 +111,11 @@ public class WorkInformationDTO
     public decimal HoursPerDay { get; set; }
     public string StandardWorkingDays { get; set; } = "";
 }
+
+public class WorkInformationImportRequestDTO
+{
+    public List<WorkInformationDTO> Records { get; set; } = new();
+    public string TemplateName { get; set; } = string.Empty;
+    public string ImportFileName { get; set; } = string.Empty;
+    public long CompanyId { get; set; }
+}
