@@ -101,6 +101,15 @@ public class YearToDateRecordDTO
     public decimal Amount { get; set; }
 }
 
+public class ImportYearToDateRecordRequestDTO
+{
+    public List<YearToDateRecordDTO> Records { get; set; } = new();
+    public string TemplateName { get; set; } = string.Empty;
+    public string ImportFileName { get; set; } = string.Empty;
+    public long CompanyId { get; set; }
+}
+
+
 public class WorkInformationDTO
 {
     public string EmployeeCode { get; set; } = "";

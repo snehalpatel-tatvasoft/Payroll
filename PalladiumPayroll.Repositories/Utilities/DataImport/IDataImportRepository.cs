@@ -14,7 +14,7 @@ public interface IDataImportRepository
 
     Task<List<TransactionForExcelGenerateDto>> GetTransactionForExcelGenerate(int templateId);
 
-    Task<bool> ImportYTDRecord(YearToDateRecordDTO record);
+    Task<string> ImportYTDRecords(ImportYearToDateRecordRequestDTO importDto);
 
     Task<string> ImportWorkInformation(WorkInformationImportRequestDTO importDto);
 

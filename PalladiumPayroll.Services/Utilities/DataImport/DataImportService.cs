@@ -26,14 +26,12 @@ public class DataImportService : IDataImportService
 
     public async Task<JsonResult> EmployeeMasterfileImport(EmployeeMasterImportRequestDTO request)
     {
-
         var errorMessage = await _dataImportRepository.EmployeeMasterfileImport(request);
 
         if (!string.IsNullOrEmpty(errorMessage))
             return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
 
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, "Employees imported successfully.");
-
     }
 
     public async Task<JsonResult> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request)
@@ -60,18 +58,17 @@ public class DataImportService : IDataImportService
         return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
     }
 
-    public async Task<JsonResult> ImportYTDRecord(List<YearToDateRecordDTO> yearToDateRecords)
+    public async Task<JsonResult> ImportYTDRecord(ImportYearToDateRecordRequestDTO importDto)
     {
-        foreach (var record in yearToDateRecords)
+        string resultMessage = await _dataImportRepository.ImportYTDRecords(importDto);
+        if (resultMessage == "SUCCESS")
         {
-            bool isAdded = await _dataImportRepository.ImportYTDRecord(record);
-
-            if (!isAdded)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse("Failed to import year to date transactions.");
-            }
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, "Year to date Transactions imported successFully.");
         }
-        return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.Transaction + "imported successfully.");
+        else
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse("Failed to Import File.");
+        }
     }
 
     public async Task<JsonResult> ImportWorkInformation(WorkInformationImportRequestDTO request)
