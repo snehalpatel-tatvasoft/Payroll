@@ -50,6 +50,8 @@ public class DataImportRepository : IDataImportRepository
 
         var parameters = new DynamicParameters();
         parameters.Add("@CompanyId", request.CompanyId);
+        parameters.Add("@TemplateName", request.TemplateName);
+        parameters.Add("@ImportFileName", request.ImportFileName);
         parameters.Add("@UserId", userId);
         parameters.Add("@Employees", table.AsTableValuedParameter("EmployeeMasterImportType"));
 
@@ -214,7 +216,7 @@ public class DataImportRepository : IDataImportRepository
             row["PassportNumber"] = (object?)item.PassportNumber ?? DBNull.Value;
             row["PassportIssuedBy"] = (object?)item.PassportIssuedBy ?? DBNull.Value;
             row["IsAsylumSeeker"] = (object?)item.IsAsylumSeeker ?? DBNull.Value;
-            row["AsylumPermitNumber"] = (object?)item.AsylumPermitNumber ?? DBNull.Value; // Note: Typo in class? AsylumPermitNumber
+            row["AsylumPermitNumber"] = (object?)item.AsylumPermitNumber ?? DBNull.Value; 
             row["IsRefugee"] = (object?)item.IsRefugee ?? DBNull.Value;
             row["UnitNumber"] = (object?)item.UnitNumber ?? DBNull.Value;
             row["Phy_CountryId"] = (object?)item.Phy_CountryId ?? DBNull.Value;
