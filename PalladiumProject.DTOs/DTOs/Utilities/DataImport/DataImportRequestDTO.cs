@@ -81,6 +81,8 @@ public class EmployeeMasterImport
 public class EmployeeMasterImportRequestDTO
 {
     public long CompanyId { get; set; }
+    public string TemplateName { get; set; } = string.Empty;
+    public string ImportFileName { get; set; } = string.Empty;
     public List<EmployeeMasterImport> Data { get; set; } = new();
 }
 

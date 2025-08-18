@@ -13,11 +13,11 @@ public class DataImportRepository : IDataImportRepository
     private readonly DapperContext _dapper;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-
     public DataImportRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _dapper = new DapperContext(configuration);
         _httpContextAccessor = httpContextAccessor;
+
     }
 
     public async Task<TableDataModel<PayrollProcessingTransactionDto>> GetPayrollProcessingTransactionsByCompany(PayrollTransactionFilterViewModel reqModel)
@@ -40,88 +40,28 @@ public class DataImportRepository : IDataImportRepository
             TotalCount = total
         };
     }
+
     public async Task<string?> EmployeeMasterfileImport(EmployeeMasterImportRequestDTO request)
     {
-        foreach (var item in request.Data)
-        {
-            var parameters = new DynamicParameters();
-            parameters.Add("@CompanyId", request.CompanyId);
-            parameters.Add("@EmployeeCode", item.EmployeeCode);
-            parameters.Add("@EmployeeName", item.EmployeeName);
-            parameters.Add("@EmployeeSurname", item.EmployeeSurname);
-            parameters.Add("@Initials", item.Initials);
-            parameters.Add("@Gender", item.Gender);
-            parameters.Add("@PreferredName", item.PreferredName);
-            parameters.Add("@IDNumber", item.IDNumber);
-            parameters.Add("@DateOfBirth", item.DateOfBirth);
-            parameters.Add("@PassportNumber", item.PassportNumber);
-            parameters.Add("@PassportIssuedBy", item.PassportIssuedBy);
-            parameters.Add("@IsAsylumSeeker", item.IsAsylumSeeker);
-            parameters.Add("@AsylumPermitNumber", item.AsylumPermitNumber);
-            parameters.Add("@IsRefugee", item.IsRefugee);
-            parameters.Add("@UnitNumber", item.UnitNumber);
-            parameters.Add("@Phy_CountryId", item.Phy_CountryId);
-            parameters.Add("@ComplexName", item.ComplexName);
-            parameters.Add("@StreetNumber", item.StreetNumber);
-            parameters.Add("@StreetName", item.StreetName);
-            parameters.Add("@District", item.District);
-            parameters.Add("@City", item.City);
-            parameters.Add("@Phy_PostalCode", item.Phy_PostalCode);
-            parameters.Add("@IsPostalSame", item.IsPostalSame);
-            parameters.Add("@Address1", item.Address1);
-            parameters.Add("@Address2", item.Address2);
-            parameters.Add("@Address3", item.Address3);
-            parameters.Add("@Pos_PostalCode", item.Pos_PostalCode);
-            parameters.Add("@HomeNumber", item.HomeNumber);
-            parameters.Add("@CellNumber", item.CellNumber);
-            parameters.Add("@Email", item.Email);
-            parameters.Add("@StartDate", item.StartDate);
-            parameters.Add("@IncomeTaxNumber", item.IncomeTaxNumber);
-            parameters.Add("@NatureofPersonId", item.NatureofPersonId);
-            parameters.Add("@DesignationId", item.DesignationId);
-            parameters.Add("@PayrollSetupId", item.PayrollSetupId);
-            parameters.Add("@flagEndEmployment", item.FlagEndEmployment);
-            parameters.Add("@EndEmploymentDate", item.EndEmploymentDate);
-            parameters.Add("@ProfileId", item.ProfileId);
-            parameters.Add("@EmploymentStatus", item.EmploymentStatus);
-            parameters.Add("@PaymentTypeId", item.PaymentTypeId);
-            parameters.Add("@Bank1Id", item.Bank1Id);
-            parameters.Add("@AccountTypeId", item.AccountTypeId);
-            parameters.Add("@AccountName", item.AccountName);
-            parameters.Add("@AccountNumber", item.AccountNumber);
-            parameters.Add("@Branch1Code", item.Branch1Code);
-            parameters.Add("@SplitAmount1", item.SplitAmount1);
-            parameters.Add("@SplitPercentage1", item.SplitPercentage1);
-            parameters.Add("@IsJointAccount", item.IsJointAccount);
-            parameters.Add("@AccountHolderRelationship", item.AccountHolderRelationship);
-            parameters.Add("@Branch2Code", item.Branch2Code);
-            parameters.Add("@Bank2Id", item.Bank2Id);
-            parameters.Add("@AccountName1", item.AccountName1);
-            parameters.Add("@AccountNumber1", item.AccountNumber1);
-            parameters.Add("@AccountTypeId1", item.AccountTypeId1);
-            parameters.Add("@SplitAmount2", item.SplitAmount2);
-            parameters.Add("@SplitPercentage2", item.SplitPercentage2);
-            parameters.Add("@IsJointAccount1", item.IsJointAccount1);
-            parameters.Add("@AccountHolderRelationship1", item.AccountHolderRelationship1);
-            parameters.Add("@Name", item.Name);
-            parameters.Add("@Relationship", item.Relationship);
-            parameters.Add("@Phone", item.Phone);
-            parameters.Add("@DepartmentId", item.DepartmentId);
-            parameters.Add("@RaceId", item.RaceId);
-            parameters.Add("@Title", item.Title);
-            parameters.Add("@CopyCompanyAddress", item.CopyCompanyAddress);
-            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
-            var result = await _dapper.ExecuteStoredProcedureSingle<string>("usp_ImportEmployeesMasterFile", parameters);
+        string? userId = _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value;
 
-            if (result == "DUPLICATE")
-                return "Duplicate employee code";
+        var table = EmployeeMasterToDataTable(request.Data);
 
-            if (result == "ERROR")
-                return "Error importing employee";
-        }
+        var parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", request.CompanyId);
+        parameters.Add("@TemplateName", request.TemplateName);
+        parameters.Add("@ImportFileName", request.ImportFileName);
+        parameters.Add("@UserId", userId);
+        parameters.Add("@Employees", table.AsTableValuedParameter("EmployeeMasterImportType"));
 
-        return null;
+        var result = await _dapper.ExecuteStoredProcedureSingle<string>(
+            "usp_ImportEmployeesMasterFile",
+            parameters
+        );
+
+        return result == "SUCCESS" ? null : result;
+
     }
 
     public async Task<bool> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request)
@@ -209,41 +149,162 @@ public class DataImportRepository : IDataImportRepository
     {
         DataTable? table = ConvertToDataTable(importDto.Records);
         DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("@EmployeeCode", record.EmployeeCode);
+        parameters.Add("@AnnualSalary", record.AnnualSalary);
+        parameters.Add("@MonthlySalary", record.MonthlySalary);
+        parameters.Add("@RatePerDay", record.RatePerDay);
+        parameters.Add("@RatePerHour", record.RatePerHour);
+        parameters.Add("@DaysPerWeek", record.DaysPerWeek);
+        parameters.Add("@HoursPerWeek", record.HoursPerWeek);
+        parameters.Add("@HoursPerDay", record.HoursPerDay);
+        parameters.Add("@StandardWorkingDays", record.StandardWorkingDays);
+        parameters.Add("@UserId", userId);
+        parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-        parameters.Add("@WorkInfoTable", table.AsTableValuedParameter("dbo.WorkInformationTableType"));
-        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
-        parameters.Add("@TemplateName", importDto.TemplateName);
-        parameters.Add("@ImportFileName", importDto.ImportFileName);
-        parameters.Add("@CompanyId", importDto.CompanyId);
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_ImportWorkInformation", parameters);
 
-        var resultMessage = await _dapper.ExecuteStoredProcedureSingle<string>(
-            "usp_ImportWorkInformation",
-            parameters);
-
-        return resultMessage ?? "No response from procedure";
+        return parameters.Get<bool>("@IsSuccess");
     }
 
-
-    public async Task<TableDataModel<ImportStatusDto>> GetImportStatus(ImportStatusFilterViewModel reqModel)
+    private  DataTable EmployeeMasterToDataTable(IEnumerable<EmployeeMasterImport> data)
     {
-        DynamicParameters parameters = new();
-        parameters.Add("@CompanyId", reqModel.CompanyId);
-        parameters.Add("@TemplateName", reqModel.TemplateName ?? string.Empty);
-        parameters.Add("@CurrentPage", reqModel.CurrentPage);
-        parameters.Add("@PageSize", reqModel.PageSize);
-        parameters.Add("@SortBy", reqModel.SortBy ?? "CreatedDate");
-        parameters.Add("@SortType", reqModel.SortType ? "ASC" : "DESC");
-        parameters.Add("@TotalCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
+        var table = new DataTable();
+        table.Columns.Add("EmployeeCode", typeof(string));
+        table.Columns.Add("EmployeeName", typeof(string));
+        table.Columns.Add("EmployeeSurname", typeof(string));
+        table.Columns.Add("Initials", typeof(string));
+        table.Columns.Add("Gender", typeof(int));
+        table.Columns.Add("PreferredName", typeof(string));
+        table.Columns.Add("IDNumber", typeof(string));
+        table.Columns.Add("DateOfBirth", typeof(DateTime));
+        table.Columns.Add("PassportNumber", typeof(string));
+        table.Columns.Add("PassportIssuedBy", typeof(int));
+        table.Columns.Add("IsAsylumSeeker", typeof(bool));
+        table.Columns.Add("AsylumPermitNumber", typeof(string));
+        table.Columns.Add("IsRefugee", typeof(bool));
+        table.Columns.Add("UnitNumber", typeof(string));
+        table.Columns.Add("Phy_CountryId", typeof(string));
+        table.Columns.Add("ComplexName", typeof(string));
+        table.Columns.Add("StreetNumber", typeof(string));
+        table.Columns.Add("StreetName", typeof(string));
+        table.Columns.Add("District", typeof(string));
+        table.Columns.Add("City", typeof(string));
+        table.Columns.Add("Phy_PostalCode", typeof(string));
+        table.Columns.Add("IsPostalSame", typeof(bool));
+        table.Columns.Add("Address1", typeof(string));
+        table.Columns.Add("Address2", typeof(string));
+        table.Columns.Add("Address3", typeof(string));
+        table.Columns.Add("Pos_PostalCode", typeof(string));
+        table.Columns.Add("HomeNumber", typeof(string));
+        table.Columns.Add("CellNumber", typeof(string));
+        table.Columns.Add("Email", typeof(string));
+        table.Columns.Add("StartDate", typeof(DateTime));
+        table.Columns.Add("IncomeTaxNumber", typeof(string));
+        table.Columns.Add("NatureofPersonId", typeof(long));
+        table.Columns.Add("DesignationId", typeof(string));
+        table.Columns.Add("PayrollSetupId", typeof(string));
+        table.Columns.Add("flagEndEmployment", typeof(bool));
+        table.Columns.Add("EndEmploymentDate", typeof(DateTime));
+        table.Columns.Add("ProfileId", typeof(string));
+        table.Columns.Add("EmploymentStatus", typeof(int));
+        table.Columns.Add("PaymentTypeId", typeof(string));
+        table.Columns.Add("Bank1Id", typeof(string));
+        table.Columns.Add("AccountTypeId", typeof(string));
+        table.Columns.Add("AccountName", typeof(string));
+        table.Columns.Add("AccountNumber", typeof(string));
+        table.Columns.Add("Branch1Code", typeof(string));
+        table.Columns.Add("SplitAmount1", typeof(decimal));
+        table.Columns.Add("SplitPercentage1", typeof(decimal));
+        table.Columns.Add("IsJointAccount", typeof(bool));
+        table.Columns.Add("AccountHolderRelationship", typeof(string));
+        table.Columns.Add("Branch2Code", typeof(string));
+        table.Columns.Add("Bank2Id", typeof(string));
+        table.Columns.Add("AccountName1", typeof(string));
+        table.Columns.Add("AccountNumber1", typeof(string));
+        table.Columns.Add("AccountTypeId1", typeof(string));
+        table.Columns.Add("SplitAmount2", typeof(decimal));
+        table.Columns.Add("SplitPercentage2", typeof(decimal));
+        table.Columns.Add("IsJointAccount1", typeof(bool));
+        table.Columns.Add("AccountHolderRelationship1", typeof(string));
+        table.Columns.Add("[Name]", typeof(string)); 
+        table.Columns.Add("Relationship", typeof(string));
+        table.Columns.Add("Phone", typeof(string));
+        table.Columns.Add("DepartmentId", typeof(string));
+        table.Columns.Add("RaceId", typeof(string));
+        table.Columns.Add("Title", typeof(int));
+        table.Columns.Add("CopyCompanyAddress", typeof(bool));
 
-        List<ImportStatusDto>? data = await _dapper.ExecuteStoredProcedure<ImportStatusDto>("usp_GetImportStatus", parameters);
-        int total = parameters.Get<int>("@TotalCount");
-
-        return new TableDataModel<ImportStatusDto>
+        foreach (var item in data)
         {
-            DataList = data,
-            TotalCount = total
-        };
-    }
+            var row = table.NewRow();
+            row["EmployeeCode"] = (object?)item.EmployeeCode ?? DBNull.Value;
+            row["EmployeeName"] = (object?)item.EmployeeName ?? DBNull.Value;
+            row["EmployeeSurname"] = (object?)item.EmployeeSurname ?? DBNull.Value;
+            row["Initials"] = (object?)item.Initials ?? DBNull.Value;
+            row["Gender"] = (object?)item.Gender ?? DBNull.Value;
+            row["PreferredName"] = (object?)item.PreferredName ?? DBNull.Value;
+            row["IDNumber"] = (object?)item.IDNumber ?? DBNull.Value;
+            row["DateOfBirth"] = (object?)item.DateOfBirth ?? DBNull.Value;
+            row["PassportNumber"] = (object?)item.PassportNumber ?? DBNull.Value;
+            row["PassportIssuedBy"] = (object?)item.PassportIssuedBy ?? DBNull.Value;
+            row["IsAsylumSeeker"] = (object?)item.IsAsylumSeeker ?? DBNull.Value;
+            row["AsylumPermitNumber"] = (object?)item.AsylumPermitNumber ?? DBNull.Value; 
+            row["IsRefugee"] = (object?)item.IsRefugee ?? DBNull.Value;
+            row["UnitNumber"] = (object?)item.UnitNumber ?? DBNull.Value;
+            row["Phy_CountryId"] = (object?)item.Phy_CountryId ?? DBNull.Value;
+            row["ComplexName"] = (object?)item.ComplexName ?? DBNull.Value;
+            row["StreetNumber"] = (object?)item.StreetNumber ?? DBNull.Value;
+            row["StreetName"] = (object?)item.StreetName ?? DBNull.Value;
+            row["District"] = (object?)item.District ?? DBNull.Value;
+            row["City"] = (object?)item.City ?? DBNull.Value;
+            row["Phy_PostalCode"] = (object?)item.Phy_PostalCode ?? DBNull.Value;
+            row["IsPostalSame"] = (object?)item.IsPostalSame ?? DBNull.Value;
+            row["Address1"] = (object?)item.Address1 ?? DBNull.Value;
+            row["Address2"] = (object?)item.Address2 ?? DBNull.Value;
+            row["Address3"] = (object?)item.Address3 ?? DBNull.Value;
+            row["Pos_PostalCode"] = (object?)item.Pos_PostalCode ?? DBNull.Value;
+            row["HomeNumber"] = (object?)item.HomeNumber ?? DBNull.Value;
+            row["CellNumber"] = (object?)item.CellNumber ?? DBNull.Value;
+            row["Email"] = (object?)item.Email ?? DBNull.Value;
+            row["StartDate"] = (object?)item.StartDate ?? DBNull.Value;
+            row["IncomeTaxNumber"] = (object?)item.IncomeTaxNumber ?? DBNull.Value;
+            row["NatureofPersonId"] = (object?)item.NatureofPersonId ?? DBNull.Value;
+            row["DesignationId"] = (object?)item.DesignationId ?? DBNull.Value;
+            row["PayrollSetupId"] = (object?)item.PayrollSetupId ?? DBNull.Value;
+            row["flagEndEmployment"] = (object?)item.FlagEndEmployment ?? DBNull.Value; // Note: Typo in class? FlagEndEmployment
+            row["EndEmploymentDate"] = (object?)item.EndEmploymentDate ?? DBNull.Value;
+            row["ProfileId"] = (object?)item.ProfileId ?? DBNull.Value;
+            row["EmploymentStatus"] = (object?)item.EmploymentStatus ?? DBNull.Value;
+            row["PaymentTypeId"] = (object?)item.PaymentTypeId ?? DBNull.Value;
+            row["Bank1Id"] = (object?)item.Bank1Id ?? DBNull.Value;
+            row["AccountTypeId"] = (object?)item.AccountTypeId ?? DBNull.Value;
+            row["AccountName"] = (object?)item.AccountName ?? DBNull.Value;
+            row["AccountNumber"] = (object?)item.AccountNumber ?? DBNull.Value;
+            row["Branch1Code"] = (object?)item.Branch1Code ?? DBNull.Value;
+            row["SplitAmount1"] = (object?)item.SplitAmount1 ?? DBNull.Value;
+            row["SplitPercentage1"] = (object?)item.SplitPercentage1 ?? DBNull.Value;
+            row["IsJointAccount"] = (object?)item.IsJointAccount ?? DBNull.Value;
+            row["AccountHolderRelationship"] = (object?)item.AccountHolderRelationship ?? DBNull.Value;
+            row["Branch2Code"] = (object?)item.Branch2Code ?? DBNull.Value;
+            row["Bank2Id"] = (object?)item.Bank2Id ?? DBNull.Value;
+            row["AccountName1"] = (object?)item.AccountName1 ?? DBNull.Value;
+            row["AccountNumber1"] = (object?)item.AccountNumber1 ?? DBNull.Value;
+            row["AccountTypeId1"] = (object?)item.AccountTypeId1 ?? DBNull.Value;
+            row["SplitAmount2"] = (object?)item.SplitAmount2 ?? DBNull.Value;
+            row["SplitPercentage2"] = (object?)item.SplitPercentage2 ?? DBNull.Value;
+            row["IsJointAccount1"] = (object?)item.IsJointAccount1 ?? DBNull.Value;
+            row["AccountHolderRelationship1"] = (object?)item.AccountHolderRelationship1 ?? DBNull.Value;
+            row["[Name]"] = (object?)item.Name ?? DBNull.Value;
+            row["Relationship"] = (object?)item.Relationship ?? DBNull.Value;
+            row["Phone"] = (object?)item.Phone ?? DBNull.Value;
+            row["DepartmentId"] = (object?)item.DepartmentId ?? DBNull.Value;
+            row["RaceId"] = (object?)item.RaceId ?? DBNull.Value;
+            row["Title"] = (object?)item.Title ?? DBNull.Value;
+            row["CopyCompanyAddress"] = (object?)item.CopyCompanyAddress ?? DBNull.Value;
+            table.Rows.Add(row);
+        }
 
+        return table;
+    }
 
 }
