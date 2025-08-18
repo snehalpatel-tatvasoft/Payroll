@@ -122,9 +122,9 @@ public class DataImportController : ControllerBase
         {
             return await _dataImportService.GetImportStatus(reqModel);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ex.Message);
         }
     }
 }
