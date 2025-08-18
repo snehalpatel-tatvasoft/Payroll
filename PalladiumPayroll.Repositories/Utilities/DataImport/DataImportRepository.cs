@@ -224,4 +224,26 @@ public class DataImportRepository : IDataImportRepository
     }
 
 
+    public async Task<TableDataModel<ImportStatusDto>> GetImportStatus(ImportStatusFilterViewModel reqModel)
+    {
+        DynamicParameters parameters = new();
+        parameters.Add("@CompanyId", reqModel.CompanyId);
+        parameters.Add("@TemplateName", reqModel.TemplateName ?? string.Empty);
+        parameters.Add("@CurrentPage", reqModel.CurrentPage);
+        parameters.Add("@PageSize", reqModel.PageSize);
+        parameters.Add("@SortBy", reqModel.SortBy ?? "CreatedDate");
+        parameters.Add("@SortType", reqModel.SortType ? "ASC" : "DESC");
+        parameters.Add("@TotalCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+        List<ImportStatusDto>? data = await _dapper.ExecuteStoredProcedure<ImportStatusDto>("usp_GetImportStatus", parameters);
+        int total = parameters.Get<int>("@TotalCount");
+
+        return new TableDataModel<ImportStatusDto>
+        {
+            DataList = data,
+            TotalCount = total
+        };
+    }
+
+
 }

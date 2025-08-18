@@ -75,7 +75,7 @@ public class DataImportController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> ImportYTDRecord([FromBody] List<YearToDateRecordDTO>  request)
+    public async Task<ActionResult> ImportYTDRecord([FromBody] List<YearToDateRecordDTO> request)
     {
         try
         {
@@ -83,12 +83,12 @@ public class DataImportController : ControllerBase
         }
         catch (Exception)
         {
-           return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> ImportWorkInformation([FromBody]  WorkInformationImportRequestDTO request)
+    public async Task<ActionResult> ImportWorkInformation([FromBody] WorkInformationImportRequestDTO request)
     {
         try
         {
@@ -112,6 +112,19 @@ public class DataImportController : ControllerBase
         catch (Exception ex)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction, ex.Message));
+        }
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> GetImportStatus([FromQuery] ImportStatusFilterViewModel reqModel)
+    {
+        try
+        {
+            return await _dataImportService.GetImportStatus(reqModel);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
     }
 }

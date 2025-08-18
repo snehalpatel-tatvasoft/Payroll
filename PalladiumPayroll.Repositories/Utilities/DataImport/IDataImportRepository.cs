@@ -17,4 +17,6 @@ public interface IDataImportRepository
     Task<bool> ImportYTDRecord(YearToDateRecordDTO record);
 
     Task<string> ImportWorkInformation(WorkInformationImportRequestDTO importDto);
+
+    Task<TableDataModel<ImportStatusDto>> GetImportStatus(ImportStatusFilterViewModel reqModel);
 }

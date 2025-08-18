@@ -23,6 +23,7 @@ public class DataImportService : IDataImportService
 
         return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
     }
+
     public async Task<JsonResult> EmployeeMasterfileImport(EmployeeMasterImportRequestDTO request)
     {
 
@@ -87,5 +88,10 @@ public class DataImportService : IDataImportService
         }
     }
 
+    public async Task<JsonResult> GetImportStatus(ImportStatusFilterViewModel reqModel)
+    {
+        TableDataModel<ImportStatusDto> status = await _dataImportRepository.GetImportStatus(reqModel);
 
+        return HttpStatusCodeResponse.SuccessResponse(status, string.Format(ResponseMessages.Success, "Import Status", ActionType.Retrieved));
+    }
 }

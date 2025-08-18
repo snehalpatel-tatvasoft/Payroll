@@ -119,3 +119,13 @@ public class WorkInformationImportRequestDTO
     public string ImportFileName { get; set; } = string.Empty;
     public long CompanyId { get; set; }
 }
+
+public class ImportStatusFilterViewModel
+{
+    public long CompanyId { get; set; }
+    public string? TemplateName { get; set; }
+    public int CurrentPage { get; set; }
+    public int PageSize { get; set; }
+    public string? SortBy { get; set; }
+    public bool SortType { get; set; } = false; 
+}
