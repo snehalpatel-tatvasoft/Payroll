@@ -449,6 +449,7 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@PayrollCycleName", companyPayrollCycle.CycleName);
             parameters.Add("@PayrollCycleTypeId", companyPayrollCycle.CycleType);
             parameters.Add("@CycleEndDate", companyPayrollCycle.CycleEndDate);
+            parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
             bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCompanyPayrollCycle", parameters);
             return isUpsert;

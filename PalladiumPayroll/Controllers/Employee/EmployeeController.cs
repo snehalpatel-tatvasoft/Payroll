@@ -107,6 +107,7 @@ namespace PalladiumPayroll.Controllers.Employee
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
         [HttpPost("[action]")]
         public async Task<ActionResult> EmployeePaymentDetailSave(EmployeePaymentDetail reqModel)
         {
