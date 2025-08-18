@@ -21,6 +21,7 @@ public class TransactionForExcelGenerateDto
 
 public class ImportStatusDto
 {
+    public long StatusId { get; set; }
     public string? TemplateName { get; set; }
     public string? ImportFileName { get; set; }
     public string? ErrorTableName { get; set; }
