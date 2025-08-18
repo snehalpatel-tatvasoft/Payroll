@@ -25,6 +25,7 @@ public class DataImportService : IDataImportService
 
         return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
     }
+
     public async Task<JsonResult> EmployeeMasterfileImport(EmployeeMasterImportRequestDTO request)
     {
 
@@ -61,11 +62,11 @@ public class DataImportService : IDataImportService
         return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
     }
 
-    public async Task<JsonResult> ImportYTDRecord(ImportYTDRecordRequestDTO request)
+    public async Task<JsonResult> ImportYTDRecord(List<YearToDateRecordDTO> yearToDateRecords)
     {
-        foreach (var record in request.YearToDateRecords)
+        foreach (var record in yearToDateRecords)
         {
-            bool isAdded = await _dataImportRepository.ImportYTDRecord(record, request.CreatedBy);
+            bool isAdded = await _dataImportRepository.ImportYTDRecord(record);
 
             if (!isAdded)
             {
@@ -75,18 +76,25 @@ public class DataImportService : IDataImportService
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.Transaction + "imported successfully.");
     }
 
-    public async Task<JsonResult> ImportWorkInformation(ImportWorkInformationRequestDTO request)
+    public async Task<JsonResult> ImportWorkInformation(WorkInformationImportRequestDTO request)
     {
-        foreach (var record in request.WorkInformations)
-        {
-            bool isAdded = await _dataImportRepository.ImportWorkInformation(record, request.UserId);
+        string resultMessage = await _dataImportRepository.ImportWorkInformation(request);
 
-            if (!isAdded)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse("Failed to import work information.");
-            }
+        if (resultMessage == "SUCCESS")
+        {
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, "Work Information imported successFully");
         }
-        return HttpStatusCodeResponse.SuccessResponse(string.Empty, "Work Information imported successfully.");
+        else
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse("Failed to Import File");
+        }
+    }
+
+    public async Task<JsonResult> GetImportStatus(ImportStatusFilterViewModel reqModel)
+    {
+        TableDataModel<ImportStatusDto> status = await _dataImportRepository.GetImportStatus(reqModel);
+
+        return HttpStatusCodeResponse.SuccessResponse(status, string.Format(ResponseMessages.Success, "Import Status", ActionType.Retrieved));
     }
 
 

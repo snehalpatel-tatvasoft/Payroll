@@ -1,9 +1,5 @@
 namespace PalladiumPayroll.DTOs.DTOs.Utilities.DataImport;
 
-public class DataImportRequestDTO
-{
-}
-
 public class PayrollTransactionFilterViewModel
 {
     public long CompanyId { get; set; }
@@ -85,6 +81,8 @@ public class EmployeeMasterImport
 public class EmployeeMasterImportRequestDTO
 {
     public long CompanyId { get; set; }
+    public string TemplateName { get; set; } = string.Empty;
+    public string ImportFileName { get; set; } = string.Empty;
     public List<EmployeeMasterImport> Data { get; set; } = new();
 }
 
@@ -103,12 +101,6 @@ public class YearToDateRecordDTO
     public decimal Amount { get; set; }
 }
 
-public class ImportYTDRecordRequestDTO
-{
-    public int CreatedBy { get; set; } = 1;
-    public List<YearToDateRecordDTO> YearToDateRecords { get; set; } = new List<YearToDateRecordDTO>();
-}
-
 public class WorkInformationDTO
 {
     public string EmployeeCode { get; set; } = "";
@@ -122,11 +114,22 @@ public class WorkInformationDTO
     public string StandardWorkingDays { get; set; } = "";
 }
 
-
-public class ImportWorkInformationRequestDTO
+public class WorkInformationImportRequestDTO
 {
-    public string UserId { get; set; } = "";
-    public List<WorkInformationDTO> WorkInformations { get; set; } = new List<WorkInformationDTO>();
+    public List<WorkInformationDTO> Records { get; set; } = new();
+    public string TemplateName { get; set; } = string.Empty;
+    public string ImportFileName { get; set; } = string.Empty;
+    public long CompanyId { get; set; }
+}
+
+public class ImportStatusFilterViewModel
+{
+    public long CompanyId { get; set; }
+    public string? TemplateName { get; set; }
+    public int CurrentPage { get; set; }
+    public int PageSize { get; set; }
+    public string? SortBy { get; set; }
+    public bool SortType { get; set; } = false;
 }
 
 public class ESSUserData

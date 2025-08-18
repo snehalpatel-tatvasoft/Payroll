@@ -1,4 +1,3 @@
-using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.Utilities.DataImport;
 using PalladiumPayroll.DTOs.Miscellaneous;
@@ -28,7 +27,7 @@ public class DataImportController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
     }
 
@@ -41,9 +40,7 @@ public class DataImportController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, "Import year to date template.")
-            );
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
     }
 
@@ -60,7 +57,7 @@ public class DataImportController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, "Year to date Template" ));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
     }
 
@@ -73,12 +70,12 @@ public class DataImportController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Transaction));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> ImportYTDRecord(ImportYTDRecordRequestDTO request)
+    public async Task<ActionResult> ImportYTDRecord([FromBody] List<YearToDateRecordDTO> request)
     {
         try
         {
@@ -86,12 +83,12 @@ public class DataImportController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Transaction));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> ImportWorkInformation(ImportWorkInformationRequestDTO request)
+    public async Task<ActionResult> ImportWorkInformation([FromBody] WorkInformationImportRequestDTO request)
     {
         try
         {
@@ -99,9 +96,11 @@ public class DataImportController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, "Work Information"));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
     }
+
+
     [HttpPost("[action]")]
     public async Task<ActionResult> EmployeeMasterfileImport([FromBody] EmployeeMasterImportRequestDTO request)
     {
@@ -113,6 +112,19 @@ public class DataImportController : ControllerBase
         catch (Exception ex)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving,"Employee Masterfile Import", ex.Message));
+        }
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> GetImportStatus([FromQuery] ImportStatusFilterViewModel reqModel)
+    {
+        try
+        {
+            return await _dataImportService.GetImportStatus(reqModel);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
     }
     [HttpPost("[action]")]

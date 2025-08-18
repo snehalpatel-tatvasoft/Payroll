@@ -18,3 +18,13 @@ public class TransactionForExcelGenerateDto
     public long PayrollProcessId { get; set; }
     public string? Description { get; set; }
 }
+
+public class ImportStatusDto
+{
+    public long StatusId { get; set; }
+    public string? TemplateName { get; set; }
+    public string? ImportFileName { get; set; }
+    public string? ErrorTableName { get; set; }
+    public bool ISSuccessful { get; set; }
+    public string? ErrorMessage { get; set; }
+}
