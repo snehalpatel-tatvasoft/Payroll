@@ -145,25 +145,22 @@ public class DataImportRepository : IDataImportRepository
         return table;
     }
 
-    public async Task<string> ImportWorkInformation(WorkInformationImportRequestDTO importDto)
+     public async Task<string> ImportWorkInformation(WorkInformationImportRequestDTO importDto)
     {
         DataTable? table = ConvertToDataTable(importDto.Records);
         DynamicParameters parameters = new DynamicParameters();
-        parameters.Add("@EmployeeCode", record.EmployeeCode);
-        parameters.Add("@AnnualSalary", record.AnnualSalary);
-        parameters.Add("@MonthlySalary", record.MonthlySalary);
-        parameters.Add("@RatePerDay", record.RatePerDay);
-        parameters.Add("@RatePerHour", record.RatePerHour);
-        parameters.Add("@DaysPerWeek", record.DaysPerWeek);
-        parameters.Add("@HoursPerWeek", record.HoursPerWeek);
-        parameters.Add("@HoursPerDay", record.HoursPerDay);
-        parameters.Add("@StandardWorkingDays", record.StandardWorkingDays);
-        parameters.Add("@UserId", userId);
-        parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-        await _dapper.ExecuteStoredProcedureSingle<object>("usp_ImportWorkInformation", parameters);
+        parameters.Add("@WorkInfoTable", table.AsTableValuedParameter("dbo.WorkInformationTableType"));
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+        parameters.Add("@TemplateName", importDto.TemplateName);
+        parameters.Add("@ImportFileName", importDto.ImportFileName);
+        parameters.Add("@CompanyId", importDto.CompanyId);
 
-        return parameters.Get<bool>("@IsSuccess");
+        var resultMessage = await _dapper.ExecuteStoredProcedureSingle<string>(
+            "usp_ImportWorkInformation",
+            parameters);
+
+        return resultMessage ?? "No response from procedure";
     }
 
     private  DataTable EmployeeMasterToDataTable(IEnumerable<EmployeeMasterImport> data)
@@ -305,6 +302,27 @@ public class DataImportRepository : IDataImportRepository
         }
 
         return table;
+    }
+
+    public async Task<TableDataModel<ImportStatusDto>> GetImportStatus(ImportStatusFilterViewModel reqModel)
+    {
+        DynamicParameters parameters = new();
+        parameters.Add("@CompanyId", reqModel.CompanyId);
+        parameters.Add("@TemplateName", reqModel.TemplateName ?? string.Empty);
+        parameters.Add("@CurrentPage", reqModel.CurrentPage);
+        parameters.Add("@PageSize", reqModel.PageSize);
+        parameters.Add("@SortBy", reqModel.SortBy ?? "CreatedDate");
+        parameters.Add("@SortType", reqModel.SortType ? "ASC" : "DESC");
+        parameters.Add("@TotalCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+        List<ImportStatusDto>? data = await _dapper.ExecuteStoredProcedure<ImportStatusDto>("usp_GetImportStatus", parameters);
+        int total = parameters.Get<int>("@TotalCount");
+
+        return new TableDataModel<ImportStatusDto>
+        {
+            DataList = data,
+            TotalCount = total
+        };
     }
 
 }
