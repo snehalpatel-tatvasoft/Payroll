@@ -26,7 +26,7 @@ public class AccessRightsController : ControllerBase
         {
             return await _accessRightsService.UpsertAccessRole(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.AccessRole)
@@ -47,7 +47,7 @@ public class AccessRightsController : ControllerBase
 
             return await _accessRightsService.GetAllAccessRoles(companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.AccessRole)
@@ -68,7 +68,7 @@ public class AccessRightsController : ControllerBase
 
             return await _accessRightsService.DeleteAccessRole(accessRoleId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.AccessRole)
@@ -89,7 +89,7 @@ public class AccessRightsController : ControllerBase
 
             return await _accessRightsService.GetAccessRightsByRoleType(accessRoleId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.AccessRights)
@@ -105,7 +105,7 @@ public class AccessRightsController : ControllerBase
         {
             return await _accessRightsService.SaveRoleFunctinalityAccessRights(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.AccessRights)
@@ -125,7 +125,7 @@ public class AccessRightsController : ControllerBase
             }
             return await _accessRightsService.GetPayFrequencyAccessRights(accessRoleId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.AccessRights)
@@ -141,7 +141,7 @@ public class AccessRightsController : ControllerBase
         {
             return await _accessRightsService.SavePayFrequencyAccessRights(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.AccessRights)
@@ -161,7 +161,7 @@ public class AccessRightsController : ControllerBase
             }
             return await _accessRightsService.GetTransactionFunctionAccessRights(accessRoleId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.AccessRights)
