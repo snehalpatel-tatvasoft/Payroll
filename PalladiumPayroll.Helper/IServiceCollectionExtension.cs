@@ -17,7 +17,7 @@ namespace PalladiumPayroll.Helper
 
             // Register class that uses it
             services.AddScoped<PayrollMachine>();
-            services.AddSingleton<AppSettingDirectoryPath>();
+            services.AddSingleton<AppSettingPathHelper>();
 
             services.AddTransient<ILog4net, Log4net.Log4net>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
