@@ -134,11 +134,11 @@ public class ImportStatusFilterViewModel
 
 public class ESSUserData
 {
-    public string EmployeeCode { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
+    public string? EmployeeCode { get; set; }
+    public string? Email { get; set; }
+    public string? Password { get; set; }
     public string? PasswordHash { get; set; }
-    public string AccessRoleName { get; set; }
+    public string? AccessRoleName { get; set; }
     public string? ApprovalManager { get; set; }
     public string? SecondApproval { get; set; }
     public bool? IsManager { get; set; }
@@ -162,5 +162,7 @@ public class ESSUserData
 public class UpsertESSUserRequestDTO
 {
     public long CompanyId { get; set; }
+    public string TemplateName { get; set; } = string.Empty;
+    public string ImportFileName { get; set; } = string.Empty;
     public List<ESSUserData> Data { get; set; } = new();
 }

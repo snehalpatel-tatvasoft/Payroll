@@ -122,10 +122,10 @@ public class DataImportService : IDataImportService
                 user.PasswordHash = passwordHasher.HashPassword(null, user.Password);
             }
 
-            var result = await _dataImportRepository.UpsertESSUser(request);
-            if (result == "ERROR")
+            var errorMessage = await _dataImportRepository.UpsertESSUser(request);
+            if (!string.IsNullOrEmpty(errorMessage))
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse("Failed to upsert ESS user.");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
             }
 
             return HttpStatusCodeResponse.SuccessResponse(string.Empty, "ESS user upserted successfully.");

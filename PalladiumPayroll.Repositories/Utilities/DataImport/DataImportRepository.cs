@@ -325,14 +325,80 @@ public class DataImportRepository : IDataImportRepository
         };
     }
 
-     public async Task<string> UpsertESSUser(UpsertESSUserRequestDTO request)
+    public async Task<string?> UpsertESSUser(UpsertESSUserRequestDTO request)
     {
+        var table = ESSUserToDataTable(request.Data);
+
         var parameters = new DynamicParameters();
         parameters.Add("@CompanyId", request.CompanyId);
-        parameters.Add("@EmployeesData", Newtonsoft.Json.JsonConvert.SerializeObject(request.Data));
+        parameters.Add("@TemplateName", request.TemplateName);
+        parameters.Add("@ImportFileName", request.ImportFileName);
+        parameters.Add("@ESSUsers", table.AsTableValuedParameter("ESSUserImportType"));
 
-        var result = await _dapper.ExecuteStoredProcedureSingle<string>("usp_UpsertESSUser", parameters);
-        return result;
+        var result = await _dapper.ExecuteStoredProcedureSingle<string>(
+            "usp_UpsertESSUser",
+            parameters
+        );
+
+        return result == "SUCCESS" ? null : result;
     }
 
+    private DataTable ESSUserToDataTable(IEnumerable<ESSUserData> data)
+    {
+        var table = new DataTable();
+        table.Columns.Add("EmployeeCode", typeof(string));
+        table.Columns.Add("Email", typeof(string));
+        table.Columns.Add("Password", typeof(string));
+        table.Columns.Add("PasswordHash", typeof(string));
+        table.Columns.Add("AccessRoleName", typeof(string));
+        table.Columns.Add("ApprovalManager", typeof(string));
+        table.Columns.Add("SecondApproval", typeof(string));
+        table.Columns.Add("IsManager", typeof(bool));
+        table.Columns.Add("ApplyLeaveView", typeof(bool));
+        table.Columns.Add("ApplyLeaveSave", typeof(bool));
+        table.Columns.Add("ApplyLeaveDelete", typeof(bool));
+        table.Columns.Add("PayslipsView", typeof(bool));
+        table.Columns.Add("PayslipsSave", typeof(bool));
+        table.Columns.Add("PayslipsDelete", typeof(bool));
+        table.Columns.Add("ManageLeaveView", typeof(bool));
+        table.Columns.Add("ManageLeaveSave", typeof(bool));
+        table.Columns.Add("ManageLeaveDelete", typeof(bool));
+        table.Columns.Add("ClaimsOnBehalfView", typeof(bool));
+        table.Columns.Add("ClaimsOnBehalfSave", typeof(bool));
+        table.Columns.Add("ClaimsOnBehalfDelete", typeof(bool));
+        table.Columns.Add("ESSEMPLOYEESView", typeof(bool));
+        table.Columns.Add("ESSEMPLOYEESSave", typeof(bool));
+        table.Columns.Add("ESSEMPLOYEESDelete", typeof(bool));
+
+        foreach (var item in data)
+        {
+            var row = table.NewRow();
+            row["EmployeeCode"] = (object?)item.EmployeeCode ?? DBNull.Value;
+            row["Email"] = (object?)item.Email ?? DBNull.Value;
+            row["Password"] = (object?)item.Password ?? DBNull.Value;
+            row["PasswordHash"] = (object?)item.PasswordHash ?? DBNull.Value;
+            row["AccessRoleName"] = (object?)item.AccessRoleName ?? DBNull.Value;
+            row["ApprovalManager"] = (object?)item.ApprovalManager ?? DBNull.Value;
+            row["SecondApproval"] = (object?)item.SecondApproval ?? DBNull.Value;
+            row["IsManager"] = (object?)item.IsManager ?? DBNull.Value;
+            row["ApplyLeaveView"] = (object?)item.ApplyLeaveView ?? DBNull.Value;
+            row["ApplyLeaveSave"] = (object?)item.ApplyLeaveSave ?? DBNull.Value;
+            row["ApplyLeaveDelete"] = (object?)item.ApplyLeaveDelete ?? DBNull.Value;
+            row["PayslipsView"] = (object?)item.PayslipsView ?? DBNull.Value;
+            row["PayslipsSave"] = (object?)item.PayslipsSave ?? DBNull.Value;
+            row["PayslipsDelete"] = (object?)item.PayslipsDelete ?? DBNull.Value;
+            row["ManageLeaveView"] = (object?)item.ManageLeaveView ?? DBNull.Value;
+            row["ManageLeaveSave"] = (object?)item.ManageLeaveSave ?? DBNull.Value;
+            row["ManageLeaveDelete"] = (object?)item.ManageLeaveDelete ?? DBNull.Value;
+            row["ClaimsOnBehalfView"] = (object?)item.ClaimsOnBehalfView ?? DBNull.Value;
+            row["ClaimsOnBehalfSave"] = (object?)item.ClaimsOnBehalfSave ?? DBNull.Value;
+            row["ClaimsOnBehalfDelete"] = (object?)item.ClaimsOnBehalfDelete ?? DBNull.Value;
+            row["ESSEMPLOYEESView"] = (object?)item.ESSEMPLOYEESView ?? DBNull.Value;
+            row["ESSEMPLOYEESSave"] = (object?)item.ESSEMPLOYEESSave ?? DBNull.Value;
+            row["ESSEMPLOYEESDelete"] = (object?)item.ESSEMPLOYEESDelete ?? DBNull.Value;
+            table.Rows.Add(row);
+        }
+
+        return table;
+    }
 }

@@ -7,7 +7,7 @@ public interface IDataImportRepository
 {
     Task<TableDataModel<PayrollProcessingTransactionDto>> GetPayrollProcessingTransactionsByCompany(PayrollTransactionFilterViewModel reqModel);
     Task<string?> EmployeeMasterfileImport(EmployeeMasterImportRequestDTO request);
-    Task<string> UpsertESSUser(UpsertESSUserRequestDTO request);
+    Task<string?> UpsertESSUser(UpsertESSUserRequestDTO request);
 
     Task<bool> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request);
 
