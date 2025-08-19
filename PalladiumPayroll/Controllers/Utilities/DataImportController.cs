@@ -75,7 +75,7 @@ public class DataImportController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> ImportYTDRecord([FromBody] List<YearToDateRecordDTO> request)
+    public async Task<ActionResult> ImportYTDRecord([FromBody] ImportYearToDateRecordRequestDTO request)
     {
         try
         {
@@ -122,9 +122,9 @@ public class DataImportController : ControllerBase
         {
             return await _dataImportService.GetImportStatus(reqModel);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ex.Message);
         }
     }
     [HttpPost("[action]")]

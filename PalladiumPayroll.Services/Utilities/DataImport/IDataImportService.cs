@@ -15,7 +15,7 @@ public interface IDataImportService
 
     Task<JsonResult> GetTransactionForExcelGenerate(int templateId);
 
-    Task<JsonResult> ImportYTDRecord(List<YearToDateRecordDTO> request);
+    Task<JsonResult> ImportYTDRecord(ImportYearToDateRecordRequestDTO importDto);
 
      Task<JsonResult> ImportWorkInformation(WorkInformationImportRequestDTO request);
 

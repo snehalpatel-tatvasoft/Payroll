@@ -100,21 +100,39 @@ public class DataImportRepository : IDataImportRepository
         return result ?? new List<TransactionForExcelGenerateDto>();
     }
 
-    public async Task<bool> ImportYTDRecord(YearToDateRecordDTO record)
+    private DataTable YearToDateRecordsToDataTable(List<YearToDateRecordDTO> records)
     {
-        DynamicParameters? parameters = new DynamicParameters();
-        parameters.Add("@EmployeeCode", record.EmployeeCode);
-        parameters.Add("@Description", record.Description);
-        parameters.Add("@Amount", record.Amount);
-        parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
-        parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+        DataTable table = new DataTable();
+        table.Columns.Add("EmployeeCode", typeof(string));
+        table.Columns.Add("Description", typeof(string));
+        table.Columns.Add("Amount", typeof(decimal));
 
-        await _dapper.ExecuteStoredProcedureSingle<object>("usp_ImportYearToDateTransactions", parameters);
+        foreach (var record in records)
+        {
+            table.Rows.Add(record.EmployeeCode, record.Description, record.Amount);
+        }
 
-        return parameters.Get<bool>("@IsSuccess");
+        return table;
     }
 
-    private DataTable ConvertToDataTable(List<WorkInformationDTO> workInformations)
+    public async Task<string> ImportYTDRecords(ImportYearToDateRecordRequestDTO importDto)
+    {
+        DataTable? dataTable = YearToDateRecordsToDataTable(importDto.Records);
+        DynamicParameters? parameters = new DynamicParameters();
+
+        parameters.Add("@YearToDateTable", dataTable.AsTableValuedParameter("dbo.YearToDateTableType"));
+        parameters.Add("@TemplateName", importDto.TemplateName);
+        parameters.Add("@ImportFileName", importDto.ImportFileName);
+        parameters.Add("@CompanyId", importDto.CompanyId);
+        parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+
+        var resultMessage = await _dapper.ExecuteStoredProcedureSingle<string>("usp_ImportYearToDateTransactions", parameters);
+
+        return resultMessage ?? "No response from procedure";
+    }
+
+
+    private DataTable WorkInformationToDataTable(List<WorkInformationDTO> workInformations)
     {
         DataTable table = new DataTable();
         table.Columns.Add("EmployeeCode", typeof(string));
@@ -145,9 +163,9 @@ public class DataImportRepository : IDataImportRepository
         return table;
     }
 
-     public async Task<string> ImportWorkInformation(WorkInformationImportRequestDTO importDto)
+    public async Task<string> ImportWorkInformation(WorkInformationImportRequestDTO importDto)
     {
-        DataTable? table = ConvertToDataTable(importDto.Records);
+        DataTable? table = WorkInformationToDataTable(importDto.Records);
         DynamicParameters parameters = new DynamicParameters();
 
         parameters.Add("@WorkInfoTable", table.AsTableValuedParameter("dbo.WorkInformationTableType"));
@@ -245,7 +263,7 @@ public class DataImportRepository : IDataImportRepository
             row["PassportNumber"] = (object?)item.PassportNumber ?? DBNull.Value;
             row["PassportIssuedBy"] = (object?)item.PassportIssuedBy ?? DBNull.Value;
             row["IsAsylumSeeker"] = (object?)item.IsAsylumSeeker ?? DBNull.Value;
-            row["AsylumPermitNumber"] = (object?)item.AsylumPermitNumber ?? DBNull.Value; 
+            row["AsylumPermitNumber"] = (object?)item.AsylumPermitNumber ?? DBNull.Value;
             row["IsRefugee"] = (object?)item.IsRefugee ?? DBNull.Value;
             row["UnitNumber"] = (object?)item.UnitNumber ?? DBNull.Value;
             row["Phy_CountryId"] = (object?)item.Phy_CountryId ?? DBNull.Value;

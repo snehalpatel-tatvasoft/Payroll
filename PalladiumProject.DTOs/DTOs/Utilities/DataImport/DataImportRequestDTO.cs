@@ -101,6 +101,15 @@ public class YearToDateRecordDTO
     public decimal Amount { get; set; }
 }
 
+public class ImportYearToDateRecordRequestDTO
+{
+    public List<YearToDateRecordDTO> Records { get; set; } = new();
+    public string TemplateName { get; set; } = string.Empty;
+    public string ImportFileName { get; set; } = string.Empty;
+    public long CompanyId { get; set; }
+}
+
+
 public class WorkInformationDTO
 {
     public string EmployeeCode { get; set; } = "";
@@ -128,8 +137,8 @@ public class ImportStatusFilterViewModel
     public string? TemplateName { get; set; }
     public int CurrentPage { get; set; }
     public int PageSize { get; set; }
-    public string? SortBy { get; set; }
-    public bool SortType { get; set; } = false;
+    public string? SortBy { get; set; } = "StatusId";
+    public bool SortType { get; set; } = true; 
 }
 
 public class ESSUserData

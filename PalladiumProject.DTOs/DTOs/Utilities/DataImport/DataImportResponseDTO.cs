@@ -25,6 +25,6 @@ public class ImportStatusDto
     public string? TemplateName { get; set; }
     public string? ImportFileName { get; set; }
     public string? ErrorTableName { get; set; }
-    public bool ISSuccessful { get; set; }
+    public int IsSuccessful { get; set; }
     public string? ErrorMessage { get; set; }
 }
