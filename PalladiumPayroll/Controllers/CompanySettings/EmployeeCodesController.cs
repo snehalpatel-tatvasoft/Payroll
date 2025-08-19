@@ -32,7 +32,7 @@ public class EmployeeCodesController : ControllerBase
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.EmployeeCode)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.EmployeeCode)
             );
         }
     }
@@ -52,7 +52,7 @@ public class EmployeeCodesController : ControllerBase
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeCode)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeCode)
             );
         }
     }

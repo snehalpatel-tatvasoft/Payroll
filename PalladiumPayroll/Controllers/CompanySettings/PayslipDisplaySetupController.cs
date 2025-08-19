@@ -30,10 +30,10 @@ public class PayslipDisplaySetupController : ControllerBase
             }
             return await _payslipDisplaySetupService.SavePayslipDisplaySettings(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.PayslipDisplaySetup, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.PayslipDisplaySetup)
             );
         }
     }
@@ -50,10 +50,10 @@ public class PayslipDisplaySetupController : ControllerBase
 
             return await _payslipDisplaySetupService.GetPayslipSettingsByCompanyId(companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.PayslipDisplaySetup, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.PayslipDisplaySetup)
             );
         }
     }

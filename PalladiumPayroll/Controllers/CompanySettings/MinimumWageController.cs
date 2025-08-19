@@ -29,7 +29,7 @@ public class MinimumWageController : ControllerBase
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.MinimumWage)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.MinimumWage)
             );
         }
     }
@@ -49,7 +49,7 @@ public class MinimumWageController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.MinimumWage));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.MinimumWage));
         }
     }
 
@@ -67,7 +67,7 @@ public class MinimumWageController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Updating, ResponseMessages.MinimumWage));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.MinimumWage));
         }
     }
 
@@ -87,7 +87,7 @@ public class MinimumWageController : ControllerBase
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.MinimumWage)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.MinimumWage)
             );
         }
     }
