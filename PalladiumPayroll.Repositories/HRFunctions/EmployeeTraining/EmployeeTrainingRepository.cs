@@ -1,5 +1,6 @@
 using System.Data;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.Common;
@@ -10,11 +11,14 @@ namespace PalladiumPayroll.Repositories.HRFunctions.EmployeeTraining;
 public class EmployeeTrainingRepository : IEmployeeTrainingRepository
 {
     private readonly DapperContext _dapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public EmployeeTrainingRepository(IConfiguration configuration)
+    public EmployeeTrainingRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _dapper = new DapperContext(configuration);
+        _httpContextAccessor = httpContextAccessor;
     }
+
 
     public async Task<bool> UpsertEmployeeTraining(EmployeeTrainingUpsertData request)
     {
@@ -43,7 +47,7 @@ public class EmployeeTrainingRepository : IEmployeeTrainingRepository
         parameters.Add("@FileName", request.FileName);
         parameters.Add("@FileType", request.FileType);
         parameters.Add("@FileSize", request.FileSize);
-        parameters.Add("@UserId", request.UserId);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
@@ -53,11 +57,11 @@ public class EmployeeTrainingRepository : IEmployeeTrainingRepository
     }
 
 
-    public async Task<bool> DeleteEmployeeTraining(long employeeTrainingId, string userId)
+    public async Task<bool> DeleteEmployeeTraining(long employeeTrainingId)
     {
         DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmployeeTrainingId", employeeTrainingId);
-        parameters.Add("@UserId", userId);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeleteEmployeeTraining", parameters);

@@ -7,7 +7,7 @@ public interface IEmployeeGrievancesRepository
 {
     Task<bool> UpsertEmployeeGrievance(EmployeeGrievanceUpsertData request);
 
-    Task<bool> DeleteEmployeeGrievance(long employeeGrievanceId, string userId);
+    Task<bool> DeleteEmployeeGrievance(long employeeGrievanceId);
 
     Task<List<EmployeeDropdownDTO>> GetEmployeesForGrievances(long companyId);
 

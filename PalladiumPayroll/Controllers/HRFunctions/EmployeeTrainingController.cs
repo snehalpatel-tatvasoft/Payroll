@@ -33,14 +33,14 @@ public class EmployeeTrainingController : ControllerBase
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.EmployeeTraining)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.EmployeeTraining)
             );
         }
     }
 
 
     [HttpDelete("[action]")]
-    public async Task<ActionResult> DeleteEmployeeTraining(long employeeTrainingId, string userId)
+    public async Task<ActionResult> DeleteEmployeeTraining(long employeeTrainingId)
     {
         try
         {
@@ -49,12 +49,12 @@ public class EmployeeTrainingController : ControllerBase
                 return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidEmployeeTrainingnId);
             }
 
-            return await _employeeTrainingService.DeleteEmployeeTraining(employeeTrainingId, userId);
+            return await _employeeTrainingService.DeleteEmployeeTraining(employeeTrainingId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.EmployeeTraining, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.EmployeeTraining)
             );
         }
     }
@@ -72,9 +72,9 @@ public class EmployeeTrainingController : ControllerBase
 
             return await _employeeTrainingService.GetEmployeeTrainingDropdownData(companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeTraining, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeTraining));
         }
     }
 
@@ -91,9 +91,9 @@ public class EmployeeTrainingController : ControllerBase
 
             return await _employeeTrainingService.GetEmployeeTrainings(companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeTraining, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeTraining));
         }
     }
 
@@ -109,9 +109,9 @@ public class EmployeeTrainingController : ControllerBase
             }
             return await _employeeTrainingService.GetEmployeeTrainingById(trainingId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeTraining, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeTraining));
         }
     }
 
@@ -124,7 +124,7 @@ public class EmployeeTrainingController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.EmployeeTraining+" droplist item"));
         }
     }
 
@@ -137,7 +137,7 @@ public class EmployeeTrainingController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.EmployeeTraining+" droplist item"));
         }
     }
 
@@ -150,7 +150,7 @@ public class EmployeeTrainingController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, "downloading", ResponseMessages.EmployeeTraining+" documnet"));
         }
     }
 
@@ -163,7 +163,7 @@ public class EmployeeTrainingController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+           return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.EmployeeTraining+" documnet."));
         }
     }
 }

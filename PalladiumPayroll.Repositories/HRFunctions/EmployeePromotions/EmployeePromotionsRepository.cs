@@ -1,8 +1,8 @@
 using System.Data;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
-using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeePromotions;
 
 namespace PalladiumPayroll.Repositories.HRFunctions.EmployeePromotions;
@@ -10,11 +10,14 @@ namespace PalladiumPayroll.Repositories.HRFunctions.EmployeePromotions;
 public class EmployeePromotionsRepository : IEmployeePromotionsRepository
 {
     private readonly DapperContext _dapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public EmployeePromotionsRepository(IConfiguration configuration)
+    public EmployeePromotionsRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _dapper = new DapperContext(configuration);
+        _httpContextAccessor = httpContextAccessor;
     }
+
     public async Task<bool> AddEmployeePromotion(EmployeePromotionsUpsertData request)
     {
         DynamicParameters? parameters = new DynamicParameters();
@@ -36,7 +39,7 @@ public class EmployeePromotionsRepository : IEmployeePromotionsRepository
         parameters.Add("@ProvinceId", request.ProvinceId);
         parameters.Add("@SupportFunctionId", request.SupportFunctionId);
         parameters.Add("@CompanyId", request.CompanyId);
-        parameters.Add("@UserId", request.UserId);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_AddEmployeePromotion", parameters);
@@ -66,7 +69,7 @@ public class EmployeePromotionsRepository : IEmployeePromotionsRepository
         parameters.Add("@ProvinceId", request.ProvinceId);
         parameters.Add("@SupportFunctionId", request.SupportFunctionId);
         parameters.Add("@CompanyId", request.CompanyId);
-        parameters.Add("@UserId", request.UserId);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_UpdateEmployeePromotion", parameters);
@@ -74,11 +77,11 @@ public class EmployeePromotionsRepository : IEmployeePromotionsRepository
         return parameters.Get<bool>("@IsSuccess");
     }
 
-    public async Task<bool> DeleteEmployeePromotion(long employeePromotionId, string userId)
+    public async Task<bool> DeleteEmployeePromotion(long employeePromotionId)
     {
         DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmployeePromotionId", employeePromotionId);
-        parameters.Add("@UserId", userId);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeleteEmployeePromotion", parameters);
@@ -147,7 +150,6 @@ public class EmployeePromotionsRepository : IEmployeePromotionsRepository
         DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@employee_id", employeeId);
         parameters.Add("@company_id", companyId);
-
 
         return await _dapper.ExecuteStoredProcedureSingle<EmployeePromotionAutoFillDTO>(
             "usp_GetEmployeeTransferAutofilldata", parameters);

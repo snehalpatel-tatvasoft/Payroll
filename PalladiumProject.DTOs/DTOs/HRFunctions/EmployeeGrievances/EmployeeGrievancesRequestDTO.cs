@@ -14,7 +14,6 @@ public class EmployeeGrievanceUpsertData
     public DateTime? Stage2Date { get; set; }
     public string? Stage2Outcome { get; set; } = null;
     public string? Stage2Chairperson { get; set; } = null;
-    public string UserId { get; set; } = "";
 }
 
 public class NatureOfGrievancesDto

@@ -9,7 +9,7 @@ public interface IEmployeePromotionsService
 
     Task<JsonResult> UpdateEmployeePromotion(EmployeePromotionsUpsertData request);
 
-    Task<JsonResult> DeleteEmployeePromotion(long employeePromotionId, string userId);
+    Task<JsonResult> DeleteEmployeePromotion(long employeePromotionId);
 
     Task<JsonResult> GetEmployeePromotionDropdownData(long companyId);
 

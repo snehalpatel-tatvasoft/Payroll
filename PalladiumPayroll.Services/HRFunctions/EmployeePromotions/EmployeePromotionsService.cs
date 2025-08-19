@@ -18,113 +18,56 @@ public class EmployeePromotionsService : IEmployeePromotionsService
 
     public async Task<JsonResult> AddEmployeePromotion(EmployeePromotionsUpsertData request)
     {
-        try
+        bool isSaved = await _employeePromotionsRepository.AddEmployeePromotion(request);
+        if (!isSaved)
         {
-            bool isSaved = await _employeePromotionsRepository.AddEmployeePromotion(request);
-
-            if (!isSaved)
-            {
-                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeGrievanceSaveFailed);
-            }
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeePromotions, ActionType.Saved));
-
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.EmployeeGrievanceSaveFailed);
         }
-        catch (Exception)
-        {
-            return HttpStatusCodeResponse.BadRequestResponse();
-        }
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeePromotions, ActionType.Saved));
     }
 
     public async Task<JsonResult> UpdateEmployeePromotion(EmployeePromotionsUpsertData request)
     {
-        try
+        bool isSaved = await _employeePromotionsRepository.UpdateEmployeePromotion(request);
+        if (!isSaved)
         {
-            bool isSaved = await _employeePromotionsRepository.UpdateEmployeePromotion(request);
-
-            if (!isSaved)
-            {
-                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeGrievanceSaveFailed);
-            }
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeePromotions, ActionType.Updated));
-
+            return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeGrievanceSaveFailed);
         }
-        catch (Exception)
-        {
-            return HttpStatusCodeResponse.BadRequestResponse();
-        }
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeePromotions, ActionType.Updated));
     }
 
-    public async Task<JsonResult> DeleteEmployeePromotion(long employeePromotionId, string userId)
+    public async Task<JsonResult> DeleteEmployeePromotion(long employeePromotionId)
     {
-        try
-        {
-            bool isDeleted = await _employeePromotionsRepository.DeleteEmployeePromotion(employeePromotionId, userId);
+        bool isDeleted = await _employeePromotionsRepository.DeleteEmployeePromotion(employeePromotionId);
 
-            if (!isDeleted)
-            {
-                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeePromotionNotFound);
-            }
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeePromotions, ActionType.Deleted));
-        }
-        catch (Exception)
+        if (!isDeleted)
         {
-            return HttpStatusCodeResponse.BadRequestResponse();
+            return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeePromotionNotFound);
         }
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeePromotions, ActionType.Deleted));
     }
 
     public async Task<JsonResult> GetEmployeePromotionDropdownData(long companyId)
     {
-        try
-        {
-            EmployeePromotionDropdownsDTO? data = await _employeePromotionsRepository.GetEmployeePromotionDropdownData(companyId);
-
-            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.EmployeePromotions, ActionType.Retrieved));
-        }
-        catch (Exception)
-        {
-            return HttpStatusCodeResponse.BadRequestResponse();
-        }
+        EmployeePromotionDropdownsDTO? data = await _employeePromotionsRepository.GetEmployeePromotionDropdownData(companyId);
+        return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.EmployeePromotions, ActionType.Retrieved));
     }
 
     public async Task<JsonResult> GetEmployeePromotions(long companyId)
     {
-        try
-        {
-            List<EmployeePromotionsdisplayDataDTO> employeePromotions = await _employeePromotionsRepository.GetEmployeePromotionsDisplayData(companyId);
-
-            return HttpStatusCodeResponse.SuccessResponse(employeePromotions, string.Format(ResponseMessages.Success, ResponseMessages.EmployeePromotions, ActionType.Retrieved));
-        }
-        catch (Exception)
-        {
-            return HttpStatusCodeResponse.BadRequestResponse();
-        }
+        List<EmployeePromotionsdisplayDataDTO> employeePromotions = await _employeePromotionsRepository.GetEmployeePromotionsDisplayData(companyId);
+        return HttpStatusCodeResponse.SuccessResponse(employeePromotions, string.Format(ResponseMessages.Success, ResponseMessages.EmployeePromotions, ActionType.Retrieved));
     }
 
     public async Task<JsonResult> GetEmployeePromotionById(long promotionId)
     {
-        try
-        {
-            EmployeePromotionDetailDTO? employeePromotion = await _employeePromotionsRepository.GetEmployeePromotioneById(promotionId);
-
-            return HttpStatusCodeResponse.SuccessResponse(employeePromotion, string.Empty);
-        }
-        catch (Exception)
-        {
-            return HttpStatusCodeResponse.BadRequestResponse();
-        }
+        EmployeePromotionDetailDTO? employeePromotion = await _employeePromotionsRepository.GetEmployeePromotioneById(promotionId);
+        return HttpStatusCodeResponse.SuccessResponse(employeePromotion, string.Empty);
     }
 
     public async Task<JsonResult> GetEmployeePromotionAutofillData(long employeeId, long companyId)
     {
-        try
-        {
-            EmployeePromotionAutoFillDTO? autoFilData = await _employeePromotionsRepository.GetEmployeePromotionAutofillData(employeeId,companyId);
-
-            return HttpStatusCodeResponse.SuccessResponse(autoFilData, string.Empty);
-        }
-        catch (Exception)
-        {
-            return HttpStatusCodeResponse.BadRequestResponse();
-        }
+        EmployeePromotionAutoFillDTO? autoFilData = await _employeePromotionsRepository.GetEmployeePromotionAutofillData(employeeId, companyId);
+        return HttpStatusCodeResponse.SuccessResponse(autoFilData, string.Empty);
     }
 }

@@ -8,7 +8,7 @@ public interface IEmployeePromotionsRepository
 
     Task<bool> UpdateEmployeePromotion(EmployeePromotionsUpsertData request);
 
-    Task<bool> DeleteEmployeePromotion(long employeePromotionId, string userId);
+    Task<bool> DeleteEmployeePromotion(long employeePromotionId);
 
     Task<EmployeePromotionDropdownsDTO> GetEmployeePromotionDropdownData(long companyId);
 

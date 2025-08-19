@@ -26,10 +26,10 @@ public class EmployeePromotionsController : ControllerBase
         {
             return await _employeePromotionsService.AddEmployeePromotion(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.EmployeePromotions, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.EmployeePromotions)
             );
         }
     }
@@ -45,17 +45,17 @@ public class EmployeePromotionsController : ControllerBase
             }
             return await _employeePromotionsService.UpdateEmployeePromotion(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Updating, ResponseMessages.EmployeePromotions, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.EmployeePromotions)
             );
         }
     }
 
 
     [HttpDelete("[action]")]
-    public async Task<ActionResult> DeleteEmployeePromotion(long employeePromotionId, string userId)
+    public async Task<ActionResult> DeleteEmployeePromotion(long employeePromotionId)
     {
         try
         {
@@ -64,12 +64,12 @@ public class EmployeePromotionsController : ControllerBase
                 return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidEmployeePromotionId);
             }
 
-            return await _employeePromotionsService.DeleteEmployeePromotion(employeePromotionId, userId);
+            return await _employeePromotionsService.DeleteEmployeePromotion(employeePromotionId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.EmployeePromotions, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.EmployeePromotions)
             );
         }
     }
@@ -87,9 +87,11 @@ public class EmployeePromotionsController : ControllerBase
 
             return await _employeePromotionsService.GetEmployeePromotionDropdownData(companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeePromotions, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeePromotions)
+            );
         }
     }
 
@@ -106,9 +108,11 @@ public class EmployeePromotionsController : ControllerBase
 
             return await _employeePromotionsService.GetEmployeePromotions(companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeePromotions, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeePromotions)
+            );
         }
     }
 
@@ -124,9 +128,11 @@ public class EmployeePromotionsController : ControllerBase
             }
             return await _employeePromotionsService.GetEmployeePromotionById(promotionId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeePromotions, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeePromotions)
+            );
         }
     }
 
@@ -142,9 +148,11 @@ public class EmployeePromotionsController : ControllerBase
             }
             return await _employeePromotionsService.GetEmployeePromotionAutofillData(employeeId,companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeePromotions, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeePromotions)
+            );
         }
     }
 }

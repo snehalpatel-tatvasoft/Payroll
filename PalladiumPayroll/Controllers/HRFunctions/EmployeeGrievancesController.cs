@@ -29,16 +29,16 @@ public class EmployeeGrievancesController : ControllerBase
             }
             return await _employeeGrievancesService.UpsertEmployeeGrievance(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.EmployeeGrievances, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.EmployeeGrievances)
             );
         }
     }
 
     [HttpDelete("[action]")]
-    public async Task<ActionResult> DeleteEmployeeGrievance(long employeeGrievanceId, string userId)
+    public async Task<ActionResult> DeleteEmployeeGrievance(long employeeGrievanceId)
     {
         try
         {
@@ -47,12 +47,12 @@ public class EmployeeGrievancesController : ControllerBase
                 return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidEmployeeGrievanceId);
             }
 
-            return await _employeeGrievancesService.DeleteEmployeeGrievance(employeeGrievanceId, userId);
+            return await _employeeGrievancesService.DeleteEmployeeGrievance(employeeGrievanceId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.EmployeeGrievances, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.EmployeeGrievances)
             );
         }
     }
@@ -69,9 +69,11 @@ public class EmployeeGrievancesController : ControllerBase
 
             return await _employeeGrievancesService.GetEmployeesForGrievances(companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Employee)
+            );
         }
     }
 
@@ -87,9 +89,11 @@ public class EmployeeGrievancesController : ControllerBase
 
             return await _employeeGrievancesService.GetNatureOfGrievances(companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.NatureOfGrievances, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.NatureOfGrievances)
+            );
         }
     }
 
@@ -105,9 +109,11 @@ public class EmployeeGrievancesController : ControllerBase
 
             return await _employeeGrievancesService.GetEmployeeGrievances(companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeGrievances, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeGrievances)
+            );
         }
     }
 
@@ -123,9 +129,11 @@ public class EmployeeGrievancesController : ControllerBase
 
             return await _employeeGrievancesService.GetEmployeeGrievanceById(grievanceId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeGrievances, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeGrievances)
+            );
         }
     }
 
@@ -141,10 +149,10 @@ public class EmployeeGrievancesController : ControllerBase
 
             return await _employeeGrievancesService.AddNatureOfGrievance(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.NatureOfGrievances, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.NatureOfGrievances)
             );
         }
     }
@@ -161,10 +169,10 @@ public class EmployeeGrievancesController : ControllerBase
 
             return await _employeeGrievancesService.DeleteNatureOfGrievance(natureOfGrievanceId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.NatureOfGrievances, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.NatureOfGrievances)
             );
         }
     }

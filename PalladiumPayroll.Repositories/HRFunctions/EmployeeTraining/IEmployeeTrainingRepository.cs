@@ -7,7 +7,7 @@ public interface IEmployeeTrainingRepository
 {
     Task<bool> UpsertEmployeeTraining(EmployeeTrainingUpsertData request);
 
-    Task<bool> DeleteEmployeeTraining(long employeeTrainingId, string userId);
+    Task<bool> DeleteEmployeeTraining(long employeeTrainingId);
 
     Task<List<EmployeeTrainingDisplayDataDTO>> GetEmployeeTrainingDisplayData(long companyId);
 

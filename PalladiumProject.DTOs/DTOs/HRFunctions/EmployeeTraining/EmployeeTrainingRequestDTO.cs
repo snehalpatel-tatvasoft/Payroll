@@ -27,7 +27,6 @@ public class EmployeeTrainingUpsertData
     public string? FileName { get; set; }
     public string? FileType { get; set; }
     public long? FileSize { get; set; }
-    public string UserId { get; set; } = null!;
     public IFormFile? File { get; set; }
 }
 

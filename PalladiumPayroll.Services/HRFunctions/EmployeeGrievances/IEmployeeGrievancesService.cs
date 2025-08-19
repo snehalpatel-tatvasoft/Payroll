@@ -7,7 +7,7 @@ public interface IEmployeeGrievancesService
 {
     Task<JsonResult> UpsertEmployeeGrievance(EmployeeGrievanceUpsertData request);
 
-    Task<JsonResult> DeleteEmployeeGrievance(long employeeGrievanceId, string userId);
+    Task<JsonResult> DeleteEmployeeGrievance(long employeeGrievanceId);
 
     Task<JsonResult> GetEmployeesForGrievances(long  companyId);
 

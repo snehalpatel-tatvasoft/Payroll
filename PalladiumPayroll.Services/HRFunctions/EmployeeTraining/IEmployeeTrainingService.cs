@@ -7,7 +7,7 @@ public interface IEmployeeTrainingService
 {
     Task<JsonResult> UpsertEmployeeTraining(EmployeeTrainingUpsertData request);
 
-    Task<JsonResult> DeleteEmployeeTraining(long employeeTrainingId, string userId);
+    Task<JsonResult> DeleteEmployeeTraining(long employeeTrainingId);
 
     Task<JsonResult> GetEmployeeTrainingDropdownData(long companyId);
 

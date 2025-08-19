@@ -1,5 +1,6 @@
 using System.Data;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.Admin.AccessRights;
@@ -9,10 +10,12 @@ namespace PalladiumPayroll.Repositories.Admin.AccessRights;
 public class AccessRightsRepository : IAccessRightsRepository
 {
     private readonly DapperContext _dapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AccessRightsRepository(IConfiguration configuration)
+    public AccessRightsRepository(IConfiguration configuration,IHttpContextAccessor httpContextAccessor)
     {
         _dapper = new DapperContext(configuration);
+         _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<(bool IsSuccess, int AccessRoleId)> UpsertAccessRole(AccessRoleDTO request)
@@ -23,7 +26,7 @@ public class AccessRightsRepository : IAccessRightsRepository
         parameters.Add("@AccessRoleName", request.AccessRoleName);
         parameters.Add("@AccessTypeId", request.AccessTypeId);
         parameters.Add("@CompanyId", request.CompanyId);
-        parameters.Add("@UserId", request.UserId);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_UpsertAccessRole", parameters);
@@ -110,7 +113,7 @@ public class AccessRightsRepository : IAccessRightsRepository
 
     public async Task<List<PayFrequencyAccessRightsDTO>> GetPayFrequencyAccessRights(int accessRoleId)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters parameters = new DynamicParameters();
         parameters.Add("@AccessRoleId", accessRoleId);
 
         var result = await _dapper.ExecuteStoredProcedure<PayFrequencyAccessRightsDTO>(
@@ -123,11 +126,11 @@ public class AccessRightsRepository : IAccessRightsRepository
     {
         foreach (var request in requests)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@AccessRoleId", request.AccessRoleId);
             parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
             parameters.Add("@IsAllow", request.IsAllow);
-            parameters.Add("@UserId", request.UserId);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
             parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
             await _dapper.ExecuteStoredProcedureSingle<object>(
@@ -145,10 +148,10 @@ public class AccessRightsRepository : IAccessRightsRepository
 
     public async Task<List<AccessRightsByRoleTypeDTO>> GetTransactionFunctionAccessRights(int accessRoleId)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@AccessRoleId", accessRoleId);
 
-        var result = await _dapper.ExecuteStoredProcedure<AccessRightsByRoleTypeDTO>(
+        List<AccessRightsByRoleTypeDTO>? result = await _dapper.ExecuteStoredProcedure<AccessRightsByRoleTypeDTO>(
             "usp_GetAccessRightsForTransactionFunctions", parameters);
 
         return result;
