@@ -1,4 +1,4 @@
-﻿﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Employees;
@@ -565,7 +565,75 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
+        }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeByEmployeeId(long employeeId, long companyId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeByEmployeeId(employeeId, companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetSecondApprovalEmployeeListByCompanyId(long companyId)
+        {
+            try
+            {
+                return await _employeeService.GetSecondApprovalEmployeeListByCompanyId(companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpdateEmployeeSelfService([FromBody] UpdateEmployeeSelfServiceModel model)
+        {
+            try
+            {
+                if (model == null || model.FunctionalityList == null || !model.FunctionalityList.Any())
+                {
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.InvalidOrMissingRequestParameters);
+                }
+                return await _employeeService.UpdateEmployeeSelfService(model);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetAccessRolesByCompanyId(long companyId)
+        {
+            try
+            {
+                return await _employeeService.GetAccessRolesByCompanyId(companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetPreviousService(int employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetPreviousService(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
         }
     }
 }

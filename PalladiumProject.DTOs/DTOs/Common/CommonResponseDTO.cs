@@ -21,8 +21,5 @@
         public int TotalCount { get; set; }
     }
 
-    public class DirectoryPathSetting
-    {
-        public string EmployeeDocument { get; set; }
-    }
+
 }

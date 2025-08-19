@@ -52,11 +52,15 @@ namespace PalladiumPayroll.Helper.Constants
             #region Company
 
             public static readonly string Company = "Company";
+            public static readonly string CompanyInfo = "Company Information";
+            public static readonly string CompanyRepresentativeInfo = "Company Representative";
+            public static readonly string CompanyBankDetails = "Company Bank Details";
+            public static readonly string EmploymentEquityInformation = "Employment Equity Information";
             public const string CompanyAlreadyExists = "Company Already Exists";
             public const string CompanyRegisteredSuccessfully = "Company Registered Successfully";
             public const string ErrorCreatingCompany = "Error While Creating Company!!";
             public const string GLSetupError = "Error while connecting GL Database!!";
-            public const string GLSetupSuccess = "GL database connected succssfully!!";
+            public const string GLSetupSuccess = "GL database connected successfully!!";
 
             #endregion
 
@@ -249,6 +253,24 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string EmployeeOrCompanyIdInvalid = "EmployeeId Or CompanyId is Invalid";
             public static readonly string EmployeeNotFound = "Employee Not Found";
             public static readonly string InvalidEmployeeOrCompanyId = "Invalid Employee Or CompanyId";
+
+            #endregion
+
+
+            #region access rights
+
+            public static readonly string AccessRole = "Access Role";
+
+            public const string AcceessRoleAlreadyExists = "Access Role with this name is alreasy exists.";
+            public const string UnableToSaveAccessRole = "Unable to save Access Role";
+            public const string AccessRoleNotFound = "Access Role could not be deleted or was not found.";
+
+            public const string InvalidAccessRoleId = "Access Role Id is Invalid.";
+
+            public static readonly string AccessRights = "Access Rights";
+
+            public const string UnableToSaveAccessRights = "Unable to save Access Rights";
+
 
             #endregion
         }

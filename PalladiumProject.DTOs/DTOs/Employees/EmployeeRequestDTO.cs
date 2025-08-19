@@ -164,4 +164,21 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
         public int DocumentId { get; set; }
         public string DocumentUrl { get; set; }
     }
+
+    public class FunctionalityUpdate
+    {
+        public int FunctionalityId { get; set; }
+        public bool View { get; set; }
+        public bool Edit { get; set; }
+        public bool Delete { get; set; }
+    }
+
+    public class UpdateEmployeeSelfServiceModel
+    {
+        public long EmployeeId { get; set; }
+        public long CompanyId { get; set; }
+        public List<FunctionalityUpdate> FunctionalityList { get; set; }
+        public bool IsManager { get; set; }
+        public int? SecondApprovalId { get; set; }
+    }
 }

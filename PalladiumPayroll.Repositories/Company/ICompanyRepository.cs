@@ -16,8 +16,28 @@ namespace PalladiumPayroll.Repositories.Company
         Task<bool> AddNewBank(BankModel bankModel);
         Task<List<DropDownViewModel>> GetCompanyWithSubCompany(int companyId, string userId);
         Task<bool> SetActiveCompanyId(int companyId);
+        Task<List<CompanyInfo>> GetCompanyInformation(int companyId);
+        Task<List<GLSetup>> GetCompanyGLInfo(int companyId);
+        Task<bool> UpdateCompanyInformation(CompanyInfo companyInfo);
+        Task<List<CompanyRepresentative>> GetCompanyRepresentativeInfo(int companyId);
+        Task<bool> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo);
+        Task<List<CompanyBankAccount>> GetBankDetailsInfo(int companyId);
+        Task<bool> UpdateBankDetailsInfo(CompanyBankAccount companyBankAccount);
+        Task<List<CompanyPayrollCycle>> GetPayrollCycleInfo(int companyId, int taxYearId);
+        Task<List<CompanyCoidaSetup>> GetCOIDASetupInfo(int companyId, int yearId);
+        Task<List<PayrollMedicalAidList>> GetMedicalAidFundInfo(int companyId);
+        Task<List<PayrollBenefitFundList>> GetCompanyBenefitFundInfo(int companyId);
+        Task<bool> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle);
+        Task<bool> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList);
+        Task<bool> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup);
+        Task<bool> AddMedicalAidFundInfo(PayrollMedicalAidList payrollMedicalAidList);
+        Task<bool> DeletePayrollCycleInfo(int cycleId);
+        Task<bool> DeleteMedicalAidFund(int fundId);
+        Task<bool> DeleteCompanyBenefitFund(int fundId);
         Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel);
         Task<List<DropDownViewModelWithString>> GetGLAccounts(DBConnectionModel dbConnectionModel);
         Task<bool> CheckGLDBConnection(DBConnectionModel dbConnectionModel);
+        Task<bool> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation);
+        Task<List<EmploymentEquityInformation>> GetEmploymentEquityInfo(int companyId);
     }
 }
