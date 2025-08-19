@@ -124,12 +124,11 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
         public long NumberOfRepayment { get; set; }
         public decimal CurrentRepayment { get; set; }
         public bool IsLinkAccount { get; set; }
-        public string AccountName { get; set; } = "";
+        public string? AccountName { get; set; } = "";
         public string? AccountNumber { get; set; }
         public long? AccountTypeId { get; set; }
         public long? BankId { get; set; }
-        public string BranchCode { get; set; } = "";
-        public long UserId { get; set; }
+        public string? BranchCode { get; set; } = "";
     }
 
     public class EmployeeSavingsRequest
@@ -140,7 +139,6 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
         public decimal SavingsAmount { get; set; }
         public long NumberOfRepayment { get; set; }
         public decimal CurrentRepayment { get; set; }
-        public long UserId { get; set; }
     }
 
     public class EmployeeDocumentUpload

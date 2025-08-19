@@ -204,7 +204,8 @@ namespace PalladiumPayroll.Helper.Constants
 
 
             #region Employees Loan
-
+            public static readonly string EmployeeLoan = "Employee Loan";
+            public static readonly string LoanNotFound = "Employee Loan not Found.";
             public static readonly string LoanPausedSuccessfully = "Loan paused successfully.";
             public static readonly string LoanPausedFailed = "Failed to pause the loan.";
             public static readonly string LoanCreatedSuccessfully = "Loan created successfully.";
@@ -254,7 +255,6 @@ namespace PalladiumPayroll.Helper.Constants
             #region access rights
 
             public static readonly string AccessRole = "Access Role";
-
             public const string AcceessRoleAlreadyExists = "Access Role with this name is alreasy exists.";
             public const string UnableToSaveAccessRole = "Unable to save Access Role";
             public const string AccessRoleNotFound = "Access Role could not be deleted or was not found.";
@@ -262,9 +262,17 @@ namespace PalladiumPayroll.Helper.Constants
             public const string InvalidAccessRoleId = "Access Role Id is Invalid.";
 
             public static readonly string AccessRights = "Access Rights";
-
             public const string UnableToSaveAccessRights = "Unable to save Access Rights";
 
+            #endregion
+
+
+            #region savings and garnishee
+
+            public static readonly string Savings = "Savings";
+            public static readonly string Garnishee = "Garnishee";
+            public static readonly string GarnisheeSavedFailed = "Failed to save Garnishee.";
+            public static readonly string SavingsSavedFailed = "Failed to save Savings.";
 
             #endregion
         }

@@ -268,26 +268,26 @@ namespace PalladiumPayroll.Services.Employees
 
             if (!isDeleted)
             {
-                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.Employee + " loan not found.");
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.LoanNotFound);
             }
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Loan", ActionType.Deleted));
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeLoan, ActionType.Deleted));
         }
 
         public async Task<JsonResult> GetEmployeeLoanDetail(long employeeId)
         {
             EmployeeLoanResponse? data = await _employeeRepository.GetEmployeeLoanDetail(employeeId);
-            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Loan", ActionType.Retrieved));
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeLoan, ActionType.Retrieved));
         }
         public async Task<JsonResult> GetGarnisheeDropdownData(long companyId)
         {
             GarnisheeDropdownListDto? data = await _employeeRepository.GetGarnisheeDropdownData(companyId);
-            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishee DropList", ActionType.Retrieved));
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Garnishee + " DropDowns", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetGarnisheeDetails(long employeeId)
         {
             List<GarnishDetails>? data = await _employeeRepository.GetGarnisheeDetails(employeeId);
-            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishes", ActionType.Retrieved));
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Garnishee, ActionType.Retrieved));
         }
 
         public async Task<JsonResult> UpsertGarnishee(EmployeeGarnisheeRequest request)
@@ -295,15 +295,15 @@ namespace PalladiumPayroll.Services.Employees
             bool isSaved = await _employeeRepository.UpsertGarnishee(request);
             if (!isSaved)
             {
-                return HttpStatusCodeResponse.NotFoundResponse("Failed to save " + ResponseMessages.Employee + " Garnishee");
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.GarnisheeSavedFailed);
             }
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishee", ActionType.Saved));
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Garnishee, ActionType.Saved));
         }
 
         public async Task<JsonResult> GetSavingsDetails(long employeeId)
         {
             List<SavingsDetails>? data = await _employeeRepository.GetSavingsDetails(employeeId);
-            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Savings", ActionType.Retrieved));
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Savings, ActionType.Retrieved));
         }
 
         public async Task<JsonResult> UpsertSaving(EmployeeSavingsRequest request)
@@ -311,9 +311,9 @@ namespace PalladiumPayroll.Services.Employees
             bool isSaved = await _employeeRepository.UpsertSaving(request);
             if (!isSaved)
             {
-                return HttpStatusCodeResponse.NotFoundResponse("Failed to save " + ResponseMessages.Employee + " Saving");
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.SavingsSavedFailed);
             }
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Savings", ActionType.Saved));
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Savings, ActionType.Saved));
         }
 
         public async Task<JsonResult> GetEmployeeDocument(int employeeId)

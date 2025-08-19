@@ -22,7 +22,7 @@ public class EmployeeCodesService : IEmployeeCodesService
 
         if (!isSaved)
         {
-            return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeCodeSaveFailed);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.EmployeeCodeSaveFailed);
         }
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeCode, ActionType.Saved));
 

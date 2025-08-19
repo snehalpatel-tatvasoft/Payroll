@@ -22,7 +22,7 @@ public class PayslipDisplaySetupService : IPayslipDisplaySetupService
 
         if (!isSaved)
         {
-            return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.PayslipDisplaySetupSaveFailed);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.PayslipDisplaySetupSaveFailed);
         }
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.PayslipDisplaySetup, ActionType.Saved));
     }
