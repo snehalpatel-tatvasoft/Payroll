@@ -143,7 +143,7 @@ namespace PalladiumPayroll.Controllers.Employee
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CasualWageInformation));
             }
         }
 
@@ -156,7 +156,7 @@ namespace PalladiumPayroll.Controllers.Employee
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.CasualWageInformation));
             }
         }
 
@@ -174,9 +174,9 @@ namespace PalladiumPayroll.Controllers.Employee
                 var response = await _employeeService.GetTransactionTypesDropdownData(companyId);
                 return HttpStatusCodeResponse.SuccessResponse(response, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTransfer, ActionType.Retrieved));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeTransfer, ex.Message));
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.DirectiveInformation));
             }
         }
 
@@ -187,20 +187,27 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return await _employeeService.AddDirective(reqModel);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.EmployeeTransfer, ex.Message));
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.DirectiveInformation));
             }
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetDirectivesByEmployeeId(int employeeId)
         {
-            var result = await _employeeService.GetDirectivesByEmployeeId(employeeId);
-            return HttpStatusCodeResponse.SuccessResponse(
-                result,
-                string.Format(ResponseMessages.Success, $"{ResponseMessages.Employee} Directive Information", ActionType.Retrieved)
-            );
+            try
+            {
+                var result = await _employeeService.GetDirectivesByEmployeeId(employeeId);
+                return HttpStatusCodeResponse.SuccessResponse(
+                    result,
+                    string.Format(ResponseMessages.Success, $"{ResponseMessages.Employee} Directive Information", ActionType.Retrieved)
+                );
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.DirectiveInformation));
+            }
         }
 
         [HttpPut("[action]")]
@@ -210,10 +217,10 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return await _employeeService.UpdateDirective(directiveId, reqModel);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    string.Format(ResponseMessages.Exception, ActionType.Updating, $"{ResponseMessages.Employee} Directive Information", ex.Message));
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.DirectiveInformation));
             }
         }
 
@@ -224,10 +231,10 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return await _employeeService.DeleteDirective(directiveId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    string.Format(ResponseMessages.Exception, ActionType.Deleting, $"{ResponseMessages.Employee} Directive Information", ex.Message));
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.DirectiveInformation));
             }
         }
 
@@ -481,11 +488,11 @@ namespace PalladiumPayroll.Controllers.Employee
             try
             {
                 var response = await _employeeService.GetTaxInformationDropdownData();
-                return HttpStatusCodeResponse.SuccessResponse(response, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTransfer, ActionType.Retrieved));
+                return HttpStatusCodeResponse.SuccessResponse(response, string.Format(ResponseMessages.Success, ResponseMessages.TaxInformation, ActionType.Retrieved));
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.TaxInformation));
             }
         }
 
@@ -498,7 +505,7 @@ namespace PalladiumPayroll.Controllers.Employee
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.TaxInformation));
             }
         }
 
@@ -511,7 +518,7 @@ namespace PalladiumPayroll.Controllers.Employee
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.TaxInformation));
             }
         }
 

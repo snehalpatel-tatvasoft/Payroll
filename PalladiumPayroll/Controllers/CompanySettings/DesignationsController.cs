@@ -48,7 +48,6 @@ namespace PalladiumPayroll.Controllers.Company_Settings
             }
         }
 
-
         [HttpDelete("DeleteDesignations/{id}")]
         public async Task<ActionResult> DeleteDesignations(long id)
         {
@@ -76,6 +75,7 @@ namespace PalladiumPayroll.Controllers.Company_Settings
                 return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.Designations));
             }
         }
+        
         [HttpPost("ImportDesignations")]
         public async Task<ActionResult> ImportDesignations([FromBody] ImportDesignationRequestDTO request)
         {
@@ -86,11 +86,9 @@ namespace PalladiumPayroll.Controllers.Company_Settings
             }
             catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.Designations));
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Importing, ResponseMessages.Designations));
             }
         }
-
-
     }
 }
 

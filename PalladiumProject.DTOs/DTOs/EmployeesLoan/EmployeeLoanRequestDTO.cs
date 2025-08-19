@@ -16,12 +16,11 @@ public class EmployeeLoanRequestDTO
     public decimal? InterestRate { get; set; }
     public decimal? ActualLoanAmount { get; set; }
     public string? LoanIntegration { get; set; } = string.Empty;
-    public int? UserId { get; set; }
 
 }
 public class LoanFilterViewModel : TableFilterViewModel
 {
     public long CompanyId { get; set; }
-    public string? LoanStatus { get; set; }
+    public int? LoanStatus { get; set; }
 }
 

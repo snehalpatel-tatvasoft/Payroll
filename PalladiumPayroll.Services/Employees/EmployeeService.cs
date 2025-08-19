@@ -143,7 +143,7 @@ namespace PalladiumPayroll.Services.Employees
             var result = await _employeeRepository.UpdateCasualWageInformation(reqModel);
             if (result)
             {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, string.Concat(ResponseMessages.Employee, " ", "Casual Wage Information"), ActionType.Updated));
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CasualWageInformation, ActionType.Updated));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
@@ -161,8 +161,7 @@ namespace PalladiumPayroll.Services.Employees
             {
                 return HttpStatusCodeResponse.SuccessResponse(
                     string.Empty,
-                    string.Format(ResponseMessages.Success,
-                    $"{ResponseMessages.Employee} Directive Information", ActionType.Saved));
+                    string.Format(ResponseMessages.Success,ResponseMessages.DirectiveInformation, ActionType.Saved));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
@@ -179,7 +178,7 @@ namespace PalladiumPayroll.Services.Employees
             {
                 return HttpStatusCodeResponse.SuccessResponse(
                     string.Empty,
-                    string.Format(ResponseMessages.Success, $"{ResponseMessages.Employee} Directive Information", ActionType.Updated));
+                    string.Format(ResponseMessages.Success, ResponseMessages.DirectiveInformation, ActionType.Updated));
             }
 
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
@@ -192,7 +191,7 @@ namespace PalladiumPayroll.Services.Employees
             {
                 return HttpStatusCodeResponse.SuccessResponse(
                     string.Empty,
-                    string.Format(ResponseMessages.Success, $"{ResponseMessages.Employee} Directive", ActionType.Deleted));
+                    string.Format(ResponseMessages.Success,ResponseMessages.DirectiveInformation, ActionType.Deleted));
             }
 
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
@@ -214,9 +213,9 @@ namespace PalladiumPayroll.Services.Employees
             var result = await _employeeRepository.UpdateTaxInformation(reqModel);
             if (result == true)
             {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, string.Concat(ResponseMessages.Employee, " ", "Tax Information"), ActionType.Updated));
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.TaxInformation, ActionType.Updated));
             }
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.TaxInformation));
         }
 
 

@@ -1,4 +1,5 @@
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.Common;
@@ -10,12 +11,12 @@ namespace PalladiumPayroll.Repositories.EmployeesLoan;
 public class EmployeesLoanRepository : IEmployeesLoanRepository
 {
     private readonly DapperContext _dapper;
-    private readonly IConfiguration _configuration;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public EmployeesLoanRepository(IConfiguration configuration)
+    public EmployeesLoanRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
-        _configuration = configuration;
-        _dapper = new DapperContext(_configuration);
+        _dapper = new DapperContext(configuration);
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<bool> CreateEmployeeLoan(EmployeeLoanRequestDTO request)
@@ -31,7 +32,7 @@ public class EmployeesLoanRepository : IEmployeesLoanRepository
         parameters.Add("@InterestRate", request.InterestRate);
         parameters.Add("@ActualLoanAmount", request.ActualLoanAmount);
         parameters.Add("@LoanIntegration", request.LoanIntegration);
-        parameters.Add("@CreatedBy", request.UserId);
+        parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_CreateEmployeeLoan", parameters);
     }
@@ -50,7 +51,7 @@ public class EmployeesLoanRepository : IEmployeesLoanRepository
         parameters.Add("@InterestRate", request.InterestRate);
         parameters.Add("@ActualLoanAmount", request.ActualLoanAmount);
         parameters.Add("@LoanIntegration", request.LoanIntegration);
-        parameters.Add("@LastUpdatedBy", request.UserId);
+        parameters.Add("@LastUpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateEmployeeLoan", parameters);
     }

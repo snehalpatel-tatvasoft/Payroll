@@ -46,7 +46,12 @@ namespace PalladiumPayroll.Helper.Constants
             #region Employee
 
             public static readonly string Employee = "Employee";
+            public static readonly string CasualWageInformation = "Employee Casual Wage Information";
+            public static readonly string  DirectiveInformation = "Employee  Directive Information";
+            public static readonly string  TaxInformation = "Employee  Tax Information";
 
+
+           
             #endregion
 
             #region Company
@@ -192,7 +197,7 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
             public static readonly string TransactionImportedSuccessfully = "Transaction imported successfully.";
             public static readonly string TransactionImportFailed = "Error occurred while importing the data";
-            public static readonly string TransactionDeleteFailed= "Failed to deleted Transaction.";
+            public static readonly string TransactionDeleteFailed = "Failed to deleted Transaction.";
 
 
             #endregion
@@ -210,7 +215,7 @@ namespace PalladiumPayroll.Helper.Constants
 
 
             #region Employees Loan
-
+            public static readonly string EmployeesLoan = "Employees Loan";
             public static readonly string LoanPausedSuccessfully = "Loan paused successfully.";
             public static readonly string LoanPausedFailed = "Failed to pause the loan.";
             public static readonly string LoanCreatedSuccessfully = "Loan created successfully.";
