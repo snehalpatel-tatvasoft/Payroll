@@ -1,4 +1,5 @@
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.Common;
@@ -11,10 +12,13 @@ namespace PalladiumPayroll.Repositories.HRFunctions.EmployeeTransfer;
 public class EmployeeTransferRepository : IEmployeeTransferRepository
 {
     private readonly DapperContext _dapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public EmployeeTransferRepository(IConfiguration configuration)
+    public EmployeeTransferRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _dapper = new DapperContext(configuration);
+        _httpContextAccessor = httpContextAccessor;
+
     }
 
     public async Task<EmployeeTransferDropdownsDTO> GetEmployeeTransferDropdownData(long companyId)
@@ -87,7 +91,7 @@ public class EmployeeTransferRepository : IEmployeeTransferRepository
         parameters.Add("@OccupationalStatusId", request.OccupationalStatusId);
         parameters.Add("@AppointmentTypeId", request.AppointmentTypeId);
         parameters.Add("@CompanyId", request.CompanyId);
-        parameters.Add("@UserId", request.UserId);
+        parameters.Add("@UserId",  _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         return await _dapper.ExecuteStoredProcedureSingle<EmployeeTransferDetailDTO>("usp_AddEmployeeTransfer", parameters);
     }

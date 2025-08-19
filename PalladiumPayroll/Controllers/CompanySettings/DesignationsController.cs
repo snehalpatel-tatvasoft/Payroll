@@ -1,7 +1,11 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company_Settings;
+using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Company_Settings;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
+
 
 namespace PalladiumPayroll.Controllers.Company_Settings
 {
@@ -24,9 +28,9 @@ namespace PalladiumPayroll.Controllers.Company_Settings
                 JsonResult? res = await _designationsService.CreateDesignations(request);
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.Designations));
             }
         }
 
@@ -38,9 +42,9 @@ namespace PalladiumPayroll.Controllers.Company_Settings
                 JsonResult? res = await _designationsService.GetAllDesignations(companyId);
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Designations));
             }
         }
 
@@ -53,9 +57,9 @@ namespace PalladiumPayroll.Controllers.Company_Settings
                 JsonResult res = await _designationsService.DeleteDesignations(id);
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.Designations));
             }
         }
 
@@ -67,9 +71,9 @@ namespace PalladiumPayroll.Controllers.Company_Settings
                 JsonResult? res = await _designationsService.UpdateDesignations(request);
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.Designations));
             }
         }
         [HttpPost("ImportDesignations")]
@@ -80,9 +84,9 @@ namespace PalladiumPayroll.Controllers.Company_Settings
                 JsonResult? res = await _designationsService.ImportDesignations(request);
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.Designations));
             }
         }
 

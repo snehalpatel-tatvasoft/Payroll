@@ -18,7 +18,7 @@ namespace PalladiumPayroll.Helper.Constants
         public const int ResetPasswordTokenLength = 100;
 
         public const int PageNumber = 1;
-        
+
         public const string DefaultConnectionString = "Data Source={0}; initial catalog={1}; User ID={2}; Password={3}; TrustServerCertificate=True;";
 
 
@@ -39,6 +39,7 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string AlreadyExist = "{0} already exists !";
             public static readonly string Valid = "{0} is valid";
             public static readonly string SomethingWrong = "Something went wrong.";
+            public static readonly string ExceptionMessage = "An Error Occurred While {0} {1}";
 
             #endregion
 
@@ -115,14 +116,18 @@ namespace PalladiumPayroll.Helper.Constants
             #endregion
 
             #region Designation
-
+            public static readonly string Designations = "Designations";
             public const string DesignationsCreatedSuccessfully = "Designation created successfully";
             public const string DesignationsCreationFailed = "Failed to create designation";
             public const string DataFetchSuccess = "Data fetched successfully";
             public const string DesignationsDeletedSuccessfully = "Designation deleted successfully";
+            public const string DesignationsDeleteFailed = "Failed to deleted designation";
             public const string DesignationsUpdatedSuccessfully = "Designation updated successfully";
             public const string DesignationsUpdateFailed = "Failed to update designation";
             public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
+            public const string DesignationsImportedSuccessfully = "Designations imported successfully.";
+
+
 
             #endregion
 
@@ -183,6 +188,8 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
             public static readonly string TransactionImportedSuccessfully = "Transaction imported successfully.";
             public static readonly string TransactionImportFailed = "Error occurred while importing the data";
+            public static readonly string TransactionDeleteFailed= "Failed to deleted Transaction.";
+
 
             #endregion
 
@@ -212,12 +219,12 @@ namespace PalladiumPayroll.Helper.Constants
 
             #endregion
 
-            
+
             #region Employee Promotions
 
 
             public static readonly string EmployeePromotions = "Employee Promotions";
-            public const string EmployeePromotionSaveFailed  = "Failed to save Employee Promotion";
+            public const string EmployeePromotionSaveFailed = "Failed to save Employee Promotion";
 
             public static readonly string NatureOfPromotions = "Nature of Promotions";
             public const string InvalidEmployeePromotionId = "Employee Promotion Id is Invalid.";
@@ -228,7 +235,7 @@ namespace PalladiumPayroll.Helper.Constants
             #region Employee Training
 
             public static readonly string EmployeeTraining = "Employee Training";
-            public const string EmployeeTrainingSaveFailed  = "Failed to save Employee Training";
+            public const string EmployeeTrainingSaveFailed = "Failed to save Employee Training";
             public const string InvalidEmployeeTrainingnId = "Employee Training Id is Invalid.";
             public const string EmployeeTrainingNotFound = "Employee Training was not found.";
 
