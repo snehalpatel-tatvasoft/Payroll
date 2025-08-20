@@ -343,4 +343,44 @@ public class DataImportRepository : IDataImportRepository
         };
     }
 
+    private DataTable TimeSheetToDataTable(List<EmployeeTimeSheetDTO> timeSheetList)
+    {
+        DataTable table = new DataTable();
+        table.Columns.Add("EmployeeCode", typeof(string));
+        table.Columns.Add("WorkDate", typeof(DateTime));
+        table.Columns.Add("Hours", typeof(decimal));
+        table.Columns.Add("OverTimeType", typeof(string));
+        table.Columns.Add("OverTimeHours", typeof(decimal));
+
+        foreach (var item in timeSheetList)
+        {
+            DataRow? row = table.NewRow();
+            row["EmployeeCode"] = item.EmployeeCode;
+            row["WorkDate"] = item.WorkDate;
+            row["Hours"] = item.Hours;
+            row["OverTimeType"] = item.OverTimeType;
+            row["OverTimeHours"] = (object?)item.OverTimeHours ?? DBNull.Value;
+
+            table.Rows.Add(row);
+        }
+        return table;
+    }
+
+    public async Task<string> ImportEmployeeTimeSheet(EmployeeTimeSheetImportRequestDTO importDto)
+    {
+        DataTable table = TimeSheetToDataTable(importDto.Records);
+        DynamicParameters parameters = new DynamicParameters();
+
+        parameters.Add("@ImportTable", table.AsTableValuedParameter("dbo.EmployeeTimeSheetImportType"));
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+        parameters.Add("@TemplateName", importDto.TemplateName);
+        parameters.Add("@ImportFileName", importDto.ImportFileName);
+        parameters.Add("@CompanyId", importDto.CompanyId);
+
+        string? resultMessage = await _dapper.ExecuteStoredProcedureSingle<string>(
+            "usp_ImportEmployeeTimeSheet",
+            parameters);
+
+        return resultMessage ?? "No response from procedure";
+    }
 }

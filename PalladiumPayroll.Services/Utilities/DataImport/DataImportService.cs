@@ -39,7 +39,7 @@ public class DataImportService : IDataImportService
         bool isAdded = await _dataImportRepository.AddImportYearToDateTemplate(request);
 
         if (isAdded)
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Import Year to Date Template ", ActionType.Saved));
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.YearToDateTemplate, ActionType.Saved));
 
         return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.AlreadyExist, "Template with this name"));
     }
@@ -48,7 +48,7 @@ public class DataImportService : IDataImportService
     {
         List<YTDTemplateDropdownDto> template = await _dataImportRepository.GetDropDownForYearToDateTemplate(companyId);
 
-        return HttpStatusCodeResponse.SuccessResponse(template, string.Format(ResponseMessages.Success, "Year to date Template", ActionType.Retrieved));
+        return HttpStatusCodeResponse.SuccessResponse(template, string.Format(ResponseMessages.Success, ResponseMessages.YearToDateTemplate, ActionType.Retrieved));
     }
 
     public async Task<JsonResult> GetTransactionForExcelGenerate(int templateId)
@@ -63,7 +63,7 @@ public class DataImportService : IDataImportService
         string resultMessage = await _dataImportRepository.ImportYTDRecords(importDto);
         if (resultMessage == "SUCCESS")
         {
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, "Year to date Transactions imported successFully.");
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.YearToDateTemplate, "Imported"));
         }
         else
         {
@@ -77,7 +77,7 @@ public class DataImportService : IDataImportService
 
         if (resultMessage == "SUCCESS")
         {
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, "Work Information imported successFully");
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.YearToDateTemplate, "Imported"));
         }
         else
         {
@@ -89,6 +89,21 @@ public class DataImportService : IDataImportService
     {
         TableDataModel<ImportStatusDto> status = await _dataImportRepository.GetImportStatus(reqModel);
 
-        return HttpStatusCodeResponse.SuccessResponse(status, string.Format(ResponseMessages.Success, "Import Status", ActionType.Retrieved));
+        return HttpStatusCodeResponse.SuccessResponse(status, string.Format(ResponseMessages.Success, ResponseMessages.ImportStatus, ActionType.Retrieved));
     }
+
+    public async Task<JsonResult> ImportEmployeeTimeSheet(EmployeeTimeSheetImportRequestDTO request)
+    {
+        string resultMessage = await _dataImportRepository.ImportEmployeeTimeSheet(request);
+
+        if (resultMessage == "SUCCESS")
+        {
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Timesheet, "Imported"));
+        }
+        else
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse("Failed to Import File");
+        }
+    }
+
 }

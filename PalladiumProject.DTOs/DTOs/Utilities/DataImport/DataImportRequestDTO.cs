@@ -140,3 +140,20 @@ public class ImportStatusFilterViewModel
     public string? SortBy { get; set; } = "StatusId";
     public bool SortType { get; set; } = true; 
 }
+
+public class EmployeeTimeSheetDTO
+{
+    public string EmployeeCode { get; set; } = string.Empty;
+    public DateTime WorkDate { get; set; }
+    public decimal Hours { get; set; }
+    public string OverTimeType { get; set; } = string.Empty;
+    public decimal? OverTimeHours { get; set; }
+}
+
+public class EmployeeTimeSheetImportRequestDTO
+{
+    public List<EmployeeTimeSheetDTO> Records { get; set; } = new();
+    public string TemplateName { get; set; } = string.Empty;
+    public string ImportFileName { get; set; } = string.Empty;
+    public long CompanyId { get; set; }
+}

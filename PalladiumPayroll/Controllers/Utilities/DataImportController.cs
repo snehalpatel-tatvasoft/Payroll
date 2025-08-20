@@ -27,7 +27,9 @@ public class DataImportController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Transaction)
+            );
         }
     }
 
@@ -40,7 +42,9 @@ public class DataImportController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.YearToDateTemplate)
+            );
         }
     }
 
@@ -57,7 +61,9 @@ public class DataImportController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+             return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.YearToDateTemplate + "Dropdown")
+            );
         }
     }
 
@@ -70,7 +76,9 @@ public class DataImportController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+             return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Transaction)
+            );
         }
     }
 
@@ -83,7 +91,9 @@ public class DataImportController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+           return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, "Importing", ResponseMessages.YearToDateTemplate)
+            );
         }
     }
 
@@ -96,7 +106,9 @@ public class DataImportController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, "Importing", ResponseMessages.WorkInformation)
+            );
         }
     }
 
@@ -122,9 +134,27 @@ public class DataImportController : ControllerBase
         {
             return await _dataImportService.GetImportStatus(reqModel);
         }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.ImportStatus)
+            );
+        }
+    }
+
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> ImportEmployeeTimeSheet([FromBody] EmployeeTimeSheetImportRequestDTO request)
+    {
+        try
+        {
+            return await _dataImportService.ImportEmployeeTimeSheet(request);
+        }
         catch (Exception ex)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.Exception, "Importing", ResponseMessages.Timesheet,ex.Message)
+            );
         }
     }
 }
