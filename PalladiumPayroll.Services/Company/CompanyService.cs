@@ -234,6 +234,12 @@ namespace PalladiumPayroll.Services.Company
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
         }
 
+        public async Task<JsonResult> GetProcessCyclePeriodInfo(int payrollId)
+        {
+            List<CyelePeriod> cycleList = await _companyRepository.GetProcessCyclePeriodInfo(payrollId);
+            return HttpStatusCodeResponse.SuccessResponse(cycleList, string.Format(ResponseMessages.Success, "Cycle Periods", ActionType.Retrieved));
+        }
+
         public async Task<JsonResult> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList)
         {
             bool isAdded = await _companyRepository.UpsertCompanyBenefitFund(payrollBenefitFundList);
