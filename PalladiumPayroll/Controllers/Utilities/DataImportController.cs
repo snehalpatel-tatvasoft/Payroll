@@ -111,7 +111,7 @@ public class DataImportController : ControllerBase
         }
         catch (Exception ex)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving,"Employee Masterfile Import", ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, "Employee Masterfile Import", ex.Message));
         }
     }
 
@@ -138,6 +138,19 @@ public class DataImportController : ControllerBase
         catch (Exception ex)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Updating, "ESS User", ex.Message));
+        }
+    }
+    [HttpPost("[action]")]
+    public async Task<ActionResult> ImportEmployeeNumbers([FromBody] ImportEmployeeNumbersRequestDTO request)
+    {
+        try
+        {
+            JsonResult? res = await _dataImportService.ImportEmployeeNumbers(request);
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Updating, "Employee Numbers", ex.Message));
         }
     }
 }

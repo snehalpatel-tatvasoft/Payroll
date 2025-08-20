@@ -175,3 +175,17 @@ public class UpsertESSUserRequestDTO
     public string ImportFileName { get; set; } = string.Empty;
     public List<ESSUserData> Data { get; set; } = new();
 }
+
+public class EmployeeNumberImport
+{
+    public string? OldEmployeeCode { get; set; }
+    public string? NewEmployeeCode { get; set; }
+}
+
+public class ImportEmployeeNumbersRequestDTO
+{
+    public long CompanyId { get; set; }
+    public string TemplateName { get; set; } = string.Empty;
+    public string ImportFileName { get; set; } = string.Empty;
+    public List<EmployeeNumberImport> Data { get; set; } = new();
+}

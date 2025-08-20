@@ -419,4 +419,39 @@ public class DataImportRepository : IDataImportRepository
 
         return table;
     }
+
+    public async Task<string?> ImportEmployeeNumbers(ImportEmployeeNumbersRequestDTO request)
+    {
+        var table = EmployeeNumbersToDataTable(request.Data);
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", request.CompanyId);
+        parameters.Add("@TemplateName", request.TemplateName);
+        parameters.Add("@ImportFileName", request.ImportFileName);
+        parameters.Add("@EmployeeNumbers", table.AsTableValuedParameter("EmployeeNumberImportType"));
+
+        var result = await _dapper.ExecuteStoredProcedureSingle<string>(
+            "usp_ImportEmployeeNumbers",
+            parameters
+        );
+
+        return result == "SUCCESS" ? null : result;
+    }
+
+    private DataTable EmployeeNumbersToDataTable(IEnumerable<EmployeeNumberImport> data)
+    {
+        var table = new DataTable();
+        table.Columns.Add("OldEmployeeCode", typeof(string));
+        table.Columns.Add("NewEmployeeCode", typeof(string));
+
+        foreach (var item in data)
+        {
+            var row = table.NewRow();
+            row["OldEmployeeCode"] = (object?)item.OldEmployeeCode ?? DBNull.Value;
+            row["NewEmployeeCode"] = (object?)item.NewEmployeeCode ?? DBNull.Value;
+            table.Rows.Add(row);
+        }
+
+        return table;
+    }
 }

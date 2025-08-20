@@ -132,4 +132,27 @@ public class DataImportService : IDataImportService
             return HttpStatusCodeResponse.InternalServerErrorResponse($"Error upserting ESS user: {ex.Message}");
         }
     }
+
+    public async Task<JsonResult> ImportEmployeeNumbers(ImportEmployeeNumbersRequestDTO request)
+    {
+        try
+        {
+            if (request == null || request.CompanyId <= 0 || request.Data == null || !request.Data.Any())
+            {
+                return HttpStatusCodeResponse.BadRequestResponse();
+            }
+
+            var errorMessage = await _dataImportRepository.ImportEmployeeNumbers(request);
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
+            }
+
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, "Employee codes updated successfully.");
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse($"Error importing employee numbers: {ex.Message}");
+        }
+    }
 }
