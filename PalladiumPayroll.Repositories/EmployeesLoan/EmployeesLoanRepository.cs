@@ -56,20 +56,20 @@ public class EmployeesLoanRepository : IEmployeesLoanRepository
         return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateEmployeeLoan", parameters);
     }
 
-    public async Task<bool> PauseEmployeeLoan(long employeeLoanId, long updatedBy)
+    public async Task<bool> PauseEmployeeLoan(long employeeLoanId)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@LoanId", employeeLoanId);
-        parameters.Add("@UpdatedBy", updatedBy);
+        parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_PauseEmployeeLoan", parameters);
     }
 
-    public async Task<bool> FullPaidEmployeeLoan(long employeeLoanId, long updatedBy)
+    public async Task<bool> FullPaidEmployeeLoan(long employeeLoanId)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@LoanId", employeeLoanId);
-        parameters.Add("@UpdatedBy", updatedBy);
+        parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_FullPaidEmployeeLoan", parameters);
     }

@@ -47,12 +47,12 @@ public class EmployeesLoanController : ControllerBase
         }
     }
 
-    [HttpPut("PauseLoan/{employeeLoanId}/{updatedBy}")]
-    public async Task<ActionResult> PauseLoan(long employeeLoanId, long updatedBy)
+    [HttpPut("PauseLoan/{employeeLoanId}")]
+    public async Task<ActionResult> PauseLoan(long employeeLoanId)
     {
         try
         {
-            var res = await _service.PauseEmployeeLoan(employeeLoanId, updatedBy);
+            var res = await _service.PauseEmployeeLoan(employeeLoanId);
             return res;
         }
         catch (Exception)
@@ -61,12 +61,12 @@ public class EmployeesLoanController : ControllerBase
         }
     }
 
-    [HttpPut("FullPaidLoan/{employeeLoanId}/{updatedBy}")]
-    public async Task<ActionResult> FullPaidLoan(long employeeLoanId, long updatedBy)
+    [HttpPut("FullPaidLoan/{employeeLoanId}")]
+    public async Task<ActionResult> FullPaidLoan(long employeeLoanId)
     {
         try
         {
-            var res = await _service.FullPaidEmployeeLoan(employeeLoanId, updatedBy);
+            var res = await _service.FullPaidEmployeeLoan(employeeLoanId);
             return res;
         }
         catch (Exception)

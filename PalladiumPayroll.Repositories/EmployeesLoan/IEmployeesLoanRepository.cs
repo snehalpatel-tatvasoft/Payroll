@@ -7,9 +7,9 @@ public interface IEmployeesLoanRepository
 {
     Task<bool> CreateEmployeeLoan(EmployeeLoanRequestDTO request);
     Task<bool> UpdateEmployeeLoan(EmployeeLoanRequestDTO request);
-    Task<bool> PauseEmployeeLoan(long employeeLoanId, long updatedBy);
+    Task<bool> PauseEmployeeLoan(long employeeLoanId);
     Task<TableDataModel<EmployeeLoanResponseDTO>> GetLoansByCompanyId(LoanFilterViewModel reqModel);    Task<EmployeeLoanDropdownsDTO> GetEmployeeLoanDropdowns(long companyId);
-    Task<bool> FullPaidEmployeeLoan(long employeeLoanId, long updatedBy);
+    Task<bool> FullPaidEmployeeLoan(long employeeLoanId);
 
 
 }
