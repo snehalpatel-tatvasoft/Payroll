@@ -31,7 +31,7 @@ public class DataImportService : IDataImportService
         if (!string.IsNullOrEmpty(errorMessage))
             return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
 
-        return HttpStatusCodeResponse.SuccessResponse(string.Empty, "Employees imported successfully.");
+       return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeMasterfile, ActionType.Imported));
     }
 
     public async Task<JsonResult> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request)
@@ -63,7 +63,7 @@ public class DataImportService : IDataImportService
         string resultMessage = await _dataImportRepository.ImportYTDRecords(importDto);
         if (resultMessage == "SUCCESS")
         {
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.YearToDateTemplate, "Imported"));
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.YearToDateTemplate, ActionType.Imported));
         }
         else
         {
@@ -77,7 +77,7 @@ public class DataImportService : IDataImportService
 
         if (resultMessage == "SUCCESS")
         {
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.YearToDateTemplate, "Imported"));
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.YearToDateTemplate, ActionType.Imported));
         }
         else
         {
@@ -98,7 +98,7 @@ public class DataImportService : IDataImportService
 
         if (resultMessage == "SUCCESS")
         {
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Timesheet, "Imported"));
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Timesheet, ActionType.Imported));
         }
         else
         {

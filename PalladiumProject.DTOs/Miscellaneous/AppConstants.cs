@@ -271,6 +271,7 @@ namespace PalladiumPayroll.Helper.Constants
             #region Data Import
             public static readonly string YearToDateTemplate = "Year To Date Template";
             public static readonly string WorkInformation = "Work Information";
+            public static readonly string EmployeeMasterfile = "Employee Masterfile";
             public static readonly string ImportStatus = "Import Status";
             public static readonly string Timesheet = "Employee Timesheet";
 

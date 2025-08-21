@@ -92,7 +92,7 @@ public class DataImportController : ControllerBase
         catch (Exception)
         {
            return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.ExceptionMessage, "Importing", ResponseMessages.YearToDateTemplate)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Importing, ResponseMessages.YearToDateTemplate)
             );
         }
     }
@@ -107,7 +107,7 @@ public class DataImportController : ControllerBase
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.ExceptionMessage, "Importing", ResponseMessages.WorkInformation)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Importing, ResponseMessages.WorkInformation)
             );
         }
     }
@@ -121,9 +121,11 @@ public class DataImportController : ControllerBase
             JsonResult? res = await _dataImportService.EmployeeMasterfileImport(request);
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving,"Employee Masterfile Import", ex.Message));
+             return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Importing, ResponseMessages.EmployeeMasterfile)
+            );
         }
     }
 
@@ -150,10 +152,10 @@ public class DataImportController : ControllerBase
         {
             return await _dataImportService.ImportEmployeeTimeSheet(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, "Importing", ResponseMessages.Timesheet,ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Importing, ResponseMessages.Timesheet)
             );
         }
     }
