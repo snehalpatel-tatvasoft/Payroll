@@ -104,18 +104,6 @@ namespace PalladiumPayroll.Repositories.Employees
             });
             return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Personal info drop list", ActionType.Retrieved));
         }
-
-        #endregion
-
-        #region Payment info
-        public async Task<JsonResult> GetEmployeePaymentDetail(int employeeId)
-        {
-            var parameters = new DynamicParameters();
-            parameters.Add("@EmployeeId", employeeId);
-            var result = await _dapper.ExecuteStoredProcedureSingle<EmployeePaymentDetail>("usp_GetEmployeePaymentDetail", parameters);
-            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Payment info", ActionType.Retrieved));
-        }
-
         public async Task<bool> SaveEmployeePersonalInfo(EmployeePersonalInformation reqModel)
         {
             var parameters = new DynamicParameters();
@@ -168,6 +156,17 @@ namespace PalladiumPayroll.Repositories.Employees
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeePersonalInfo", parameters);
             return result;
         }
+        #endregion
+
+        #region Payment info
+        public async Task<JsonResult> GetEmployeePaymentDetail(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+            var result = await _dapper.ExecuteStoredProcedureSingle<EmployeePaymentDetail>("usp_GetEmployeePaymentDetail", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Payment info", ActionType.Retrieved));
+        }
+
         public async Task<bool> EmployeePaymentDetailSave(EmployeePaymentDetail reqModel)
         {
             var parameters = new DynamicParameters();

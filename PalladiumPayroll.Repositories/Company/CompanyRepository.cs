@@ -505,6 +505,7 @@ namespace PalladiumPayroll.Repositories.Company
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@CycleId", cycleId);
+            parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
             bool isDeleted = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteCompanyPayrollCycle", parameters);
             return isDeleted;
