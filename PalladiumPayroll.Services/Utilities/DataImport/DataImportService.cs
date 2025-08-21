@@ -26,12 +26,16 @@ public class DataImportService : IDataImportService
 
     public async Task<JsonResult> EmployeeMasterfileImport(EmployeeMasterImportRequestDTO request)
     {
-        var errorMessage = await _dataImportRepository.EmployeeMasterfileImport(request);
+        var resultMessage = await _dataImportRepository.EmployeeMasterfileImport(request);
+        if (resultMessage == "SUCCESS")
+        {
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeMasterfile, ActionType.Imported));
+        }
+        else
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse("Failed to Import File.");
+        }
 
-        if (!string.IsNullOrEmpty(errorMessage))
-            return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
-
-       return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeMasterfile, ActionType.Imported));
     }
 
     public async Task<JsonResult> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request)
@@ -91,24 +95,30 @@ public class DataImportService : IDataImportService
 
         return HttpStatusCodeResponse.SuccessResponse(status, string.Format(ResponseMessages.Success, ResponseMessages.ImportStatus, ActionType.Retrieved));
     }
-     public async Task<JsonResult> LeaveTakenOnImport(LeaveTakenOnImportRequestDTO request)
+    public async Task<JsonResult> LeaveTakenOnImport(LeaveTakenOnImportRequestDTO request)
     {
-        var errorMessage = await _dataImportRepository.LeaveTakenOnImport(request);
-
-        if (!string.IsNullOrEmpty(errorMessage))
-            return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
-
-        return HttpStatusCodeResponse.SuccessResponse(string.Empty,string.Format(ResponseMessages.Success, "Leave TakenOn records ", ActionType.Imported));
+        var resultMessage = await _dataImportRepository.LeaveTakenOnImport(request);
+        if (resultMessage == "SUCCESS")
+        {
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.LeaveTakenOn, ActionType.Imported));
+        }
+        else
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse("Failed to Import File");
+        }
     }
 
     public async Task<JsonResult> LeaveTransactionImport(LeaveTransactionImportRequestDTO request)
     {
-        var errorMessage = await _dataImportRepository.LeaveTransactionImport(request);
-
-        if (!string.IsNullOrEmpty(errorMessage))
-            return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
-
-        return HttpStatusCodeResponse.SuccessResponse(string.Empty,string.Format(ResponseMessages.Success, "Leave Transaction records ", ActionType.Imported));
+        var resultMessage = await _dataImportRepository.LeaveTransactionImport(request);
+        if (resultMessage == "SUCCESS")
+        {
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.LeaveTransaction, ActionType.Imported));
+        }
+        else
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse("Failed to Import File");
+        }
     }
 
     public async Task<JsonResult> ImportEmployeeTimeSheet(EmployeeTimeSheetImportRequestDTO request)

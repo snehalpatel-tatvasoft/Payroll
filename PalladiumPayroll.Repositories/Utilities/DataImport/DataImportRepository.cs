@@ -60,8 +60,7 @@ public class DataImportRepository : IDataImportRepository
             parameters
         );
 
-        return result == "SUCCESS" ? null : result;
-
+        return result ?? "No response from procedure";
     }
 
     public async Task<bool> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request)
@@ -361,7 +360,7 @@ public class DataImportRepository : IDataImportRepository
             parameters
         );
 
-        return result == "SUCCESS" ? null : result;
+        return  result ?? "No response from procedure";
     }
 
     public async Task<string?> LeaveTransactionImport(LeaveTransactionImportRequestDTO request)
@@ -382,7 +381,7 @@ public class DataImportRepository : IDataImportRepository
             parameters
         );
 
-        return result == "SUCCESS" ? null : result;
+        return  result ?? "No response from procedure";
     }
     private DataTable LeaveTakenOnToDataTable(List<LeaveTakenOnImport> data)
     {

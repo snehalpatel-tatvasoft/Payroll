@@ -274,6 +274,9 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string EmployeeMasterfile = "Employee Masterfile";
             public static readonly string ImportStatus = "Import Status";
             public static readonly string Timesheet = "Employee Timesheet";
+            public static readonly string LeaveTakenOn = "Leave TakenOn";
+            public static readonly string LeaveTransaction = "Leave Transaction";
+
 
             #endregion
         }

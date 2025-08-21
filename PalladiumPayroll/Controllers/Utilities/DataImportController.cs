@@ -167,9 +167,9 @@ public class DataImportController : ControllerBase
             JsonResult? res = await _dataImportService.LeaveTakenOnImport(request);
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Importing, "Leave Taken On Import", ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Importing,ResponseMessages.LeaveTakenOn));
         }
     }
 
@@ -181,9 +181,9 @@ public class DataImportController : ControllerBase
             JsonResult? res = await _dataImportService.LeaveTransactionImport(request);
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Importing, "Leave Transaction Import", ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Importing, ResponseMessages.LeaveTransaction));
         }
     }
 }
