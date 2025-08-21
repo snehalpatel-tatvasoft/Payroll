@@ -3,7 +3,6 @@ using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Helper;
 using PalladiumPayroll.Repositories.Employees;
-using System.ComponentModel.Design;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 

@@ -7,6 +7,7 @@ using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -453,6 +454,13 @@ namespace PalladiumPayroll.Repositories.Company
 
             bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCompanyPayrollCycle", parameters);
             return isUpsert;
+        }
+
+        public async Task<List<CyelePeriod>> GetProcessCyclePeriodInfo(int payrollId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyPayrollId", payrollId);
+            return await _dapper.ExecuteStoredProcedure<CyelePeriod>("usp_GetProcessingCyclePeriods", parameters);
         }
 
         public async Task<bool> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList)

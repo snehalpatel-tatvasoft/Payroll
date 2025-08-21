@@ -249,6 +249,19 @@ namespace PalladiumPayroll.Controllers.Company
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetProcessCyclePeriodInfo(int payrollId)
+        {
+            try
+            {
+                return await _companyService.GetProcessCyclePeriodInfo(payrollId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
         [HttpPost("[action]")]
         public async Task<ActionResult> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList)
         {

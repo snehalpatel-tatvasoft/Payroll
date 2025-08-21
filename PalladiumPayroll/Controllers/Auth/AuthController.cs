@@ -104,5 +104,18 @@ namespace PalladiumPayroll.Controllers.Auth
                 return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Company, ex.Message));
             }
         }
+
+        [HttpPost("[action]")]
+        public IActionResult Refresh(RefreshRequest request)
+        {
+            try
+            {
+                return _authService.RefreshRequest(request);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.InternalServerError);
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@ using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 
 namespace PalladiumPayroll.Repositories.Company
 {
@@ -28,6 +29,7 @@ namespace PalladiumPayroll.Repositories.Company
         Task<List<PayrollMedicalAidList>> GetMedicalAidFundInfo(int companyId);
         Task<List<PayrollBenefitFundList>> GetCompanyBenefitFundInfo(int companyId);
         Task<bool> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle);
+        Task<List<CyelePeriod>> GetProcessCyclePeriodInfo(int payrollId);
         Task<bool> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList);
         Task<bool> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup);
         Task<bool> AddMedicalAidFundInfo(PayrollMedicalAidList payrollMedicalAidList);
