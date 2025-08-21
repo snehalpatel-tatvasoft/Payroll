@@ -159,4 +159,31 @@ public class DataImportController : ControllerBase
             );
         }
     }
+    [HttpPost("[action]")]
+    public async Task<ActionResult> ImportLeaveTakenOn([FromBody] LeaveTakenOnImportRequestDTO request)
+    {
+        try
+        {
+            JsonResult? res = await _dataImportService.LeaveTakenOnImport(request);
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Importing, "Leave Taken On Import", ex.Message));
+        }
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> ImportLeaveTransactions([FromBody] LeaveTransactionImportRequestDTO request)
+    {
+        try
+        {
+            JsonResult? res = await _dataImportService.LeaveTransactionImport(request);
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Importing, "Leave Transaction Import", ex.Message));
+        }
+    }
 }

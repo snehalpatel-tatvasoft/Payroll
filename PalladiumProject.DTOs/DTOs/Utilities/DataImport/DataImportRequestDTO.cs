@@ -140,6 +140,42 @@ public class ImportStatusFilterViewModel
     public string? SortBy { get; set; } = "StatusId";
     public bool SortType { get; set; } = true; 
 }
+public class LeaveTakenOnImport
+{
+    public string? EmployeeCode { get; set; }
+    public string? LeaveType { get; set; }= string.Empty;
+    public int? Year { get; set; }
+    public decimal? OpeningBalance { get; set; }
+    public decimal? DaysAccrued { get; set; }
+    public decimal? DaysTaken { get; set; }
+    public decimal? DaysDue { get; set; }
+    public decimal? LeaveEntitlement { get; set; }
+}
+
+public class LeaveTransactionImport
+{
+    public string? EmployeeCode { get; set; }
+    public string? LeaveType { get; set; }
+    public DateTime? DateFrom { get; set; }
+    public DateTime? DateTo { get; set; }
+    public decimal? NoOfDays { get; set; }
+}
+
+public class LeaveTakenOnImportRequestDTO
+{
+    public long CompanyId { get; set; }
+    public string TemplateName { get; set; } = string.Empty;
+    public string ImportFileName { get; set; } = string.Empty;
+    public List<LeaveTakenOnImport> Records { get; set; } = new();
+}
+
+public class LeaveTransactionImportRequestDTO
+{
+    public long CompanyId { get; set; }
+    public string TemplateName { get; set; } = string.Empty;
+    public string ImportFileName { get; set; } = string.Empty;
+    public List<LeaveTransactionImport> Records { get; set; } = new();
+}
 
 public class EmployeeTimeSheetDTO
 {
