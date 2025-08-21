@@ -265,6 +265,19 @@
 
             #endregion
         }
+
+
+        public static class ContentTypes
+        {
+            public const string OctetStream = "application/octet-stream";
+            public const string Json = "application/json";
+            public const string Xml = "application/xml";
+            public const string Xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            public const string Pdf = "application/pdf";
+            public const string Text = "text/plain";
+            public const string Html = "text/html";
+            public const string MultipartFormData = "multipart/form-data";
+        }
     }
 
 }
