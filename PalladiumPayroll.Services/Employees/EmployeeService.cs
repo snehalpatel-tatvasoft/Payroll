@@ -48,7 +48,7 @@ namespace PalladiumPayroll.Services.Employees
             {
                 dt.Rows.Add(item.EmployeeCode, item.EmployeeName, item.Department, item.Designation, item.IDNumber, item.Dob);
             }
-            return ExcelHelper.ExportToExcel(dt);
+            return ExcelHelper.ExportToExcel(new Dictionary<string, DataTable> { { "Sheet 1", dt } });
         }
 
         public async Task<JsonResult> DeleteEmployee(int employeeId)
