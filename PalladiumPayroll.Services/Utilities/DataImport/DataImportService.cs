@@ -31,7 +31,7 @@ public class DataImportService : IDataImportService
         if (!string.IsNullOrEmpty(errorMessage))
             return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
 
-        return HttpStatusCodeResponse.SuccessResponse(string.Empty, "Employees imported successfully.");
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success,"Employees MasterFile ", ActionType.Imported) );
     }
 
     public async Task<JsonResult> AddImportYearToDateTemplate(ImportYearToDateTemplateDto request)
@@ -90,5 +90,24 @@ public class DataImportService : IDataImportService
         TableDataModel<ImportStatusDto> status = await _dataImportRepository.GetImportStatus(reqModel);
 
         return HttpStatusCodeResponse.SuccessResponse(status, string.Format(ResponseMessages.Success, "Import Status", ActionType.Retrieved));
+    }
+     public async Task<JsonResult> LeaveTakenOnImport(LeaveTakenOnImportRequestDTO request)
+    {
+        var errorMessage = await _dataImportRepository.LeaveTakenOnImport(request);
+
+        if (!string.IsNullOrEmpty(errorMessage))
+            return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
+
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty,string.Format(ResponseMessages.Success, "Leave TakenOn records ", ActionType.Imported));
+    }
+
+    public async Task<JsonResult> LeaveTransactionImport(LeaveTransactionImportRequestDTO request)
+    {
+        var errorMessage = await _dataImportRepository.LeaveTransactionImport(request);
+
+        if (!string.IsNullOrEmpty(errorMessage))
+            return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
+
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty,string.Format(ResponseMessages.Success, "Leave Transaction records ", ActionType.Imported));
     }
 }

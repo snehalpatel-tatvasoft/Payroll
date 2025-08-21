@@ -19,4 +19,8 @@ public interface IDataImportRepository
     Task<string> ImportWorkInformation(WorkInformationImportRequestDTO importDto);
 
     Task<TableDataModel<ImportStatusDto>> GetImportStatus(ImportStatusFilterViewModel reqModel);
+    Task<string?> LeaveTransactionImport(LeaveTransactionImportRequestDTO request);
+    Task<string?> LeaveTakenOnImport(LeaveTakenOnImportRequestDTO request);
+
+
 }

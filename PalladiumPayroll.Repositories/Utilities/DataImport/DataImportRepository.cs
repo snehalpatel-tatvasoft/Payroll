@@ -343,4 +343,96 @@ public class DataImportRepository : IDataImportRepository
         };
     }
 
+    public async Task<string?> LeaveTakenOnImport(LeaveTakenOnImportRequestDTO request)
+    {
+        string? userId = _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value;
+
+        var table = LeaveTakenOnToDataTable(request.Records);
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", request.CompanyId);
+        parameters.Add("@TemplateName", request.TemplateName);
+        parameters.Add("@ImportFileName", request.ImportFileName);
+        parameters.Add("@UserId", userId);
+        parameters.Add("@LeaveTakenOnRecords", table.AsTableValuedParameter("LeaveTakenOnImportType"));
+
+        var result = await _dapper.ExecuteStoredProcedureSingle<string>(
+            "usp_ImportLeaveTakenOn",
+            parameters
+        );
+
+        return result == "SUCCESS" ? null : result;
+    }
+
+    public async Task<string?> LeaveTransactionImport(LeaveTransactionImportRequestDTO request)
+    {
+        string? userId = _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value;
+
+        var table = LeaveTransactionToDataTable(request.Records);
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", request.CompanyId);
+        parameters.Add("@TemplateName", request.TemplateName);
+        parameters.Add("@ImportFileName", request.ImportFileName);
+        parameters.Add("@UserId", userId);
+        parameters.Add("@LeaveTransactionRecords", table.AsTableValuedParameter("LeaveTransactionImportType"));
+
+        var result = await _dapper.ExecuteStoredProcedureSingle<string>(
+            "usp_ImportLeaveTransactions",
+            parameters
+        );
+
+        return result == "SUCCESS" ? null : result;
+    }
+    private DataTable LeaveTakenOnToDataTable(List<LeaveTakenOnImport> data)
+    {
+        var table = new DataTable();
+        table.Columns.Add("EmployeeCode", typeof(string));
+        table.Columns.Add("LeaveType", typeof(string));
+        table.Columns.Add("Year", typeof(int));
+        table.Columns.Add("OpeningBalance", typeof(decimal));
+        table.Columns.Add("DaysAccrued", typeof(decimal));
+        table.Columns.Add("DaysTaken", typeof(decimal));
+        table.Columns.Add("DaysDue", typeof(decimal));
+        table.Columns.Add("LeaveEntitlement", typeof(decimal));
+
+        foreach (var item in data)
+        {
+            table.Rows.Add(
+                item.EmployeeCode ?? (object)DBNull.Value,
+                item.LeaveType ?? (object)DBNull.Value,
+                item.Year ?? (object)DBNull.Value,
+                item.OpeningBalance ?? (object)DBNull.Value,
+                item.DaysAccrued ?? (object)DBNull.Value,
+                item.DaysTaken ?? (object)DBNull.Value,
+                item.DaysDue ?? (object)DBNull.Value,
+                item.LeaveEntitlement ?? (object)DBNull.Value
+            );
+        }
+
+        return table;
+    }
+    private DataTable LeaveTransactionToDataTable(List<LeaveTransactionImport> data)
+    {
+        var table = new DataTable();
+        table.Columns.Add("EmployeeCode", typeof(string));
+        table.Columns.Add("LeaveType", typeof(string));
+        table.Columns.Add("DateFrom", typeof(DateTime));
+        table.Columns.Add("DateTo", typeof(DateTime));
+        table.Columns.Add("NoOfDays", typeof(decimal));
+
+        foreach (var item in data)
+        {
+            table.Rows.Add(
+                item.EmployeeCode ?? (object)DBNull.Value,
+                item.LeaveType ?? (object)DBNull.Value,
+                item.DateFrom ?? (object)DBNull.Value,
+                item.DateTo ?? (object)DBNull.Value,
+                item.NoOfDays ?? (object)DBNull.Value
+            );
+        }
+
+        return table;
+    }
+
 }

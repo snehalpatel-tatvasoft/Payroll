@@ -16,9 +16,13 @@ public interface IDataImportService
 
     Task<JsonResult> ImportYTDRecord(ImportYearToDateRecordRequestDTO importDto);
 
-     Task<JsonResult> ImportWorkInformation(WorkInformationImportRequestDTO request);
+    Task<JsonResult> ImportWorkInformation(WorkInformationImportRequestDTO request);
 
-     Task<JsonResult> GetImportStatus(ImportStatusFilterViewModel reqModel);
+    Task<JsonResult> GetImportStatus(ImportStatusFilterViewModel reqModel);
+    Task<JsonResult> LeaveTakenOnImport(LeaveTakenOnImportRequestDTO request);
+    Task<JsonResult> LeaveTransactionImport(LeaveTransactionImportRequestDTO request);
+
+
 }
 
 
