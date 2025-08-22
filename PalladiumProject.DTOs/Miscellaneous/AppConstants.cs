@@ -39,6 +39,7 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string AlreadyExist = "{0} already exists !";
             public static readonly string Valid = "{0} is valid";
             public static readonly string SomethingWrong = "Something went wrong.";
+            public static readonly string ExceptionMessage = "An Error Occurred While {0} {1}";
 
             #endregion
 
