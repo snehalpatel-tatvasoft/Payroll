@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using PalladiumPayroll.Helper;
 using PalladiumPayroll.Repositories.Employees;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
@@ -12,7 +12,7 @@ namespace PalladiumPayroll.Services.Employees
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly DirectoryPathSetting _directoryPathSetting;
-        public EmployeeService(IEmployeeRepository employeeRepository, AppSettingDirectoryPath directoryPathSetting)
+        public EmployeeService(IEmployeeRepository employeeRepository, AppSettingPathHelper directoryPathSetting)
         {
             _employeeRepository = employeeRepository;
             _directoryPathSetting = directoryPathSetting.GetAppSettingDirectoryPath();
@@ -355,26 +355,17 @@ namespace PalladiumPayroll.Services.Employees
             {
                 List<EmployeeDocuments> dbFileList = new List<EmployeeDocuments>();
                 var employeeFolder = $"Employee_{employeeDocument.EmployeeId}";
-                var finalPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, employeeFolder).Replace("/", Path.DirectorySeparatorChar.ToString());
-                if (!Directory.Exists(finalPath))
-                {
-                    Directory.CreateDirectory(finalPath);
-                }
+                var finalPath = FileHandler.CombinePath(basePath, employeeFolder);
+                FileHandler.CreateDirectory(finalPath);
+
                 foreach (var file in employeeDocument.Document)
                 {
-                    var isFileReplced = false;
+                    var isFileReplaced = false;
                     var filePath = Path.Combine(finalPath, file.FileName);
-                    if (File.Exists(filePath))
-                    {
-                        isFileReplced = true;
-                        File.Delete(filePath);
-                    }
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
+                    isFileReplaced =  FileHandler.DeleteFile(filePath);
+                    await FileHandler.UploadFile(filePath, file);
 
-                    if(!isFileReplced)
+                    if(!isFileReplaced)
                     {
                         var relativePath = Path.Combine(employeeFolder, file.FileName).Replace(Path.DirectorySeparatorChar.ToString(), "/");
                         dbFileList.Add(new EmployeeDocuments() { 
@@ -400,12 +391,8 @@ namespace PalladiumPayroll.Services.Employees
             var result = await _employeeRepository.DeleteDocuments(reqModel.DocumentId);
             if (result)
             {
-                var basePath = _directoryPathSetting.EmployeeDocument.Replace("/", Path.DirectorySeparatorChar.ToString());
-                var existFilePath = Path.Combine(Directory.GetCurrentDirectory(), basePath, reqModel.DocumentUrl);
-                if (File.Exists(existFilePath))
-                {
-                    File.Delete(existFilePath);
-                }
+                var basePath = _directoryPathSetting.EmployeeDocument;
+                FileHandler.DeleteFile(FileHandler.CombinePath(basePath, reqModel.DocumentUrl));
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Document", ActionType.Deleted));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
@@ -413,14 +400,8 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<byte[]> DownloadDocument(string documentUrl)
         {
-            byte[] result = { };
             var basePath = _directoryPathSetting.EmployeeDocument;
-            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, documentUrl).Replace("/", Path.DirectorySeparatorChar.ToString());
-            if (File.Exists(fullPath))
-            {
-                result = await File.ReadAllBytesAsync(fullPath);
-            }
-            return result;
+            return await FileHandler.ReadFileBytes(FileHandler.CombinePath(basePath, documentUrl));
         }
 
         public async Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId)
@@ -441,6 +422,12 @@ namespace PalladiumPayroll.Services.Employees
         public async Task<JsonResult> GetAccessRolesByCompanyId(long companyId)
         {
             return await _employeeRepository.GetAccessRolesByCompanyId(companyId);
+        }
+
+        public async Task<JsonResult> GetPreviousService(int employeeId)
+        {
+            var previousServiceList = await _employeeRepository.GetPreviousService(employeeId);
+            return HttpStatusCodeResponse.SuccessResponse(previousServiceList, string.Format(ResponseMessages.Success, "Previous Service", ActionType.Retrieved));
         }
     }
 }

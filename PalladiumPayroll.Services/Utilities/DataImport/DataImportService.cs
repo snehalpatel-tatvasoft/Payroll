@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Utilities.DataImport;
 using PalladiumPayroll.DTOs.Miscellaneous;
@@ -94,6 +96,70 @@ public class DataImportService : IDataImportService
         TableDataModel<ImportStatusDto> status = await _dataImportRepository.GetImportStatus(reqModel);
 
         return HttpStatusCodeResponse.SuccessResponse(status, string.Format(ResponseMessages.Success, ResponseMessages.ImportStatus, ActionType.Retrieved));
+
+    }
+
+
+    public async Task<JsonResult> UpsertESSUser(UpsertESSUserRequestDTO request)
+    {
+        try
+        {
+            if (request == null || request.CompanyId <= 0 || request.Data == null || !request.Data.Any())
+            {
+                return HttpStatusCodeResponse.BadRequestResponse();
+            }
+
+            // Hash passwords using PasswordHasher
+            var passwordHasher = new PasswordHasher<object>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions
+            {
+                CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3,
+                IterationCount = 10000 
+            }));
+
+            foreach (var user in request.Data)
+            {
+                if (string.IsNullOrWhiteSpace(user.Password))
+                    continue;
+
+                user.PasswordHash = passwordHasher.HashPassword(null, user.Password);
+            }
+
+            var errorMessage = await _dataImportRepository.UpsertESSUser(request);
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
+            }
+
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, "ESS user upserted successfully.");
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse($"Error upserting ESS user: {ex.Message}");
+        }
+    }
+
+    public async Task<JsonResult> ImportEmployeeNumbers(ImportEmployeeNumbersRequestDTO request)
+    {
+        try
+        {
+            if (request == null || request.CompanyId <= 0 || request.Data == null || !request.Data.Any())
+            {
+                return HttpStatusCodeResponse.BadRequestResponse();
+            }
+
+            var errorMessage = await _dataImportRepository.ImportEmployeeNumbers(request);
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
+            }
+
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, "Employee codes updated successfully.");
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse($"Error importing employee numbers: {ex.Message}");
+        }
+    
     }
     public async Task<JsonResult> LeaveTakenOnImport(LeaveTakenOnImportRequestDTO request)
     {

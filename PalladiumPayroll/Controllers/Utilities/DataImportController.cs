@@ -186,4 +186,30 @@ public class DataImportController : ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Importing, ResponseMessages.LeaveTransaction));
         }
     }
+    [HttpPost("[action]")]
+    public async Task<ActionResult> UpsertESSUser([FromBody] UpsertESSUserRequestDTO request)
+    {
+        try
+        {
+            JsonResult? res = await _dataImportService.UpsertESSUser(request);
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Updating, "ESS User", ex.Message));
+        }
+    }
+    [HttpPost("[action]")]
+    public async Task<ActionResult> ImportEmployeeNumbers([FromBody] ImportEmployeeNumbersRequestDTO request)
+    {
+        try
+        {
+            JsonResult? res = await _dataImportService.ImportEmployeeNumbers(request);
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Updating, "Employee Numbers", ex.Message));
+        }
+    }
 }
