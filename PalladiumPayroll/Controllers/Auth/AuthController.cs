@@ -110,7 +110,7 @@ namespace PalladiumPayroll.Controllers.Auth
 
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public IActionResult Refresh(RefreshRequest request)
+        public IActionResult RefreshToken(RefreshRequest request)
         {
             try
             {
