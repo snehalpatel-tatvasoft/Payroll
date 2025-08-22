@@ -110,7 +110,7 @@ namespace PalladiumPayroll.Repositories.Auth
         {
             if (JwtTokenHelper.IsTokenExpired(request.RefreshToken, _jwtSettings?.RefreshTokenKey!))
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.InvalidToken);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TokenExpired);
             }
 
             var principal = JwtTokenHelper.GetPrincipalFromExpiredToken(request.AccessToken, _jwtSettings?.Key!);

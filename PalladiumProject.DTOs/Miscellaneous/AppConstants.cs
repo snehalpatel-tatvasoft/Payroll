@@ -78,7 +78,7 @@
             public const string LinkExpired = "Link Is Expired!";
             public const string PasswordChanged = "Password Changed Successfully";
             public const string TokenExpired = "Token Expired";
-            public const string InvalidToken = "Invalid refresh token";
+            public const string InvalidToken = "Invalid token";
             public const string ForcePasswordReset = "You need to reset your password";
             public const string UserInActive = "Sorry your account is InActive, you can't login!";
             public const string PlanExpired = "Your subscription has expired. Please renew to continue using the service.";
