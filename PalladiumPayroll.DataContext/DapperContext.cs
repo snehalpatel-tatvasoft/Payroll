@@ -14,6 +14,7 @@ namespace PalladiumPayroll.DataContext
         public DapperContext(IConfiguration configuration)
         {
             _connectionString = AppSettingsConfig.GetConnectionString(configuration);
+            _connectionString = string.IsNullOrEmpty(_connectionString) ? _connectionString : SecurityHandler.Decrypt(_connectionString, "U4%");
         }
 
         private IDbConnection CreateConnection(string? connectionString = null) => new SqlConnection(string.IsNullOrEmpty(connectionString) ? _connectionString :  connectionString);
