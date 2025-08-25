@@ -39,6 +39,7 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string AlreadyExist = "{0} already exists !";
             public static readonly string Valid = "{0} is valid";
             public static readonly string SomethingWrong = "Something went wrong.";
+            public static readonly string ExceptionMessage = "An Error Occurred While {0} {1}";
 
             #endregion
 
@@ -216,12 +217,12 @@ namespace PalladiumPayroll.Helper.Constants
 
             #endregion
 
-            
+
             #region Employee Promotions
 
 
             public static readonly string EmployeePromotions = "Employee Promotions";
-            public const string EmployeePromotionSaveFailed  = "Failed to save Employee Promotion";
+            public const string EmployeePromotionSaveFailed = "Failed to save Employee Promotion";
 
             public static readonly string NatureOfPromotions = "Nature of Promotions";
             public const string InvalidEmployeePromotionId = "Employee Promotion Id is Invalid.";
@@ -232,7 +233,7 @@ namespace PalladiumPayroll.Helper.Constants
             #region Employee Training
 
             public static readonly string EmployeeTraining = "Employee Training";
-            public const string EmployeeTrainingSaveFailed  = "Failed to save Employee Training";
+            public const string EmployeeTrainingSaveFailed = "Failed to save Employee Training";
             public const string InvalidEmployeeTrainingnId = "Employee Training Id is Invalid.";
             public const string EmployeeTrainingNotFound = "Employee Training was not found.";
 
@@ -266,6 +267,18 @@ namespace PalladiumPayroll.Helper.Constants
 
 
             #endregion
+
+            #region coid accident
+            public static readonly string CoidAccident = "COID accident";
+            public static readonly string CoidAccidentFailedDelete = "Failed to delete COID Accident ";
+            public static readonly string CoidAccidentUpdatedSuccessfully = "COID Accident updated successfully";
+            public static readonly string CoidAccidentCreatedSuccessfully = "COID Accident created successfully";
+            public static readonly string CoidAccidentCreateFailed = "COID Accident creation failed";
+            public static readonly string CoidAccidentUpdateFailed = "COID Accident update failed";
+
+            #endregion
+
+
         }
     }
 
