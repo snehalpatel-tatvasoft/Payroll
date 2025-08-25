@@ -19,7 +19,7 @@ public class CheckInOutRepository : ICheckInOutRepository
         DynamicParameters parameters = new DynamicParameters();
         parameters.Add("@EmployeeCode", request.EmployeeCode);
         parameters.Add("@Password", request.Password);
-        parameters.Add("@Date", request.Date.Date);
+        parameters.Add("@Date", request.Date);
         parameters.Add("@IsCheckIn", request.IsCheckIn);
 
         CheckInOutResultDTO? result = await _dapper.ExecuteStoredProcedureSingle<CheckInOutResultDTO>("usp_SaveClockInOut", parameters);
