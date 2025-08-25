@@ -13,8 +13,6 @@ namespace PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company
     public class CyelePeriod
     {
         public int ProcessingCyclePeriodId { get; set; }
-        public string CycleName { get; set; }
-        public int CycleType { get; set; }
         public DateTime ProcessStartDate { get; set; }
         public DateTime ProcessEndDate { get; set; }
         public bool? IsProcessed { get; set; }
