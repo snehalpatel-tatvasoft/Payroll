@@ -118,7 +118,7 @@ namespace PalladiumPayroll.Controllers.Company
             }
         }
         [HttpPost("[action]")]
-        public async Task<ActionResult> SaveGlAccountNumber(GLTransactionDetails model)
+        public async Task<ActionResult> SaveGlAccountNumber(TransactionListForCompany model)
         {
             try
             {
