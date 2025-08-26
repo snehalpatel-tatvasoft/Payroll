@@ -17,6 +17,7 @@ using PalladiumPayroll.Repositories.User;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeePromotions;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeTraining;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeTransfer;
+using PalladiumPayroll.Repositories.CheckInOut;
 using PalladiumPayroll.Repositories.HRFunctions.CoidAccident;
 
 namespace PalladiumPayroll.Repositories
@@ -50,6 +51,7 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<IAccessRightsRepository, AccessRightsRepository>();
             services.AddScoped<IUserCreationRepository, UserCreationRepository>();
             services.AddScoped<IDisciplinaryLogRepository, DisciplinaryLogRepository>();
+            services.AddScoped<ICheckInOutRepository, CheckInOutRepository>();
             services.AddScoped<ICoidAccidentRepository,CoidAccidentRepository>();
             return services;
         }

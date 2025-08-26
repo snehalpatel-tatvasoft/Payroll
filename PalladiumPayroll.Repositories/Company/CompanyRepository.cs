@@ -55,12 +55,13 @@ namespace PalladiumPayroll.Repositories.Company
             List<GLSetup> response = await _dapper.ExecuteStoredProcedure<GLSetup>("usp_GetGLSetupByCompanyId", parameters);
             return response;
         }
-        public async Task<bool> SaveGlAccountNumber(GLTransactionDetails model)
+        public async Task<bool> SaveGlAccountNumber(TransactionListForCompany model)
         {
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@PayrollProcessId", model.PayrollProcessId);
-            parameters.Add("@AccountNumber", model.AccountNumber);
-            parameters.Add("@AccountType", model.AccountType);
+            parameters.Add("@CreditAccount", model.CreditAccountNumber);
+            parameters.Add("@DebitAccount", model.DebitAccountNumber);
+            parameters.Add("@ContraAccount", model.ContraAccountNumber);
 
             var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SaveGlAccountNumber", parameters);
             return response;

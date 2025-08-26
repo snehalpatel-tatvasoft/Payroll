@@ -1,5 +1,6 @@
 using System.Data;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.CompanySettings;
@@ -10,10 +11,12 @@ namespace PalladiumPayroll.Repositories.CompanySettings;
 public class MinimumWageRepository : IMinimumWageRepository
 {
     private readonly DapperContext _dapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public MinimumWageRepository(IConfiguration configuration)
+    public MinimumWageRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _dapper = new DapperContext(configuration);
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<bool> IsDuplicateMinimumWageName(string name, long companyId, int? wageId = null)
@@ -36,7 +39,7 @@ public class MinimumWageRepository : IMinimumWageRepository
         parameters.Add("@Name", request.Name);
         parameters.Add("@ProfessionType", request.ProfessionType);
         parameters.Add("@MinimumWage", request.MinimumWage);
-        parameters.Add("@CreatedBy", 1);
+        parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@CreatedDate", DateTime.Now);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
@@ -66,7 +69,7 @@ public class MinimumWageRepository : IMinimumWageRepository
         parameters.Add("@Name", request.Name);
         parameters.Add("@ProfessionType", request.ProfessionType);
         parameters.Add("@MinimumWage", request.MinimumWage);
-        parameters.Add("@UpdatedBy", 1);
+        parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@UpdatedDate", DateTime.Now);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 

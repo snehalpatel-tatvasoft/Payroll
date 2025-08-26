@@ -150,7 +150,6 @@ public class EmployeeTransferDetailDTO
     public long? OccupationalStatusId { get; set; }
     public long? AppointmentTypeId { get; set; }
     public long CompanyId { get; set; }
-    public int UserId { get; set; } 
 }
 
 public class EmployeeTransferAutoFillDTO

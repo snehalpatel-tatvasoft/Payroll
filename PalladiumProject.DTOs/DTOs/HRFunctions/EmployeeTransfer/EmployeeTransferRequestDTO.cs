@@ -22,5 +22,4 @@ public class EmployeeTransferRequestDTO
     public long? OccupationalStatusId { get; set; }
     public long? AppointmentTypeId { get; set; }
     public long CompanyId { get; set; }
-    public int UserId { get; set; } 
 }

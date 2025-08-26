@@ -19,23 +19,23 @@ public class MinimumWageController : ControllerBase
     }
 
 
-    [HttpPost("CreateMinimumWage")]
-    public async Task<ActionResult> SaveMinimumWage(MinimumWageRequestDTO request)
+    [HttpPost("[action]")]
+    public async Task<ActionResult> CreateMinimumWage(MinimumWageRequestDTO request)
     {
         try
         {
             return await _minimumWageService.CreateMinimumWage(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.MinimumWage, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.MinimumWage)
             );
         }
     }
 
 
-    [HttpGet("company/{companyId}")]
+    [HttpGet("[action]")]
     public async Task<ActionResult> GetMinimumWagesByCompanyId(int companyId)
     {
         try
@@ -45,16 +45,16 @@ public class MinimumWageController : ControllerBase
                 return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
             }
 
-           return await _minimumWageService.GetMinimumWagesByCompanyId(companyId);
+            return await _minimumWageService.GetMinimumWagesByCompanyId(companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.MinimumWage, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.MinimumWage));
         }
     }
 
 
-    [HttpPatch("UpdateMinimumWage")]
+    [HttpPut("[action]")]
     public async Task<ActionResult> UpdateMinimumWage(MinimumWageRequestDTO request)
     {
         try
@@ -63,16 +63,16 @@ public class MinimumWageController : ControllerBase
             {
                 return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.WageIdNotFound);
             }
-            return await _minimumWageService.UpdateMinimumWage(request);      
+            return await _minimumWageService.UpdateMinimumWage(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Updating, ResponseMessages.MinimumWage, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.MinimumWage));
         }
     }
 
 
-    [HttpDelete("DeleteMinimumWage/{wageId}")]
+    [HttpDelete("[action]")]
     public async Task<ActionResult> DeleteMinimumWage(int wageId)
     {
         try
@@ -84,10 +84,10 @@ public class MinimumWageController : ControllerBase
 
             return await _minimumWageService.DeleteMinimumWage(wageId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.MinimumWage, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.MinimumWage)
             );
         }
     }
