@@ -365,7 +365,7 @@ namespace PalladiumPayroll.Controllers.Employee
             }
             catch (Exception ex)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ex.Message);
             }
         }
 

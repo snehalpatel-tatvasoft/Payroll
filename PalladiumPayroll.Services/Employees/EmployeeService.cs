@@ -157,10 +157,6 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup)
         {
-            if (timeSheetSetup.TimeSheetPassword != timeSheetSetup.TimeSheetConfirmPassword)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse("Password is mismatch !");
-            }
             var result = await _employeeRepository.SaveEmployeeTimeSheetSetup(timeSheetSetup);
             if (result)
             {
