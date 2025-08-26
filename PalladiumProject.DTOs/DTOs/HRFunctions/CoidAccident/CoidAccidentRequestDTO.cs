@@ -8,7 +8,7 @@ public class CoidAccidentRequestDTO
     public int AccidentType { get; set; }
     public string Severity { get; set; } = string.Empty;
     public string PartOfBodyHurt { get; set; } = string.Empty;
-    public string HoursLost { get; set; } = string.Empty; 
+    public int  HoursLost { get; set; } 
     public string Comments { get; set; } = string.Empty;
     public bool Reported { get; set; }
     public bool Claimed { get; set; }

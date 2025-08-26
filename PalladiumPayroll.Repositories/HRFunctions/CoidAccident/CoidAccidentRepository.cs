@@ -29,7 +29,7 @@ public class CoidAccidentRepository : ICoidAccidentRepository
         parameters.Add("@AccidentType", request.AccidentType);
         parameters.Add("@Severity", request.Severity);
         parameters.Add("@PartOfBodyHurt", request.PartOfBodyHurt);
-        parameters.Add("@HoursLost", int.Parse(request.HoursLost));
+        parameters.Add("@HoursLost", request.HoursLost);
         parameters.Add("@Reported", request.Reported);
         parameters.Add("@Claimed", request.Claimed);
         parameters.Add("@Settled", request.Settled);
