@@ -4,6 +4,10 @@ using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Company;
+using System.ComponentModel.Design;
+using System.Globalization;
+using System.Reflection;
+using System.Transactions;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 
 namespace PalladiumPayroll.Controllers.Company
@@ -100,6 +104,32 @@ namespace PalladiumPayroll.Controllers.Company
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetTransactionList(long companyId)
+        {
+            try
+            {
+                List<TransactionListForCompany> transactionLists= await _companyService.GetTransactionList(companyId);
+                return HttpStatusCodeResponse.SuccessResponse(transactionLists, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+            }
+        }
+        [HttpPost("[action]")]
+        public async Task<ActionResult> SaveGlAccountNumber(GLTransactionDetails model)
+        {
+            try
+            {
+                bool res = await _companyService.SaveGlAccountNumber(model);
+                return HttpStatusCodeResponse.SuccessResponse(res, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+            }
+        }
         [HttpGet("[action]")]
         public async Task<ActionResult> GetCompanyGLInfo(int companyId)
         {

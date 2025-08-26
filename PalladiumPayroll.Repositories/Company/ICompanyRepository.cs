@@ -38,6 +38,8 @@ namespace PalladiumPayroll.Repositories.Company
         Task<bool> DeleteCompanyBenefitFund(int fundId);
         Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel);
         Task<List<DropDownViewModelWithString>> GetGLAccounts(DBConnectionModel dbConnectionModel);
+        Task<List<TransactionListForCompany>> GetTransactionList(long companyId);
+        Task<bool> SaveGlAccountNumber(GLTransactionDetails model);
         Task<bool> CheckGLDBConnection(DBConnectionModel dbConnectionModel);
         Task<bool> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation);
         Task<List<EmploymentEquityInformation>> GetEmploymentEquityInfo(int companyId);

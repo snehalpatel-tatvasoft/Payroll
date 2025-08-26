@@ -12,6 +12,7 @@ using PalladiumPayroll.Helper;
 using PalladiumPayroll.Helper.Constants;
 using PalladiumPayroll.Helper.JWTToken;
 using PalladiumPayroll.Repositories.Company;
+using System.ComponentModel.Design;
 using System.Net.Mail;
 using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -313,6 +314,15 @@ namespace PalladiumPayroll.Services.Company
                 glSetup.GlDepartmentList = await _companyRepository.GetGLDepartments(dbConnectionModel);
             }
             return HttpStatusCodeResponse.SuccessResponse(glSetup, string.Format(ResponseMessages.Success, "GL Account", ActionType.Retrieved));
+        }
+
+        public async Task<List<TransactionListForCompany>> GetTransactionList(long companyId)
+        {
+            return await _companyRepository.GetTransactionList(companyId);
+        }
+        public async Task<bool> SaveGlAccountNumber(GLTransactionDetails model)
+        {
+            return await _companyRepository.SaveGlAccountNumber(model);
         }
 
         public async Task<JsonResult> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation)

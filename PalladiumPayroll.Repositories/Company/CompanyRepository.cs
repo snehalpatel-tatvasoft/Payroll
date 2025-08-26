@@ -9,6 +9,7 @@ using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using System.ComponentModel.Design;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
@@ -46,7 +47,24 @@ namespace PalladiumPayroll.Repositories.Company
             string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
             return await DapperContext.CheckDBConnection(connectionString);
         }
+        public async Task<List<GLSetup>> GetCompanyGLInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
 
+            List<GLSetup> response = await _dapper.ExecuteStoredProcedure<GLSetup>("usp_GetGLSetupByCompanyId", parameters);
+            return response;
+        }
+        public async Task<bool> SaveGlAccountNumber(GLTransactionDetails model)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@PayrollProcessId", model.PayrollProcessId);
+            parameters.Add("@AccountNumber", model.AccountNumber);
+            parameters.Add("@AccountType", model.AccountType);
+
+            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SaveGlAccountNumber", parameters);
+            return response;
+        }
         public async Task<long> CreateCompany(CreateCompanyRequest request)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -350,15 +368,14 @@ namespace PalladiumPayroll.Repositories.Company
             return response;
         }
 
-        public async Task<List<GLSetup>> GetCompanyGLInfo(int companyId)
+        public async Task<List<TransactionListForCompany>> GetTransactionList(long companyId)
         {
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
 
-            List<GLSetup> response = await _dapper.ExecuteStoredProcedure<GLSetup>("usp_GetGLSetupByCompanyId", parameters);
+            List<TransactionListForCompany> response = await _dapper.ExecuteStoredProcedure<TransactionListForCompany>("usp_GetTransactionListForCompany", parameters);
             return response;
         }
-
         public async Task<bool> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo)
         {
             DynamicParameters parameters = new DynamicParameters();
