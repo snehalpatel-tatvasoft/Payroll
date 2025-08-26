@@ -30,7 +30,7 @@ public class EmployeesLoanController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.EmployeesLoan));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.EmployeeLoan));
         }
     }
     [HttpPut("UpdateEmployeeLoan")]
@@ -43,7 +43,7 @@ public class EmployeesLoanController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.EmployeesLoan));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.EmployeeLoan));
         }
     }
 
@@ -57,7 +57,7 @@ public class EmployeesLoanController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.EmployeesLoan));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.EmployeeLoan));
         }
     }
 
@@ -71,7 +71,7 @@ public class EmployeesLoanController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.EmployeesLoan));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.EmployeeLoan));
         }
     }
 
@@ -85,7 +85,7 @@ public class EmployeesLoanController : ControllerBase
         }
         catch (Exception ex)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeesLoan,ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeLoan,ex.Message));
         }
     }
 
@@ -102,7 +102,7 @@ public class EmployeesLoanController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeesLoan));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeLoan));
         }
     }
 }
