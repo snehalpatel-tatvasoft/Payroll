@@ -1,4 +1,6 @@
-﻿namespace PalladiumPayroll.DTOs.DTOs.Common
+﻿using Microsoft.Extensions.Options;
+
+namespace PalladiumPayroll.DTOs.DTOs.Common
 {
     public class AppSettingDirectoryPath
     {
