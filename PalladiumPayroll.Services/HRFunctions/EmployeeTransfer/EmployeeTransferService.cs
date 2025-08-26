@@ -19,71 +19,36 @@ public class EmployeeTransferService : IEmployeeTransferService
 
     public async Task<EmployeeTransferDropdownsDTO> GetEmployeeTransferDropdownData(long companyId)
     {
-        try
-        {
-            var data = await _employeeTransferRepository.GetEmployeeTransferDropdownData(companyId);
-            return data;
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+
+        var data = await _employeeTransferRepository.GetEmployeeTransferDropdownData(companyId);
+        return data;
     }
     public async Task<JsonResult> GetEmployeeAutoFillData(long employeeId, long companyId)
     {
-        try
+        var autofillData = await _employeeTransferRepository.GetEmployeeAutoFillData(employeeId, companyId);
+
+        if (autofillData == null)
         {
-            if (employeeId <= 0 || companyId <= 0)
-            {
-                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeOrCompanyIdInvalid);
-            }
-
-            var autofillData = await _employeeTransferRepository.GetEmployeeAutoFillData(employeeId, companyId);
-
-            if (autofillData == null)
-            {
-                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeNotFound);
-            }
-
-            return HttpStatusCodeResponse.SuccessResponse(autofillData, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTransfer, ActionType.Retrieved));
+            return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeNotFound);
         }
-        catch (Exception)
-        {
-            return HttpStatusCodeResponse.BadRequestResponse();
-        }
+
+        return HttpStatusCodeResponse.SuccessResponse(autofillData, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTransfer, ActionType.Retrieved));
     }
     public async Task<JsonResult> AddEmployeeTransfer(EmployeeTransferRequestDTO request)
     {
-        try
-        {
-            if (request.EmployeeId <= 0 || request.CompanyId <= 0)
-            {
-                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidEmployeeOrCompanyId);
-            }
 
-            var result = await _employeeTransferRepository.AddEmployeeTransfer(request);
-            if (result != null)
-            {
-                return HttpStatusCodeResponse.SuccessResponse(result, ResponseMessages.EmployeeTransferCreatedSuccessfully);
-            }
-
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.EmployeeTransferCreationFailed);
-        }
-        catch (Exception)
+        var result = await _employeeTransferRepository.AddEmployeeTransfer(request);
+        if (result != null)
         {
-            return HttpStatusCodeResponse.BadRequestResponse();
+            return HttpStatusCodeResponse.SuccessResponse(result, ResponseMessages.EmployeeTransferCreatedSuccessfully);
         }
+
+        return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.EmployeeTransferCreationFailed);
+
     }
     public async Task<List<EmployeeTransferDisplayDataModel>> GetEmployeeTransferList(long companyId)
     {
-        try
-        {
-            var data = await _employeeTransferRepository.GetEmployeeTransferList(companyId);
-            return data;
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+        var data = await _employeeTransferRepository.GetEmployeeTransferList(companyId);
+        return data;
     }
 }

@@ -31,9 +31,9 @@ public class EmployeeTransferController : ControllerBase
             var response = await _employeeTransferService.GetEmployeeTransferDropdownData(companyId);
             return HttpStatusCodeResponse.SuccessResponse(response, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTransfer, ActionType.Retrieved));
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeTransfer, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeTransfer));
         }
     }
 
@@ -42,11 +42,15 @@ public class EmployeeTransferController : ControllerBase
     {
         try
         {
+            if (employeeId <= 0 || companyId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeOrCompanyIdInvalid);
+            }
             return await _employeeTransferService.GetEmployeeAutoFillData(employeeId, companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeTransfer, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeTransfer));
         }
     }
 
@@ -55,15 +59,19 @@ public class EmployeeTransferController : ControllerBase
     {
         try
         {
+            if (request.EmployeeId <= 0 || request.CompanyId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidEmployeeOrCompanyId);
+            }
             var res = await _employeeTransferService.AddEmployeeTransfer(request);
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.EmployeeTransfer, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.EmployeeTransfer));
         }
     }
-    
+
     [HttpGet("[action]")]
     public async Task<ActionResult> GetEmployeeTransferList(long companyId)
     {
@@ -77,9 +85,9 @@ public class EmployeeTransferController : ControllerBase
             var response = await _employeeTransferService.GetEmployeeTransferList(companyId);
             return HttpStatusCodeResponse.SuccessResponse(response, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTransfer, ActionType.Retrieved));
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeTransfer, ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeTransfer));
         }
     }
 

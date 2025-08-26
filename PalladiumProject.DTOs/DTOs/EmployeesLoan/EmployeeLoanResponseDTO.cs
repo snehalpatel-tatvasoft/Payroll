@@ -11,7 +11,7 @@ public class EmployeeLoanResponseDTO
     public decimal LoanAmount { get; set; }
     public decimal LoanPaidAmount { get; set; }
     public decimal OutstandingAmount { get; set; }
-    public string LoanStatusName { get; set; } = string.Empty;
+    public int LoanStatusID { get; set; }
     public decimal LoanMaxdeductionInterestRate { get; set; }
     public decimal InterestRate { get; set; }
     public decimal ActualLoanAmount { get; set; }

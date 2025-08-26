@@ -27,10 +27,10 @@ public class CreateTransactionController : ControllerBase
             var res = await _createTransactionService.GetAllTransactions(companyId);
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.CreateTransaction, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CreateTransaction)
             );
         }
     }
@@ -43,10 +43,10 @@ public class CreateTransactionController : ControllerBase
             var res = await _createTransactionService.AddTransaction(request);
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.CreateTransaction, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.CreateTransaction)
             );
         }
     }
@@ -60,10 +60,10 @@ public class CreateTransactionController : ControllerBase
             var res = await _createTransactionService.UpdateTransaction(request);
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Updating, ResponseMessages.CreateTransaction, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.CreateTransaction)
             );
         }
     }
@@ -76,10 +76,10 @@ public class CreateTransactionController : ControllerBase
             var res = await _createTransactionService.GetTransactionById(id);
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.CreateTransaction, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CreateTransaction)
             );
         }
     }
@@ -92,10 +92,10 @@ public class CreateTransactionController : ControllerBase
             JsonResult res = await _createTransactionService.DeleteTransaction(id);
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.CreateTransaction, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.CreateTransaction)
             );
         }
     }
@@ -108,10 +108,10 @@ public class CreateTransactionController : ControllerBase
             var res = await _createTransactionService.ImportTransactions(request);
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.CreateTransaction, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.CreateTransaction)
             );
         }
     }
