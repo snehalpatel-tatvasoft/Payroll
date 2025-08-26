@@ -15,5 +15,10 @@ namespace PalladiumPayroll.Services.Auth
         {
             return await _authRepository.Login(loginRequest);
         }
+
+        public JsonResult RefreshRequest(RefreshRequest request)
+        {
+            return _authRepository.RefreshRequest(request);
+        }
     }
 }
