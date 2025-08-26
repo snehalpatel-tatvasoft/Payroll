@@ -14,7 +14,7 @@ namespace PalladiumPayroll.Helper
             {
                 key = SECRET_KEY;
             }
-            string EncryptionKey = "#Payroll@" + key;
+            string EncryptionKey = "#Payroll@#" + key;
             byte[] clearBytes = Encoding.Unicode.GetBytes(input);
             using (Aes encryptor = Aes.Create())
             {
