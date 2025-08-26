@@ -6,7 +6,6 @@ using PalladiumPayroll.Helper;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeTraining;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
-using DirectoryPathSetting = PalladiumPayroll.Helper.DirectoryPathSetting;
 
 namespace PalladiumPayroll.Services.HRFunctions.EmployeeTraining;
 
@@ -26,20 +25,13 @@ public class EmployeeTrainingService : IEmployeeTrainingService
         if (request.File != null && request.File.Length > 0)
         {
             var basePath = _directoryPathSetting.TrainingDocument;
-            var finalPath = Path.Combine(Directory.GetCurrentDirectory(), basePath);
+            var finalPath = FileHandler.CombinePath(basePath, "");
 
-            if (!Directory.Exists(finalPath))
-                Directory.CreateDirectory(finalPath);
+            FileHandler.CreateDirectory(finalPath);
 
             var filePath = Path.Combine(finalPath, request.File.FileName);
-
-            if (File.Exists(filePath))
-                File.Delete(filePath);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await request.File.CopyToAsync(stream);
-            }
+            FileHandler.DeleteFile(filePath);
+            await FileHandler.UploadFile(filePath, request.File);
 
             var relativePath = Path.Combine(basePath, request.File.FileName).Replace("\\", "/");
 
@@ -98,14 +90,10 @@ public class EmployeeTrainingService : IEmployeeTrainingService
 
     public async Task<byte[]> DownloadDocument(string documentUrl)
     {
-        byte[] result = { };
         var basePath = _directoryPathSetting.TrainingDocument;
-        var fullPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, documentUrl).Replace("/", Path.DirectorySeparatorChar.ToString());
-        if (File.Exists(fullPath))
-        {
-            result = await File.ReadAllBytesAsync(fullPath);
-        }
-        return result;
+        var fullPath = FileHandler.CombinePath(basePath, documentUrl);
+
+        return await FileHandler.ReadFileBytes(fullPath);
     }
 
     public async Task<JsonResult> DeleteTrainingDocument(string documentUrl)
@@ -113,17 +101,17 @@ public class EmployeeTrainingService : IEmployeeTrainingService
         string basePath = _directoryPathSetting.TrainingDocument
             .Replace("/", Path.DirectorySeparatorChar.ToString());
 
-        string filePath = Path.Combine(Directory.GetCurrentDirectory(), basePath, documentUrl);
+        var filePath = FileHandler.CombinePath(basePath, documentUrl);
 
-        if (File.Exists(filePath))
+        bool isDeleted = FileHandler.DeleteFile(filePath);
+
+        if (isDeleted)
         {
-            File.Delete(filePath);
             return HttpStatusCodeResponse.SuccessResponse(
                 string.Empty,
                 string.Format(ResponseMessages.Success, "Document", ActionType.Deleted)
             );
         }
-
         return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
     }
 
