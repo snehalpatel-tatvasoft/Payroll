@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeTraining;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using PalladiumPayroll.Helper;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeTraining;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
+using DirectoryPathSetting = PalladiumPayroll.Helper.DirectoryPathSetting;
 
 namespace PalladiumPayroll.Services.HRFunctions.EmployeeTraining;
 
@@ -13,7 +15,7 @@ public class EmployeeTrainingService : IEmployeeTrainingService
     private readonly IEmployeeTrainingRepository _employeeTrainingRepository;
     private readonly DirectoryPathSetting _directoryPathSetting;
 
-    public EmployeeTrainingService(IEmployeeTrainingRepository employeeTrainingRepository, AppSettingDirectoryPath directoryPathSetting)
+    public EmployeeTrainingService(IEmployeeTrainingRepository employeeTrainingRepository, AppSettingPathHelper directoryPathSetting)
     {
         _employeeTrainingRepository = employeeTrainingRepository;
         _directoryPathSetting = directoryPathSetting.GetAppSettingDirectoryPath();
