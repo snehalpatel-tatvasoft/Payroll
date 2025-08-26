@@ -8,9 +8,11 @@ using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
+using PalladiumPayroll.Helper;
 using PalladiumPayroll.Helper.Constants;
 using PalladiumPayroll.Helper.JWTToken;
 using PalladiumPayroll.Repositories.Company;
+using System.ComponentModel.Design;
 using System.Net.Mail;
 using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -22,12 +24,14 @@ namespace PalladiumPayroll.Services.Company
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly EmailService _emailService;
-        private readonly IConfiguration _configuration;
+        private readonly JwtSettings? _jwtSettings;
+        private readonly PayrollWebSetting? _payrollWebSetting;
         public CompanyService(ICompanyRepository companyRepository, EmailService emailService, IConfiguration configuration)
         {
             _companyRepository = companyRepository;
             _emailService = emailService;
-            _configuration = configuration;
+            _jwtSettings = AppSettingsConfig.GetSection<JwtSettings>(configuration, "Jwt");
+            _payrollWebSetting = AppSettingsConfig.GetSection<PayrollWebSetting>(configuration, "Payroll");
         }
 
         public async Task<JsonResult> CompanyCreation(CompanyModels model)
@@ -47,102 +51,84 @@ namespace PalladiumPayroll.Services.Company
 
         public async Task<JsonResult> CreateCompany(CreateCompanyRequest request)
         {
-            try
+            // Check if company already exists
+            if (await _companyRepository.CheckCompanyExist(request.Company))
             {
-                // Check if company already exists
-                if (await _companyRepository.CheckCompanyExist(request.Company))
-                {
-                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.CompanyAlreadyExists);
-                }
-
-                // Create company
-                long companyId = await _companyRepository.CreateCompany(request);
-                if (companyId <= 0)
-                {
-                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.ErrorCreatingCompany);
-                }
-
-                // Hash password and create user
-                string passwordHash = new PasswordHasher<object>().HashPassword(user: string.Empty, request.Password);
-
-                CreateUserRequestDto? createUserRequest = new CreateUserRequestDto
-                {
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    Email = request.Email,
-                    Password = request.Password,
-                    PasswordHash = passwordHash,
-                    ContactNo = request.ContactNo,
-                    CompanyId = (int)companyId
-                };
-
-                Guid userId = await _companyRepository.CreateUser(createUserRequest);
-                if (userId == Guid.Empty)
-                {
-                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.ErrorCreatingUser);
-                }
-
-                #region Send Email
-
-                try
-                {
-                    string subject = "Premium Pay Welcome email";
-
-                    string webUrl = _configuration["Payroll:WebUrl"]!;
-                    string loginUrl = "/auth/login";
-
-                    JWTTokenService jwtService = new JWTTokenService(_configuration);
-
-                    Claim[] claims = { new Claim(JWTClaimTypes.UserId, userId.ToString()) };
-
-                    string token = jwtService.GenerateToken(
-                         claims,
-                         DateTime.Now.AddMinutes(AppConstants.AuthTokenExpiryInMinutes),
-                         _configuration["Jwt:Key"]!
-                     );
-
-                    // Append the token directly to the URL
-                    string finalUrl = $"{webUrl}{loginUrl}?token={token}";
-
-                    string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EmailTemplate", "WelcomeEmail.html");
-                    string bodyTemplate = await File.ReadAllTextAsync(templatePath);
-
-                    string emailBody = bodyTemplate
-                                    .Replace("{UserName}", request.FirstName ?? "User")
-                                    .Replace("{LoginUrl}", $"<a href='{finalUrl}' target='_blank'>Click here</a>");
-
-                    MailMessage mailMessage = new MailMessage
-                    {
-                        Body = emailBody,
-                        Subject = subject,
-                        IsBodyHtml = true
-                    };
-
-                    mailMessage.To.Add("meet.panchal@tatvasoft.com");
-                    //mailMessage.To.Add(request.Email);
-
-                    string emailSent = _emailService.SendMail(mailMessage);
-
-                    if (emailSent == ResponseMessages.EmailSentSuccessfully)
-                    {
-                        return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.EmailSentSuccessfully);
-                    }
-                    else
-                    {
-                        return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.EmailSentFailure);
-                    }
-                }
-                catch (Exception)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
-
-                #endregion
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.CompanyAlreadyExists);
             }
-            catch (Exception)
+
+            // Create company
+            long companyId = await _companyRepository.CreateCompany(request);
+            if (companyId <= 0)
             {
-                return HttpStatusCodeResponse.BadRequestResponse();
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.ErrorCreatingCompany);
             }
+
+            // Hash password and create user
+            string passwordHash = new PasswordHasher<object>().HashPassword(user: string.Empty, request.Password);
+
+            CreateUserRequestDto? createUserRequest = new CreateUserRequestDto
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Email = request.Email,
+                Password = request.Password,
+                PasswordHash = passwordHash,
+                ContactNo = request.ContactNo,
+                CompanyId = (int)companyId
+            };
+
+            Guid userId = await _companyRepository.CreateUser(createUserRequest);
+            if (userId == Guid.Empty)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.ErrorCreatingUser);
+            }
+
+            #region Send Email
+
+            string subject = "Premium Pay Welcome email";
+
+            string webUrl = _payrollWebSetting?.WebUrl!;
+
+            string token = JwtTokenHelper.GenerateToken(
+                    [new Claim(JWTClaimTypes.UserId, userId.ToString())],
+                    DateTime.Now.AddMinutes(AuthTokenExpiryInMinutes),
+                    _jwtSettings?.Key!,
+                    _jwtSettings?.Issuer!,
+                    _jwtSettings?.Audience!
+                );
+
+            // Append the token directly to the URL
+            string finalUrl = $"{webUrl}/auth/login?token={token}";
+
+            string templatePath = FileHandler.EmailTemplatePath("WelcomeEmail.html");
+            string bodyTemplate = await FileHandler.ReadFileContent(templatePath);
+
+            string emailBody = bodyTemplate
+                            .Replace("{UserName}", request.FirstName ?? "User")
+                            .Replace("{LoginUrl}", $"<a href='{finalUrl}' target='_blank'>Click here</a>");
+
+            MailMessage mailMessage = new MailMessage
+            {
+                Body = emailBody,
+                Subject = subject,
+                IsBodyHtml = true,
+            };
+
+            mailMessage.To.Add("meet.panchal@tatvasoft.com");
+            //mailMessage.To.Add(request.Email);
+            string emailSent = _emailService.SendMail(mailMessage);
+
+            if (emailSent == ResponseMessages.EmailSentSuccessfully)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.EmailSentSuccessfully);
+            }
+            else
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.EmailSentFailure);
+            }
+
+            #endregion
         }
 
         public async Task<JsonResult> AddNewBank(BankModel bankModel)
@@ -249,6 +235,12 @@ namespace PalladiumPayroll.Services.Company
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
         }
 
+        public async Task<JsonResult> GetProcessCyclePeriodInfo(int payrollId)
+        {
+            List<CyelePeriod> cycleList = await _companyRepository.GetProcessCyclePeriodInfo(payrollId);
+            return HttpStatusCodeResponse.SuccessResponse(cycleList, string.Format(ResponseMessages.Success, "Cycle Periods", ActionType.Retrieved));
+        }
+
         public async Task<JsonResult> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList)
         {
             bool isAdded = await _companyRepository.UpsertCompanyBenefitFund(payrollBenefitFundList);
@@ -322,6 +314,15 @@ namespace PalladiumPayroll.Services.Company
                 glSetup.GlDepartmentList = await _companyRepository.GetGLDepartments(dbConnectionModel);
             }
             return HttpStatusCodeResponse.SuccessResponse(glSetup, string.Format(ResponseMessages.Success, "GL Account", ActionType.Retrieved));
+        }
+
+        public async Task<List<TransactionListForCompany>> GetTransactionList(long companyId)
+        {
+            return await _companyRepository.GetTransactionList(companyId);
+        }
+        public async Task<bool> SaveGlAccountNumber(GLTransactionDetails model)
+        {
+            return await _companyRepository.SaveGlAccountNumber(model);
         }
 
         public async Task<JsonResult> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation)
