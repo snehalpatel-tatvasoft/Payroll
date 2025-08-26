@@ -1,7 +1,9 @@
 using System.Data;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeGrievances;
 
 namespace PalladiumPayroll.Repositories.HRFunctions.EmployeeGrievances;
@@ -9,10 +11,12 @@ namespace PalladiumPayroll.Repositories.HRFunctions.EmployeeGrievances;
 public class EmployeeGrievancesRepository : IEmployeeGrievancesRepository
 {
     private readonly DapperContext _dapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public EmployeeGrievancesRepository(IConfiguration configuration)
+    public EmployeeGrievancesRepository(IConfiguration configuration,IHttpContextAccessor httpContextAccessor)
     {
         _dapper = new DapperContext(configuration);
+         _httpContextAccessor = httpContextAccessor;
     }
 
 
@@ -32,7 +36,7 @@ public class EmployeeGrievancesRepository : IEmployeeGrievancesRepository
         parameters.Add("@Stage2Date", request.Stage2Date);
         parameters.Add("@Stage2Outcome", request.Stage2Outcome);
         parameters.Add("@Stage2Chairperson", request.Stage2Chairperson);
-        parameters.Add("@UserId", request.UserId);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_UpsertEmployeeGrievance", parameters);
@@ -40,11 +44,11 @@ public class EmployeeGrievancesRepository : IEmployeeGrievancesRepository
         return parameters.Get<bool>("@IsSuccess");
     }
 
-    public async Task<bool> DeleteEmployeeGrievance(long employeeGrievanceId, string userId)
+    public async Task<bool> DeleteEmployeeGrievance(long employeeGrievanceId)
     {
         DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmployeeGrievanceId", employeeGrievanceId);
-        parameters.Add("@UserId", userId);
+        parameters.Add("@UserId",  _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeleteEmployeeGrievance", parameters);
@@ -81,7 +85,7 @@ public class EmployeeGrievancesRepository : IEmployeeGrievancesRepository
 
     public async Task<List<EmployeeGrievanceDTO>> GetEmployeeGrievances(long companyId)
     {
-         DynamicParameters? parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@CompanyId", companyId);
 
         List<EmployeeGrievanceDTO>? result = await _dapper.ExecuteStoredProcedure<EmployeeGrievanceDTO>(
@@ -101,6 +105,28 @@ public class EmployeeGrievancesRepository : IEmployeeGrievancesRepository
             "usp_GetEmployeeGrievanceById", parameters);
     }
 
+    public async Task<List<DropDownViewModel>> AddNatureOfGrievance(NatureOfGrievancesDto request)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@Name", request.Name);
+        parameters.Add("@CompanyId", request.CompanyId);
 
+        List<DropDownViewModel>? result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>(
+            "usp_AddNatureOfGrievance", parameters
+        );
+
+        return result ?? new List<DropDownViewModel>();
+    }
+
+    public async Task<bool> DeleteNatureOfGrievance(int natureOfGrievanceId)
+    {
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("@NatureOfGrievanceId", natureOfGrievanceId);
+        parameters.Add("@IsDeleted", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeleteNatureOfGrievance", parameters);
+
+        return parameters.Get<bool>("@IsDeleted");
+    }
 
 }

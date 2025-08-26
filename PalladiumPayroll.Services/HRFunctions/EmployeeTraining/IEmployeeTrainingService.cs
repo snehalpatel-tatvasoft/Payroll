@@ -7,11 +7,19 @@ public interface IEmployeeTrainingService
 {
     Task<JsonResult> UpsertEmployeeTraining(EmployeeTrainingUpsertData request);
 
-    Task<JsonResult> DeleteEmployeeTraining(long employeeTrainingId, string userId);
+    Task<JsonResult> DeleteEmployeeTraining(long employeeTrainingId);
 
     Task<JsonResult> GetEmployeeTrainingDropdownData(long companyId);
 
     Task<JsonResult> GetEmployeeTrainings(long companyId);
 
     Task<JsonResult> GetEmployeeTrainingById(long trainingId);
+
+    Task<JsonResult> AddEmployeeTrainingDropdownItem(EmployeeTrainingDropdownItem reqItem);
+
+    Task<JsonResult> DeleteEmployeeTrainingDropdownItem(int id, int type);
+
+    Task<byte[]> DownloadDocument(string documentUrl);
+
+     Task<JsonResult> DeleteTrainingDocument(string documentUrl);
 }
