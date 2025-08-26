@@ -283,6 +283,18 @@
             public static readonly string SavingsSavedFailed = "Failed to save Savings.";
 
             #endregion
+
+            #region coid accident
+            public static readonly string CoidAccident = "COID accident";
+            public static readonly string CoidAccidentFailedDelete = "Failed to delete COID Accident ";
+            public static readonly string CoidAccidentUpdatedSuccessfully = "COID Accident updated successfully";
+            public static readonly string CoidAccidentCreatedSuccessfully = "COID Accident created successfully";
+            public static readonly string CoidAccidentCreateFailed = "COID Accident creation failed";
+            public static readonly string CoidAccidentUpdateFailed = "COID Accident update failed";
+
+            #endregion
+
+
         }
 
 
