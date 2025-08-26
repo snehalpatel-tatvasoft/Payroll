@@ -6,6 +6,7 @@ namespace PalladiumPayroll.Helper
     public static class SecurityHandler
     {
         private readonly static string SECRET_KEY = "$XPalladium$";
+        private readonly static string DEFAULT_KEY = "#Payroll@";
         private readonly static int FIX_ITERATE = 120218;
 
         public static string Encrypt(string input, string? key = "", int iterate = 0)
@@ -14,7 +15,7 @@ namespace PalladiumPayroll.Helper
             {
                 key = SECRET_KEY;
             }
-            string EncryptionKey = "#Payroll@#" + key;
+            string EncryptionKey = string.Concat(DEFAULT_KEY, "#", key);
             byte[] clearBytes = Encoding.Unicode.GetBytes(input);
             using (Aes encryptor = Aes.Create())
             {
@@ -40,9 +41,9 @@ namespace PalladiumPayroll.Helper
         {
             if (string.IsNullOrEmpty(key))
             {
-                key = SECRET_KEY;
+                key = string.Concat("#", SECRET_KEY);
             }
-            string EncryptionKey = "#Payroll@" + key;
+            string EncryptionKey = string.Concat(DEFAULT_KEY, key);
             byte[] cipherBytes = Convert.FromBase64String(encryptedValue);
             using (Aes encryptor = Aes.Create())
             {
