@@ -1,7 +1,9 @@
 using System.Data;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeTraining;
 
 namespace PalladiumPayroll.Repositories.HRFunctions.EmployeeTraining;
@@ -9,11 +11,14 @@ namespace PalladiumPayroll.Repositories.HRFunctions.EmployeeTraining;
 public class EmployeeTrainingRepository : IEmployeeTrainingRepository
 {
     private readonly DapperContext _dapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public EmployeeTrainingRepository(IConfiguration configuration)
+    public EmployeeTrainingRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _dapper = new DapperContext(configuration);
+        _httpContextAccessor = httpContextAccessor;
     }
+
 
     public async Task<bool> UpsertEmployeeTraining(EmployeeTrainingUpsertData request)
     {
@@ -39,7 +44,10 @@ public class EmployeeTrainingRepository : IEmployeeTrainingRepository
         parameters.Add("@SAQARequired", request.SAQARequired);
         parameters.Add("@Comments", request.Comments);
         parameters.Add("@FilePath", request.FilePath);
-        parameters.Add("@UserId", request.UserId);
+        parameters.Add("@FileName", request.FileName);
+        parameters.Add("@FileType", request.FileType);
+        parameters.Add("@FileSize", request.FileSize);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
@@ -49,11 +57,11 @@ public class EmployeeTrainingRepository : IEmployeeTrainingRepository
     }
 
 
-    public async Task<bool> DeleteEmployeeTraining(long employeeTrainingId, string userId)
+    public async Task<bool> DeleteEmployeeTraining(long employeeTrainingId)
     {
         DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmployeeTrainingId", employeeTrainingId);
-        parameters.Add("@UserId", userId);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeleteEmployeeTraining", parameters);
@@ -110,6 +118,42 @@ public class EmployeeTrainingRepository : IEmployeeTrainingRepository
                 return dropdownsData;
             }
         );
+    }
+
+    public async Task<List<DropDownViewModel>> AddEmployeeTrainingDropdownItem(EmployeeTrainingDropdownItem reqItem)
+    {
+        List<DropDownViewModel>? result = new List<DropDownViewModel>();
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@Name", reqItem.Name);
+        parameters.Add("@CompanyId", reqItem.CompanyId);
+
+        switch (reqItem.Type)
+        {
+            case 1:
+                result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddCourse", parameters);
+                break;
+            case 2:
+                result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddCourseType", parameters);
+                break;
+            case 3:
+                result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddInstitution", parameters);
+                break;
+            case 4:
+                result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddNQFLevel", parameters);
+                break;
+            case 5:
+                result = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_AddUnitStandard", parameters);
+                break;
+        }
+        return result;
+    }
+
+    public async Task<bool> DeleteEmployeeTrainingDropdownItem(int id, int type)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@id", id);
+        parameters.Add("@type", type);
+        return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteEmployeeTrainingDropdownItem", parameters);
     }
 
 }
