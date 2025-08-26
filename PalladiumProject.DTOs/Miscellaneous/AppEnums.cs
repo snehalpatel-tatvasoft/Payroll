@@ -13,7 +13,8 @@
             Saving,
             Retrieving,
             Updating,
-            Deleting
+            Deleting,
+            Importing
         }
 
         public enum PositiveNumbers
