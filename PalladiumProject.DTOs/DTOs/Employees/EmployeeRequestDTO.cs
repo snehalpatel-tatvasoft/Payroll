@@ -11,6 +11,55 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
         public bool? IsActive { get; set; } = true;
     }
 
+    public class EmployeePersonalInformation
+    {
+        public int EmployeeId { get; set; }
+        public int CompanyId { get; set; }
+        public string? EmployeeCode { get; set; }
+        public string? EmployeeName { get; set; }
+        public string? EmployeeSurname { get; set; }
+        public int? Title { get; set; }
+        public string? Initials { get; set; }
+        public string? ProfilePicture { get; set; }
+        public int? Gender { get; set; }
+        public string? PreferredName { get; set; }
+        public int? PassportIssuedBy { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string? HomeNumber { get; set; }
+        public string? CellNumber { get; set; }
+        public string? Email { get; set; }
+        public string? EmergencyContactName { get; set; }
+        public string? EmergencyRelation { get; set; }
+        public string? EmergencyCellNumber { get; set; }
+        public int? HomeLanguage { get; set; }
+        public int? Profile { get; set; }
+        public string? IDNumber { get; set; }
+        public string? PassportNumber { get; set; }
+        public int? Race { get; set; }
+        public int? EmploymentStatus { get; set; }
+        public int? NatureOfPerson { get; set; }
+        public bool IsPersonwithDisability { get; set; }
+        public bool IsForeignNational { get; set; }
+        public bool IsRefugee { get; set; }
+        public bool IsAsylumSeeker { get; set; }
+        public string? AsylumPermitNumber { get; set; }
+        public int? AddressIndicator { get; set; }
+        public string? UnitNumber { get; set; }
+        public string? ComplexName { get; set; }
+        public string? StreetNumber { get; set; }
+        public string? StreetName { get; set; }
+        public string? District { get; set; }
+        public string? City { get; set; }
+        public string? Phy_PostalCode { get; set; }
+        public int? Phy_CountryId { get; set; }
+        public bool IsPostalSame { get; set; }
+        public string? Address1 { get; set; }
+        public string? Address2 { get; set; }
+        public string? Address3 { get; set; }
+        public string? Pos_PostalCode { get; set; }
+        public int? Pos_CountryId { get; set; }
+        public string? UserId { get; set; }
+    }
     public class EmployeePaymentDetail
     {
         public int? EmployeeId { get; set; }

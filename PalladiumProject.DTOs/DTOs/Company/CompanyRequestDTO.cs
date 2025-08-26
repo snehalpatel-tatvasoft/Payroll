@@ -103,7 +103,21 @@
         public string? CreditAccountNumber { get; set; }
         public string? ContraAccountNumber { get; set; }
     }
-
+    public class TransactionListForCompany
+    {
+        public int PayrollProcessId { get; set; }
+        public int AllowanceTypeId { get; set; }
+        public string? Description { get; set; }
+        public string? DebitAccountNumber { get; set; }
+        public string? CreditAccountNumber { get; set; }
+        public string? ContraAccountNumber { get; set; }
+    }
+    public class GLTransactionDetails
+    {
+        public int PayrollProcessId { get; set; }
+        public int AccountType { get; set; }
+        public string? AccountNumber { get; set; }
+    }
     public class CompanyModels
     {
         public CompanyInfo CompanyInfo { get; set; }
