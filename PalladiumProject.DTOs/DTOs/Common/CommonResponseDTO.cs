@@ -1,6 +1,5 @@
 ﻿namespace PalladiumPayroll.DTOs.DTOs.Common
 {
-
     public class DropDownViewModel
     {
         public int Id { get; set; }

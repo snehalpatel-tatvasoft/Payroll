@@ -114,7 +114,6 @@ public class EmployeePromotionsdisplayDataDTO
 {
         public long EmployeePromotionId { get; set; }
         public string EmployeeCode { get; set; } = string.Empty;
-        // public string EmployeeFullName { get; set; } = string.Empty;
         public string JobTitle { get; set; } = string.Empty;
         public string OFOCode { get; set; } = string.Empty;
         public string MajorCostCenter { get; set; } = string.Empty;
@@ -145,4 +144,26 @@ public class EmployeePromotionDetailDTO
     public long? DepartmentId { get; set; }
     public long? ProvinceId { get; set; }
     public long? SupportFunctionId { get; set; }
+}
+
+
+public class EmployeePromotionAutoFillDTO
+{
+    public string EmployeeInitialsSurname { get; set; } = string.Empty;
+    public int? DesignationId { get; set; }
+    public int? JobGradeId { get; set; }
+    public int? WSPCategoryId { get; set; }
+    public int? OFOCodeId { get; set; }
+    public int? MajorCostCenterId { get; set; }
+    public int? NICGradeId { get; set; }
+    public int? OccupationalCategoryId { get; set; }
+    public int? OccupationalLevelId { get; set; }
+    public int? ReportToId { get; set; }
+    public int? BranchId { get; set; }
+    public int? DepartmentId { get; set; }
+    public int? ProvinceId { get; set; }
+    public int? SupportFunctionId { get; set; }
+    public int? OccupationalStatusId { get; set; }
+    public int? AppointmentTypeId { get; set; }
+    public DateTime? EffectiveDate { get; set; }
 }

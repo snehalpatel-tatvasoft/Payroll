@@ -1,5 +1,6 @@
 using System.Data;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.Admin.AccessRights;
@@ -9,10 +10,12 @@ namespace PalladiumPayroll.Repositories.Admin.AccessRights;
 public class AccessRightsRepository : IAccessRightsRepository
 {
     private readonly DapperContext _dapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AccessRightsRepository(IConfiguration configuration)
+    public AccessRightsRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _dapper = new DapperContext(configuration);
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<(bool IsSuccess, int AccessRoleId)> UpsertAccessRole(AccessRoleDTO request)
@@ -23,7 +26,7 @@ public class AccessRightsRepository : IAccessRightsRepository
         parameters.Add("@AccessRoleName", request.AccessRoleName);
         parameters.Add("@AccessTypeId", request.AccessTypeId);
         parameters.Add("@CompanyId", request.CompanyId);
-        parameters.Add("@UserId", request.UserId);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_UpsertAccessRole", parameters);
@@ -85,32 +88,32 @@ public class AccessRightsRepository : IAccessRightsRepository
 
     public async Task<bool> SaveRoleFunctinalityAccessRights(List<SaveRoleFunctinalityAccessRightsDTO> requests)
     {
+        DataTable? table = new DataTable();
+        table.Columns.Add("AccessRoleId", typeof(int));
+        table.Columns.Add("FunctionalityId", typeof(int));
+        table.Columns.Add("View", typeof(bool));
+        table.Columns.Add("Edit", typeof(bool));
+        table.Columns.Add("Delete", typeof(bool));
+
         foreach (var request in requests)
         {
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@AccessRoleId", request.AccessRoleId);
-            parameters.Add("@FunctionalityId", request.FunctionalityId);
-            parameters.Add("@View", request.View);
-            parameters.Add("@Edit", request.Edit);
-            parameters.Add("@Delete", request.Delete);
-            parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-
-            await _dapper.ExecuteStoredProcedureSingle<object>(
-                "usp_SaveAccessRightsForRoleFunctinality", parameters);
-
-            if (!parameters.Get<bool>("@IsSuccess"))
-            {
-                return false;
-            }
+            table.Rows.Add(request.AccessRoleId, request.FunctionalityId, request.View, request.Edit, request.Delete);
         }
 
-        return true;
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("@AccessRights", table.AsTableValuedParameter("dbo.RoleFunctionalityAccessRightsType"));
+        parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+        await _dapper.ExecuteStoredProcedureSingle<object>(
+            "usp_SaveAccessRightsForRoleFunctinality", parameters);
+
+        return parameters.Get<bool>("@IsSuccess");
     }
 
 
     public async Task<List<PayFrequencyAccessRightsDTO>> GetPayFrequencyAccessRights(int accessRoleId)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters parameters = new DynamicParameters();
         parameters.Add("@AccessRoleId", accessRoleId);
 
         var result = await _dapper.ExecuteStoredProcedure<PayFrequencyAccessRightsDTO>(
@@ -121,34 +124,35 @@ public class AccessRightsRepository : IAccessRightsRepository
 
     public async Task<bool> SavePayFrequencyAccessRights(List<SavePayFrequencyAccessRightsDTO> requests)
     {
+        DataTable? table = new DataTable();
+        table.Columns.Add("AccessRoleId", typeof(int));
+        table.Columns.Add("CompanyPayrollId", typeof(long));
+        table.Columns.Add("IsAllow", typeof(bool));
+
         foreach (var request in requests)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@AccessRoleId", request.AccessRoleId);
-            parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
-            parameters.Add("@IsAllow", request.IsAllow);
-            parameters.Add("@UserId", request.UserId);
-            parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-
-            await _dapper.ExecuteStoredProcedureSingle<object>(
-                "usp_SaveAccessRightsForPayFrequencies", parameters);
-
-            if (!parameters.Get<bool>("@IsSuccess"))
-            {
-                return false;
-            }
+            table.Rows.Add(request.AccessRoleId, request.CompanyPayrollId, request.IsAllow);
         }
 
-        return true;
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@AccessRights", table.AsTableValuedParameter("dbo.PayFrequencyAccessRightsType"));
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+        parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+        await _dapper.ExecuteStoredProcedureSingle<object>(
+            "usp_SaveAccessRightsForPayFrequencies", parameters);
+
+        return parameters.Get<bool>("@IsSuccess");
     }
+
 
 
     public async Task<List<AccessRightsByRoleTypeDTO>> GetTransactionFunctionAccessRights(int accessRoleId)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@AccessRoleId", accessRoleId);
 
-        var result = await _dapper.ExecuteStoredProcedure<AccessRightsByRoleTypeDTO>(
+        List<AccessRightsByRoleTypeDTO>? result = await _dapper.ExecuteStoredProcedure<AccessRightsByRoleTypeDTO>(
             "usp_GetAccessRightsForTransactionFunctions", parameters);
 
         return result;

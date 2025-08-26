@@ -18,47 +18,30 @@ public class PayslipDisplaySetupService : IPayslipDisplaySetupService
 
     public async Task<JsonResult> SavePayslipDisplaySettings(SavePayslipSettingsDTO request)
     {
-        try
-        {
-            bool isSaved = await _payslipDisplaySetupRepository.SavePayslipDisplaySettings(request);
+        bool isSaved = await _payslipDisplaySetupRepository.SavePayslipDisplaySettings(request);
 
-            if (!isSaved)
-            {
-                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.PayslipDisplaySetupSaveFailed);
-            }
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.PayslipDisplaySetup, ActionType.Saved));
-
-        }
-        catch (Exception)
+        if (!isSaved)
         {
-            return HttpStatusCodeResponse.BadRequestResponse();
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.PayslipDisplaySetupSaveFailed);
         }
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.PayslipDisplaySetup, ActionType.Saved));
     }
 
     public async Task<JsonResult> GetPayslipSettingsByCompanyId(int companyId)
     {
-        try
-        {
-            PayslipDisplaySetupDataDTO? payslipDisplaySetupData = await _payslipDisplaySetupRepository.GetPayslipSettingsByCompanyId(companyId);
+        PayslipDisplaySetupDataDTO? payslipDisplaySetupData = await _payslipDisplaySetupRepository.GetPayslipSettingsByCompanyId(companyId);
 
-            if (payslipDisplaySetupData == null)
+        if (payslipDisplaySetupData == null)
+        {
+            payslipDisplaySetupData = new PayslipDisplaySetupDataDTO
             {
-                payslipDisplaySetupData = new PayslipDisplaySetupDataDTO
-                {
-                    CompanyId = companyId,
-                    IsCompanyContribution = false,
-                    IsFringeBenefits = false,
-                    PayslipLayout = 2,
-                    PayslipMessage = string.Empty
-                };
-            }
-
-            return HttpStatusCodeResponse.SuccessResponse(payslipDisplaySetupData, string.Empty);
+                CompanyId = companyId,
+                IsCompanyContribution = false,
+                IsFringeBenefits = false,
+                PayslipLayout = 2,
+                PayslipMessage = string.Empty
+            };
         }
-        catch (Exception)
-        {
-            return HttpStatusCodeResponse.BadRequestResponse();
-        }
+        return HttpStatusCodeResponse.SuccessResponse(payslipDisplaySetupData, string.Empty);
     }
-
 }

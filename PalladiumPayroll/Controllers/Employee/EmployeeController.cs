@@ -442,14 +442,14 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 if (employeeLoanId <= 0)
                 {
-                    return HttpStatusCodeResponse.NotFoundResponse("Invalid Loan Id.");
+                    return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.LoanNotFound);
                 }
                 return await _employeeService.DeleteEmployeeLoan(employeeLoanId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    string.Format(ResponseMessages.Exception, ActionType.Deleting, ResponseMessages.Employee + " Loan", ex.Message)
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.EmployeeLoan)
                 );
             }
         }
@@ -461,11 +461,14 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return await _employeeService.GetEmployeeLoanDetail(employeeId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee + " Loan", ex.Message));
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeLoan)
+                );
             }
         }
+
         [HttpGet("[action]")]
         public async Task<ActionResult> GetGarnisheeDropdownData(long companyId)
         {
@@ -473,9 +476,11 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return await _employeeService.GetGarnisheeDropdownData(companyId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee + "  Garnishee DropList", ex.Message));
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Garnishee+" Dropdown")
+                );
             }
         }
 
@@ -486,9 +491,11 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return await _employeeService.GetGarnisheeDetails(employeeId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee + "  Garnishee", ex.Message));
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Garnishee+" Dropdown")
+                );
             }
         }
 
@@ -499,10 +506,10 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return await _employeeService.UpsertGarnishee(request);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Employee + " Garnishee", ex.Message)
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.Garnishee)
                 );
             }
         }
@@ -514,9 +521,11 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return await _employeeService.GetSavingsDetails(employeeId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Employee + "  Savings", ex.Message));
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Savings)
+                );
             }
         }
 
@@ -527,10 +536,10 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return await _employeeService.UpsertSaving(request);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.Employee + " Saving", ex.Message)
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.Savings)
                 );
             }
         }

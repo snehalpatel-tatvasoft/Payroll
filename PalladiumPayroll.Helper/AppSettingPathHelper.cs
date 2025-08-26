@@ -20,6 +20,7 @@ namespace PalladiumPayroll.Helper
     public class DirectoryPathSetting
     {
         public string EmployeeDocument { get; set; } = null!;
+        public string TrainingDocument { get; set; } = null!;
     }
 
 }
