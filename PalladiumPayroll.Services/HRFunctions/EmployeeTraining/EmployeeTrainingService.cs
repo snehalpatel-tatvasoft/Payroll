@@ -6,6 +6,7 @@ using PalladiumPayroll.Helper;
 using PalladiumPayroll.Repositories.HRFunctions.EmployeeTraining;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
+using DirectoryPathSetting = PalladiumPayroll.Helper.DirectoryPathSetting;
 
 namespace PalladiumPayroll.Services.HRFunctions.EmployeeTraining;
 

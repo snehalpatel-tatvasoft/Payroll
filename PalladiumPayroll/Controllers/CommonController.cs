@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs;
-using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 
 namespace PalladiumPayroll.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class CommonController : ControllerBase
     {
         private readonly ICommonService _commonService;
@@ -17,6 +17,7 @@ namespace PalladiumPayroll.Controllers
             _commonService = commonService;
         }
 
+        [AllowAnonymous]
         [ResponseCache(Duration = 30)]
         [HttpGet("[action]")]
         public async Task<ActionResult> GetCountryList()

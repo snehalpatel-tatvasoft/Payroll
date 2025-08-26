@@ -44,10 +44,9 @@ namespace PalladiumPayroll.Repositories.Department
             parameters.Add("@DepartmentId", departmentId);
             parameters.Add("@DepartmentName", request.DepartmentName);
 
-            int rowsAffected = await _dapper.CreateConnection().ExecuteAsync(
+            int rowsAffected = await _dapper.ExecuteAsync(
                 "usp_UpdateDepartment",
-                parameters,
-                commandType: CommandType.StoredProcedure
+                parameters
             );
 
             return rowsAffected > 0;
@@ -58,10 +57,9 @@ namespace PalladiumPayroll.Repositories.Department
             var parameters = new DynamicParameters();
             parameters.Add("@DepartmentId", departmentId);
 
-            int rowsAffected = await _dapper.CreateConnection().ExecuteAsync(
+            int rowsAffected = await _dapper.ExecuteAsync(
                 "usp_DeleteDepartment",
-                parameters,
-                commandType: CommandType.StoredProcedure
+                parameters
             );
 
             return rowsAffected > 0;
@@ -74,10 +72,9 @@ namespace PalladiumPayroll.Repositories.Department
             parameters.Add("@DepartmentName", departmentName);
             parameters.Add("@Exists", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-            await _dapper.CreateConnection().ExecuteAsync(
+            await _dapper.ExecuteAsync(
                 "usp_CheckDepartmentNameExists",
-                parameters,
-                commandType: CommandType.StoredProcedure
+                parameters
             );
 
             return parameters.Get<bool>("@Exists");
