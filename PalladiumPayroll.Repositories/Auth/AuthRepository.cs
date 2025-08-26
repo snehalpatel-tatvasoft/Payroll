@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
-using PalladiumPayroll.Helper.Constants;
+using PalladiumPayroll.Helper;
 using PalladiumPayroll.Helper.JWTToken;
 using PalladiumPayroll.Repositories.User;
-using System.ComponentModel.Design;
-using System.Net;
 using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 
@@ -18,15 +16,13 @@ namespace PalladiumPayroll.Repositories.Auth
 {
     public class AuthRepository : IAuthRepository
     {
-        private readonly DapperContext _dapper;
-        private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
+        private readonly JwtSettings? _jwtSettings;
 
         public AuthRepository(IConfiguration configuration, IUserRepository userRepository)
         {
-            _dapper = new DapperContext(configuration);
-            _configuration = configuration;
             _userRepository = userRepository;
+            _jwtSettings = AppSettingsConfig.GetSection<JwtSettings>(configuration, "Jwt");
         }
 
         public async Task<JsonResult> Login(LoginRequest loginRequest)
@@ -38,39 +34,29 @@ namespace PalladiumPayroll.Repositories.Auth
 
                 if (user == null)
                 {
-                    return HttpStatusCodeResponse.GenerateResponse(
-                        result: false,
-                        statusCode: HttpStatusCode.NotFound,
-                        message: ResponseMessages.UserNotFound,
-                        data: string.Empty
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(
+                        message: ResponseMessages.UserNotFound
                     );
                 }
                 else if (!user.ConfirmedEmail)
                 {
-                    return HttpStatusCodeResponse.GenerateResponse(
-                        result: false,
-                        statusCode: HttpStatusCode.NotFound,
-                        message: ResponseMessages.AccountNotConfirmed,
-                        data: string.Empty
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(
+                        message: ResponseMessages.AccountNotConfirmed
                     );
                 }
 
                 // Verify password
                 PasswordHasher<object>? hasher = new PasswordHasher<object>();
-                dynamic? verificationResult = hasher.VerifyHashedPassword(null, user.PasswordHash, loginRequest.Password);
+                var verificationResult = hasher.VerifyHashedPassword(null, user.PasswordHash, loginRequest.Password);
 
                 if (verificationResult == PasswordVerificationResult.Failed)
                 {
-                    return HttpStatusCodeResponse.GenerateResponse(
-                        result: false,
-                        statusCode: HttpStatusCode.Unauthorized,
-                        message: "Invalid credentials!",
-                        data: string.Empty
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(
+                        message: "Invalid credentials!"
                     );
                 }
 
                 // Generate JWT & Refresh token
-                JWTTokenService jwtService = new JWTTokenService(_configuration);
 
                 List<CompanyDetails>? companies = await _userRepository.GetCompaniesByEmail(loginRequest.Email);
 
@@ -83,16 +69,20 @@ namespace PalladiumPayroll.Repositories.Auth
                     new Claim(JWTClaimTypes.CompanyId, user.CompanyId),
                 };
 
-                string accessToken = jwtService.GenerateToken(
+                string accessToken = JwtTokenHelper.GenerateToken(
                      claims,
-                     DateTime.Now.AddMinutes(AppConstants.AuthTokenExpiryInMinutes),
-                     _configuration["Jwt:Key"]!
+                     DateTime.Now.AddMinutes(AuthTokenExpiryInMinutes),
+                     _jwtSettings?.Key!,
+                     _jwtSettings?.Issuer!,
+                     _jwtSettings?.Audience!
                  );
 
-                string refreshToken = jwtService.GenerateToken(
-                    claims,
-                    DateTime.Now.AddDays(AppConstants.RefreshTokenExpiryInDays),
-                    _configuration["Jwt:RefreshTokenKey"]!
+                string refreshToken = JwtTokenHelper.GenerateToken(
+                    [],
+                    DateTime.Now.AddDays(RefreshTokenExpiryInDays),
+                    _jwtSettings?.RefreshTokenKey!,
+                    _jwtSettings?.Issuer!,
+                    _jwtSettings?.Audience!
                 );
 
                 var data = new
@@ -104,11 +94,9 @@ namespace PalladiumPayroll.Repositories.Auth
 
                 await _userRepository.LoginUser(user.Id.ToString());
 
-                return HttpStatusCodeResponse.GenerateResponse(
-                   result: true,
-                   HttpStatusCode.OK,
-                   ResponseMessages.LoginSuccessfully,
-                   data
+                return HttpStatusCodeResponse.SuccessResponse(
+                   data,
+                   ResponseMessages.LoginSuccessfully
                );
             }
             catch (Exception)
@@ -116,6 +104,33 @@ namespace PalladiumPayroll.Repositories.Auth
                 // Log the exception
                 return HttpStatusCodeResponse.InternalServerErrorResponse(message: "Internal server error!!");
             }
+        }
+
+        public JsonResult RefreshRequest(RefreshRequest request)
+        {
+            if (JwtTokenHelper.IsTokenExpired(request.RefreshToken, _jwtSettings?.RefreshTokenKey!))
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TokenExpired);
+            }
+
+            var principal = JwtTokenHelper.GetPrincipalFromExpiredToken(request.AccessToken, _jwtSettings?.Key!);
+            if (principal == null || !principal.Claims.Any())
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.InvalidToken);
+            }
+
+            var newAccessToken = JwtTokenHelper.GenerateToken(
+                principal.Claims,
+                DateTime.Now.AddMinutes(AuthTokenExpiryInMinutes),
+                _jwtSettings?.Key!,
+                _jwtSettings?.Issuer!,
+                _jwtSettings?.Audience!
+
+            );
+
+            var data = new { Token = newAccessToken };
+
+            return HttpStatusCodeResponse.SuccessResponse(data, ResponseMessages.TokenGeneratedSuccessfully);
         }
     }
 }

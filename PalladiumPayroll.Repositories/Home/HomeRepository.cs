@@ -52,7 +52,7 @@ namespace PalladiumPayroll.Repositories.Home
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", CompanyId);
-            parameters.Add("@PayrollSetupId", PayrollSetupId);
+            parameters.Add("@CompanyPayrollId", PayrollSetupId);
             parameters.Add("@UserId", UserId);
 
             return await _dapper.ExecuteStoredProcedureSingle<PayrollSummaryResponse>("usp_GetPayrollSummaryData", parameters);
@@ -62,7 +62,7 @@ namespace PalladiumPayroll.Repositories.Home
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", CompanyId);
-            parameters.Add("@PayrollSetupId", PayrollSetupId);
+            parameters.Add("@CompanyPayrollId", PayrollSetupId);
             parameters.Add("@UserId", UserId);
 
             return await _dapper.ExecuteStoredProcedureSingle<EmployeeTypeCountResponse>("usp_GetEmployeeTypeCount", parameters);
