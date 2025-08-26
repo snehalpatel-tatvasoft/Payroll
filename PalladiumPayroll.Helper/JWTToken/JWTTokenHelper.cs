@@ -13,9 +13,9 @@ namespace PalladiumPayroll.Helper.JWTToken
             SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             JwtSecurityToken token = new JwtSecurityToken(
-                issuer,
-                audience,
-                claims,
+                issuer: issuer,
+                audience: audience,
+                claims: claims,
                 expires: expires,
                 signingCredentials: credentials
             );

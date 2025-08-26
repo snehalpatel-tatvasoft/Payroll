@@ -42,7 +42,7 @@ namespace PalladiumPayroll.Repositories.Employees
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Filter", ActionType.Retrieved));
         }
 
-        public async Task<JsonResult> GetEmployeeList(EmployeeFilterViewModel reqModel)
+        public async Task<TableDataModel<EmployeeDataViewModel>> GetEmployeeList(EmployeeFilterViewModel reqModel)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", reqModel.CompanyId);
@@ -58,11 +58,11 @@ namespace PalladiumPayroll.Repositories.Employees
 
             var employeeData = await _dapper.ExecuteStoredProcedure<EmployeeDataViewModel>("usp_GetEmployeeList", parameters);
             var totalCount = parameters.Get<int>("@TotalCount");
-            return HttpStatusCodeResponse.SuccessResponse(new TableDataModel<EmployeeDataViewModel>
+            return new TableDataModel<EmployeeDataViewModel>
             {
                 DataList = employeeData,
                 TotalCount = totalCount
-            }, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieved));
+            };
         }
 
         public async Task<bool> DeleteEmployee(int employeeId)
