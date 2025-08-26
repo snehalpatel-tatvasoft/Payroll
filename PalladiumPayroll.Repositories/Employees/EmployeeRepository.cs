@@ -42,7 +42,7 @@ namespace PalladiumPayroll.Repositories.Employees
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Filter", ActionType.Retrieved));
         }
 
-        public async Task<JsonResult> GetEmployeeList(EmployeeFilterViewModel reqModel)
+        public async Task<TableDataModel<EmployeeDataViewModel>> GetEmployeeList(EmployeeFilterViewModel reqModel)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", reqModel.CompanyId);
@@ -58,11 +58,11 @@ namespace PalladiumPayroll.Repositories.Employees
 
             var employeeData = await _dapper.ExecuteStoredProcedure<EmployeeDataViewModel>("usp_GetEmployeeList", parameters);
             var totalCount = parameters.Get<int>("@TotalCount");
-            return HttpStatusCodeResponse.SuccessResponse(new TableDataModel<EmployeeDataViewModel>
+            return new TableDataModel<EmployeeDataViewModel>
             {
                 DataList = employeeData,
                 TotalCount = totalCount
-            }, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieved));
+            };
         }
 
         public async Task<bool> DeleteEmployee(int employeeId)
@@ -75,6 +75,88 @@ namespace PalladiumPayroll.Repositories.Employees
             return result;
         }
 
+        #region Personal Information
+
+        public async Task<JsonResult> GetEmployeePersonalInfo(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<EmployeePersonalInformation>("usp_GetEmployeePersonalInfo", parameters);
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Personal info", ActionType.Retrieved));
+        }
+        public async Task<JsonResult> GetEmployeePersonalInfoDropDown(int companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            var result = await _dapper.ExecuteStoredProcedureMultipleAsync("usp_GetEmployeePersonalInfoDropDown", parameters, async (multi) =>
+            {
+                var profileList = (await multi.ReadAsync<DropDownViewModel>()).ToList();
+                var countryList = (await multi.ReadAsync<DropDownViewModel>()).ToList();
+                var cityList = (await multi.ReadAsync<DropDownViewModel>()).ToList();
+
+                return new
+                {
+                    ProfileList = profileList,
+                    CountryList = countryList,
+                    CityList = cityList
+                };
+            });
+            return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Personal info drop list", ActionType.Retrieved));
+        }
+        public async Task<bool> SaveEmployeePersonalInfo(EmployeePersonalInformation reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@EmployeeCode", reqModel.EmployeeCode);
+            parameters.Add("@EmployeeName", reqModel.EmployeeName);
+            parameters.Add("@EmployeeSurname", reqModel.EmployeeSurname);
+            parameters.Add("@Title", reqModel.Title);
+            parameters.Add("@Initials", reqModel.Initials);
+            parameters.Add("@ProfilePicture", reqModel.ProfilePicture);
+            parameters.Add("@Gender", reqModel.Gender);
+            parameters.Add("@PreferredName", reqModel.PreferredName);
+            parameters.Add("@PassportIssuedBy", reqModel.PassportIssuedBy);
+            parameters.Add("@DateOfBirth", reqModel.DateOfBirth);
+            parameters.Add("@HomeNumber", reqModel.HomeNumber);
+            parameters.Add("@CellNumber", reqModel.CellNumber);
+            parameters.Add("@Email", reqModel.Email);
+            parameters.Add("@EmergencyContactName", reqModel.EmergencyContactName);
+            parameters.Add("@EmergencyRelation", reqModel.EmergencyRelation);
+            parameters.Add("@EmergencyCellNumber", reqModel.EmergencyCellNumber);
+            parameters.Add("@HomeLanguage", reqModel.HomeLanguage);
+            parameters.Add("@Profile", reqModel.Profile);
+            parameters.Add("@IDNumber", reqModel.IDNumber);
+            parameters.Add("@PassportNumber", reqModel.PassportNumber);
+            parameters.Add("@Race", reqModel.Race);
+            parameters.Add("@EmploymentStatus", reqModel.EmploymentStatus);
+            parameters.Add("@NatureOfPerson", reqModel.NatureOfPerson);
+            parameters.Add("@IsPersonwithDisability", reqModel.IsPersonwithDisability);
+            parameters.Add("@IsForeignNational", reqModel.IsForeignNational);
+            parameters.Add("@IsRefugee", reqModel.IsRefugee);
+            parameters.Add("@IsAsylumSeeker", reqModel.IsAsylumSeeker);
+            parameters.Add("@AsylumPermitNumber", reqModel.AsylumPermitNumber);
+            parameters.Add("@AddressIndicator", reqModel.AddressIndicator);
+            parameters.Add("@UnitNumber", reqModel.UnitNumber);
+            parameters.Add("@ComplexName", reqModel.ComplexName);
+            parameters.Add("@StreetNumber", reqModel.StreetNumber);
+            parameters.Add("@StreetName", reqModel.StreetName);
+            parameters.Add("@District", reqModel.District);
+            parameters.Add("@City", reqModel.City);
+            parameters.Add("@Phy_PostalCode", reqModel.Phy_PostalCode);
+            parameters.Add("@Phy_CountryId", reqModel.Phy_CountryId);
+            parameters.Add("@IsPostalSame", reqModel.IsPostalSame);
+            parameters.Add("@Address1", reqModel.Address1);
+            parameters.Add("@Address2", reqModel.Address2);
+            parameters.Add("@Address3", reqModel.Address3);
+            parameters.Add("@Pos_PostalCode", reqModel.Pos_PostalCode);
+            parameters.Add("@Pos_CountryId", reqModel.Pos_CountryId);
+            parameters.Add("@UserId", reqModel.UserId);
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeePersonalInfo", parameters);
+            return result;
+        }
+        #endregion
 
         #region Payment info
         public async Task<JsonResult> GetEmployeePaymentDetail(int employeeId)
@@ -145,9 +227,7 @@ namespace PalladiumPayroll.Repositories.Employees
                             .ToList();
                 result.WorkingDay = workDaySplit;
             }
-            ;
             return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, ResponseMessages.Employee + "Work info", ActionType.Retrieved));
-
         }
 
         public async Task<bool> EmployeeWorkInfoSave(EmployeeWorkInformation reqModel)

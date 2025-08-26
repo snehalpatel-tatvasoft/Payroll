@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Employees;
+using PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeTraining;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Helper;
 using PalladiumPayroll.Repositories.Employees;
+using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 
@@ -25,7 +28,27 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> GetEmployeeList(EmployeeFilterViewModel reqModel)
         {
-            return await _employeeRepository.GetEmployeeList(reqModel);
+            var data = await _employeeRepository.GetEmployeeList(reqModel);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieved));
+        }
+
+        public async Task<byte[]> ExportEmployeeList(EmployeeFilterViewModel reqModel)
+        {
+            reqModel.CurrentPage = -1;
+            reqModel.Search = string.Empty;
+            var data = await _employeeRepository.GetEmployeeList(reqModel);
+            var dt = new DataTable();
+            dt.Columns.Add("Employee Code", typeof(string));
+            dt.Columns.Add("Employee Name", typeof(string));
+            dt.Columns.Add("Department", typeof(string));
+            dt.Columns.Add("Designation", typeof(string));
+            dt.Columns.Add("IDNumber", typeof(string));
+            dt.Columns.Add("Dob", typeof(DateTime));
+            foreach(var item in data.DataList)
+            {
+                dt.Rows.Add(item.EmployeeCode, item.EmployeeName, item.Department, item.Designation, item.IDNumber, item.Dob);
+            }
+            return ExcelHelper.ExportToExcel(new Dictionary<string, DataTable> { { "Sheet 1", dt } });
         }
 
         public async Task<JsonResult> DeleteEmployee(int employeeId)
@@ -37,12 +60,27 @@ namespace PalladiumPayroll.Services.Employees
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
-
         public async Task<JsonResult> GetEmployeePaymentDetail(int employeeId)
         {
             return await _employeeRepository.GetEmployeePaymentDetail(employeeId);
         }
-
+        public async Task<JsonResult> GetEmployeePersonalInfo(int employeeId)
+        {
+            return await _employeeRepository.GetEmployeePersonalInfo(employeeId);
+        }
+        public async Task<JsonResult> GetEmployeePersonalInfoDropDown(int companyId)
+        {
+            return await _employeeRepository.GetEmployeePersonalInfoDropDown(companyId);
+        }
+        public async Task<JsonResult> SaveEmployeePersonalInfo(EmployeePersonalInformation reqModel)
+        {
+            var res = await _employeeRepository.SaveEmployeePersonalInfo(reqModel);
+            if (res)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, string.Concat(ResponseMessages.Employee, " ", " Personal Information"), ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
         public async Task<JsonResult> EmployeePaymentDetailSave(EmployeePaymentDetail reqModel)
         {
             var res = await _employeeRepository.EmployeePaymentDetailSave(reqModel);

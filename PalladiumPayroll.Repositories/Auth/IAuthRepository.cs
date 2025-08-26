@@ -6,5 +6,6 @@ namespace PalladiumPayroll.Repositories.Auth
     public interface IAuthRepository
     {
         Task<JsonResult> Login(LoginRequest loginRequest);
+        JsonResult RefreshRequest(RefreshRequest request);
     }
 }

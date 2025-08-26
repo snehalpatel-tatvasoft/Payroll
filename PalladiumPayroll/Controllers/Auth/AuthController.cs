@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
 using PalladiumPayroll.DTOs.Miscellaneous;
@@ -25,6 +26,7 @@ namespace PalladiumPayroll.Controllers.Auth
             _userService = userService;
         }
 
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<ActionResult> Login([FromBody] LoginRequest loginRequest)
         {
@@ -39,6 +41,7 @@ namespace PalladiumPayroll.Controllers.Auth
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("CreateCompany")]
         public async Task<ActionResult> CreateCompany(CreateCompanyRequest request)
         {
@@ -102,6 +105,20 @@ namespace PalladiumPayroll.Controllers.Auth
             catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.Company, ex.Message));
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public IActionResult RefreshToken(RefreshRequest request)
+        {
+            try
+            {
+                return _authService.RefreshRequest(request);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.InternalServerError);
             }
         }
     }

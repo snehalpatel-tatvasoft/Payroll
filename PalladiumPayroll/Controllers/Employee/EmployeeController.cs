@@ -43,6 +43,20 @@ namespace PalladiumPayroll.Controllers.Employee
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult> ExportEmployeeList([FromQuery] EmployeeFilterViewModel reqModel)
+        {
+            try
+            {
+                var fileBytes = await _employeeService.ExportEmployeeList(reqModel);
+                return File(fileBytes, ContentTypes.Xlsx, "Employees.xlsx");
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
         [HttpDelete("[action]")]
         public async Task<ActionResult> DeleteEmployee(int employeeId)
         {
@@ -62,6 +76,45 @@ namespace PalladiumPayroll.Controllers.Employee
             try
             {
                 return await _employeeService.GetEmployeePaymentDetail(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<JsonResult> GetEmployeePersonalInfo(int employeeId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeePersonalInfo(employeeId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<JsonResult> GetEmployeePersonalInfoDropDown(int companyId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeePersonalInfoDropDown(companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<JsonResult> SaveEmployeePersonalInfo(EmployeePersonalInformation reqModel)
+        {
+            try
+            {
+                return await _employeeService.SaveEmployeePersonalInfo(reqModel);
             }
             catch (Exception ex)
             {
@@ -566,7 +619,7 @@ namespace PalladiumPayroll.Controllers.Employee
         {
             try
             {
-                return File(await _employeeService.DownloadDocument(fileUrl), "application/octet-stream", fileUrl.Split("\\").LastOrDefault());
+                return File(await _employeeService.DownloadDocument(fileUrl), ContentTypes.OctetStream, fileUrl.Split("\\").LastOrDefault());
             }
             catch (Exception ex)
             {
