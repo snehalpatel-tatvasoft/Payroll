@@ -29,10 +29,10 @@ public class EmployeeCodesController : ControllerBase
             }
             return await _employeeCodesService.SaveEmployeeCodeGeneration(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Saving, ResponseMessages.EmployeeCode, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.EmployeeCode)
             );
         }
     }
@@ -49,10 +49,10 @@ public class EmployeeCodesController : ControllerBase
 
             return await _employeeCodesService.GetEmployeeCodeByCompanyId(companyId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeCode, ex.Message)
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeCode)
             );
         }
     }

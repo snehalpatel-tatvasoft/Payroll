@@ -43,7 +43,12 @@
             #region Employee
 
             public static readonly string Employee = "Employee";
+            public static readonly string CasualWageInformation = "Employee Casual Wage Information";
+            public static readonly string  DirectiveInformation = "Employee  Directive Information";
+            public static readonly string  TaxInformation = "Employee  Tax Information";
 
+
+           
             #endregion
 
             #region Company
@@ -117,14 +122,18 @@
             #endregion
 
             #region Designation
-
+            public static readonly string Designations = "Designations";
             public const string DesignationsCreatedSuccessfully = "Designation created successfully";
             public const string DesignationsCreationFailed = "Failed to create designation";
             public const string DataFetchSuccess = "Data fetched successfully";
             public const string DesignationsDeletedSuccessfully = "Designation deleted successfully";
+            public const string DesignationsDeleteFailed = "Failed to deleted designation";
             public const string DesignationsUpdatedSuccessfully = "Designation updated successfully";
             public const string DesignationsUpdateFailed = "Failed to update designation";
             public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
+            public const string DesignationsImportedSuccessfully = "Designations imported successfully.";
+
+
 
             #endregion
 
@@ -185,6 +194,8 @@
             public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
             public static readonly string TransactionImportedSuccessfully = "Transaction imported successfully.";
             public static readonly string TransactionImportFailed = "Error occurred while importing the data";
+            public static readonly string TransactionDeleteFailed = "Failed to deleted Transaction.";
+
 
             #endregion
 
@@ -201,7 +212,8 @@
 
 
             #region Employees Loan
-
+            public static readonly string EmployeeLoan = "Employee Loan";
+            public static readonly string LoanNotFound = "Employee Loan not Found.";
             public static readonly string LoanPausedSuccessfully = "Loan paused successfully.";
             public static readonly string LoanPausedFailed = "Failed to pause the loan.";
             public static readonly string LoanCreatedSuccessfully = "Loan created successfully.";
@@ -214,12 +226,12 @@
 
             #endregion
 
-            
+
             #region Employee Promotions
 
 
             public static readonly string EmployeePromotions = "Employee Promotions";
-            public const string EmployeePromotionSaveFailed  = "Failed to save Employee Promotion";
+            public const string EmployeePromotionSaveFailed = "Failed to save Employee Promotion";
 
             public static readonly string NatureOfPromotions = "Nature of Promotions";
             public const string InvalidEmployeePromotionId = "Employee Promotion Id is Invalid.";
@@ -230,7 +242,7 @@
             #region Employee Training
 
             public static readonly string EmployeeTraining = "Employee Training";
-            public const string EmployeeTrainingSaveFailed  = "Failed to save Employee Training";
+            public const string EmployeeTrainingSaveFailed = "Failed to save Employee Training";
             public const string InvalidEmployeeTrainingnId = "Employee Training Id is Invalid.";
             public const string EmployeeTrainingNotFound = "Employee Training was not found.";
 
@@ -251,7 +263,6 @@
             #region access rights
 
             public static readonly string AccessRole = "Access Role";
-
             public const string AcceessRoleAlreadyExists = "Access Role with this name is alreasy exists.";
             public const string UnableToSaveAccessRole = "Unable to save Access Role";
             public const string AccessRoleNotFound = "Access Role could not be deleted or was not found.";
@@ -259,9 +270,17 @@
             public const string InvalidAccessRoleId = "Access Role Id is Invalid.";
 
             public static readonly string AccessRights = "Access Rights";
-
             public const string UnableToSaveAccessRights = "Unable to save Access Rights";
 
+            #endregion
+
+
+            #region savings and garnishee
+
+            public static readonly string Savings = "Savings";
+            public static readonly string Garnishee = "Garnishee";
+            public static readonly string GarnisheeSavedFailed = "Failed to save Garnishee.";
+            public static readonly string SavingsSavedFailed = "Failed to save Savings.";
 
             #endregion
         }

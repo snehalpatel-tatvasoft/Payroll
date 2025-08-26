@@ -5,13 +5,17 @@ namespace PalladiumPayroll.Services.HRFunctions.EmployeePromotions;
 
 public interface IEmployeePromotionsService
 {
-    Task<JsonResult> UpsertEmployeePromotions(EmployeePromotionsUpsertData request);
+    Task<JsonResult> AddEmployeePromotion(EmployeePromotionsUpsertData request);
 
-    Task<JsonResult> DeleteEmployeePromotion(long employeePromotionId, string userId);
+    Task<JsonResult> UpdateEmployeePromotion(EmployeePromotionsUpsertData request);
+
+    Task<JsonResult> DeleteEmployeePromotion(long employeePromotionId);
 
     Task<JsonResult> GetEmployeePromotionDropdownData(long companyId);
 
     Task<JsonResult> GetEmployeePromotions(long companyId);
 
     Task<JsonResult> GetEmployeePromotionById(long promotionId);
+
+    Task<JsonResult> GetEmployeePromotionAutofillData(long employeeId, long companyId);
 }

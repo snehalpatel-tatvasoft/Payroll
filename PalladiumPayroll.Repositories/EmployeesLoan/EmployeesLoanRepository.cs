@@ -1,19 +1,22 @@
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.EmployeesLoan;
+using System.Data;
 
 namespace PalladiumPayroll.Repositories.EmployeesLoan;
 
 public class EmployeesLoanRepository : IEmployeesLoanRepository
 {
     private readonly DapperContext _dapper;
-    private readonly IConfiguration _configuration;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public EmployeesLoanRepository(IConfiguration configuration)
+    public EmployeesLoanRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
-        _configuration = configuration;
-        _dapper = new DapperContext(_configuration);
+        _dapper = new DapperContext(configuration);
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<bool> CreateEmployeeLoan(EmployeeLoanRequestDTO request)
@@ -29,7 +32,7 @@ public class EmployeesLoanRepository : IEmployeesLoanRepository
         parameters.Add("@InterestRate", request.InterestRate);
         parameters.Add("@ActualLoanAmount", request.ActualLoanAmount);
         parameters.Add("@LoanIntegration", request.LoanIntegration);
-        parameters.Add("@CreatedBy", request.UserId);
+        parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_CreateEmployeeLoan", parameters);
     }
@@ -48,37 +51,51 @@ public class EmployeesLoanRepository : IEmployeesLoanRepository
         parameters.Add("@InterestRate", request.InterestRate);
         parameters.Add("@ActualLoanAmount", request.ActualLoanAmount);
         parameters.Add("@LoanIntegration", request.LoanIntegration);
-        parameters.Add("@LastUpdatedBy", request.UserId);
+        parameters.Add("@LastUpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateEmployeeLoan", parameters);
     }
 
-    public async Task<bool> PauseEmployeeLoan(long employeeLoanId, long updatedBy)
+    public async Task<bool> PauseEmployeeLoan(long employeeLoanId)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@LoanId", employeeLoanId);
-        parameters.Add("@UpdatedBy", updatedBy);
+        parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_PauseEmployeeLoan", parameters);
     }
-    
-    public async Task<bool> FullPaidEmployeeLoan(long employeeLoanId, long updatedBy)
+
+    public async Task<bool> FullPaidEmployeeLoan(long employeeLoanId)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@LoanId", employeeLoanId);
-        parameters.Add("@UpdatedBy", updatedBy);
+        parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_FullPaidEmployeeLoan", parameters);
     }
-
-    public async Task<List<EmployeeLoanResponseDTO>> GetLoansByCompanyId(long companyId)
+    public async Task<TableDataModel<EmployeeLoanResponseDTO>> GetLoansByCompanyId(LoanFilterViewModel reqModel)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("@CompanyId", companyId);
+        parameters.Add("@CompanyId", reqModel.CompanyId);
+        parameters.Add("@LoanStatus", reqModel.LoanStatus);
+        parameters.Add("@CurrentPage", reqModel.CurrentPage);
+        parameters.Add("@PageSize", reqModel.PageSize);
+        parameters.Add("@SortBy", reqModel.SortBy ?? "LoanGrantedDate");
+        parameters.Add("@SortType", reqModel.sortType == true ? "ASC" : "DESC");
+        parameters.Add("@Search", reqModel.Search ?? "");
+        parameters.Add("@TotalCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-        return await _dapper.ExecuteStoredProcedure<EmployeeLoanResponseDTO>(
-            "usp_GetLoanDetailsByCompanyId", parameters);
+        var data = await _dapper.ExecuteStoredProcedure<EmployeeLoanResponseDTO>("usp_GetLoanDetailsByCompanyId", parameters);
+        var total = parameters.Get<int>("@TotalCount");
+
+        return new TableDataModel<EmployeeLoanResponseDTO>
+        {
+            DataList = data,
+            TotalCount = total
+        };
     }
+
+
     public async Task<EmployeeLoanDropdownsDTO> GetEmployeeLoanDropdowns(long companyId)
     {
         var parameters = new DynamicParameters();

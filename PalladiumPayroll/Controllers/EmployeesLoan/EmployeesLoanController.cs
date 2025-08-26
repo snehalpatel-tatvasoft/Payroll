@@ -4,6 +4,9 @@ using PalladiumPayroll.DTOs.DTOs.RequestDTOs.EmployeesLoan;
 using PalladiumPayroll.Services.EmployeesLoan;
 using PalladiumPayroll.DTOs.Miscellaneous;
 namespace PalladiumPayroll.Controllers.EmployeesLoan;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
+
 
 [ApiController]
 [Route("api/[controller]")]
@@ -25,9 +28,9 @@ public class EmployeesLoanController : ControllerBase
             var result = await _service.CreateEmployeeLoan(request);
             return result;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.EmployeeLoan));
         }
     }
     [HttpPut("UpdateEmployeeLoan")]
@@ -38,53 +41,54 @@ public class EmployeesLoanController : ControllerBase
             var res = await _service.UpdateEmployeeLoan(request);
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.EmployeeLoan));
         }
     }
 
-    [HttpPut("PauseLoan/{employeeLoanId}/{updatedBy}")]
-    public async Task<ActionResult> PauseLoan(long employeeLoanId, long updatedBy)
+    [HttpPut("PauseLoan/{employeeLoanId}")]
+    public async Task<ActionResult> PauseLoan(long employeeLoanId)
     {
         try
         {
-            var res = await _service.PauseEmployeeLoan(employeeLoanId, updatedBy);
+            var res = await _service.PauseEmployeeLoan(employeeLoanId);
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.EmployeeLoan));
         }
     }
 
-    [HttpPut("FullPaidLoan/{employeeLoanId}/{updatedBy}")]
-    public async Task<ActionResult> FullPaidLoan(long employeeLoanId, long updatedBy)
+    [HttpPut("FullPaidLoan/{employeeLoanId}")]
+    public async Task<ActionResult> FullPaidLoan(long employeeLoanId)
     {
         try
         {
-            var res = await _service.FullPaidEmployeeLoan(employeeLoanId, updatedBy);
+            var res = await _service.FullPaidEmployeeLoan(employeeLoanId);
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.EmployeeLoan));
         }
     }
 
     [HttpGet("GetLoansByCompany")]
-    public async Task<ActionResult> GetLoansByCompany(long companyId)
+    public async Task<ActionResult> GetLoansByCompany([FromQuery] LoanFilterViewModel reqModel)
     {
         try
         {
-            var res = await _service.GetLoansByCompanyId(companyId);
+            var res = await _service.GetLoansByCompanyId(reqModel);
             return res;
         }
         catch (Exception ex)
-        { 
-            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeLoan,ex.Message));
         }
     }
+
     [HttpGet("GetEmployeeLoanDropdowns")]
     public async Task<IActionResult> GetEmployeeLoanDropdowns(long companyId)
     {
@@ -96,13 +100,9 @@ public class EmployeesLoanController : ControllerBase
             var response = await _service.GetEmployeeLoanDropdowns(companyId);
             return HttpStatusCodeResponse.SuccessResponse(response, "Employee Loan dropdowns retrieved successfully.");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse($"Error retrieving dropdowns: {ex.Message}");
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeLoan));
         }
     }
-
-
-
-
 }
