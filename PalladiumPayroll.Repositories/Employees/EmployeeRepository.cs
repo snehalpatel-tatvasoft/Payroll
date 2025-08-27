@@ -437,9 +437,12 @@ namespace PalladiumPayroll.Repositories.Employees
             var parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", timeSheetSetup.EmployeeId);
             parameters.Add("@EnableTimeSheet", timeSheetSetup.EnableTimeSheet);
-            parameters.Add("@TimeSheetPassword", timeSheetSetup.TimeSheetConfirmPassword);
+            parameters.Add("@TimeSheetPassword", timeSheetSetup.TimeSheetPassword);
             parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
-            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeTimeSheetSetup", parameters);
+            parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+            await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeTimeSheetSetup", parameters);
+             return parameters.Get<bool>("@IsSuccess");
         }
         #endregion
 

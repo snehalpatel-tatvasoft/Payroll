@@ -320,7 +320,7 @@ namespace PalladiumPayroll.Services.Company
         {
             return await _companyRepository.GetTransactionList(companyId);
         }
-        public async Task<bool> SaveGlAccountNumber(GLTransactionDetails model)
+        public async Task<bool> SaveGlAccountNumber(TransactionListForCompany model)
         {
             return await _companyRepository.SaveGlAccountNumber(model);
         }

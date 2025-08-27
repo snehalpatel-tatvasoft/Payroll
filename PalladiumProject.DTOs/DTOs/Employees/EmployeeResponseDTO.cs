@@ -71,8 +71,7 @@
     {
         public int EmployeeId { get; set; }
         public bool? EnableTimeSheet { get; set; }
-        public string TimeSheetPassword { get; set; }
-        public string TimeSheetConfirmPassword { get; set; }
+        public string? TimeSheetPassword { get; set; }
 
     }
     

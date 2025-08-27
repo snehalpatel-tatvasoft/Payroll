@@ -43,7 +43,12 @@
             #region Employee
 
             public static readonly string Employee = "Employee";
+            public static readonly string CasualWageInformation = "Employee Casual Wage Information";
+            public static readonly string  DirectiveInformation = "Employee  Directive Information";
+            public static readonly string  TaxInformation = "Employee  Tax Information";
 
+
+           
             #endregion
 
             #region Company
@@ -117,14 +122,18 @@
             #endregion
 
             #region Designation
-
+            public static readonly string Designations = "Designations";
             public const string DesignationsCreatedSuccessfully = "Designation created successfully";
             public const string DesignationsCreationFailed = "Failed to create designation";
             public const string DataFetchSuccess = "Data fetched successfully";
             public const string DesignationsDeletedSuccessfully = "Designation deleted successfully";
+            public const string DesignationsDeleteFailed = "Failed to deleted designation";
             public const string DesignationsUpdatedSuccessfully = "Designation updated successfully";
             public const string DesignationsUpdateFailed = "Failed to update designation";
             public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
+            public const string DesignationsImportedSuccessfully = "Designations imported successfully.";
+
+
 
             #endregion
 
@@ -185,6 +194,8 @@
             public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
             public static readonly string TransactionImportedSuccessfully = "Transaction imported successfully.";
             public static readonly string TransactionImportFailed = "Error occurred while importing the data";
+            public static readonly string TransactionDeleteFailed = "Failed to deleted Transaction.";
+
 
             #endregion
 
@@ -215,12 +226,12 @@
 
             #endregion
 
-            
+
             #region Employee Promotions
 
 
             public static readonly string EmployeePromotions = "Employee Promotions";
-            public const string EmployeePromotionSaveFailed  = "Failed to save Employee Promotion";
+            public const string EmployeePromotionSaveFailed = "Failed to save Employee Promotion";
 
             public static readonly string NatureOfPromotions = "Nature of Promotions";
             public const string InvalidEmployeePromotionId = "Employee Promotion Id is Invalid.";
@@ -231,7 +242,7 @@
             #region Employee Training
 
             public static readonly string EmployeeTraining = "Employee Training";
-            public const string EmployeeTrainingSaveFailed  = "Failed to save Employee Training";
+            public const string EmployeeTrainingSaveFailed = "Failed to save Employee Training";
             public const string InvalidEmployeeTrainingnId = "Employee Training Id is Invalid.";
             public const string EmployeeTrainingNotFound = "Employee Training was not found.";
 
@@ -272,6 +283,30 @@
             public static readonly string SavingsSavedFailed = "Failed to save Savings.";
 
             #endregion
+
+            #region coid accident
+            public static readonly string CoidAccident = "COID accident";
+            public static readonly string CoidAccidentFailedDelete = "Failed to delete COID Accident ";
+            public static readonly string CoidAccidentUpdatedSuccessfully = "COID Accident updated successfully";
+            public static readonly string CoidAccidentCreatedSuccessfully = "COID Accident created successfully";
+            public static readonly string CoidAccidentCreateFailed = "COID Accident creation failed";
+            public static readonly string CoidAccidentUpdateFailed = "COID Accident update failed";
+
+            #endregion
+
+            #region Data Import
+            public static readonly string YearToDateTemplate = "Year To Date Template";
+            public static readonly string WorkInformation = "Work Information";
+            public static readonly string EmployeeMasterfile = "Employee Masterfile";
+            public static readonly string ImportStatus = "Import Status";
+            public static readonly string Timesheet = "Employee Timesheet";
+            public static readonly string LeaveTakenOn = "Leave TakenOn";
+            public static readonly string LeaveTransaction = "Leave Transaction";
+
+
+            #endregion
+
+
 
 
             #region Disciplinary Log
