@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.HRFunctions.DisciplinaryLog;
-using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.HRFunctions.DisciplinaryLog;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.HRFunctions.DisciplinaryLog;
-using System.Net;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 
@@ -28,15 +26,11 @@ namespace PalladiumPayroll.Controllers.DisciplinaryLog
                 JsonResult? res = await _disciplinaryLogService.GetDisciplinaryLogByCompanyId(companyId);
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-                {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.DisciplinaryLog)
+                );
             }
         }
 
@@ -67,37 +61,14 @@ namespace PalladiumPayroll.Controllers.DisciplinaryLog
                 JsonResult? res = await _disciplinaryLogService.GetEmployeesForDisciplinaryLogDropdown(companyId);
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-                {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                 return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.DisciplinaryLog+" Droplist")
+                );
             }
         }
 
-        // [HttpPost("CreateDisciplinaryLog")]
-        // public async Task<ActionResult> CreateDisciplinaryLog([FromForm] DisciplinaryLogRequestDTO disciplinaryLog, IFormFile file)
-        // {
-        //     try
-        //     {
-        //         JsonResult? res = await _disciplinaryLogService.CreateDisciplinaryLog(disciplinaryLog, file);
-        //         return res;
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-        //         {
-        //             Result = false,
-        //             StatusCode = HttpStatusCode.InternalServerError,
-        //             Message = ex.Message,
-        //             Data = null
-        //         });
-        //     }
-        // }
 
         [HttpGet("GetDisciplinaryLogById/{disciplinaryLogId}")]
         public async Task<ActionResult> GetDisciplinaryLogById(long disciplinaryLogId)
@@ -107,37 +78,14 @@ namespace PalladiumPayroll.Controllers.DisciplinaryLog
                 JsonResult? res = await _disciplinaryLogService.GetDisciplinaryLogById(disciplinaryLogId);
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-                {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.DisciplinaryLog)
+                );
             }
         }
 
-        // [HttpPut("UpdateDisciplinaryLog")]
-        // public async Task<ActionResult> UpdateDisciplinaryLog([FromForm] DisciplinaryLogEditRequestDTO disciplinaryLog, IFormFile file)
-        // {
-        //     try
-        //     {
-        //         JsonResult? res = await _disciplinaryLogService.UpdateDisciplinaryLog(disciplinaryLog, file);
-        //         return res;
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-        //         {
-        //             Result = false,
-        //             StatusCode = HttpStatusCode.InternalServerError,
-        //             Message = ex.Message,
-        //             Data = null
-        //         });
-        //     }
-        // }
 
         [HttpDelete("DeleteDisciplinaryLog/{disciplinaryLogId}")]
         public async Task<ActionResult> DeleteDisciplinaryLog(long disciplinaryLogId)
@@ -147,71 +95,37 @@ namespace PalladiumPayroll.Controllers.DisciplinaryLog
                 JsonResult? res = await _disciplinaryLogService.DeleteDisciplinaryLog(disciplinaryLogId);
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-                {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.DisciplinaryLog)
+            );
             }
         }
 
-        [HttpGet("DownloadFile/{disciplinaryLogId}")]
-        public async Task<IActionResult> DownloadFile(long disciplinaryLogId)
+        [HttpGet("[action]")]
+        public async Task<ActionResult> DownloadDisciplinaryLogDocument(string fileUrl)
         {
             try
             {
-                var logResult = await _disciplinaryLogService.GetDisciplinaryLogById(disciplinaryLogId);
-                if (logResult == null)
-                {
-                    return NotFound(new HttpApiResponse<object>
-                    {
-                        Result = false,
-                        StatusCode = HttpStatusCode.NotFound,
-                        Message = "File not found",
-                        Data = null
-                    });
-                }
-
-                // Assuming HttpApiResponse<T> is the structure used by HttpStatusCodeResponse
-                var responseData = logResult.Value as HttpApiResponse<DisciplinaryLogByIdResponseDTO>;
-                if (responseData == null || responseData.Result == false || responseData.Data == null || string.IsNullOrEmpty(responseData.Data.FilePath))
-                {
-                    return NotFound(new HttpApiResponse<object>
-                    {
-                        Result = false,
-                        StatusCode = HttpStatusCode.NotFound,
-                        Message = "File not found",
-                        Data = null
-                    });
-                }
-
-                var filePath = responseData.Data.FilePath;
-                if (System.IO.File.Exists(filePath))
-                {
-                    var fileBytes = System.IO.File.ReadAllBytes(filePath);
-                    return File(fileBytes, "application/octet-stream", responseData.Data.FileName);
-                }
-                return NotFound(new HttpApiResponse<object>
-                {
-                    Result = false,
-                    StatusCode = HttpStatusCode.NotFound,
-                    Message = "File not found on server",
-                    Data = null
-                });
+                return File(await _disciplinaryLogService.DownloadDisciplinaryLogDocument(fileUrl), "application/octet-stream", fileUrl.Split("\\").LastOrDefault());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-                {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = $"Error downloading file: {ex.Message}",
-                    Data = null
-                });
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, "downloading", ResponseMessages.DisciplinaryLog + " documnet"));
+            }
+        }
+
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeleteDisciplinaryLogDocument([FromQuery] DeleteDisplinaryLogDocumentDTO reqModel)
+        {
+            try
+            {
+                return await _disciplinaryLogService.DeleteDisciplinaryLogDocument(reqModel.DocumentUrl);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.DisciplinaryLog + " documnet."));
             }
         }
     }

@@ -61,7 +61,7 @@ public class EmployeeTrainingService : IEmployeeTrainingService
 
         if (!isDeleted)
         {
-            return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeTrainingNotFound);
+            return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeTraining);
         }
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeTraining, ActionType.Deleted));
     }

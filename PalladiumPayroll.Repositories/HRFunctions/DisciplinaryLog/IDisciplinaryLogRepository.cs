@@ -8,9 +8,7 @@ namespace PalladiumPayroll.Repositories.HRFunctions.DisciplinaryLog
         Task<List<DisciplinaryLogResponseDTO>> GetDisciplinaryLogByCompanyId(long companyId);
         Task<List<EmployeeDropdownDTO>> GetEmployeesForDisciplinaryLogDropdown(long companyId);
         Task<bool> UpsertDisciplinaryLog(DisciplinaryLogUpsertDTO request);
-        // Task<long> CreateDisciplinaryLog(DisciplinaryLogRequestDTO disciplinaryLog);
         Task<DisciplinaryLogByIdResponseDTO> GetDisciplinaryLogById(long disciplinaryLogId);
-        // Task<int> UpdateDisciplinaryLog(DisciplinaryLogEditRequestDTO disciplinaryLog);
         Task<int> DeleteDisciplinaryLog(long disciplinaryLogId);
     }
 }
