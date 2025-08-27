@@ -71,8 +71,7 @@
     {
         public int EmployeeId { get; set; }
         public bool? EnableTimeSheet { get; set; }
-        public string TimeSheetPassword { get; set; }
-        public string TimeSheetConfirmPassword { get; set; }
+        public string? TimeSheetPassword { get; set; }
 
     }
     
@@ -107,7 +106,7 @@
 		public decimal LoanAmount { get; set; }
 		public decimal LoanPaidAmount { get; set; }
 		public decimal OutstandingAmount { get; set; }
-		public string LoanStatusName { get; set; } = "";
+		public int LoanStatusId { get; set; }
 		public decimal LoanMaxDeduction { get; set; }
 		public decimal InterestRate { get; set; }
 		public decimal TotalLoanAmount { get; set; }

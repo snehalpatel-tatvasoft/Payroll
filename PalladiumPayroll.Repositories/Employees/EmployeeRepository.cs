@@ -437,9 +437,12 @@ namespace PalladiumPayroll.Repositories.Employees
             var parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", timeSheetSetup.EmployeeId);
             parameters.Add("@EnableTimeSheet", timeSheetSetup.EnableTimeSheet);
-            parameters.Add("@TimeSheetPassword", timeSheetSetup.TimeSheetConfirmPassword);
+            parameters.Add("@TimeSheetPassword", timeSheetSetup.TimeSheetPassword);
             parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
-            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeTimeSheetSetup", parameters);
+            parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+            await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeTimeSheetSetup", parameters);
+             return parameters.Get<bool>("@IsSuccess");
         }
         #endregion
 
@@ -645,6 +648,7 @@ namespace PalladiumPayroll.Repositories.Employees
         {
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@LoanId", employeeLoanId);
+            parameters.Add("@UserId",  _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
             parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
             await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeleteEmployeeLoan", parameters);
@@ -692,7 +696,7 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@AccountTypeId", request.AccountTypeId);
             parameters.Add("@BankId", request.BankId);
             parameters.Add("@BranchCode", request.BranchCode);
-            parameters.Add("@UserId", request.UserId);
+            parameters.Add("@UserId",  _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
             parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
             await _dapper.ExecuteStoredProcedureSingle<object>("usp_UpsertGarnishee", parameters);
@@ -722,7 +726,7 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@SavingsAmount", request.SavingsAmount);
             parameters.Add("@NumberOfRepayments", request.NumberOfRepayment);
             parameters.Add("@CurrentRepayment", request.CurrentRepayment);
-            parameters.Add("@UserId", request.UserId);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
             parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
             await _dapper.ExecuteStoredProcedureSingle<object>("usp_UpsertSavings", parameters);

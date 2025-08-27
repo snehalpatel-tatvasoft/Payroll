@@ -6,8 +6,7 @@ public class AccessRoleDTO
     public int AccessRoleId { get; set; }         
     public string AccessRoleName { get; set; } = "";
     public int? AccessTypeId { get; set; }        
-    public long CompanyId { get; set; }           
-    public string? UserId { get; set; }     
+    public long CompanyId { get; set; }    
 }
 
 public class SaveRoleFunctinalityAccessRightsDTO{
@@ -24,5 +23,4 @@ public class SavePayFrequencyAccessRightsDTO
     public int AccessRoleId { get; set; }
     public long CompanyPayrollId { get; set; }
     public bool IsAllow { get; set; }
-    public string UserId { get; set; } = string.Empty;
 }
