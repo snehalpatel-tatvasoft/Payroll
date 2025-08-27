@@ -307,6 +307,17 @@
             #endregion
 
 
+
+
+            #region Disciplinary Log
+
+            public static readonly string DisciplinaryLog = "Disciplinary Log";
+            public const string DisciplinaryLogSaveFailed  = "Failed to save Disciplinary Log";
+            public const string InvalidDisciplinaryLogId = "Disciplinary Log Id is Invalid.";
+            public const string DisciplinaryLogNotFound = "Disciplinary Log was not found.";
+
+            #endregion
+
         }
 
 
