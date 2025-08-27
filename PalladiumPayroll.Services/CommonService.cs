@@ -113,5 +113,11 @@ namespace PalladiumPayroll.Services
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
         }
+
+        public async Task<JsonResult> GetEmployeeDropDown(int companyId)
+        {
+            List<DropDownViewModel> employees = await _commonRepository.GetEmployeeDropDown(companyId);
+            return HttpStatusCodeResponse.SuccessResponse(employees, string.Empty);
+        }
     }
 }

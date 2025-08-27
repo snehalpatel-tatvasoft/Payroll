@@ -20,5 +20,6 @@ namespace PalladiumPayroll.Repositories
         Task<List<DropDownViewModel>> GetNumberOfEmployeesList();
         Task<List<DropDownViewModel>> GetIndustryOrSectorTypeList();
         Task<bool> DeleteIndustrySector(int industrySectorId);
+        Task<List<DropDownViewModel>> GetEmployeeDropDown(int companyId);
     }
 }

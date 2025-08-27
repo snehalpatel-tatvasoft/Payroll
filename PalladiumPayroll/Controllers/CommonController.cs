@@ -204,5 +204,18 @@ namespace PalladiumPayroll.Controllers
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeDropDown(int companyId)
+        {
+            try
+            {
+                return await _commonService.GetEmployeeDropDown(companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
     }
 }
