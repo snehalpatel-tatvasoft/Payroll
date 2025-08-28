@@ -19,5 +19,25 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
             var data =  await _manageLeaveRepository.GetEmployeeLeaveDetail(reqModel);
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Leave", ActionType.Retrieved));
         }
+
+        public async Task<JsonResult> GetEmployeeLeave(int leaveDetailId)
+        {
+            var data = await _manageLeaveRepository.GetEmployeeLeave(leaveDetailId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Leave", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> UpsertEmployeeLeave(AddEmployeeLeaves reqModel)
+        {
+            var res = await _manageLeaveRepository.UpsertEmployeeLeave(reqModel);
+            if (res == 1)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Leave", ActionType.Updated));
+            }
+            else if(res == 2)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.AlreadyExist, "Leave date is"));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
     }
 }

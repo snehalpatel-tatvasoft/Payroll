@@ -81,7 +81,7 @@ public class EmployeesLoanRepository : IEmployeesLoanRepository
         parameters.Add("@CurrentPage", reqModel.CurrentPage);
         parameters.Add("@PageSize", reqModel.PageSize);
         parameters.Add("@SortBy", reqModel.SortBy ?? "LoanGrantedDate");
-        parameters.Add("@SortType", reqModel.sortType == true ? "ASC" : "DESC");
+        parameters.Add("@SortType", reqModel.SortType == true ? "ASC" : "DESC");
         parameters.Add("@Search", reqModel.Search ?? "");
         parameters.Add("@TotalCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
 

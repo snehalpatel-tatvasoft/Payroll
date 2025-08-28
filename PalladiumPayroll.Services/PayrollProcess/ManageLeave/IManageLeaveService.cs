@@ -6,5 +6,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
     public interface IManageLeaveService
     {
         Task<JsonResult> GetEmployeeLeaveDetail(EmployeeLeaveFilterViewModel reqModel);
+        Task<JsonResult> GetEmployeeLeave(int leaveDetailId);
+        Task<JsonResult> UpsertEmployeeLeave(AddEmployeeLeaves reqModel);
     }
 }

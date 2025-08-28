@@ -15,6 +15,6 @@ namespace PalladiumPayroll.DTOs.DTOs.Common
         public int CurrentPage { get; set; } = PageNumber;
         public int PageSize { get; set; } = DefaultPageSize;
         public string? SortBy { get; set; }
-        public bool? sortType { get; set; } = false;
+        public bool? SortType { get; set; } = false;
     }
 }
