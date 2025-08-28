@@ -22,4 +22,15 @@ public class LeaveSettingsService:ILeaveSettingsService
 
         return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.LeaveSettings, ActionType.Retrieved));
     }
+
+    public async Task<JsonResult> UpdateLeaveSettings(LeaveSettingsRequestDTO request)
+    {
+        bool isSaved = await _leaveSettingsRepository.UpdateLeaveSettings(request);
+
+        if (!isSaved)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.LeaveSettingsUpdateFailed);
+        }
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.LeaveSettings, ActionType.Saved));
+    }
 }

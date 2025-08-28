@@ -308,6 +308,7 @@
 
             #region Leave Settings
              public static readonly string LeaveSettings = "Leave Settings.";
+             public static readonly string LeaveSettingsUpdateFailed = "Failed to update Leave Settings.";
             #endregion
 
 

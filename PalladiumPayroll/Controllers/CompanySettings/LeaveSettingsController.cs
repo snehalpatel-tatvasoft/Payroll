@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.CompanySettings.LeaveSettings;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.CompanySettings.LeaveSettings;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -38,6 +39,22 @@ public class LeaveSettingsController : ControllerBase
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.LeaveSettings));
+        }
+    }
+
+
+    [HttpPut("[action]")]
+    public async Task<ActionResult> UpdateLeaveSettings(LeaveSettingsRequestDTO request)
+    {
+        try
+        {
+            return await _leaveSettingsService.UpdateLeaveSettings(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.LeaveSettings)
+            );
         }
     }
 
