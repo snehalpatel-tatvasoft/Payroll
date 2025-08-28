@@ -20,6 +20,7 @@ using PalladiumPayroll.Services.HRFunctions.EmployeeTransfer;
 using PalladiumPayroll.Services.User;
 using PalladiumPayroll.Services.CheckInOut;
 using PalladiumPayroll.Services.HRFunctions.CoidAccident;
+using PalladiumPayroll.Services.PayrollProcess.ManageLeave;
 
 namespace PalladiumPayroll.Services
 {
@@ -55,6 +56,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IDisciplinaryLogService, DisciplinaryLogService>();
             services.AddScoped<ICheckInOutService, CheckInOutService>();
             services.AddScoped<ICoidAccidentService, CoidAccidentService>();
+            services.AddScoped<IManageLeaveService, ManageLeaveService>();
             services.AddHttpContextAccessor();
             return services;
         }

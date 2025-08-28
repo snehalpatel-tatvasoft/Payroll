@@ -4,10 +4,6 @@ using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Company;
-using System.ComponentModel.Design;
-using System.Globalization;
-using System.Reflection;
-using System.Transactions;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 
 namespace PalladiumPayroll.Controllers.Company
@@ -109,7 +105,7 @@ namespace PalladiumPayroll.Controllers.Company
         {
             try
             {
-                List<TransactionListForCompany> transactionLists= await _companyService.GetTransactionList(companyId);
+                List<TransactionListForCompany> transactionLists = await _companyService.GetTransactionList(companyId);
                 return HttpStatusCodeResponse.SuccessResponse(transactionLists, string.Empty);
             }
             catch (Exception)
