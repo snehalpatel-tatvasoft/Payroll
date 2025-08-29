@@ -479,7 +479,7 @@ namespace PalladiumPayroll.Controllers.Employee
             catch (Exception)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Garnishee+" Dropdown")
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Garnishee + " Dropdown")
                 );
             }
         }
@@ -494,7 +494,7 @@ namespace PalladiumPayroll.Controllers.Employee
             catch (Exception)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Garnishee+" Dropdown")
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Garnishee + " Dropdown")
                 );
             }
         }
@@ -702,6 +702,66 @@ namespace PalladiumPayroll.Controllers.Employee
             catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeLeavesInformation(int employeeId)
+        {
+            try
+            {
+                var result = await _employeeService.GetEmployeeLeaves(employeeId);
+                return HttpStatusCodeResponse.SuccessResponse(
+                    result,
+                    string.Format(ResponseMessages.Success, ResponseMessages.LeaveInformation, ActionType.Retrieved)
+                );
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.LeaveInformation, ex.Message));
+            }
+        }
+
+        [HttpPost("SaveEmpLeaveEntitlementNew")]
+        public async Task<ActionResult> AddEmployeeLeave([FromBody] EditLeaveRequest reqModel)
+        {
+            try
+            {
+                return await _employeeService.SaveEmpLeaveEntitlementNew(reqModel, "Add");
+            }
+            catch (Exception)
+            { 
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.LeaveInformation));
+            }
+        }
+
+        [HttpPut("SaveEmpLeaveEntitlementNew")]
+        public async Task<ActionResult> UpdateEmployeeLeave([FromBody] EditLeaveRequest reqModel)
+        {
+            try
+            {
+                return await _employeeService.SaveEmpLeaveEntitlementNew(reqModel, "Update");
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.LeaveInformation));
+            }
+        }
+
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeleteEmployeeLeaveInformation(int leaveId)
+        {
+            try
+            {
+                return await _employeeService.DeleteEmployeeLeave(leaveId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.LeaveInformation));
             }
         }
     }
