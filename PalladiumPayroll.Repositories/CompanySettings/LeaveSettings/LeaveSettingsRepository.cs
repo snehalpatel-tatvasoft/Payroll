@@ -1,4 +1,3 @@
-using System.Data;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
@@ -26,11 +25,10 @@ public class LeaveSettingsRepository : ILeaveSettingsRepository
 
     public async Task<bool> UpdateLeaveSettings(LeaveSettingsRequestDTO request)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
 
         parameters.Add("@LeaveRuleId", request.LeaveRuleId);
         parameters.Add("@CaseId", request.CaseId);
-
         parameters.Add("@Duration", request.Duration);
         parameters.Add("@LeaveAccumulationDays", request.LeaveAccumulationDays);
         parameters.Add("@ExceedDue", request.ExceedDue);
@@ -39,11 +37,8 @@ public class LeaveSettingsRepository : ILeaveSettingsRepository
         parameters.Add("@Recurring", request.Recurring);
         parameters.Add("@NoOfTimeReccuring", request.NoOfTimeReccuring);
         parameters.Add("@AnnualEntitlementDays", request.AnnualEntitlementDays);
-
-        // parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-
     
-        var isSuccess =  await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateLeaveRulesInLeaveSettings", parameters);
+        bool isSuccess =  await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateLeaveRulesInLeaveSettings", parameters);
         return isSuccess;
     }
 
