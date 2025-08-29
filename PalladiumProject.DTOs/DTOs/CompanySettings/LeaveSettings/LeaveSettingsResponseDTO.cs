@@ -8,11 +8,7 @@ public class LeaveSettingsResponseDTO
     public string CycleName { get; set; } = string.Empty;
     public string? PeriodStart { get; set; }
     public int? Duration { get; set; }
-
-    // Always populated for cases 4,5,6,8
     public decimal? AnnualEntitlementDays { get; set; }
-
-    // Only populated for cases 1,2,3,7
     public string? LeaveAccumulationPeriod { get; set; }
     public decimal? LeaveAccumulationDays { get; set; }
     public int? ExceedDue { get; set; }

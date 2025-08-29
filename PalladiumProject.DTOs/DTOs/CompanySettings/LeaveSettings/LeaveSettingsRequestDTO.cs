@@ -4,7 +4,6 @@ public class LeaveSettingsRequestDTO
 {
     public int LeaveRuleId { get; set; }
     public int CaseId { get; set; }
-    
     public int? Duration { get; set; }
     public decimal? LeaveAccumulationDays { get; set; }
     public int? ExceedDue { get; set; }
