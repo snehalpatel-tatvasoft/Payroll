@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Helper;
@@ -235,6 +236,7 @@ namespace PalladiumPayroll.Services.Employees
             return data;
         }
 
+
         public async Task<JsonResult> GetTaxInformation(int employeeId)
         {
             return await _employeeRepository.GetTaxInformation(employeeId);
@@ -428,6 +430,38 @@ namespace PalladiumPayroll.Services.Employees
         public async Task<JsonResult> GetAccessRolesByCompanyId(long companyId)
         {
             return await _employeeRepository.GetAccessRolesByCompanyId(companyId);
+        }
+
+        public async Task<JsonResult> UpsertEmployeeUser(UpsertUserRequestDTO request)
+        {
+            try
+            {
+                if (request == null || string.IsNullOrWhiteSpace(request.Email) ||
+                    string.IsNullOrWhiteSpace(request.Password) || request.CompanyId <= 0 ||
+                    request.AccessRoleId <= 0 || request.EmployeeId <= 0)
+                {
+                    return HttpStatusCodeResponse.BadRequestResponse();
+                }
+
+                // Hash password using PasswordHasher
+                string passwordHash = new PasswordHasher<object>().HashPassword(null, request.Password);
+
+                var createUserRequest = new UpsertUserRequestDTO
+                {
+                    AccessRoleId = request.AccessRoleId,
+                    Email = request.Email,
+                    Password = request.Password,
+                    PasswordHash = passwordHash,
+                    CompanyId = request.CompanyId,
+                    EmployeeId = request.EmployeeId
+                };
+
+                return await _employeeRepository.UpsertEmployeeUser(createUserRequest);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error upserting user: {ex.Message}");
+            }
         }
 
         public async Task<JsonResult> GetPreviousService(int employeeId)

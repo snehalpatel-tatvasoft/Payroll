@@ -228,4 +228,14 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
         public bool IsManager { get; set; }
         public int? SecondApprovalId { get; set; }
     }
+
+    public class UpsertUserRequestDTO
+    {
+        public int AccessRoleId { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string PasswordHash { get; set; }
+        public long CompanyId { get; set; }
+        public long EmployeeId { get; set; }
+    }
 }
