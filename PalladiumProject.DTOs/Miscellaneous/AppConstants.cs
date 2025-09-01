@@ -44,11 +44,11 @@
 
             public static readonly string Employee = "Employee";
             public static readonly string CasualWageInformation = "Employee Casual Wage Information";
-            public static readonly string  DirectiveInformation = "Employee  Directive Information";
-            public static readonly string  TaxInformation = "Employee  Tax Information";
+            public static readonly string DirectiveInformation = "Employee  Directive Information";
+            public static readonly string TaxInformation = "Employee  Tax Information";
 
 
-           
+
             #endregion
 
             #region Company
@@ -303,7 +303,13 @@
             public static readonly string LeaveTakenOn = "Leave TakenOn";
             public static readonly string LeaveTransaction = "Leave Transaction";
 
+            #endregion
 
+
+            #region Leave Settings
+             public static readonly string LeaveSettings = "Leave Settings";
+             public static readonly string LeaveSettingsUpdateFailed = "Failed to update Leave Settings.";
+             
             #endregion
 
 
