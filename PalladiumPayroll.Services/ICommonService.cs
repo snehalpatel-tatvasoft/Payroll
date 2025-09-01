@@ -19,5 +19,6 @@ namespace PalladiumPayroll.Services
         Task<JsonResult> GetIndustryOrSectorTypeList();
         Task<ActionResult> AddIndustrySectorType(string industrySector);
         Task<JsonResult> DeleteIndustrySector(int industrySectorId);
+        Task<JsonResult> GetEmployeeDropDown(int companyId);
     }
 }

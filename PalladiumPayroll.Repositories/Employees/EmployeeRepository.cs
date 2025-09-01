@@ -52,7 +52,7 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@CurrentPage", reqModel.CurrentPage);
             parameters.Add("@PageSize", reqModel.PageSize);
             parameters.Add("@SortBy", reqModel.SortBy);
-            parameters.Add("@SortType", reqModel.sortType == true ? SortAsc : SortDesc);
+            parameters.Add("@SortType", reqModel.SortType == true ? SortAsc : SortDesc);
             parameters.Add("@SearchByName", string.IsNullOrEmpty(reqModel.Search) ? string.Empty : reqModel.Search);
             parameters.Add("@TotalCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
 

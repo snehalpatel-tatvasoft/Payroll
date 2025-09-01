@@ -111,5 +111,13 @@ namespace PalladiumPayroll.Repositories
             bool isDeleted = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteIndustrySector", parameters);
             return isDeleted;
         }
+
+        public async Task<List<DropDownViewModel>> GetEmployeeDropDown(int companyId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            return await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_GetDropdownForEmployee", parameters);
+        }
+
     }
 }
