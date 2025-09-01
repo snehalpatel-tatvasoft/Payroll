@@ -7,12 +7,13 @@ namespace PalladiumPayroll.Repositories.Employees
     public interface IEmployeeRepository
     {
         Task<JsonResult> GetEmployeeFilters(int companyId);
-        Task<JsonResult> GetEmployeeList(EmployeeFilterViewModel reqModel);
+        Task<TableDataModel<EmployeeDataViewModel>> GetEmployeeList(EmployeeFilterViewModel reqModel);
         Task<bool> DeleteEmployee(int employeeId);
-
+        Task<JsonResult> GetEmployeePersonalInfo(int employeeId);
+        Task<JsonResult> GetEmployeePersonalInfoDropDown(int companyId);
+        Task<bool> SaveEmployeePersonalInfo(EmployeePersonalInformation reqModel);
         Task<JsonResult> GetEmployeePaymentDetail(int employeeId);
         Task<bool> EmployeePaymentDetailSave(EmployeePaymentDetail reqModel);
-
         Task<JsonResult> GetEmployeeWorkDropDown(int companyId);
         Task<JsonResult> GetEmployeeWorkInformation(int employeeId);
         Task<bool> EmployeeWorkInfoSave(EmployeeWorkInformation reqModel);

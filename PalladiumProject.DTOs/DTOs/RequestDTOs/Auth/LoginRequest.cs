@@ -6,6 +6,12 @@
         public string Password { get; set; } = null!;
     }
 
+    public class RefreshRequest
+    {
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
+    }
+
     public class CompanyDetails
     {
         public int CompanyId { get; set; } = 0;

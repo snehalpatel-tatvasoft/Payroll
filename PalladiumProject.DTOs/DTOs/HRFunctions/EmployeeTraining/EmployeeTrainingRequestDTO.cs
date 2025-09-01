@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Http;
+
 namespace PalladiumPayroll.DTOs.DTOs.HRFunctions.EmployeeTraining;
 
 public class EmployeeTrainingUpsertData
 {
-    public long? EmployeeTrainingId { get; set; }      
+    public long? EmployeeTrainingId { get; set; }
     public long CompanyId { get; set; }
     public long EmployeeId { get; set; }
     public DateTime? TrainingDate { get; set; }
@@ -22,5 +24,22 @@ public class EmployeeTrainingUpsertData
     public bool? SAQARequired { get; set; }
     public string? Comments { get; set; }
     public string? FilePath { get; set; }
-    public string UserId { get; set; } = null!;
+    public string? FileName { get; set; }
+    public string? FileType { get; set; }
+    public long? FileSize { get; set; }
+    public IFormFile? File { get; set; }
+}
+
+
+public class EmployeeTrainingDropdownItem
+{
+    public string Name { get; set; } = "";
+    public long CompanyId { get; set; }
+    public int Type { get; set; }
+}
+
+
+public class TrainingDocumentDelete
+{
+    public string DocumentUrl { get; set; }="";
 }

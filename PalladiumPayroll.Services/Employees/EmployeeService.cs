@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using PalladiumPayroll.Helper;
 using PalladiumPayroll.Repositories.Employees;
+using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 
@@ -13,6 +14,7 @@ namespace PalladiumPayroll.Services.Employees
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly DirectoryPathSetting _directoryPathSetting;
+        public EmployeeService(IEmployeeRepository employeeRepository, AppSettingPathHelper directoryPathSetting)
         private readonly PasswordHasher<object> _passwordHasher;
         public EmployeeService(IEmployeeRepository employeeRepository, AppSettingDirectoryPath directoryPathSetting)
         {
@@ -27,7 +29,27 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> GetEmployeeList(EmployeeFilterViewModel reqModel)
         {
-            return await _employeeRepository.GetEmployeeList(reqModel);
+            var data = await _employeeRepository.GetEmployeeList(reqModel);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieved));
+        }
+
+        public async Task<byte[]> ExportEmployeeList(EmployeeFilterViewModel reqModel)
+        {
+            reqModel.CurrentPage = -1;
+            reqModel.Search = string.Empty;
+            var data = await _employeeRepository.GetEmployeeList(reqModel);
+            var dt = new DataTable();
+            dt.Columns.Add("Employee Code", typeof(string));
+            dt.Columns.Add("Employee Name", typeof(string));
+            dt.Columns.Add("Department", typeof(string));
+            dt.Columns.Add("Designation", typeof(string));
+            dt.Columns.Add("IDNumber", typeof(string));
+            dt.Columns.Add("Dob", typeof(DateTime));
+            foreach(var item in data.DataList)
+            {
+                dt.Rows.Add(item.EmployeeCode, item.EmployeeName, item.Department, item.Designation, item.IDNumber, item.Dob);
+            }
+            return ExcelHelper.ExportToExcel(new Dictionary<string, DataTable> { { "Sheet 1", dt } });
         }
 
         public async Task<JsonResult> DeleteEmployee(int employeeId)
@@ -39,12 +61,27 @@ namespace PalladiumPayroll.Services.Employees
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
-
         public async Task<JsonResult> GetEmployeePaymentDetail(int employeeId)
         {
             return await _employeeRepository.GetEmployeePaymentDetail(employeeId);
         }
-
+        public async Task<JsonResult> GetEmployeePersonalInfo(int employeeId)
+        {
+            return await _employeeRepository.GetEmployeePersonalInfo(employeeId);
+        }
+        public async Task<JsonResult> GetEmployeePersonalInfoDropDown(int companyId)
+        {
+            return await _employeeRepository.GetEmployeePersonalInfoDropDown(companyId);
+        }
+        public async Task<JsonResult> SaveEmployeePersonalInfo(EmployeePersonalInformation reqModel)
+        {
+            var res = await _employeeRepository.SaveEmployeePersonalInfo(reqModel);
+            if (res)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, string.Concat(ResponseMessages.Employee, " ", " Personal Information"), ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
         public async Task<JsonResult> EmployeePaymentDetailSave(EmployeePaymentDetail reqModel)
         {
             var res = await _employeeRepository.EmployeePaymentDetailSave(reqModel);
@@ -123,10 +160,6 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> SaveEmployeeTimeSheetSetup(TimeSheetSetup timeSheetSetup)
         {
-            if (timeSheetSetup.TimeSheetPassword != timeSheetSetup.TimeSheetConfirmPassword)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse("Password is mismatch !");
-            }
             var result = await _employeeRepository.SaveEmployeeTimeSheetSetup(timeSheetSetup);
             if (result)
             {
@@ -145,7 +178,7 @@ namespace PalladiumPayroll.Services.Employees
             var result = await _employeeRepository.UpdateCasualWageInformation(reqModel);
             if (result)
             {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, string.Concat(ResponseMessages.Employee, " ", "Casual Wage Information"), ActionType.Updated));
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.CasualWageInformation, ActionType.Updated));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
@@ -163,8 +196,7 @@ namespace PalladiumPayroll.Services.Employees
             {
                 return HttpStatusCodeResponse.SuccessResponse(
                     string.Empty,
-                    string.Format(ResponseMessages.Success,
-                    $"{ResponseMessages.Employee} Directive Information", ActionType.Saved));
+                    string.Format(ResponseMessages.Success,ResponseMessages.DirectiveInformation, ActionType.Saved));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
@@ -181,7 +213,7 @@ namespace PalladiumPayroll.Services.Employees
             {
                 return HttpStatusCodeResponse.SuccessResponse(
                     string.Empty,
-                    string.Format(ResponseMessages.Success, $"{ResponseMessages.Employee} Directive Information", ActionType.Updated));
+                    string.Format(ResponseMessages.Success, ResponseMessages.DirectiveInformation, ActionType.Updated));
             }
 
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
@@ -194,7 +226,7 @@ namespace PalladiumPayroll.Services.Employees
             {
                 return HttpStatusCodeResponse.SuccessResponse(
                     string.Empty,
-                    string.Format(ResponseMessages.Success, $"{ResponseMessages.Employee} Directive", ActionType.Deleted));
+                    string.Format(ResponseMessages.Success,ResponseMessages.DirectiveInformation, ActionType.Deleted));
             }
 
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
@@ -206,6 +238,7 @@ namespace PalladiumPayroll.Services.Employees
             return data;
         }
 
+
         public async Task<JsonResult> GetTaxInformation(int employeeId)
         {
             return await _employeeRepository.GetTaxInformation(employeeId);
@@ -216,9 +249,9 @@ namespace PalladiumPayroll.Services.Employees
             var result = await _employeeRepository.UpdateTaxInformation(reqModel);
             if (result == true)
             {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, string.Concat(ResponseMessages.Employee, " ", "Tax Information"), ActionType.Updated));
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.TaxInformation, ActionType.Updated));
             }
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.TaxInformation));
         }
 
 
@@ -270,78 +303,52 @@ namespace PalladiumPayroll.Services.Employees
 
             if (!isDeleted)
             {
-                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.Employee + " loan not found.");
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.LoanNotFound);
             }
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Loan", ActionType.Deleted));
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeLoan, ActionType.Deleted));
         }
 
         public async Task<JsonResult> GetEmployeeLoanDetail(long employeeId)
         {
             EmployeeLoanResponse? data = await _employeeRepository.GetEmployeeLoanDetail(employeeId);
-            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Loan", ActionType.Retrieved));
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeLoan, ActionType.Retrieved));
         }
         public async Task<JsonResult> GetGarnisheeDropdownData(long companyId)
         {
             GarnisheeDropdownListDto? data = await _employeeRepository.GetGarnisheeDropdownData(companyId);
-            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishee DropList", ActionType.Retrieved));
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Garnishee + " DropDowns", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetGarnisheeDetails(long employeeId)
         {
             List<GarnishDetails>? data = await _employeeRepository.GetGarnisheeDetails(employeeId);
-            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishes", ActionType.Retrieved));
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Garnishee, ActionType.Retrieved));
         }
 
         public async Task<JsonResult> UpsertGarnishee(EmployeeGarnisheeRequest request)
         {
-            try
+            bool isSaved = await _employeeRepository.UpsertGarnishee(request);
+            if (!isSaved)
             {
-                bool isSaved = await _employeeRepository.UpsertGarnishee(request);
-
-                if (!isSaved)
-                {
-                    return HttpStatusCodeResponse.NotFoundResponse("Failed to save "+ ResponseMessages.Employee + " Garnishee");
-                }
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Garnishee", ActionType.Saved));
-
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.GarnisheeSavedFailed);
             }
-            catch (Exception)
-            {
-                return HttpStatusCodeResponse.BadRequestResponse();
-            }
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Garnishee, ActionType.Saved));
         }
 
         public async Task<JsonResult> GetSavingsDetails(long employeeId)
         {
-            try
-            {
-                List<SavingsDetails>? data = await _employeeRepository.GetSavingsDetails(employeeId);
-
-                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Savings", ActionType.Retrieved));
-            }
-            catch (Exception)
-            {
-                return HttpStatusCodeResponse.BadRequestResponse();
-            }
+            List<SavingsDetails>? data = await _employeeRepository.GetSavingsDetails(employeeId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.Savings, ActionType.Retrieved));
         }
 
         public async Task<JsonResult> UpsertSaving(EmployeeSavingsRequest request)
         {
-            try
+            bool isSaved = await _employeeRepository.UpsertSaving(request);
+            if (!isSaved)
             {
-                bool isSaved = await _employeeRepository.UpsertSaving(request);
-
-                if (!isSaved)
-                {
-                    return HttpStatusCodeResponse.NotFoundResponse("Failed to save "+ ResponseMessages.Employee + " Saving");
-                }
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee + " Savings", ActionType.Saved));
-
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.SavingsSavedFailed);
             }
-            catch (Exception)
-            {
-                return HttpStatusCodeResponse.BadRequestResponse();
-            }
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Savings, ActionType.Saved));
         }
 
         public async Task<JsonResult> GetEmployeeDocument(int employeeId)
@@ -357,33 +364,25 @@ namespace PalladiumPayroll.Services.Employees
             {
                 List<EmployeeDocuments> dbFileList = new List<EmployeeDocuments>();
                 var employeeFolder = $"Employee_{employeeDocument.EmployeeId}";
-                var finalPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, employeeFolder).Replace("/", Path.DirectorySeparatorChar.ToString());
-                if (!Directory.Exists(finalPath))
-                {
-                    Directory.CreateDirectory(finalPath);
-                }
+                var finalPath = FileHandler.CombinePath(basePath, employeeFolder);
+                FileHandler.CreateDirectory(finalPath);
+
                 foreach (var file in employeeDocument.Document)
                 {
                     var isFileReplaced = false;
                     var filePath = Path.Combine(finalPath, file.FileName);
-                    if (File.Exists(filePath))
-                    {
-                        isFileReplaced = true;
-                        File.Delete(filePath);
-                    }
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
+                    isFileReplaced =  FileHandler.DeleteFile(filePath);
+                    await FileHandler.UploadFile(filePath, file);
 
                     if(!isFileReplaced)
                     {
                         var relativePath = Path.Combine(employeeFolder, file.FileName).Replace(Path.DirectorySeparatorChar.ToString(), "/");
-                        dbFileList.Add(new EmployeeDocuments() { 
-                            DocumentName = file.FileName, 
-                            DocumentUrl = relativePath, 
-                            DocumentType = file.ContentType, 
-                            DocumentSize = file.Length 
+                        dbFileList.Add(new EmployeeDocuments()
+                        {
+                            DocumentName = file.FileName,
+                            DocumentUrl = relativePath,
+                            DocumentType = file.ContentType,
+                            DocumentSize = file.Length
                         });
                     }
                 }
@@ -402,12 +401,8 @@ namespace PalladiumPayroll.Services.Employees
             var result = await _employeeRepository.DeleteDocuments(reqModel.DocumentId);
             if (result)
             {
-                var basePath = _directoryPathSetting.EmployeeDocument.Replace("/", Path.DirectorySeparatorChar.ToString());
-                var existFilePath = Path.Combine(Directory.GetCurrentDirectory(), basePath, reqModel.DocumentUrl);
-                if (File.Exists(existFilePath))
-                {
-                    File.Delete(existFilePath);
-                }
+                var basePath = _directoryPathSetting.EmployeeDocument;
+                FileHandler.DeleteFile(FileHandler.CombinePath(basePath, reqModel.DocumentUrl));
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Document", ActionType.Deleted));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
@@ -415,14 +410,8 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<byte[]> DownloadDocument(string documentUrl)
         {
-            byte[] result = { };
             var basePath = _directoryPathSetting.EmployeeDocument;
-            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, documentUrl).Replace("/", Path.DirectorySeparatorChar.ToString());
-            if (File.Exists(fullPath))
-            {
-                result = await File.ReadAllBytesAsync(fullPath);
-            }
-            return result;
+            return await FileHandler.ReadFileBytes(FileHandler.CombinePath(basePath, documentUrl));
         }
 
         public async Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId)

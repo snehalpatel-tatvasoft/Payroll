@@ -3,6 +3,7 @@ using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 
 namespace PalladiumPayroll.Repositories.Company
 {
@@ -28,6 +29,7 @@ namespace PalladiumPayroll.Repositories.Company
         Task<List<PayrollMedicalAidList>> GetMedicalAidFundInfo(int companyId);
         Task<List<PayrollBenefitFundList>> GetCompanyBenefitFundInfo(int companyId);
         Task<bool> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle);
+        Task<List<CyelePeriod>> GetProcessCyclePeriodInfo(int payrollId);
         Task<bool> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList);
         Task<bool> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup);
         Task<bool> AddMedicalAidFundInfo(PayrollMedicalAidList payrollMedicalAidList);
@@ -36,6 +38,8 @@ namespace PalladiumPayroll.Repositories.Company
         Task<bool> DeleteCompanyBenefitFund(int fundId);
         Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel);
         Task<List<DropDownViewModelWithString>> GetGLAccounts(DBConnectionModel dbConnectionModel);
+        Task<List<TransactionListForCompany>> GetTransactionList(long companyId);
+        Task<bool> SaveGlAccountNumber(TransactionListForCompany model);
         Task<bool> CheckGLDBConnection(DBConnectionModel dbConnectionModel);
         Task<bool> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation);
         Task<List<EmploymentEquityInformation>> GetEmploymentEquityInfo(int companyId);

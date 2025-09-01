@@ -18,98 +18,68 @@ public class DesignationsService : IDesignationsService
 
     public async Task<JsonResult> CreateDesignations(DesignationRequestDTO request)
     {
-        try
+        bool isDuplicate = await _designationsRepository.CheckDuplicateDesignation(request);
+
+        if (isDuplicate)
         {
-            bool isDuplicate = await _designationsRepository.CheckDuplicateDesignation(request);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DesignationDuplicate);
+        }
 
-            if (isDuplicate)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DesignationDuplicate);
-            }
-
-            bool isCreated = await _designationsRepository.CreateDesignations(request);
-            if (isCreated)
-            {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.DesignationsCreatedSuccessfully);
-
-            }
-
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DesignationsCreationFailed);
+        bool isCreated = await _designationsRepository.CreateDesignations(request);
+        if (isCreated)
+        {
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.DesignationsCreatedSuccessfully);
 
         }
-        catch (Exception)
-        {
-            return HttpStatusCodeResponse.BadRequestResponse();
-        }
+
+        return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DesignationsCreationFailed);
     }
 
     public async Task<JsonResult> GetAllDesignations(long companyId)
     {
-        try
-        {
-            var designations = await _designationsRepository.GetAllDesignations(companyId);
-            return HttpStatusCodeResponse.SuccessResponse(designations, ResponseMessages.DataFetchSuccess);
-        }
-        catch (Exception)
-        {
-            return HttpStatusCodeResponse.BadRequestResponse();
-        }
+
+        var designations = await _designationsRepository.GetAllDesignations(companyId);
+        return HttpStatusCodeResponse.SuccessResponse(designations, ResponseMessages.DataFetchSuccess);
     }
 
     public async Task<JsonResult> DeleteDesignations(long id)
     {
-        try
+        bool result = await _designationsRepository.DeleteDesignations(id);
+        if (result)
         {
-            await _designationsRepository.DeleteDesignations(id);
             return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.DesignationsDeletedSuccessfully);
         }
-        catch (Exception)
-        {
-            return HttpStatusCodeResponse.BadRequestResponse();
-        }
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.DesignationsDeleteFailed);
+
     }
 
     public async Task<JsonResult> UpdateDesignations(DesignationRequestDTO request)
     {
-        try
-        {
-            bool isDuplicate = await _designationsRepository.CheckDuplicateDesignation(request);
 
-            if (isDuplicate)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DesignationDuplicate);
-            }
-            bool isUpdated = await _designationsRepository.UpdateDesignations(request);
-            if (isUpdated)
-            {
-                return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.DesignationsUpdatedSuccessfully);
-            }
+        bool isDuplicate = await _designationsRepository.CheckDuplicateDesignation(request);
 
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DesignationsUpdateFailed);
-        }
-        catch (Exception)
+        if (isDuplicate)
         {
-            return HttpStatusCodeResponse.BadRequestResponse();
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DesignationDuplicate);
         }
+        bool isUpdated = await _designationsRepository.UpdateDesignations(request);
+        if (isUpdated)
+        {
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.DesignationsUpdatedSuccessfully);
+        }
+
+        return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DesignationsUpdateFailed);
+
     }
 
-public async Task<JsonResult> ImportDesignations(ImportDesignationRequestDTO request)
-{
-    try
+    public async Task<JsonResult> ImportDesignations(ImportDesignationRequestDTO request)
     {
-        var errorMessage = await _designationsRepository.ImportDesignations(request);
 
+        var errorMessage = await _designationsRepository.ImportDesignations(request);
         if (!string.IsNullOrEmpty(errorMessage))
             return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
 
-        return HttpStatusCodeResponse.SuccessResponse(string.Empty, "Designations imported successfully.");
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.DesignationsImportedSuccessfully);
     }
-    catch (Exception)
-    {
-        return HttpStatusCodeResponse.BadRequestResponse();
-    }
-}
-
-
 
 }

@@ -1,4 +1,6 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.Helper;
 using PalladiumPayroll.Helper.Middleware.Encryption;
@@ -10,9 +12,14 @@ using PalladiumPayroll.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddControllers(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -25,6 +32,7 @@ builder.Services.AddTransient<DapperContext>();
 builder.Services.AddServiceRepositories();
 builder.Services.AddServices();
 builder.Services.AddHelpers(builder.Configuration);
+builder.Services.AddSwagerGenerator();
 builder.Services.ConfigureAuthentication(builder.Configuration);
 
 builder.Services.AddAutoMapper(typeof(Mapper));

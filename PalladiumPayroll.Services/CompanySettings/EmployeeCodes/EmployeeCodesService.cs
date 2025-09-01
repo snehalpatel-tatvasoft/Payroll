@@ -18,34 +18,21 @@ public class EmployeeCodesService : IEmployeeCodesService
 
     public async Task<JsonResult> SaveEmployeeCodeGeneration(EmployeeCodeRequestDTO request)
     {
-        try
-        {
-            bool isSaved = await _employeeCodeRepository.SaveEmployeeCodeGeneration(request);
+        bool isSaved = await _employeeCodeRepository.SaveEmployeeCodeGeneration(request);
 
-            if (!isSaved)
-            {
-                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeCodeSaveFailed);
-            }
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeCode, ActionType.Saved));
-
-        }
-        catch (Exception)
+        if (!isSaved)
         {
-            return HttpStatusCodeResponse.BadRequestResponse();
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.EmployeeCodeSaveFailed);
         }
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeCode, ActionType.Saved));
+
     }
 
     public async Task<JsonResult> GetEmployeeCodeByCompanyId(int companyId)
     {
-        try
-        {
-            EmployeeCodeResponseDTO? employeeCodeData = await _employeeCodeRepository.GetEmployeeCodeByCompanyId(companyId);
+        EmployeeCodeResponseDTO? employeeCodeData = await _employeeCodeRepository.GetEmployeeCodeByCompanyId(companyId);
 
-            return HttpStatusCodeResponse.SuccessResponse(employeeCodeData, string.Empty);
-        }
-        catch (Exception)
-        {
-            return HttpStatusCodeResponse.BadRequestResponse();
-        }
+        return HttpStatusCodeResponse.SuccessResponse(employeeCodeData, string.Empty);
+
     }
 }

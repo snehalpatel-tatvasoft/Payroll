@@ -18,6 +18,9 @@ using PalladiumPayroll.Services.HRFunctions.EmployeePromotions;
 using PalladiumPayroll.Services.HRFunctions.EmployeeTraining;
 using PalladiumPayroll.Services.HRFunctions.EmployeeTransfer;
 using PalladiumPayroll.Services.User;
+using PalladiumPayroll.Services.CheckInOut;
+using PalladiumPayroll.Services.HRFunctions.CoidAccident;
+using PalladiumPayroll.Services.Utilities.DataImport;
 
 namespace PalladiumPayroll.Services
 {
@@ -51,6 +54,9 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IAccessRightsService, AccessRightsService>();
             services.AddScoped<IUserCreationService, UserCreationService>();
             services.AddScoped<IDisciplinaryLogService, DisciplinaryLogService>();
+            services.AddScoped<ICheckInOutService, CheckInOutService>();
+            services.AddScoped<ICoidAccidentService, CoidAccidentService>();
+            services.AddScoped<IDataImportService, DataImportService>();
             services.AddHttpContextAccessor();
             return services;
         }

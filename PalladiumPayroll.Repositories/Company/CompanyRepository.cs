@@ -7,7 +7,9 @@ using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using System.ComponentModel.Design;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
@@ -27,15 +29,16 @@ namespace PalladiumPayroll.Repositories.Company
         public async Task<List<DropDownViewModelWithString>> GetGLAccounts(DBConnectionModel dbConnectionModel)
         {
             string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
+            string query = string.Format(DefaultSQLQuery, "intGLNumber as [ID] ,intGLNumber AS [KEY], intGLNumber AS [VALUE]", "[tblAccounts]");
 
-            string query = "SELECT intGLNumber as ID ,intGLNumber AS [KEY], intGLNumber AS [VALUE] from dbo.tblAccounts"; // Adjust as needed
             return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
         }
+
         public async Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel)
         {
             string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
+            string query = string.Format(DefaultSQLQuery, "strDesc as [ID] ,strDesc AS [KEY], strDesc AS [VALUE]", "[tblDepartments]");
 
-            string query = "SELECT strDesc as ID ,strDesc AS [KEY], strDesc AS [VALUE] from dbo.tblDepartments"; // Adjust as needed
             return await _dapper.ExecuteQueryWithConnection<DropDownViewModelWithString>(query, connectionString);
         }
 
@@ -44,7 +47,25 @@ namespace PalladiumPayroll.Repositories.Company
             string connectionString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
             return await DapperContext.CheckDBConnection(connectionString);
         }
+        public async Task<List<GLSetup>> GetCompanyGLInfo(int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
 
+            List<GLSetup> response = await _dapper.ExecuteStoredProcedure<GLSetup>("usp_GetGLSetupByCompanyId", parameters);
+            return response;
+        }
+        public async Task<bool> SaveGlAccountNumber(TransactionListForCompany model)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@PayrollProcessId", model.PayrollProcessId);
+            parameters.Add("@CreditAccount", model.CreditAccountNumber);
+            parameters.Add("@DebitAccount", model.DebitAccountNumber);
+            parameters.Add("@ContraAccount", model.ContraAccountNumber);
+
+            var response = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SaveGlAccountNumber", parameters);
+            return response;
+        }
         public async Task<long> CreateCompany(CreateCompanyRequest request)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -281,11 +302,9 @@ namespace PalladiumPayroll.Repositories.Company
 
         public async Task<bool> SetActiveCompanyId(int companyId)
         {
-            string userId = _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value;
-
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
-            parameters.Add("@UserId", userId);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
             bool isAdded = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SetActiveCompanyId", parameters);
             return isAdded;
@@ -350,15 +369,14 @@ namespace PalladiumPayroll.Repositories.Company
             return response;
         }
 
-        public async Task<List<GLSetup>> GetCompanyGLInfo(int companyId)
+        public async Task<List<TransactionListForCompany>> GetTransactionList(long companyId)
         {
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
 
-            List<GLSetup> response = await _dapper.ExecuteStoredProcedure<GLSetup>("usp_GetGLSetupByCompanyId", parameters);
+            List<TransactionListForCompany> response = await _dapper.ExecuteStoredProcedure<TransactionListForCompany>("usp_GetTransactionListForCompany", parameters);
             return response;
         }
-
         public async Task<bool> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -450,9 +468,17 @@ namespace PalladiumPayroll.Repositories.Company
             parameters.Add("@PayrollCycleName", companyPayrollCycle.CycleName);
             parameters.Add("@PayrollCycleTypeId", companyPayrollCycle.CycleType);
             parameters.Add("@CycleEndDate", companyPayrollCycle.CycleEndDate);
+            parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
             bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCompanyPayrollCycle", parameters);
             return isUpsert;
+        }
+
+        public async Task<List<CyelePeriod>> GetProcessCyclePeriodInfo(int payrollId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyPayrollId", payrollId);
+            return await _dapper.ExecuteStoredProcedure<CyelePeriod>("usp_GetProcessingCyclePeriods", parameters);
         }
 
         public async Task<bool> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList)
@@ -505,6 +531,7 @@ namespace PalladiumPayroll.Repositories.Company
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@CycleId", cycleId);
+            parameters.Add("@UpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
             bool isDeleted = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteCompanyPayrollCycle", parameters);
             return isDeleted;

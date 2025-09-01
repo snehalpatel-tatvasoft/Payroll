@@ -27,6 +27,7 @@ namespace PalladiumPayroll.Services.Company
         Task<List<PayrollMedicalAidList>> GetMedicalAidFundInfo(int companyId);
         Task<List<PayrollBenefitFundList>> GetCompanyBenefitFundInfo(int companyId);
         Task<JsonResult> UpsertPayrollCycleInfo(CompanyPayrollCycle companyPayrollCycle);
+        Task<JsonResult> GetProcessCyclePeriodInfo(int payrollId);
         Task<JsonResult> UpsertCompanyBenefitFund(PayrollBenefitFundList payrollBenefitFundList);
         Task<JsonResult> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation);
         Task<JsonResult> UpsertCOIDASetupInfo(CompanyCoidaSetup companyCoidaSetup);
@@ -35,5 +36,7 @@ namespace PalladiumPayroll.Services.Company
         Task<JsonResult> DeleteMedicalAidFund(int fundId);
         Task<JsonResult> DeleteCompanyBenefitFund(int fundId);
         Task<JsonResult> GetGLSetup(DBConnectionModel dbConnectionModel);
+        Task<List<TransactionListForCompany>> GetTransactionList(long companyId);
+        Task<bool> SaveGlAccountNumber(TransactionListForCompany model);
     }
 }

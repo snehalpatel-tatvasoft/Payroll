@@ -21,7 +21,6 @@ public class EmployeePromotionsUpsertData
     public long? ProvinceId { get; set; }
     public long? SupportFunctionId { get; set; }
     public long CompanyId { get; set; }
-    public string UserId { get; set; } = null!;  
 }
 
 

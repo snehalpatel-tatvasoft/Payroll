@@ -7,8 +7,12 @@ namespace PalladiumPayroll.Services.Employees
     {
         Task<JsonResult> GetEmployeeFilters(int companyId);
         Task<JsonResult> GetEmployeeList(EmployeeFilterViewModel reqModel);
+        Task<byte[]> ExportEmployeeList(EmployeeFilterViewModel reqModel);
         Task<JsonResult> DeleteEmployee(int employeeId);
         Task<JsonResult> GetEmployeePaymentDetail(int employeeId);
+        Task<JsonResult> GetEmployeePersonalInfo(int employeeId);
+        Task<JsonResult> GetEmployeePersonalInfoDropDown(int companyId);
+        Task<JsonResult> SaveEmployeePersonalInfo(EmployeePersonalInformation reqModel);
         Task<JsonResult> EmployeePaymentDetailSave(EmployeePaymentDetail reqModel);
         Task<JsonResult> GetEmployeeWorkDropDown(int companyId);
         Task<JsonResult> GetEmployeeWorkInformation(int employeeId);
@@ -42,8 +46,6 @@ namespace PalladiumPayroll.Services.Employees
         Task<TaxInformationDropdownData> GetTaxInformationDropdownData();
         Task<JsonResult> GetTaxInformation(int employeeId);
         Task<JsonResult> UpdateTaxInformation(TaxInformation reqModel);
-
-
         Task<JsonResult> GetEmployeeDocument(int employeeId);
         Task<JsonResult> UploadDocuments(EmployeeDocumentUpload employeeDocument);
         Task<JsonResult> DeleteDocuments(EmployeeDocumentDelete reqModel);

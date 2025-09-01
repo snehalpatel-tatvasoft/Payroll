@@ -1,7 +1,4 @@
-﻿
-using System.Runtime.CompilerServices;
-
-namespace PalladiumPayroll.Helper.Constants
+﻿namespace PalladiumPayroll.Helper.Constants
 {
     public static class AppConstants
     {
@@ -20,7 +17,7 @@ namespace PalladiumPayroll.Helper.Constants
         public const int PageNumber = 1;
 
         public const string DefaultConnectionString = "Data Source={0}; initial catalog={1}; User ID={2}; Password={3}; TrustServerCertificate=True;";
-
+        public const string DefaultSQLQuery = "SELECT {0} FROM [dbo].{1}";
 
         public const string SortAsc = "ASC";
         public const string SortDesc = "DESC";
@@ -39,13 +36,19 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string AlreadyExist = "{0} already exists !";
             public static readonly string Valid = "{0} is valid";
             public static readonly string SomethingWrong = "Something went wrong.";
+            public static readonly string ExceptionMessage = "An Error Occurred While {0} {1}";
 
             #endregion
 
             #region Employee
 
             public static readonly string Employee = "Employee";
+            public static readonly string CasualWageInformation = "Employee Casual Wage Information";
+            public static readonly string  DirectiveInformation = "Employee  Directive Information";
+            public static readonly string  TaxInformation = "Employee  Tax Information";
 
+
+           
             #endregion
 
             #region Company
@@ -80,7 +83,7 @@ namespace PalladiumPayroll.Helper.Constants
             public const string LinkExpired = "Link Is Expired!";
             public const string PasswordChanged = "Password Changed Successfully";
             public const string TokenExpired = "Token Expired";
-            public const string InvalidToken = "Invalid refresh token";
+            public const string InvalidToken = "Invalid token";
             public const string ForcePasswordReset = "You need to reset your password";
             public const string UserInActive = "Sorry your account is InActive, you can't login!";
             public const string PlanExpired = "Your subscription has expired. Please renew to continue using the service.";
@@ -119,14 +122,18 @@ namespace PalladiumPayroll.Helper.Constants
             #endregion
 
             #region Designation
-
+            public static readonly string Designations = "Designations";
             public const string DesignationsCreatedSuccessfully = "Designation created successfully";
             public const string DesignationsCreationFailed = "Failed to create designation";
             public const string DataFetchSuccess = "Data fetched successfully";
             public const string DesignationsDeletedSuccessfully = "Designation deleted successfully";
+            public const string DesignationsDeleteFailed = "Failed to deleted designation";
             public const string DesignationsUpdatedSuccessfully = "Designation updated successfully";
             public const string DesignationsUpdateFailed = "Failed to update designation";
             public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
+            public const string DesignationsImportedSuccessfully = "Designations imported successfully.";
+
+
 
             #endregion
 
@@ -187,6 +194,8 @@ namespace PalladiumPayroll.Helper.Constants
             public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
             public static readonly string TransactionImportedSuccessfully = "Transaction imported successfully.";
             public static readonly string TransactionImportFailed = "Error occurred while importing the data";
+            public static readonly string TransactionDeleteFailed = "Failed to deleted Transaction.";
+
 
             #endregion
 
@@ -203,7 +212,8 @@ namespace PalladiumPayroll.Helper.Constants
 
 
             #region Employees Loan
-
+            public static readonly string EmployeeLoan = "Employee Loan";
+            public static readonly string LoanNotFound = "Employee Loan not Found.";
             public static readonly string LoanPausedSuccessfully = "Loan paused successfully.";
             public static readonly string LoanPausedFailed = "Failed to pause the loan.";
             public static readonly string LoanCreatedSuccessfully = "Loan created successfully.";
@@ -216,12 +226,12 @@ namespace PalladiumPayroll.Helper.Constants
 
             #endregion
 
-            
+
             #region Employee Promotions
 
 
             public static readonly string EmployeePromotions = "Employee Promotions";
-            public const string EmployeePromotionSaveFailed  = "Failed to save Employee Promotion";
+            public const string EmployeePromotionSaveFailed = "Failed to save Employee Promotion";
 
             public static readonly string NatureOfPromotions = "Nature of Promotions";
             public const string InvalidEmployeePromotionId = "Employee Promotion Id is Invalid.";
@@ -232,7 +242,7 @@ namespace PalladiumPayroll.Helper.Constants
             #region Employee Training
 
             public static readonly string EmployeeTraining = "Employee Training";
-            public const string EmployeeTrainingSaveFailed  = "Failed to save Employee Training";
+            public const string EmployeeTrainingSaveFailed = "Failed to save Employee Training";
             public const string InvalidEmployeeTrainingnId = "Employee Training Id is Invalid.";
             public const string EmployeeTrainingNotFound = "Employee Training was not found.";
 
@@ -253,7 +263,6 @@ namespace PalladiumPayroll.Helper.Constants
             #region access rights
 
             public static readonly string AccessRole = "Access Role";
-
             public const string AcceessRoleAlreadyExists = "Access Role with this name is alreasy exists.";
             public const string UnableToSaveAccessRole = "Unable to save Access Role";
             public const string AccessRoleNotFound = "Access Role could not be deleted or was not found.";
@@ -261,11 +270,67 @@ namespace PalladiumPayroll.Helper.Constants
             public const string InvalidAccessRoleId = "Access Role Id is Invalid.";
 
             public static readonly string AccessRights = "Access Rights";
-
             public const string UnableToSaveAccessRights = "Unable to save Access Rights";
+
+            #endregion
+
+
+            #region savings and garnishee
+
+            public static readonly string Savings = "Savings";
+            public static readonly string Garnishee = "Garnishee";
+            public static readonly string GarnisheeSavedFailed = "Failed to save Garnishee.";
+            public static readonly string SavingsSavedFailed = "Failed to save Savings.";
+
+            #endregion
+
+            #region coid accident
+            public static readonly string CoidAccident = "COID accident";
+            public static readonly string CoidAccidentFailedDelete = "Failed to delete COID Accident ";
+            public static readonly string CoidAccidentUpdatedSuccessfully = "COID Accident updated successfully";
+            public static readonly string CoidAccidentCreatedSuccessfully = "COID Accident created successfully";
+            public static readonly string CoidAccidentCreateFailed = "COID Accident creation failed";
+            public static readonly string CoidAccidentUpdateFailed = "COID Accident update failed";
+
+            #endregion
+
+            #region Data Import
+            public static readonly string YearToDateTemplate = "Year To Date Template";
+            public static readonly string WorkInformation = "Work Information";
+            public static readonly string EmployeeMasterfile = "Employee Masterfile";
+            public static readonly string ImportStatus = "Import Status";
+            public static readonly string Timesheet = "Employee Timesheet";
+            public static readonly string LeaveTakenOn = "Leave TakenOn";
+            public static readonly string LeaveTransaction = "Leave Transaction";
 
 
             #endregion
+
+
+
+
+            #region Disciplinary Log
+
+            public static readonly string DisciplinaryLog = "Disciplinary Log";
+            public const string DisciplinaryLogSaveFailed  = "Failed to save Disciplinary Log";
+            public const string InvalidDisciplinaryLogId = "Disciplinary Log Id is Invalid.";
+            public const string DisciplinaryLogNotFound = "Disciplinary Log was not found.";
+
+            #endregion
+
+        }
+
+
+        public static class ContentTypes
+        {
+            public const string OctetStream = "application/octet-stream";
+            public const string Json = "application/json";
+            public const string Xml = "application/xml";
+            public const string Xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            public const string Pdf = "application/pdf";
+            public const string Text = "text/plain";
+            public const string Html = "text/html";
+            public const string MultipartFormData = "multipart/form-data";
         }
     }
 

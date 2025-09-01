@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Company;
+using System.ComponentModel.Design;
+using System.Globalization;
+using System.Reflection;
+using System.Transactions;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 
 namespace PalladiumPayroll.Controllers.Company
@@ -100,6 +105,32 @@ namespace PalladiumPayroll.Controllers.Company
         }
 
         [HttpGet("[action]")]
+        public async Task<ActionResult> GetTransactionList(long companyId)
+        {
+            try
+            {
+                List<TransactionListForCompany> transactionLists= await _companyService.GetTransactionList(companyId);
+                return HttpStatusCodeResponse.SuccessResponse(transactionLists, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+            }
+        }
+        [HttpPost("[action]")]
+        public async Task<ActionResult> SaveGlAccountNumber(TransactionListForCompany model)
+        {
+            try
+            {
+                bool res = await _companyService.SaveGlAccountNumber(model);
+                return HttpStatusCodeResponse.SuccessResponse(res, string.Empty);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
+            }
+        }
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetCompanyGLInfo(int companyId)
         {
             try
@@ -181,6 +212,19 @@ namespace PalladiumPayroll.Controllers.Company
         }
 
         [HttpGet("[action]")]
+        public async Task<ActionResult> GetGLSetup([FromQuery] DBConnectionModel dbConnectionModel)
+        {
+            try
+            {
+                return await _companyService.GetGLSetup(dbConnectionModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetPayrollCycleInfo(int companyId, int taxYearId)
         {
             try
@@ -228,6 +272,19 @@ namespace PalladiumPayroll.Controllers.Company
             try
             {
                 return await _companyService.UpsertPayrollCycleInfo(companyPayrollCycle);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetProcessCyclePeriodInfo(int payrollId)
+        {
+            try
+            {
+                return await _companyService.GetProcessCyclePeriodInfo(payrollId);
             }
             catch (Exception)
             {

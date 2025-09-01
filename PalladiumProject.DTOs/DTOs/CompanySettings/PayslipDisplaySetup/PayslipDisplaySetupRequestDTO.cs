@@ -7,6 +7,5 @@ public class SavePayslipSettingsDTO
     public bool IsFringeBenefits { get; set; }
     public int PayslipLayout { get; set; }
     public string PayslipMessage { get; set; }="";
-    public long UserId { get; set; }
      public int RestorePayslipLayout { get; set; } = 0;
 }
