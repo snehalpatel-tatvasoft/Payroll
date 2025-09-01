@@ -10,6 +10,7 @@
             Updated,
             uploaded,
             Retrieved,
+            Imported,
             Saving,
             Retrieving,
             Updating,

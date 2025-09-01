@@ -44,11 +44,13 @@
 
             public static readonly string Employee = "Employee";
             public static readonly string CasualWageInformation = "Employee Casual Wage Information";
-            public static readonly string  DirectiveInformation = "Employee  Directive Information";
-            public static readonly string  TaxInformation = "Employee  Tax Information";
+            public static readonly string DirectiveInformation = "Employee  Directive Information";
+            public static readonly string TaxInformation = "Employee  Tax Information";
+            public static readonly string  LeaveInformation = "Employee  Leave Information";
 
 
-           
+
+
             #endregion
 
             #region Company
@@ -294,6 +296,35 @@
 
             #endregion
 
+            #region Data Import
+            public static readonly string YearToDateTemplate = "Year To Date Template";
+            public static readonly string WorkInformation = "Work Information";
+            public static readonly string EmployeeMasterfile = "Employee Masterfile";
+            public static readonly string ImportStatus = "Import Status";
+            public static readonly string Timesheet = "Employee Timesheet";
+            public static readonly string LeaveTakenOn = "Leave TakenOn";
+            public static readonly string LeaveTransaction = "Leave Transaction";
+
+            #endregion
+
+
+            #region Leave Settings
+             public static readonly string LeaveSettings = "Leave Settings";
+             public static readonly string LeaveSettingsUpdateFailed = "Failed to update Leave Settings.";
+             
+            #endregion
+
+
+
+
+            #region Disciplinary Log
+
+            public static readonly string DisciplinaryLog = "Disciplinary Log";
+            public const string DisciplinaryLogSaveFailed  = "Failed to save Disciplinary Log";
+            public const string InvalidDisciplinaryLogId = "Disciplinary Log Id is Invalid.";
+            public const string DisciplinaryLogNotFound = "Disciplinary Log was not found.";
+
+            #endregion
 
         }
 

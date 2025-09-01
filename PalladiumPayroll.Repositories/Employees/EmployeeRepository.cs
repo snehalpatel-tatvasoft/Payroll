@@ -442,7 +442,7 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
             await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeeTimeSheetSetup", parameters);
-             return parameters.Get<bool>("@IsSuccess");
+            return parameters.Get<bool>("@IsSuccess");
         }
         #endregion
 
@@ -648,7 +648,7 @@ namespace PalladiumPayroll.Repositories.Employees
         {
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@LoanId", employeeLoanId);
-            parameters.Add("@UserId",  _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
             parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
             await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeleteEmployeeLoan", parameters);
@@ -696,7 +696,7 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@AccountTypeId", request.AccountTypeId);
             parameters.Add("@BankId", request.BankId);
             parameters.Add("@BranchCode", request.BranchCode);
-            parameters.Add("@UserId",  _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
             parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
             await _dapper.ExecuteStoredProcedureSingle<object>("usp_UpsertGarnishee", parameters);
@@ -932,8 +932,38 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@CompanyId", companyId);
 
             var data = await _dapper.ExecuteStoredProcedure<AccessRoleDto>(
-                "usp_GetAccessRolesNamesByCompanyId", parameters);
+                "usp_GetAccessRolesNamesByCompanyIdForEmployee", parameters);
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Access Roles", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> UpsertEmployeeUser(UpsertUserRequestDTO request)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@AccessRoleId", request.AccessRoleId);
+            parameters.Add("@Email", request.Email);
+            parameters.Add("@Password", request.Password);
+            parameters.Add("@PasswordHash", request.PasswordHash);
+            parameters.Add("@CompanyId", request.CompanyId);
+            parameters.Add("@EmployeeId", request.EmployeeId);
+
+            var result = await _dapper.ExecuteStoredProcedureSingle<dynamic>("usp_UpsertEmployeeUser", parameters);
+
+            var response = new UpsertUserResponseDTO
+            {
+                Result = result.Result == 1,
+                UserId = result.UserId,
+                ErrorNumber = result.ErrorNumber,
+                ErrorMessage = result.ErrorMessage
+            };
+
+            if (response.Result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(response, "User upserted successfully.");
+            }
+            else
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error: {response.ErrorMessage} (Error Number: {response.ErrorNumber})");
+            }
         }
 
         #endregion
@@ -945,5 +975,51 @@ namespace PalladiumPayroll.Repositories.Employees
             return await _dapper.ExecuteStoredProcedure<EmployeePreviousService>("usp_GetPreviousServiceData", parameters);
         }
 
+        public async Task<List<LeaveModel>> GetEmployeeLeaves(int employeeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", employeeId);
+
+            var data = await _dapper.ExecuteStoredProcedure<LeaveModel>("usp_GetEmployeeLeavesInformation", parameters);
+            return data.ToList();
+        }
+
+        public async Task<JsonResult> SaveEmpLeaveEntitlementNew(EditLeaveRequest reqModel, string oprType)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@oprType", oprType);
+            parameters.Add("@EmployeeLeaveId", reqModel.EmployeeLeaveId ?? (object)DBNull.Value);
+            parameters.Add("@Year", reqModel.Year ?? DateTime.Now.Year);
+            parameters.Add("@LeaveTypeId", reqModel.LeaveTypeId);
+            parameters.Add("@OpeningBalance", reqModel.TakeOnBalance);
+            parameters.Add("@DaysAccrued", reqModel.DaysAccrued);
+            parameters.Add("@DaysTaken", reqModel.DaysTaken);
+            parameters.Add("@DaysDue", reqModel.DaysDue);
+            parameters.Add("@LeaveEntitlement", reqModel.CycleLeaveEntitlement);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+
+            var result = await _dapper.ExecuteStoredProcedure<int>("usp_SaveEmpLeaveEntitlementNew", parameters);
+            if (result.Contains(1))
+            {
+                return HttpStatusCodeResponse.SuccessResponse(
+                    string.Empty,
+                    string.Format(ResponseMessages.Success, ResponseMessages.LeaveInformation, oprType == "Add" ? ActionType.Saved : ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<JsonResult> DeleteEmployeeLeave(int employeeLeaveId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeLeaveId", employeeLeaveId);
+
+            var result = await _dapper.ExecuteStoredProcedure<int>("usp_DeleteEmployeeLeaveInformation", parameters);
+
+            return HttpStatusCodeResponse.SuccessResponse(
+                string.Empty,
+                string.Format(ResponseMessages.Success, ResponseMessages.LeaveInformation, ActionType.Deleted));
+
+        }
     }
 }

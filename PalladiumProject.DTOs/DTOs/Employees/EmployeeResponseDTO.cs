@@ -39,7 +39,7 @@
 		public int? ProvinceId { get; set; }
 		public int? SupportFunctionId { get; set; }
 	}
-   
+
 
 	public class PayrollTransactionList
 	{
@@ -73,25 +73,25 @@
         public bool? EnableTimeSheet { get; set; }
         public string? TimeSheetPassword { get; set; }
 
-    }
-    
+	}
 
 
-    public class TransactionTypeDropdownsDTO
-    {
-        public List<TransactionType> TransactionType { get; set; } = new();
-    }
-    public class GetDirectiveResponse
-    {
-        public int Id { get; set; }
-        public string DirectiveNumber { get; set; } = string.Empty;
-        public DateTime DirectiveDate { get; set; }
-        public int SourceCode { get; set; }
-        public decimal DirectiveAmount { get; set; }
-        public string TypeIndicator { get; set; } = string.Empty;
-        public string TransactionType { get; set; } = string.Empty;
-        public bool Status { get; set; }
-    }
+
+	public class TransactionTypeDropdownsDTO
+	{
+		public List<TransactionType> TransactionType { get; set; } = new();
+	}
+	public class GetDirectiveResponse
+	{
+		public int Id { get; set; }
+		public string DirectiveNumber { get; set; } = string.Empty;
+		public DateTime DirectiveDate { get; set; }
+		public int SourceCode { get; set; }
+		public decimal DirectiveAmount { get; set; }
+		public string TypeIndicator { get; set; } = string.Empty;
+		public string TransactionType { get; set; } = string.Empty;
+		public bool Status { get; set; }
+	}
 
 	public class EmployeeLoanInfoDto
 	{
@@ -179,51 +179,51 @@
 		public decimal? ClosingBalance { get; set; }
 	}
 
-    public class TaxMethod
-    {
-        public long TaxMethodId { get; set; }
-        public string? TaxMethodName { get; set; }
-    }
+	public class TaxMethod
+	{
+		public long TaxMethodId { get; set; }
+		public string? TaxMethodName { get; set; }
+	}
 
-    public class IT3aReasonCode
-    {
-        public long IT3aReasonCodeId { get; set; }
-        public string? Name { get; set; }
-    }
-    public class UIFExempts
-    {
-        public long UIFExemptId { get; set; }
-        public string? UIFExemptCode { get; set; }
-        public string? UIFExemptName { get; set; }
-    }
+	public class IT3aReasonCode
+	{
+		public long IT3aReasonCodeId { get; set; }
+		public string? Name { get; set; }
+	}
+	public class UIFExempts
+	{
+		public long UIFExemptId { get; set; }
+		public string? UIFExemptCode { get; set; }
+		public string? UIFExemptName { get; set; }
+	}
 
-    public class TaxInformationDropdownData
-    {
-        public List<TaxMethod> TaxMethod { get; set; } = new();
-        public List<IT3aReasonCode> IT3aReasonCode { get; set; } = new();
-        public List<UIFExempts> UIFExempts { get; set; } = new();
+	public class TaxInformationDropdownData
+	{
+		public List<TaxMethod> TaxMethod { get; set; } = new();
+		public List<IT3aReasonCode> IT3aReasonCode { get; set; } = new();
+		public List<UIFExempts> UIFExempts { get; set; } = new();
 
 
-    }
-    public class TaxInformation
-    {
-        public long EmployeeId { get; set; }
-        public string? IncomeTaxNumber { get; set; }
-        public string? TaxOffice { get; set; }
-        public int TaxMethod { get; set; }
-        public int IT3aReasonCodes { get; set; }
-        public int ExemptFromUIF { get; set; }
-        public int MedicalAidBeneficiaries { get; set; }
-        public bool IsOIDReportExclude { get; set; }
-        public bool IsSDLExempt { get; set; }
-        public bool IsPrivateBenefit { get; set; }
-        public bool IsCompanyorClose { get; set; }
-        public bool IsTrust { get; set; }
-        public bool IsETIQualifies { get; set; }
-        public decimal MinimumWage { get; set; }
-        public string? ValidId { get; set; }
-        public bool IsAverageWorkingHours { get; set; }
-        
+	}
+	public class TaxInformation
+	{
+		public long EmployeeId { get; set; }
+		public string? IncomeTaxNumber { get; set; }
+		public string? TaxOffice { get; set; }
+		public int TaxMethod { get; set; }
+		public int IT3aReasonCodes { get; set; }
+		public int ExemptFromUIF { get; set; }
+		public int MedicalAidBeneficiaries { get; set; }
+		public bool IsOIDReportExclude { get; set; }
+		public bool IsSDLExempt { get; set; }
+		public bool IsPrivateBenefit { get; set; }
+		public bool IsCompanyorClose { get; set; }
+		public bool IsTrust { get; set; }
+		public bool IsETIQualifies { get; set; }
+		public decimal MinimumWage { get; set; }
+		public string? ValidId { get; set; }
+		public bool IsAverageWorkingHours { get; set; }
+
 
 	}
 
@@ -282,6 +282,14 @@
 	{
 		public string EmployeeCode { get; set; } = null!;
 		public DateTime PreviousStartDate { get; set; }
-        public DateOnly TerminationDate { get; set; }
-    }
+		public DateOnly TerminationDate { get; set; }
+	}
+
+	public class UpsertUserResponseDTO
+	{
+		public bool Result { get; set; }
+		public Guid? UserId { get; set; }
+		public int? ErrorNumber { get; set; }
+		public string ErrorMessage { get; set; }
+	}
 }

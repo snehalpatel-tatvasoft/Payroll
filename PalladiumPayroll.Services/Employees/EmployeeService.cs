@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Helper;
@@ -42,7 +43,7 @@ namespace PalladiumPayroll.Services.Employees
             dt.Columns.Add("Designation", typeof(string));
             dt.Columns.Add("IDNumber", typeof(string));
             dt.Columns.Add("Dob", typeof(DateTime));
-            foreach(var item in data.DataList)
+            foreach (var item in data.DataList)
             {
                 dt.Rows.Add(item.EmployeeCode, item.EmployeeName, item.Department, item.Designation, item.IDNumber, item.Dob);
             }
@@ -193,7 +194,7 @@ namespace PalladiumPayroll.Services.Employees
             {
                 return HttpStatusCodeResponse.SuccessResponse(
                     string.Empty,
-                    string.Format(ResponseMessages.Success,ResponseMessages.DirectiveInformation, ActionType.Saved));
+                    string.Format(ResponseMessages.Success, ResponseMessages.DirectiveInformation, ActionType.Saved));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
@@ -223,7 +224,7 @@ namespace PalladiumPayroll.Services.Employees
             {
                 return HttpStatusCodeResponse.SuccessResponse(
                     string.Empty,
-                    string.Format(ResponseMessages.Success,ResponseMessages.DirectiveInformation, ActionType.Deleted));
+                    string.Format(ResponseMessages.Success, ResponseMessages.DirectiveInformation, ActionType.Deleted));
             }
 
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
@@ -234,6 +235,7 @@ namespace PalladiumPayroll.Services.Employees
             var data = await _employeeRepository.GetTaxInformationDropdownData();
             return data;
         }
+
 
         public async Task<JsonResult> GetTaxInformation(int employeeId)
         {
@@ -367,10 +369,10 @@ namespace PalladiumPayroll.Services.Employees
                 {
                     var isFileReplaced = false;
                     var filePath = Path.Combine(finalPath, file.FileName);
-                    isFileReplaced =  FileHandler.DeleteFile(filePath);
+                    isFileReplaced = FileHandler.DeleteFile(filePath);
                     await FileHandler.UploadFile(filePath, file);
 
-                    if(!isFileReplaced)
+                    if (!isFileReplaced)
                     {
                         var relativePath = Path.Combine(employeeFolder, file.FileName).Replace(Path.DirectorySeparatorChar.ToString(), "/");
                         dbFileList.Add(new EmployeeDocuments()
@@ -430,10 +432,58 @@ namespace PalladiumPayroll.Services.Employees
             return await _employeeRepository.GetAccessRolesByCompanyId(companyId);
         }
 
+        public async Task<JsonResult> UpsertEmployeeUser(UpsertUserRequestDTO request)
+        {
+            try
+            {
+                if (request == null || string.IsNullOrWhiteSpace(request.Email) ||
+                    string.IsNullOrWhiteSpace(request.Password) || request.CompanyId <= 0 ||
+                    request.AccessRoleId <= 0 || request.EmployeeId <= 0)
+                {
+                    return HttpStatusCodeResponse.BadRequestResponse();
+                }
+
+                // Hash password using PasswordHasher
+                string passwordHash = new PasswordHasher<object>().HashPassword(null, request.Password);
+
+                var createUserRequest = new UpsertUserRequestDTO
+                {
+                    AccessRoleId = request.AccessRoleId,
+                    Email = request.Email,
+                    Password = request.Password,
+                    PasswordHash = passwordHash,
+                    CompanyId = request.CompanyId,
+                    EmployeeId = request.EmployeeId
+                };
+
+                return await _employeeRepository.UpsertEmployeeUser(createUserRequest);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error upserting user: {ex.Message}");
+            }
+        }
+
         public async Task<JsonResult> GetPreviousService(int employeeId)
         {
             var previousServiceList = await _employeeRepository.GetPreviousService(employeeId);
             return HttpStatusCodeResponse.SuccessResponse(previousServiceList, string.Format(ResponseMessages.Success, "Previous Service", ActionType.Retrieved));
+        }
+        
+
+        public async Task<List<LeaveModel>> GetEmployeeLeaves(int employeeId)
+        {
+            return await _employeeRepository.GetEmployeeLeaves(employeeId);
+        }
+
+        public async Task<JsonResult> SaveEmpLeaveEntitlementNew(EditLeaveRequest reqModel, string oprType)
+        {
+            return await _employeeRepository.SaveEmpLeaveEntitlementNew(reqModel, oprType);
+        }
+
+        public async Task<JsonResult> DeleteEmployeeLeave(int employeeLeaveId)
+        {
+            return await _employeeRepository.DeleteEmployeeLeave(employeeLeaveId);
         }
     }
 }
