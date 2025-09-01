@@ -21,6 +21,7 @@ namespace PalladiumPayroll.Helper
     {
         public string EmployeeDocument { get; set; } = null!;
         public string TrainingDocument { get; set; } = null!;
+        public string DisplinaryLogDocument { get; set; } = null!;
     }
 
 }
