@@ -15,8 +15,6 @@ namespace PalladiumPayroll.Services.Employees
         private readonly IEmployeeRepository _employeeRepository;
         private readonly DirectoryPathSetting _directoryPathSetting;
         public EmployeeService(IEmployeeRepository employeeRepository, AppSettingPathHelper directoryPathSetting)
-        private readonly PasswordHasher<object> _passwordHasher;
-        public EmployeeService(IEmployeeRepository employeeRepository, AppSettingDirectoryPath directoryPathSetting)
         {
             _employeeRepository = employeeRepository;
             _directoryPathSetting = directoryPathSetting.GetAppSettingDirectoryPath();
