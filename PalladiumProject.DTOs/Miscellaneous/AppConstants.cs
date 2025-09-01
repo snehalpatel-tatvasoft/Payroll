@@ -46,6 +46,8 @@
             public static readonly string CasualWageInformation = "Employee Casual Wage Information";
             public static readonly string DirectiveInformation = "Employee  Directive Information";
             public static readonly string TaxInformation = "Employee  Tax Information";
+            public static readonly string  LeaveInformation = "Employee  Leave Information";
+
 
 
 

@@ -238,4 +238,30 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
         public long CompanyId { get; set; }
         public long EmployeeId { get; set; }
     }
+    public class LeaveModel
+    {
+        public int Id { get; set; }
+        public string LeaveType { get; set; } = string.Empty;
+        public decimal TakeOnBalance { get; set; }
+        public decimal DaysAccrued { get; set; }
+        public decimal DaysTaken { get; set; }
+        public decimal DaysDue { get; set; }
+        public decimal CycleLeaveEntitlement { get; set; }
+        public int LeaveTypeId { get; set; }
+        public int EmployeeId { get; set; }
+        public int Year { get; set; }
+    }
+
+    public class EditLeaveRequest
+    {
+        public int EmployeeId { get; set; }
+        public int? EmployeeLeaveId { get; set; }
+        public int LeaveTypeId { get; set; }
+        public int? Year { get; set; }
+        public decimal TakeOnBalance { get; set; }
+        public decimal DaysAccrued { get; set; }
+        public decimal DaysTaken { get; set; }
+        public decimal DaysDue { get; set; }
+        public decimal CycleLeaveEntitlement { get; set; }
+    }
 }

@@ -43,7 +43,7 @@ namespace PalladiumPayroll.Services.Employees
             dt.Columns.Add("Designation", typeof(string));
             dt.Columns.Add("IDNumber", typeof(string));
             dt.Columns.Add("Dob", typeof(DateTime));
-            foreach(var item in data.DataList)
+            foreach (var item in data.DataList)
             {
                 dt.Rows.Add(item.EmployeeCode, item.EmployeeName, item.Department, item.Designation, item.IDNumber, item.Dob);
             }
@@ -194,7 +194,7 @@ namespace PalladiumPayroll.Services.Employees
             {
                 return HttpStatusCodeResponse.SuccessResponse(
                     string.Empty,
-                    string.Format(ResponseMessages.Success,ResponseMessages.DirectiveInformation, ActionType.Saved));
+                    string.Format(ResponseMessages.Success, ResponseMessages.DirectiveInformation, ActionType.Saved));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
@@ -224,7 +224,7 @@ namespace PalladiumPayroll.Services.Employees
             {
                 return HttpStatusCodeResponse.SuccessResponse(
                     string.Empty,
-                    string.Format(ResponseMessages.Success,ResponseMessages.DirectiveInformation, ActionType.Deleted));
+                    string.Format(ResponseMessages.Success, ResponseMessages.DirectiveInformation, ActionType.Deleted));
             }
 
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
@@ -369,10 +369,10 @@ namespace PalladiumPayroll.Services.Employees
                 {
                     var isFileReplaced = false;
                     var filePath = Path.Combine(finalPath, file.FileName);
-                    isFileReplaced =  FileHandler.DeleteFile(filePath);
+                    isFileReplaced = FileHandler.DeleteFile(filePath);
                     await FileHandler.UploadFile(filePath, file);
 
-                    if(!isFileReplaced)
+                    if (!isFileReplaced)
                     {
                         var relativePath = Path.Combine(employeeFolder, file.FileName).Replace(Path.DirectorySeparatorChar.ToString(), "/");
                         dbFileList.Add(new EmployeeDocuments()
@@ -468,6 +468,22 @@ namespace PalladiumPayroll.Services.Employees
         {
             var previousServiceList = await _employeeRepository.GetPreviousService(employeeId);
             return HttpStatusCodeResponse.SuccessResponse(previousServiceList, string.Format(ResponseMessages.Success, "Previous Service", ActionType.Retrieved));
+        }
+        
+
+        public async Task<List<LeaveModel>> GetEmployeeLeaves(int employeeId)
+        {
+            return await _employeeRepository.GetEmployeeLeaves(employeeId);
+        }
+
+        public async Task<JsonResult> SaveEmpLeaveEntitlementNew(EditLeaveRequest reqModel, string oprType)
+        {
+            return await _employeeRepository.SaveEmpLeaveEntitlementNew(reqModel, oprType);
+        }
+
+        public async Task<JsonResult> DeleteEmployeeLeave(int employeeLeaveId)
+        {
+            return await _employeeRepository.DeleteEmployeeLeave(employeeLeaveId);
         }
     }
 }

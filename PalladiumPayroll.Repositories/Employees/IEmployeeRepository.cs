@@ -60,6 +60,9 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<JsonResult> UpsertEmployeeUser(UpsertUserRequestDTO request);
 
         Task<List<EmployeePreviousService>> GetPreviousService(int employeeId);
+        Task<List<LeaveModel>> GetEmployeeLeaves(int employeeId);
+        Task<JsonResult> SaveEmpLeaveEntitlementNew(EditLeaveRequest reqModel, string oprType);
+        Task<JsonResult> DeleteEmployeeLeave(int employeeLeaveId);
     }
 
 }
