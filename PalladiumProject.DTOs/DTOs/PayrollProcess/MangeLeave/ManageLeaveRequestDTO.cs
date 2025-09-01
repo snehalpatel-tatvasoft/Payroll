@@ -24,6 +24,6 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave
         public int ToTime { get; set; }
         public decimal Duration { get; set; }
         public DateTime RequestedDate { get; set; }
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
     }
 }
