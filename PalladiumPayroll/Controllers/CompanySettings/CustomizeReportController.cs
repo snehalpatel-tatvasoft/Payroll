@@ -4,6 +4,8 @@ using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.CompanySettings;
 using PalladiumPayroll.Services.CompanySettings;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.CompanySettings;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.CompanySettings;
 
@@ -12,13 +14,10 @@ namespace PalladiumPayroll.Controllers.CompanySettings;
 public class CustomizeReportController : ControllerBase
 {
     private readonly ICustomizeReportService _customizeReportService;
-    private readonly string _baseReportPath;
 
     public CustomizeReportController(ICustomizeReportService customizeReportService, IConfiguration configuration)
     {
         _customizeReportService = customizeReportService;
-        _baseReportPath = configuration.GetValue<string>("ReportSettings:BaseReportPath")
-                         ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "reports");
     }
 
     [HttpGet("GetAllReports")]
@@ -29,104 +28,71 @@ public class CustomizeReportController : ControllerBase
             JsonResult? res = await _customizeReportService.GetAllReports(new CustomizeReportRequestDTO());
             return res;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-            {
-                Result = false,
-                StatusCode = HttpStatusCode.InternalServerError,
-                Message = ex.Message,
-                Data = null
-            });
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CustomizeReport)
+                );
         }
     }
 
-    [HttpPost("DownloadReport")]
-    public async Task<ActionResult> DownloadReport([FromBody] DownloadReportRequestDTO request)
+    [HttpGet("DownloadReport")]
+    public async Task<ActionResult> DownloadReport([FromQuery] int reportId, [FromQuery] int? companyId)
     {
         try
         {
+            var request = new DownloadReportRequestDTO
+            {
+                ReportId = reportId,
+                CompanyId = companyId
+            };
             JsonResult? res = await _customizeReportService.DownloadReport(request);
             if (res.Value is HttpApiResponse<DownloadReportResponseDTO> response && response.Result)
             {
-                var relativePath = response.Data?.ReportPath;
-                if (string.IsNullOrEmpty(relativePath))
+                var filePath = response.Data?.FilePath;
+                if (string.IsNullOrEmpty(filePath))
                 {
-                    return NotFound(new HttpApiResponse<object>
-                    {
-                        Result = false,
-                        StatusCode = HttpStatusCode.NotFound,
-                        Message = "Report path not found.",
-                        Data = null
-                    });
+                    return HttpStatusCodeResponse.NotFoundResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CustomizeReport));                  
+
                 }
 
-                var absolutePath = Path.Combine(_baseReportPath, relativePath.Replace('/', Path.DirectorySeparatorChar));
-                if (!System.IO.File.Exists(absolutePath))
+                if (!System.IO.File.Exists(filePath))
                 {
-                    return NotFound(new HttpApiResponse<object>
-                    {
-                        Result = false,
-                        StatusCode = HttpStatusCode.NotFound,
-                        Message = $"Report file not found at {absolutePath}.",
-                        Data = null
-                    });
+                    return HttpStatusCodeResponse.NotFoundResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CustomizeReport));                  
                 }
 
-                var fileBytes = await System.IO.File.ReadAllBytesAsync(absolutePath);
-                var fileName = Path.GetFileName(absolutePath);
+                var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                var fileName = Path.GetFileName(filePath);
                 return File(fileBytes, "application/octet-stream", fileName);
             }
             return Ok(res.Value);
         }
-        catch (Exception ex)
+        catch (Exception )
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-            {
-                Result = false,
-                StatusCode = HttpStatusCode.InternalServerError,
-                Message = ex.Message,
-                Data = null
-            });
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+            string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CustomizeReport));                  
         }
     }
-    
-    [HttpPost("UploadReport")]
+
+    [HttpPost("[action]")]
     public async Task<ActionResult> UploadReport([FromForm] UploadReportRequestDTO request)
     {
         try
         {
-            if (!Directory.Exists(_baseReportPath))
+            if (request.ReportId < 0)
             {
-                Directory.CreateDirectory(_baseReportPath);
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidReportId);
             }
-
-            var uploadDir = Path.Combine(_baseReportPath, "uploaded-reports");
-            if (!Directory.Exists(uploadDir))
-            {
-                Directory.CreateDirectory(uploadDir);
-            }
-
-            var fileName = $"{Guid.NewGuid()}_{Path.GetFileNameWithoutExtension(request.File.FileName)}.repx";
-            var filePath = Path.Combine(uploadDir, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await request.File.CopyToAsync(stream);
-            }
-
-            var result = await _customizeReportService.UploadReport(request, fileName);
-            return result;
+            return await _customizeReportService.UploadReport(request);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-            {
-                Result = false,
-                StatusCode = HttpStatusCode.InternalServerError,
-                Message = $"Failed to upload report: {ex.Message}",
-                Data = null
-            });
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.CustomizeReport)
+            );
         }
     }
+
 }

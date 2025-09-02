@@ -326,6 +326,12 @@
 
             #endregion
 
+            #region Customize Report
+
+            public static readonly string CustomizeReport = "Customize Report";
+            public const string InvalidReportId = "Report Id is Invalid.";
+
+            #endregion
         }
 
 

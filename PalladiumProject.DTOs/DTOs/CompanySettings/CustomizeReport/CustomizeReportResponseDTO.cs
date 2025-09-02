@@ -8,7 +8,7 @@ namespace PalladiumPayroll.DTOs.DTOs.ResponseDTOs.CompanySettings
 
     public class DownloadReportResponseDTO
     {
-        public string ReportPath { get; set; } = null!;
+        public string FilePath { get; set; } = null!;
     }
 
     public class UploadReportResponseDTO
