@@ -8,7 +8,7 @@ public class LeaveSettingsRequestDTO
     public decimal? LeaveAccumulationDays { get; set; }
     public int? ExceedDue { get; set; }
     public bool? LeaveCarriedForward { get; set; }
-    public int? LeaveCarriedForwardMaxDays { get; set; }
+    public decimal? LeaveCarriedForwardMaxDays { get; set; }
     public bool? Recurring { get; set; }
     public int? NoOfTimeReccuring { get; set; }
     public decimal? AnnualEntitlementDays { get; set; }
