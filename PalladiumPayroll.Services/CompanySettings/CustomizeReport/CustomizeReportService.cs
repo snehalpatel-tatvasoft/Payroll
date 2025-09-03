@@ -81,12 +81,12 @@ public class CustomizeReportService : ICustomizeReportService
 
         if (!isSaved)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DisciplinaryLogSaveFailed);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.ErrorSavingCustomizeReport);
         }
 
         return HttpStatusCodeResponse.SuccessResponse(
             string.Empty,
-            string.Format(ResponseMessages.Success, ResponseMessages.DisciplinaryLog, ActionType.Saved)
+            string.Format(ResponseMessages.Success, ResponseMessages.CustomizeReport, ActionType.Saved)
         );
 
     }

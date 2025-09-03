@@ -330,6 +330,7 @@
 
             public static readonly string CustomizeReport = "Customize Report";
             public const string InvalidReportId = "Report Id is Invalid.";
+            public const string ErrorSavingCustomizeReport = "Error while Saving Customize Report";
 
             #endregion
         }
