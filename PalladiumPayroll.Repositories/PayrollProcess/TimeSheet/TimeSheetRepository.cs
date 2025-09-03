@@ -1,6 +1,4 @@
 ﻿using Dapper;
-using DocumentFormat.OpenXml.Spreadsheet;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.TimeSheet;
@@ -11,12 +9,10 @@ namespace PalladiumPayroll.Services.PayrollProcess.TimeSheet
     public class TimeSheetRepository : ITimeSheetRepository
     {
         private readonly DapperContext _dapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TimeSheetRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public TimeSheetRepository(IConfiguration configuration)
         {
             _dapper = new DapperContext(configuration);
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<List<TimeSheetImport>> GetLatestImportedData(int companyId)
