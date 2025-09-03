@@ -37,6 +37,8 @@
             public static readonly string Valid = "{0} is valid";
             public static readonly string SomethingWrong = "Something went wrong.";
             public static readonly string ExceptionMessage = "An Error Occurred While {0} {1}";
+            public static readonly string EmptyFile = "File is empty !!";
+            public static readonly string InavalidFile = "File format is invalid !";
 
             #endregion
 
