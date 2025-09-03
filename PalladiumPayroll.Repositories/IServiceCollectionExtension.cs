@@ -22,6 +22,7 @@ using PalladiumPayroll.Repositories.HRFunctions.CoidAccident;
 using PalladiumPayroll.Repositories.Utilities.DataImport;
 using PalladiumPayroll.Repositories.CompanySettings.LeaveSettings;
 using PalladiumPayroll.Services.PayrollProcess.ManageLeave;
+using PalladiumPayroll.Services.PayrollProcess.TimeSheet;
 
 namespace PalladiumPayroll.Repositories
 {
@@ -59,6 +60,7 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<IDataImportRepository, DataImportRepository>();
             services.AddScoped<ILeaveSettingsRepository, LeaveSettingsRepository>();
             services.AddScoped<IManageLeaveRepository, ManageLeaveRepository>();
+            services.AddScoped<ITimeSheetRepository, TimeSheetRepository>();
             return services;
         }
     }
