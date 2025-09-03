@@ -6,6 +6,7 @@ using PalladiumPayroll.Services.CompanySettings;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.CompanySettings;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
+using PalladiumPayroll.Helper;
 
 namespace PalladiumPayroll.Controllers.CompanySettings;
 
@@ -20,7 +21,7 @@ public class CustomizeReportController : ControllerBase
         _customizeReportService = customizeReportService;
     }
 
-    [HttpGet("GetAllReports")]
+    [HttpGet("[action]")]
     public async Task<ActionResult> GetAllReports()
     {
         try
@@ -36,7 +37,7 @@ public class CustomizeReportController : ControllerBase
         }
     }
 
-    [HttpGet("DownloadReport")]
+    [HttpGet("[action]")]
     public async Task<ActionResult> DownloadReport([FromQuery] int reportId, [FromQuery] int? companyId)
     {
         try
@@ -53,26 +54,19 @@ public class CustomizeReportController : ControllerBase
                 if (string.IsNullOrEmpty(filePath))
                 {
                     return HttpStatusCodeResponse.NotFoundResponse(
-                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CustomizeReport));                  
-
+                        string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CustomizeReport));
                 }
 
-                if (!System.IO.File.Exists(filePath))
-                {
-                    return HttpStatusCodeResponse.NotFoundResponse(
-                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CustomizeReport));                  
-                }
-
-                var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                var fileBytes = await FileHandler.ReadFileBytes(filePath);
                 var fileName = Path.GetFileName(filePath);
-                return File(fileBytes, "application/octet-stream", fileName);
+                return File(fileBytes, ContentTypes.OctetStream, fileName);
             }
             return Ok(res.Value);
         }
-        catch (Exception )
+        catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-            string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CustomizeReport));                  
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CustomizeReport));
         }
     }
 

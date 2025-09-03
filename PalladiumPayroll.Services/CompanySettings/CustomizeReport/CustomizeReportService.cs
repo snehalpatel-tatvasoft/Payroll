@@ -32,9 +32,10 @@ public class CustomizeReportService : ICustomizeReportService
             }
             return HttpStatusCodeResponse.NotFoundResponse("Reports");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching reports: {ex.Message}");
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CustomizeReport));
         }
     }
 
@@ -49,45 +50,54 @@ public class CustomizeReportService : ICustomizeReportService
             }
             return HttpStatusCodeResponse.NotFoundResponse("Report Path");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse($"Error downloading report: {ex.Message}");
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                               string.Format(ResponseMessages.ExceptionMessage, "Downloading", ResponseMessages.CustomizeReport));
         }
+
     }
 
     public async Task<JsonResult> UploadReport(UploadReportRequestDTO request)
     {
-
-        if (request.File != null && request.File.Length > 0)
+        try
         {
-            var basePath = _directoryPathSetting.CustomizeReportDocument;
-            var finalPath = FileHandler.CombinePath(basePath, "");
+            if (request.File != null && request.File.Length > 0)
+            {
+                var basePath = _directoryPathSetting.CustomizeReportDocument;
+                var finalPath = FileHandler.CombinePath(basePath, "");
 
-            FileHandler.CreateDirectory(finalPath);
+                FileHandler.CreateDirectory(finalPath);
 
-            var filePath = Path.Combine(finalPath, request.File.FileName);
-            FileHandler.DeleteFile(filePath);
-            await FileHandler.UploadFile(filePath, request.File);
+                var filePath = Path.Combine(finalPath, request.File.FileName);
+                FileHandler.DeleteFile(filePath);
+                await FileHandler.UploadFile(filePath, request.File);
 
-            var relativePath = Path.Combine(basePath, request.File.FileName).Replace("\\", "/");
+                var relativePath = Path.Combine(basePath, request.File.FileName).Replace("\\", "/");
 
-            request.FileName = request.File.FileName;
-            request.FilePath = relativePath;
-            request.FileSize = request.File.Length;
-            request.FileType = request.File.ContentType;
+                request.FileName = request.File.FileName;
+                request.FilePath = relativePath;
+                request.FileSize = request.File.Length;
+                request.FileType = request.File.ContentType;
+            }
+
+            bool isSaved = await _customizeReportRepository.UploadReport(request);
+
+            if (!isSaved)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.ErrorSavingCustomizeReport);
+            }
+
+            return HttpStatusCodeResponse.SuccessResponse(
+                string.Empty,
+                string.Format(ResponseMessages.Success, ResponseMessages.CustomizeReport, ActionType.Saved)
+            );
         }
-
-        bool isSaved = await _customizeReportRepository.UploadReport(request);
-
-        if (!isSaved)
+        catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.ErrorSavingCustomizeReport);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                               string.Format(ResponseMessages.ExceptionMessage, "Uploading", ResponseMessages.CustomizeReport));
         }
-
-        return HttpStatusCodeResponse.SuccessResponse(
-            string.Empty,
-            string.Format(ResponseMessages.Success, ResponseMessages.CustomizeReport, ActionType.Saved)
-        );
 
     }
 
