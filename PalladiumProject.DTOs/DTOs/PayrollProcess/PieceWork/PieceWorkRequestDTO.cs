@@ -52,4 +52,5 @@ public class PieceWorkFilterViewModel
     public string SortBy { get; set; } = "PieceworkId";
     public bool SortType { get; set; } = true;
     public string Search { get; set; } = "";
+    public bool IsExport { get; set; } = false;
 }

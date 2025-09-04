@@ -125,7 +125,7 @@ public class PieceWorkController : ControllerBase
         }
     }
 
-    
+
     [HttpDelete("[action]")]
     public async Task<ActionResult> DeletePieceWork(int pieceWorkId)
     {
@@ -142,6 +142,23 @@ public class PieceWorkController : ControllerBase
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.PieceWork)
+            );
+        }
+    }
+
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> ExportPieceworkList([FromQuery] PieceWorkFilterViewModel reqModel)
+    {
+        try
+        {
+            byte[]? fileBytes = await _pieceWorkService.ExportPieceworkList(reqModel);
+            return File(fileBytes, ContentTypes.Xlsx, "PieceWorkList.xlsx");
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Exporting, ResponseMessages.PieceWork+" List")
             );
         }
     }

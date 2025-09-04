@@ -1,7 +1,9 @@
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.PieceWork;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using PalladiumPayroll.Helper;
 using PalladiumPayroll.Repositories.PayrollProcess.PieceWork;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
@@ -94,4 +96,40 @@ public class PieceWorkService : IPieceWorkService
         }
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.PieceWork, ActionType.Deleted));
     }
+
+    public async Task<byte[]> ExportPieceworkList(PieceWorkFilterViewModel reqModel)
+    {
+        reqModel.CurrentPage = 0;
+        reqModel.PageSize = 0;
+
+        TableDataModel<PieceworkListDTO>? data = await _pieceWorkRepository.GetPieceWorkList(reqModel);
+
+        DataTable? dt = new DataTable();
+        dt.Columns.Add("Employee Code", typeof(string));
+        dt.Columns.Add("Employee Name", typeof(string));
+        dt.Columns.Add("Area", typeof(string));
+        dt.Columns.Add("Product Type", typeof(string));
+        dt.Columns.Add("Unit", typeof(string));
+        dt.Columns.Add("Quantity Delivered", typeof(decimal));
+        dt.Columns.Add("Rate", typeof(decimal));
+        dt.Columns.Add("Total Paid Amount", typeof(decimal));
+        dt.Columns.Add("Payment Date", typeof(DateTime));
+
+        foreach (var item in data.DataList)
+        {
+            dt.Rows.Add(
+                item.EmployeeCode,
+                item.EmployeeName,
+                item.Area,
+                item.ProductType,
+                item.Unit,
+                item.QuantityDelivered ?? 0,
+                item.Rate ?? 0,
+                item.TotalPaidAmount ?? 0,
+                item.PaymentDate
+            );
+        }
+        return ExcelHelper.ExportToExcel(new Dictionary<string, DataTable> { { "Piecework", dt } });
+    }
+
 }

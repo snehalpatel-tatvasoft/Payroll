@@ -11,11 +11,13 @@
             uploaded,
             Retrieved,
             Imported,
+            Exported,
             Saving,
             Retrieving,
             Updating,
             Deleting,
-            Importing
+            Importing,
+            Exporting
         }
 
         public enum PositiveNumbers

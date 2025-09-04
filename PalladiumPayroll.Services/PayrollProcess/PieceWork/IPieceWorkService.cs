@@ -20,4 +20,6 @@ public interface IPieceWorkService
     Task<JsonResult> GetPieceWorkList(PieceWorkFilterViewModel reqModel);
 
      Task<JsonResult> DeletePieceWork(int pieceWorkId);
+
+     Task<byte[]> ExportPieceworkList(PieceWorkFilterViewModel reqModel);
 }

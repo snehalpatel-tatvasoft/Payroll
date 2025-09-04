@@ -153,6 +153,7 @@ public class PieceWorkRepository : IPieceWorkRepository
         parameters.Add("@SortBy", reqModel.SortBy ?? "PieceworkId");
         parameters.Add("@SortType", reqModel.SortType ? "ASC" : "DESC");
         parameters.Add("@Search", reqModel.Search ?? "");
+        parameters.Add("@IsExport", reqModel.IsExport);
         parameters.Add("@TotalCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
         var data = await _dapper.ExecuteStoredProcedure<PieceworkListDTO>("usp_GetPieceworkList", parameters);
