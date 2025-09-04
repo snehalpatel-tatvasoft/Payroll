@@ -16,6 +16,6 @@
     {
         public int CompanyId { get; set; } = 0;
         public string CompanyName { get; set; } = string.Empty;
-        public int AccessRoleID { get; set; }
+        public int AccessTypeId { get; set; }
     }
 }
