@@ -60,5 +60,12 @@ public class PieceWorkService : IPieceWorkService
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.PieceWorkMaster, ActionType.Saved));
     }
 
+    public async Task<JsonResult> GetPieceworkRate(GetPieceworkRateRequestDTO request)
+    {
+        decimal? rate = await _pieceWorkRepository.GetPieceworkRate(request);
+
+        return HttpStatusCodeResponse.SuccessResponse(rate, string.Format(ResponseMessages.Success, ResponseMessages.PieceWork + " Rate", ActionType.Retrieved));
+    }
+
 
 }

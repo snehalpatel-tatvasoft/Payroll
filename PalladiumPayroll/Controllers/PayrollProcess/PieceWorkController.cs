@@ -33,7 +33,7 @@ public class PieceWorkController : ControllerBase
         }
         catch (Exception)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.PieceWork+" DropList"));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.PieceWork + " DropList"));
         }
     }
 
@@ -55,7 +55,7 @@ public class PieceWorkController : ControllerBase
     {
         try
         {
-            return await _pieceWorkService.DeletePieceWorkDropdownItem(id,type);
+            return await _pieceWorkService.DeletePieceWorkDropdownItem(id, type);
         }
         catch (Exception)
         {
@@ -64,7 +64,7 @@ public class PieceWorkController : ControllerBase
             );
         }
     }
-    
+
     [HttpPost("[action]")]
     public async Task<ActionResult> UpsertPieceWorkMasterData(UpsertPieceworkMasterDataDTO request)
     {
@@ -79,4 +79,20 @@ public class PieceWorkController : ControllerBase
             );
         }
     }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> GetPieceworkRate(GetPieceworkRateRequestDTO request)
+    {
+        try
+        {
+            return await _pieceWorkService.GetPieceworkRate(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.PieceWork+" Rate")
+            );
+        }
+    }
 }
+    

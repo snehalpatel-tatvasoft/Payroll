@@ -12,4 +12,6 @@ public interface IPieceWorkService
     Task<JsonResult> DeletePieceWorkDropdownItem(int id, int type);
 
     Task<JsonResult> UpsertPieceWorkMasterData(UpsertPieceworkMasterDataDTO request);
+
+    Task<JsonResult> GetPieceworkRate(GetPieceworkRateRequestDTO request);
 }

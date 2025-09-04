@@ -99,4 +99,20 @@ public class PieceWorkRepository : IPieceWorkRepository
         return parameters.Get<bool>("@IsSuccess");
     }
 
+
+    public async Task<decimal?> GetPieceworkRate(GetPieceworkRateRequestDTO request)
+    {
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("@Mode", request.Mode);
+        parameters.Add("@CompanyId", request.CompanyId);
+        parameters.Add("@EmployeeId", request.EmployeeId);
+        parameters.Add("@UnitId", request.UnitId);
+        parameters.Add("@ProductTypeId", request.ProductTypeId);
+        parameters.Add("@AreaId", request.AreaId);
+
+        decimal? result = await _dapper.ExecuteStoredProcedureSingle<decimal?>(
+            "usp_GetPieceworkRateFromMasterTable", parameters);
+
+        return result;
+    }
 }

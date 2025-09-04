@@ -12,4 +12,6 @@ public interface IPieceWorkRepository
     Task<DeleteDropDownResult> DeletePieceWorkDropdownItem(int id, int type);
 
     Task<bool> UpsertPieceWorkMasterData(UpsertPieceworkMasterDataDTO request);
+
+    Task<decimal?> GetPieceworkRate(GetPieceworkRateRequestDTO request);
 }

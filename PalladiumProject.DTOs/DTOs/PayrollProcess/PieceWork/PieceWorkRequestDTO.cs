@@ -20,3 +20,13 @@ public class UpsertPieceworkMasterDataDTO{
     public long CompanyId { get; set; }
     public long? EmployeeId { get; set; }
 }
+
+public class GetPieceworkRateRequestDTO
+{
+    public string Mode { get; set; } = string.Empty;
+    public long CompanyId { get; set; }
+    public long? EmployeeId { get; set; }  
+    public int UnitId { get; set; }
+    public int ProductTypeId { get; set; }
+    public int AreaId { get; set; }
+}
