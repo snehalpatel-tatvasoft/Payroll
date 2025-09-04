@@ -23,6 +23,7 @@ using PalladiumPayroll.Services.HRFunctions.CoidAccident;
 using PalladiumPayroll.Services.Utilities.DataImport;
 using PalladiumPayroll.Services.CompanySettings.LeaveSettings;
 using PalladiumPayroll.Services.PayrollProcess.ManageLeave;
+using PalladiumPayroll.Services.PayrollProcess.CommissionReport;
 
 namespace PalladiumPayroll.Services
 {
@@ -61,6 +62,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IDataImportService, DataImportService>();
             services.AddScoped<ILeaveSettingsService, LeaveSettingsService>();
             services.AddScoped<IManageLeaveService, ManageLeaveService>();
+            services.AddScoped<ICommissionReportService, CommissionReportService>();
             services.AddHttpContextAccessor();
             return services;
         }

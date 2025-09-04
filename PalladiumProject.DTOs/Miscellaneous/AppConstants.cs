@@ -46,7 +46,7 @@
             public static readonly string CasualWageInformation = "Employee Casual Wage Information";
             public static readonly string DirectiveInformation = "Employee  Directive Information";
             public static readonly string TaxInformation = "Employee  Tax Information";
-            public static readonly string  LeaveInformation = "Employee  Leave Information";
+            public static readonly string LeaveInformation = "Employee  Leave Information";
 
 
 
@@ -309,9 +309,9 @@
 
 
             #region Leave Settings
-             public static readonly string LeaveSettings = "Leave Settings";
-             public static readonly string LeaveSettingsUpdateFailed = "Failed to update Leave Settings.";
-             
+            public static readonly string LeaveSettings = "Leave Settings";
+            public static readonly string LeaveSettingsUpdateFailed = "Failed to update Leave Settings.";
+
             #endregion
 
 
@@ -323,6 +323,11 @@
             public const string DisciplinaryLogSaveFailed  = "Failed to save Disciplinary Log";
             public const string InvalidDisciplinaryLogId = "Disciplinary Log Id is Invalid.";
             public const string DisciplinaryLogNotFound = "Disciplinary Log was not found.";
+
+            #endregion
+
+            #region Commission Report
+            public static readonly string CommissionReport = "Commission Report";
 
             #endregion
 
