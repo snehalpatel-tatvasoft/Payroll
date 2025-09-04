@@ -39,3 +39,24 @@ public class PieceWorkDropdownsDTO
     public List<AreaDto> Areas { get; set; } = new();
     public List<EmployeeDto> Employees { get; set; } = new();
 }
+
+public class PieceworkListDTO
+{
+    public int PieceworkId { get; set; }
+    public long EmployeeId { get; set; }
+    public string EmployeeCode { get; set; } = string.Empty;
+    public string EmployeeName { get; set; } = string.Empty;
+    public int AreaId { get; set; }
+    public string Area { get; set; } = string.Empty;
+    public int ProductTypeId { get; set; }
+    public string ProductType { get; set; } = string.Empty;
+    public int UnitId { get; set; }
+    public string Unit { get; set; } = string.Empty;
+    public decimal? QuantityDelivered { get; set; }
+    public decimal? Rate { get; set; }
+    public decimal? TotalPaidAmount { get; set; }
+    public bool InfluenceUIF { get; set; }
+    public bool InfluenceSDL { get; set; }
+    public DateTime? PaymentDate { get; set; }
+    public long CompanyId { get; set; }
+}

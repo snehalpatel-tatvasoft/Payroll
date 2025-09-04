@@ -14,4 +14,10 @@ public interface IPieceWorkService
     Task<JsonResult> UpsertPieceWorkMasterData(UpsertPieceworkMasterDataDTO request);
 
     Task<JsonResult> GetPieceworkRate(GetPieceworkRateRequestDTO request);
+
+    Task<JsonResult> UpsertPieceWork(UpsertPieceworkDTO request);
+
+    Task<JsonResult> GetPieceWorkList(PieceWorkFilterViewModel reqModel);
+
+     Task<JsonResult> DeletePieceWork(int pieceWorkId);
 }

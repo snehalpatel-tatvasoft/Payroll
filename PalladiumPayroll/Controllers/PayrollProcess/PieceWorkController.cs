@@ -90,9 +90,59 @@ public class PieceWorkController : ControllerBase
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.PieceWork+" Rate")
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.PieceWork + " Rate")
+            );
+        }
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> UpsertPieceWork(UpsertPieceworkDTO request)
+    {
+        try
+        {
+            return await _pieceWorkService.UpsertPieceWork(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.PieceWork)
+            );
+        }
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> GetPieceWorkList([FromQuery] PieceWorkFilterViewModel reqModel)
+    {
+        try
+        {
+            return await _pieceWorkService.GetPieceWorkList(reqModel);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.PieceWork)
+            );
+        }
+    }
+
+    
+    [HttpDelete("[action]")]
+    public async Task<ActionResult> DeletePieceWork(int pieceWorkId)
+    {
+        try
+        {
+            if (pieceWorkId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidPieceWorkId);
+            }
+
+            return await _pieceWorkService.DeletePieceWork(pieceWorkId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.PieceWork)
             );
         }
     }
 }
-    

@@ -1,5 +1,6 @@
 using System.Data;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.Common;
@@ -10,10 +11,12 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.PieceWork;
 public class PieceWorkRepository : IPieceWorkRepository
 {
     private readonly DapperContext _dapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public PieceWorkRepository(IConfiguration configuration)
+    public PieceWorkRepository(IConfiguration configuration,IHttpContextAccessor httpContextAccessor)
     {
         _dapper = new DapperContext(configuration);
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<PieceWorkDropdownsDTO> GetPieceWorkDropdownData(long companyId)
@@ -80,7 +83,7 @@ public class PieceWorkRepository : IPieceWorkRepository
     }
 
 
-     public async Task<bool> UpsertPieceWorkMasterData(UpsertPieceworkMasterDataDTO request)
+    public async Task<bool> UpsertPieceWorkMasterData(UpsertPieceworkMasterDataDTO request)
     {
         DynamicParameters? parameters = new DynamicParameters();
 
@@ -114,5 +117,63 @@ public class PieceWorkRepository : IPieceWorkRepository
             "usp_GetPieceworkRateFromMasterTable", parameters);
 
         return result;
+    }
+
+    public async Task<bool> UpsertPieceWork(UpsertPieceworkDTO request)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+
+        parameters.Add("@PieceworkId", request.PieceworkId);
+        parameters.Add("@EmployeeId", request.EmployeeId);
+        parameters.Add("@AreaId", request.AreaId);
+        parameters.Add("@ProductTypeId", request.ProductTypeId);
+        parameters.Add("@UnitId", request.UnitId);
+        parameters.Add("@QuantityDelivered", request.QuantityDelivered);
+        parameters.Add("@TotalPaidAmount", request.TotalPaidAmount);
+        parameters.Add("@Rate", request.Rate);
+        parameters.Add("@InfluenceUIF", request.InfluenceUIF);
+        parameters.Add("@InfluenceSDL", request.InfluenceSDL);
+        parameters.Add("@PaymentDate", request.PaymentDate);
+        parameters.Add("@CompanyId", request.CompanyId);
+        parameters.Add("@UserId",  _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+
+        parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_UpsertPiecework", parameters);
+
+        return parameters.Get<bool>("@IsSuccess");
+    }
+
+    public async Task<TableDataModel<PieceworkListDTO>> GetPieceWorkList(PieceWorkFilterViewModel reqModel)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", reqModel.CompanyId);
+        parameters.Add("@CurrentPage", reqModel.CurrentPage);
+        parameters.Add("@PageSize", reqModel.PageSize);
+        parameters.Add("@SortBy", reqModel.SortBy ?? "PieceworkId");
+        parameters.Add("@SortType", reqModel.SortType ? "ASC" : "DESC");
+        parameters.Add("@Search", reqModel.Search ?? "");
+        parameters.Add("@TotalCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+        var data = await _dapper.ExecuteStoredProcedure<PieceworkListDTO>("usp_GetPieceworkList", parameters);
+        int total = parameters.Get<int>("@TotalCount");
+
+        return new TableDataModel<PieceworkListDTO>
+        {
+            DataList = data,
+            TotalCount = total
+        };
+    }
+
+     public async Task<bool> DeletePieceWork(int pieceWorkId)
+    {
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("@PieceWorkId", pieceWorkId);
+        parameters.Add("@UserId",  _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+        parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeletePieceWork", parameters);
+
+        return parameters.Get<bool>("@IsSuccess");
     }
 }

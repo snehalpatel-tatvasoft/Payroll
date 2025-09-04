@@ -48,7 +48,6 @@ public class PieceWorkService : IPieceWorkService
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, result.Message);
     }
 
-
     public async Task<JsonResult> UpsertPieceWorkMasterData(UpsertPieceworkMasterDataDTO request)
     {
         bool isSaved = await _pieceWorkRepository.UpsertPieceWorkMasterData(request);
@@ -67,5 +66,32 @@ public class PieceWorkService : IPieceWorkService
         return HttpStatusCodeResponse.SuccessResponse(rate, string.Format(ResponseMessages.Success, ResponseMessages.PieceWork + " Rate", ActionType.Retrieved));
     }
 
+    public async Task<JsonResult> UpsertPieceWork(UpsertPieceworkDTO request)
+    {
+        bool isSaved = await _pieceWorkRepository.UpsertPieceWork(request);
 
+        if (!isSaved)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.PieceWorkSaveFiled);
+        }
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.PieceWork, ActionType.Saved));
+    }
+
+    public async Task<JsonResult> GetPieceWorkList(PieceWorkFilterViewModel reqModel)
+    {
+        TableDataModel<PieceworkListDTO> pieceworks = await _pieceWorkRepository.GetPieceWorkList(reqModel);
+
+        return HttpStatusCodeResponse.SuccessResponse(pieceworks, string.Format(ResponseMessages.Success, ResponseMessages.PieceWork, ActionType.Retrieved));
+    }
+
+    public async Task<JsonResult> DeletePieceWork(int pieceWorkId)
+    {
+        bool isDeleted = await _pieceWorkRepository.DeletePieceWork(pieceWorkId);
+
+        if (!isDeleted)
+        {
+            return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.PieceWork);
+        }
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.PieceWork, ActionType.Deleted));
+    }
 }

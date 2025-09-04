@@ -14,4 +14,10 @@ public interface IPieceWorkRepository
     Task<bool> UpsertPieceWorkMasterData(UpsertPieceworkMasterDataDTO request);
 
     Task<decimal?> GetPieceworkRate(GetPieceworkRateRequestDTO request);
+
+    Task<bool> UpsertPieceWork(UpsertPieceworkDTO request);
+
+     Task<TableDataModel<PieceworkListDTO>> GetPieceWorkList(PieceWorkFilterViewModel reqModel);
+
+      Task<bool> DeletePieceWork(int pieceWorkId);
 }

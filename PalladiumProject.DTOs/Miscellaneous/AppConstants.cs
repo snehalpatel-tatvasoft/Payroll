@@ -329,6 +329,9 @@
             public static readonly string PieceWork = "Piece Work";
             public static readonly string PieceWorkMaster = "Piece Work Master Data";
             public const string PieceWorkMasterSaveFiled = "Failed to save Piece Work master data.";
+            public const string PieceWorkSaveFiled = "Failed to save Piece Work.";
+             public const string PieceWorkNotFound = "Piece work was not found.";
+              public const string InvalidPieceWorkId = "Piece Work Id is Invalid.";
 
             #endregion
 
