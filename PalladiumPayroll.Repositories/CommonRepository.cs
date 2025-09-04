@@ -70,6 +70,14 @@ namespace PalladiumPayroll.Repositories
             return response;
         }
 
+        public async Task<List<DropDownViewModel>> GetCyclePeriodDropDown(int cycleId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CycleId", cycleId);
+            List<DropDownViewModel> response = await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_GetPayPeriods", parameters);
+            return response;
+        }
+
         public async Task<bool> CheckDBConnection(DBConnectionModel dbConnectionModel)
         {
             string originalString = string.Format(DefaultConnectionString, dbConnectionModel.ServerName, dbConnectionModel.DBName, dbConnectionModel.UserName, dbConnectionModel.Password);
