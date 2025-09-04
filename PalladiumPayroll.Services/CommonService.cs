@@ -20,49 +20,55 @@ namespace PalladiumPayroll.Services
         public async Task<JsonResult> GetCountryList()
         {
             List<DropDownViewModel> countryList = await _commonRepository.GetCountryList();
-            return HttpStatusCodeResponse.SuccessResponse(countryList, string.Empty);
+            return HttpStatusCodeResponse.SuccessResponse(countryList, string.Format(ResponseMessages.Success, "country", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetTaxYearList()
         {
             List<DropDownViewModel> yearList = await _commonRepository.GetTaxYearList();
-            return HttpStatusCodeResponse.SuccessResponse(yearList, string.Empty);
+            return HttpStatusCodeResponse.SuccessResponse(yearList, string.Format(ResponseMessages.Success, "tax year", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetBankList(int? companyId)
         {
             List<DropDownViewModel> bankList = await _commonRepository.GetBankList(companyId);
-            return HttpStatusCodeResponse.SuccessResponse(bankList, string.Empty);
+            return HttpStatusCodeResponse.SuccessResponse(bankList, string.Format(ResponseMessages.Success, "bank", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetBranchList(int bankId)
         {
             List<DropDownViewModel> branchList = await _commonRepository.GetBranchList(bankId);
-            return HttpStatusCodeResponse.SuccessResponse(branchList, string.Empty);
+            return HttpStatusCodeResponse.SuccessResponse(branchList, string.Format(ResponseMessages.Success, "branch", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetStandardIndustryCode()
         {
             List<DropDownViewModel> standardList = await _commonRepository.GetStandardIndustryCode();
-            return HttpStatusCodeResponse.SuccessResponse(standardList, string.Empty);
+            return HttpStatusCodeResponse.SuccessResponse(standardList, string.Format(ResponseMessages.Success, "industry", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetTradeClassification()
         {
             List<DropDownViewModel> tradeList = await _commonRepository.GetTradeClassification();
-            return HttpStatusCodeResponse.SuccessResponse(tradeList, string.Empty);
+            return HttpStatusCodeResponse.SuccessResponse(tradeList, string.Format(ResponseMessages.Success, "trade classification", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetTransactionList()
         {
             List<TransactionList> transactionList = await _commonRepository.GetTransactionList();
-            return HttpStatusCodeResponse.SuccessResponse(transactionList, string.Empty);
+            return HttpStatusCodeResponse.SuccessResponse(transactionList, string.Format(ResponseMessages.Success, "transaction", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetCompanyCycle(int companyId)
         {
             List<DropDownViewModel> cycleList = await _commonRepository.GetCompanyCycle(companyId);
-            return HttpStatusCodeResponse.SuccessResponse(cycleList, string.Empty);
+            return HttpStatusCodeResponse.SuccessResponse(cycleList, string.Format(ResponseMessages.Success, "cycle", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> GetCyclePeriodDropDown(int cycleId)
+        {
+            var periodList = await _commonRepository.GetCyclePeriodDropDown(cycleId);
+            return HttpStatusCodeResponse.SuccessResponse(periodList, string.Format(ResponseMessages.Success, "Perid", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> CheckDBConnection(DBConnectionModel dbConnectionModel)
@@ -78,20 +84,20 @@ namespace PalladiumPayroll.Services
         public async Task<JsonResult> GetBusinessTypeList()
         {
             List<DropDownViewModel> businessTypeList = await _commonRepository.GetBusinessTypeList();
-            return HttpStatusCodeResponse.SuccessResponse(businessTypeList, string.Empty);
+            return HttpStatusCodeResponse.SuccessResponse(businessTypeList, string.Format(ResponseMessages.Success, "bussiness type", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetNumberOfEmployeesList()
         {
             List<DropDownViewModel> numberOfEmployees = await _commonRepository.GetNumberOfEmployeesList();
-            return HttpStatusCodeResponse.SuccessResponse(numberOfEmployees, string.Empty);
+            return HttpStatusCodeResponse.SuccessResponse(numberOfEmployees, string.Format(ResponseMessages.Success, "no employee", ActionType.Retrieved));
         }
 
 
         public async Task<JsonResult> GetIndustryOrSectorTypeList()
         {
             List<DropDownViewModel> industryOrSectorTypeList = await _commonRepository.GetIndustryOrSectorTypeList();
-            return HttpStatusCodeResponse.SuccessResponse(industryOrSectorTypeList, string.Empty);
+            return HttpStatusCodeResponse.SuccessResponse(industryOrSectorTypeList, string.Format(ResponseMessages.Success, "sector", ActionType.Retrieved));
         }
 
         public async Task<ActionResult> AddIndustrySectorType(string industrySector)
@@ -117,7 +123,7 @@ namespace PalladiumPayroll.Services
         public async Task<JsonResult> GetEmployeeDropDown(int companyId)
         {
             List<DropDownViewModel> employees = await _commonRepository.GetEmployeeDropDown(companyId);
-            return HttpStatusCodeResponse.SuccessResponse(employees, string.Empty);
+            return HttpStatusCodeResponse.SuccessResponse(employees, string.Format(ResponseMessages.Success, "employee", ActionType.Retrieved));
         }
     }
 }
