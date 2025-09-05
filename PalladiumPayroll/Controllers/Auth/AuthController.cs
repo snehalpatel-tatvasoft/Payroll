@@ -32,12 +32,26 @@ namespace PalladiumPayroll.Controllers.Auth
         {
             try
             {
-                JsonResult? loginResponse = await _authService.Login(loginRequest);
-                return loginResponse;
+                return await _authService.Login(loginRequest);
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TryLater);
+            }
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public async Task<ActionResult> LoginSelectedUser(string userId)
+        {
+            try
+            {
+                return await _authService.LoginSelectedUser(userId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TryLater);
             }
         }
 

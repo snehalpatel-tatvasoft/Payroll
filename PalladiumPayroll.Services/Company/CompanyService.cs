@@ -9,10 +9,8 @@ using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using PalladiumPayroll.Helper;
-using PalladiumPayroll.Helper.Constants;
 using PalladiumPayroll.Helper.JWTToken;
 using PalladiumPayroll.Repositories.Company;
-using System.ComponentModel.Design;
 using System.Net.Mail;
 using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -72,7 +70,7 @@ namespace PalladiumPayroll.Services.Company
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Email = request.Email,
-                Password = request.Password,
+                Password = SecurityHandler.Encrypt(request.Password),
                 PasswordHash = passwordHash,
                 ContactNo = request.ContactNo,
                 CompanyId = (int)companyId

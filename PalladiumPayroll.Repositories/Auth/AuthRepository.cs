@@ -27,82 +27,79 @@ namespace PalladiumPayroll.Repositories.Auth
 
         public async Task<JsonResult> Login(LoginRequest loginRequest)
         {
-            try
+            // Fetch user by email
+            List<UserResponse> userList = await _userRepository.GetUserInfo(loginRequest.Email);
+            List<UserResponse> multiUserList = new List<UserResponse>();
+
+            if (!userList.Any())
             {
-                // Fetch user by email
-                UserResponse? user = await _userRepository.GetUserInfo(loginRequest.Email);
-
-                if (user == null)
-                {
-                    return HttpStatusCodeResponse.InternalServerErrorResponse(
-                        message: ResponseMessages.UserNotFound
-                    );
-                }
-                else if (!user.ConfirmedEmail)
-                {
-                    return HttpStatusCodeResponse.InternalServerErrorResponse(
-                        message: ResponseMessages.AccountNotConfirmed
-                    );
-                }
-
-                // Verify password
-                PasswordHasher<object>? hasher = new PasswordHasher<object>();
-                var verificationResult = hasher.VerifyHashedPassword(null, user.PasswordHash, loginRequest.Password);
-
-                if (verificationResult == PasswordVerificationResult.Failed)
-                {
-                    return HttpStatusCodeResponse.InternalServerErrorResponse(
-                        message: "Invalid credentials!"
-                    );
-                }
-
-                // Generate JWT & Refresh token
-
-                List<CompanyDetails>? companies = await _userRepository.GetCompaniesByEmail(loginRequest.Email);
-
-                Claim[] claims =
-                {
-                    new Claim(JWTClaimTypes.UserId, user.Id.ToString()),
-                    new Claim(JWTClaimTypes.UserName, user.UserName),
-                    new Claim(JWTClaimTypes.Email, user.Email),
-                    new Claim(JWTClaimTypes.Role, user.RoleId),
-                    new Claim(JWTClaimTypes.CompanyId, user.CompanyId),
-                };
-
-                string accessToken = JwtTokenHelper.GenerateToken(
-                     claims,
-                     DateTime.Now.AddMinutes(AuthTokenExpiryInMinutes),
-                     _jwtSettings?.Key!,
-                     _jwtSettings?.Issuer!,
-                     _jwtSettings?.Audience!
-                 );
-
-                string refreshToken = JwtTokenHelper.GenerateToken(
-                    [],
-                    DateTime.Now.AddDays(RefreshTokenExpiryInDays),
-                    _jwtSettings?.RefreshTokenKey!,
-                    _jwtSettings?.Issuer!,
-                    _jwtSettings?.Audience!
-                );
-
-                var data = new
-                {
-                    Token = accessToken,
-                    RefreshToken = refreshToken,
-                    Companies = companies
-                };
-
-                await _userRepository.LoginUser(user.Id.ToString());
-
-                return HttpStatusCodeResponse.SuccessResponse(
-                   data,
-                   ResponseMessages.LoginSuccessfully
-               );
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UserNotFound);
             }
-            catch (Exception)
+            else
             {
-                // Log the exception
-                return HttpStatusCodeResponse.InternalServerErrorResponse(message: "Internal server error!!");
+                foreach (var user in userList)
+                {
+                    PasswordHasher<object>? hasher = new PasswordHasher<object>();
+                    var verificationResult = hasher.VerifyHashedPassword(string.Empty, user.PasswordHash, loginRequest.Password);
+
+                    if (verificationResult == PasswordVerificationResult.Success)
+                    {
+                        multiUserList.Add(user);
+                    }
+                }
+
+                if (multiUserList.Any())
+                {
+                    if (multiUserList.Count == 1)
+                    {
+                        var validUser = multiUserList[0];
+                        if (!validUser.ConfirmedEmail)
+                        {
+                            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.AccountNotConfirmed);
+                        }
+                        var tokens = GetAccessTokenAndRefreshToken(multiUserList.FirstOrDefault()!);
+                        var result = new LoginResposeModel() { Token = tokens[0], RefreshToken = tokens[1], IsMultiUser = false, CompanyId = validUser.CompanyId };
+                        return HttpStatusCodeResponse.SuccessResponse(result, ResponseMessages.LoginSuccessfully);
+                    }
+                    else
+                    {
+                        var companies = multiUserList.Select(x => new CompanyDetails()
+                        {
+                            CompanyId = x.CompanyId,
+                            CompanyName = x.CompanyName,
+                            RoleId = x.RoleId,
+                            UserId = x.Id,
+                        }).ToList();
+                        var result = new LoginResposeModel() { IsMultiUser = true, CompanyDetails = companies };
+                        return HttpStatusCodeResponse.SuccessResponse(result, "Login Process");
+                    }
+                }
+                else
+                {
+                    return HttpStatusCodeResponse.InternalServerErrorResponse("Invalid credentials!");
+                }
+            }
+        }
+
+        public async Task<JsonResult> LoginSelectedUser(string userId)
+        {
+            var user = await _userRepository.GetUserInfoByUserId(userId);
+            if (user != null)
+            {
+                if (!user.ConfirmedEmail)
+                {
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.AccountNotConfirmed);
+                }
+                else
+                {
+                    var tokens = GetAccessTokenAndRefreshToken(user);
+                    var result = new LoginResposeModel() { Token = tokens[0], RefreshToken = tokens[1], IsMultiUser = false, CompanyId = user.CompanyId };
+                    return HttpStatusCodeResponse.SuccessResponse(result, ResponseMessages.LoginSuccessfully);
+                }
+            }
+            else
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UserNotFound);
             }
         }
 
@@ -131,6 +128,37 @@ namespace PalladiumPayroll.Repositories.Auth
             var data = new { Token = newAccessToken };
 
             return HttpStatusCodeResponse.SuccessResponse(data, ResponseMessages.TokenGeneratedSuccessfully);
+        }
+
+        public List<string> GetAccessTokenAndRefreshToken(UserResponse user)
+        {
+            List<string> data = new List<string>();
+            Claim[] claims =
+                {
+                    new Claim(JWTClaimTypes.UserId, user.Id.ToString()),
+                    new Claim(JWTClaimTypes.UserName, user.UserName),
+                    new Claim(JWTClaimTypes.Email, user.Email),
+                    new Claim(JWTClaimTypes.Role, user.RoleId.ToString()),
+                    new Claim(JWTClaimTypes.CompanyId, user.CompanyId.ToString()),
+                };
+
+            string accessToken = JwtTokenHelper.GenerateToken(
+                 claims,
+                 DateTime.Now.AddMinutes(AuthTokenExpiryInMinutes),
+                 _jwtSettings?.Key!,
+                 _jwtSettings?.Issuer!,
+                 _jwtSettings?.Audience!
+             );
+
+            string refreshToken = JwtTokenHelper.GenerateToken(
+                [],
+                DateTime.Now.AddDays(RefreshTokenExpiryInDays),
+                _jwtSettings?.RefreshTokenKey!,
+                _jwtSettings?.Issuer!,
+                _jwtSettings?.Audience!
+            );
+            data.AddRange(new[] { accessToken, refreshToken });
+            return data;
         }
     }
 }

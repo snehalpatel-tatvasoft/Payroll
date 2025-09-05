@@ -16,6 +16,11 @@ namespace PalladiumPayroll.Services.Auth
             return await _authRepository.Login(loginRequest);
         }
 
+        public async Task<JsonResult> LoginSelectedUser(string userId)
+        {
+            return await _authRepository.LoginSelectedUser(userId);
+        }
+
         public JsonResult RefreshRequest(RefreshRequest request)
         {
             return _authRepository.RefreshRequest(request);
