@@ -14,8 +14,9 @@
 
     public class CompanyDetails
     {
-        public int CompanyId { get; set; } = 0;
+        public Guid UserId { get; set; }
+        public int CompanyId { get; set; }
         public string CompanyName { get; set; } = string.Empty;
-        public int AccessRoleID { get; set; }
+        public int RoleId { get; set; }
     }
 }

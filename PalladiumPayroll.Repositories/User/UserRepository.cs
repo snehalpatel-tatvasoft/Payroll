@@ -23,13 +23,21 @@ namespace PalladiumPayroll.Repositories.User
             return response;
         }
 
-        public async Task<UserResponse?> GetUserInfo(string email)
+        public async Task<List<UserResponse>> GetUserInfo(string email)
         {
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@Email", email);
 
-            return await _dapper.ExecuteStoredProcedureSingle<UserResponse>("usp_GetUserDetailsByEmail", parameters);
+            return await _dapper.ExecuteStoredProcedure<UserResponse>("usp_GetUserDetailsByEmail1", parameters);
         }
+
+        public async Task<UserResponse?> GetUserInfoByUserId(string userId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@UserId", userId);
+            return await _dapper.ExecuteStoredProcedureSingle<UserResponse>("usp_GetUserDetailsByUserId", parameters);
+        }
+
 
         public async Task<bool> ConfirmEmail(string userId)
         {

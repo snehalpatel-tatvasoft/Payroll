@@ -37,6 +37,8 @@
             public static readonly string Valid = "{0} is valid";
             public static readonly string SomethingWrong = "Something went wrong.";
             public static readonly string ExceptionMessage = "An Error Occurred While {0} {1}";
+            public static readonly string EmptyFile = "File is empty !!";
+            public static readonly string InavalidFile = "File format is invalid !";
 
             #endregion
 
@@ -326,6 +328,13 @@
 
             #endregion
 
+            #region Customize Report
+
+            public static readonly string CustomizeReport = "Customize Report";
+            public const string InvalidReportId = "Report Id is Invalid.";
+            public const string ErrorSavingCustomizeReport = "Error while Saving Customize Report";
+
+            #endregion
             #region Commission Report
             public static readonly string CommissionReport = "Commission Report";
 

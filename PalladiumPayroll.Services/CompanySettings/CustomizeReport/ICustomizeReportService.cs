@@ -7,7 +7,6 @@ public interface ICustomizeReportService
 {
     Task<JsonResult> GetAllReports(CustomizeReportRequestDTO request);
     Task<JsonResult> DownloadReport(DownloadReportRequestDTO request);
-    // Task<JsonResult> UploadReport(UploadReportRequestDTO request);
+    Task<JsonResult> UploadReport(UploadReportRequestDTO request);
 
-    Task<JsonResult> UploadReport(UploadReportRequestDTO request, string fileName);
-}
+} 

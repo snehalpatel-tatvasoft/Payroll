@@ -11,7 +11,7 @@ namespace PalladiumPayroll.Services.User
         {
             _userRepository = userRepository;
         }
-        public async Task<UserResponse> GetUserInfo(string email)
+        public async Task<List<UserResponse>> GetUserInfo(string email)
         {
             return await _userRepository.GetUserInfo(email);
         }
