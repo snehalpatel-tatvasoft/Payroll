@@ -130,7 +130,8 @@ namespace PalladiumPayroll.Repositories.Auth
             return HttpStatusCodeResponse.SuccessResponse(data, ResponseMessages.TokenGeneratedSuccessfully);
         }
 
-        public List<string> GetAccessTokenAndRefreshToken(UserResponse user)
+        #region token generate
+        private List<string> GetAccessTokenAndRefreshToken(UserResponse user)
         {
             List<string> data = new List<string>();
             Claim[] claims =
@@ -157,8 +158,9 @@ namespace PalladiumPayroll.Repositories.Auth
                 _jwtSettings?.Issuer!,
                 _jwtSettings?.Audience!
             );
-            data.AddRange(new[] { accessToken, refreshToken });
+            data.AddRange([accessToken, refreshToken]);
             return data;
         }
+        #endregion
     }
 }
