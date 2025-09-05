@@ -55,8 +55,8 @@ public class PieceworkListDTO
     public decimal? QuantityDelivered { get; set; }
     public decimal? Rate { get; set; }
     public decimal? TotalPaidAmount { get; set; }
-    public bool InfluenceUIF { get; set; }
-    public bool InfluenceSDL { get; set; }
+    public bool? InfluenceUIF { get; set; }
+    public bool? InfluenceSDL { get; set; }
     public DateTime? PaymentDate { get; set; }
     public long CompanyId { get; set; }
 }
