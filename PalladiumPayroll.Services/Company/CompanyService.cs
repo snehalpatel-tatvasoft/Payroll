@@ -112,12 +112,11 @@ namespace PalladiumPayroll.Services.Company
                 Subject = subject,
                 IsBodyHtml = true,
             };
+            mailMessage.To.Add(request.Email);
 
-            mailMessage.To.Add("meet.panchal@tatvasoft.com");
-            //mailMessage.To.Add(request.Email);
-            string emailSent = _emailService.SendMail(mailMessage);
+            bool isEmailSent = await _emailService.SendMail(mailMessage);
 
-            if (emailSent == ResponseMessages.EmailSentSuccessfully)
+            if (isEmailSent)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.EmailSentSuccessfully);
             }

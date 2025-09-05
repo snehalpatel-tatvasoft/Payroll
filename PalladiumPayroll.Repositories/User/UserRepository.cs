@@ -1,8 +1,11 @@
-﻿using Dapper;
+﻿using Azure.Core;
+using Dapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
+using PalladiumPayroll.Helper;
 
 namespace PalladiumPayroll.Repositories.User
 {
@@ -29,6 +32,16 @@ namespace PalladiumPayroll.Repositories.User
             parameters.Add("@Email", email);
 
             return await _dapper.ExecuteStoredProcedure<UserResponse>("usp_GetUserDetailsByEmail1", parameters);
+        }
+
+        public async Task<bool> ResetPassword(string userId, string password)
+        {
+            string passwordHash = new PasswordHasher<object>().HashPassword(user: string.Empty, password);
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@UserId", userId);
+            parameters.Add("@Password", SecurityHandler.Encrypt(password));
+            parameters.Add("@HasPassword", passwordHash);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_ResetUserPassword", parameters);
         }
 
         public async Task<UserResponse?> GetUserInfoByUserId(string userId)

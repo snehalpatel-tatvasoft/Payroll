@@ -7,6 +7,7 @@ namespace PalladiumPayroll.Repositories.User
     {
         Task<bool> CheckEmailExist(string email);
         Task<List<UserResponse>> GetUserInfo(string email);
+        Task<bool> ResetPassword(string userId, string password);
         Task<UserResponse?> GetUserInfoByUserId(string userId);
         Task<bool> ConfirmEmail(string userId);
         Task<bool> CheckIsUserLoggedIn(string userId);
