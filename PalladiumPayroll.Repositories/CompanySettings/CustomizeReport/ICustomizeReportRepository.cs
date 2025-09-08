@@ -5,7 +5,7 @@ namespace PalladiumPayroll.Repositories.CompanySettings;
 
 public interface ICustomizeReportRepository
 {
-    Task<List<CustomizeReportResponseDTO>> GetAllReports(CustomizeReportRequestDTO request);
+    Task<List<CustomizeReportResponseDTO>> GetAllReports();
     Task<DownloadReportResponseDTO?> DownloadReport(DownloadReportRequestDTO request);
     Task<bool> UploadReport(UploadReportRequestDTO request);
 

@@ -327,6 +327,16 @@
             public const string ErrorSavingCustomizeReport = "Error while Saving Customize Report";
 
             #endregion
+
+            #region Notification Setup
+
+            public static readonly string NotificationSetup = "Notification Setup";
+            public static readonly string Notification = "Notification";
+            public static readonly string NotificationTemplate = "Notification Template";
+            public static readonly string UnableToCreateNotificationTemplate = "Not able to create Notification Template";
+            public static readonly string InvalidTemplateId = "Notification Template Id is not valid.";
+
+            #endregion
         }
 
 
