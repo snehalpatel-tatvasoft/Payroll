@@ -46,7 +46,7 @@ public class EmployeesLoanController : ControllerBase
         }
     }
 
-    [HttpPut("[action]/{employeeLoanId}")]
+    [HttpPut("[action]")]
     public async Task<ActionResult> PauseEmployeeLoan(long employeeLoanId)
     {
         try
@@ -60,7 +60,7 @@ public class EmployeesLoanController : ControllerBase
         }
     }
 
-    [HttpPut("[action]/{employeeLoanId}")]
+    [HttpPut("[action]")]
     public async Task<ActionResult> FullPaidEmployeeLoan(long employeeLoanId)
     {
         try
