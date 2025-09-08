@@ -12,7 +12,7 @@ namespace PalladiumPayroll.Services.Department
         Task<JsonResult> GetDepartmentsByCompanyId(long companyId);
         Task<JsonResult> CreateDepartment(DepartmentRequestDTO request);
         Task<JsonResult> EditDepartment(long departmentId, DepartmentRequestDTO request);
-        Task<JsonResult> DeleteDepartment(long departmentId);
+        Task<JsonResult> DeleteDepartment(long departmentId,long? employeeId);
     }
 }
 

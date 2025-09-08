@@ -128,6 +128,19 @@ namespace PalladiumPayroll.Controllers
         }
 
         [HttpGet("[action]")]
+        public async Task<ActionResult> GetCyclePeriodDropDown(int cycleId)
+        {
+            try
+            {
+                return await _commonService.GetCyclePeriodDropDown(cycleId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetTransactionList()
         {
             try
@@ -217,5 +230,6 @@ namespace PalladiumPayroll.Controllers
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
     }
 }

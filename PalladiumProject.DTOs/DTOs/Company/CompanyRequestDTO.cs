@@ -6,12 +6,12 @@
         public Int64 CompanyId { get; set; }
         public string? CompanyLogo { get; set; }
         public string CompanyName { get; set; } = null!;
-        public int CompanyTypeId { get; set; }
+        public int? CompanyTypeId { get; set; }
         public string CompanyRegNumber { get; set; }
         public long? TaxRegNumber { get; set; }
-        public int StdIndustryCode { get; set; }
+        public int? StdIndustryCode { get; set; }
         public string? PAYEReferenceNumber { get; set; }
-        public int TradeClassificationId { get; set; }
+        public int? TradeClassificationId { get; set; }
         public string? UIFRefNumber { get; set; }
         public string? UIFRegNumber { get; set; }
         public int? SplEcoZoneId { get; set; }
@@ -20,7 +20,7 @@
         public int CountryID { get; set; }
         public bool IsExemptSDL { get; set; }
         public bool UseBCEARemuneration { get; set; }
-        public int EmployerDisentitlementId { get; set; }
+        public int? EmployerDisentitlementId { get; set; }
         public string UnitNumber { get; set; }
         public string ComplexName { get; set; }
         public string StreetNumber { get; set; }
@@ -162,7 +162,7 @@
     public class EmploymentEquityInformation : BasicCompanyInfo
     {
         public int? EmploymentEquityInfoId { get; set; }
-        public int? EeReferenceNumber { get; set; }
+        public string? EeReferenceNumber { get; set; }
         public string? SetaClassification { get; set; }
         public string? AccountingOfficerNameAndSurname { get; set; }
         public string? AccountingOfficerTelephoneNumber { get; set; }
@@ -172,8 +172,8 @@
         public string? EquityManagerTelephone { get; set; }
         public string? EquityManagerFax { get; set; }
         public string? EquityManagerEmail { get; set; }
-        public int IndustrySectorControlId { get; set; }
-        public int BusinessTypeControlId { get; set; }
-        public int NumberOfEmployeeControlId { get; set; }
+        public int? IndustrySectorControlId { get; set; }
+        public int? BusinessTypeControlId { get; set; }
+        public int? NumberOfEmployeeControlId { get; set; }
     }
 }

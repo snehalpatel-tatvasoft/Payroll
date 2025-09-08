@@ -32,7 +32,7 @@
 		public int? NICGradeId { get; set; }
 		public int? BranchId { get; set; }
 		public int? DivisionId { get; set; }
-		public int SubDivisionId { get; set; }
+		public int? SubDivisionId { get; set; }
 		public int? MunicipalityId { get; set; }
 		public int? LocationId { get; set; }
 		public int? DepartmentId { get; set; }

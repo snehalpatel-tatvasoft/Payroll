@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Data;
 
-namespace PalladiumPayroll.Helper
+namespace PalladiumPayroll.Helper.ImportExport
 {
     public static class ExcelHelper
     {
@@ -22,7 +22,14 @@ namespace PalladiumPayroll.Helper
             }
         }
 
-        public static DataTable ImportFromExcel(IFormFile file)
+        /// <summary>
+        /// Import data from Excel file
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="isFileHeader">To skip header row data</param>
+        /// <param name="headerColumn">Add table column schema</param>
+        /// <returns></returns>
+        public static DataTable ImportFromExcel(IFormFile file, bool isFileHeader = true, DataColumn[]? headerColumn = null)
         {
             var table = new DataTable();
 
@@ -34,20 +41,30 @@ namespace PalladiumPayroll.Helper
                     var worksheet = workbook.Worksheets.First();
                     var rows = worksheet.RangeUsed()?.RowsUsed().ToList();
 
-                    if(rows == null || !rows.Any())
+                    if (rows == null || !rows.Any())
                     {
                         return table;
                     }
                     else
                     {
-                        // header - first row
-                        foreach (var cell in rows.FirstOrDefault()?.Cells()!)
+                        // header Column
+                        if (headerColumn != null && headerColumn.Any())
                         {
-                            table.Columns.Add(cell.GetValue<string>());
+                            table.Columns.AddRange(headerColumn);
+                        }
+                        else
+                        {
+                            if (isFileHeader)
+                            {
+                                foreach (var cell in rows.FirstOrDefault()?.Cells()!)
+                                {
+                                    table.Columns.Add(cell.GetValue<string>());
+                                }
+                            }
                         }
 
-                        // data - skip header row
-                        foreach (var row in rows.Skip(1))
+                        var rowData = isFileHeader ? rows.Skip(1) : rows;
+                        foreach (var row in rowData)
                         {
                             var values = row.Cells().Select(c => c.GetValue<string>()).ToArray();
                             table.Rows.Add(values);
