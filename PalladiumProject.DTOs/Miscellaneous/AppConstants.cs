@@ -196,7 +196,7 @@
             public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
             public static readonly string TransactionImportedSuccessfully = "Transaction imported successfully.";
             public static readonly string TransactionImportFailed = "Error occurred while importing the data";
-            public static readonly string TransactionDeleteFailed = "Failed to deleted Transaction.";
+            public static readonly string TransactionDeleteFailed = "Failed to delete Transaction.";
 
 
             #endregion

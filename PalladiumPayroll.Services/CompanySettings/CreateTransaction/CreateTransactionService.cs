@@ -83,22 +83,16 @@ public class CreateTransactionService : ICreateTransactionService
         {
             return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.TransactionDeletedSuccessfully);
         }
-        return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.TransactionDeleteFailed);
+        return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TransactionDeleteFailed);
 
     }
     public async Task<JsonResult> ImportTransactions(ImportTransactionRequestDTO request)
     {
+        var status = await _createTransactionRepository.ImportTransactions(request);
 
-        foreach (var transaction in request.Transactions)
+        if (status?.StartsWith("ERROR") == true)
         {
-            transaction.CompanyId = request.CompanyId;
-
-            var status = await _createTransactionRepository.ImportTransactions(transaction);
-
-            if (string.IsNullOrEmpty(status))
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TransactionImportFailed);
-            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(status ?? ResponseMessages.TransactionImportFailed);
         }
 
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.TransactionImportedSuccessfully);
