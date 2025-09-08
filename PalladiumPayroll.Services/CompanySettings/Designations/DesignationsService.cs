@@ -55,10 +55,10 @@ public class DesignationsService : IDesignationsService
             }
 
             return HttpStatusCodeResponse.SuccessResponse(
-                data: string.Empty,
-                ResponseMessages.DesignationsDeletedSuccessfully
-            );
-       
+                data: string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Designations, ActionType.Deleted));
+        }
+
+
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
@@ -94,7 +94,7 @@ public class DesignationsService : IDesignationsService
         if (!string.IsNullOrEmpty(errorMessage))
             return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
 
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Designations, ActionType.Imported));
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Designations, ActionType.Imported));
     }
 
 }
