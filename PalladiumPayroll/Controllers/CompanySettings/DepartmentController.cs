@@ -1,7 +1,9 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
+using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Department;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.Department
 {
@@ -16,28 +18,63 @@ namespace PalladiumPayroll.Controllers.Department
             _departmentService = departmentService;
         }
 
-        [HttpGet("company/{companyId}")]
+        [HttpGet("[action]")]
         public async Task<JsonResult> GetDepartmentsByCompanyId(long companyId)
         {
-            return await _departmentService.GetDepartmentsByCompanyId(companyId);
+            try
+            {
+                if (companyId <= 0)
+                {
+                    return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+                }
+
+                return await _departmentService.GetDepartmentsByCompanyId(companyId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Department));
+            }
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<JsonResult> CreateDepartment([FromBody] DepartmentRequestDTO request)
         {
-            return await _departmentService.CreateDepartment(request);
+            try
+            {
+                return await _departmentService.CreateDepartment(request);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.Department)
+                );
+            }
         }
 
-        [HttpPut("{departmentId}")]
+        [HttpPut("[action]")]
         public async Task<JsonResult> EditDepartment(long departmentId, [FromBody] DepartmentRequestDTO request)
         {
-            return await _departmentService.EditDepartment(departmentId, request);
+            try
+            {
+                return await _departmentService.EditDepartment(departmentId, request);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.Department));
+            }
         }
 
-        [HttpDelete("{departmentId}")]
+        [HttpDelete("[action]")]
         public async Task<JsonResult> DeleteDepartment(long departmentId)
         {
-            return await _departmentService.DeleteDepartment(departmentId);
+            try
+            {
+                return await _departmentService.DeleteDepartment(departmentId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.Department));
+            }
         }
     }
 }

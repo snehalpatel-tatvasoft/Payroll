@@ -7,7 +7,7 @@ namespace PalladiumPayroll.Repositories.Department
         Task<List<DepartmentResponseDTO>> GetDepartmentsByCompanyId(long companyId);
         Task<long> CreateDepartment(DepartmentRequestDTO request);
         Task<bool> EditDepartment(long departmentId, DepartmentRequestDTO request);
-        Task<bool> DeleteDepartment(long departmentId);
+        Task<string> DeleteDepartment(long departmentId);
         Task<bool> CheckDepartmentNameExists(long companyId, string departmentName);
     }
 }

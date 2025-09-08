@@ -17,10 +17,10 @@ namespace PalladiumPayroll.Repositories.Department
 
         public async Task<List<DepartmentResponseDTO>> GetDepartmentsByCompanyId(long companyId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
 
-            var departments = await _dapper.ExecuteStoredProcedure<DepartmentResponseDTO>(
+            List<DepartmentResponseDTO>? departments = await _dapper.ExecuteStoredProcedure<DepartmentResponseDTO>(
                 "usp_GetDepartmentsByCompanyId",
                 parameters
             );
@@ -30,7 +30,7 @@ namespace PalladiumPayroll.Repositories.Department
 
         public async Task<long> CreateDepartment(DepartmentRequestDTO request)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", request.CompanyId);
             parameters.Add("@DepartmentName", request.DepartmentName);
 
@@ -40,7 +40,7 @@ namespace PalladiumPayroll.Repositories.Department
 
         public async Task<bool> EditDepartment(long departmentId, DepartmentRequestDTO request)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@DepartmentId", departmentId);
             parameters.Add("@DepartmentName", request.DepartmentName);
 
@@ -52,22 +52,20 @@ namespace PalladiumPayroll.Repositories.Department
             return rowsAffected > 0;
         }
 
-        public async Task<bool> DeleteDepartment(long departmentId)
+        public async Task<string> DeleteDepartment(long departmentId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@DepartmentId", departmentId);
+            parameters.Add("@ResultMessage", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
 
-            int rowsAffected = await _dapper.ExecuteAsync(
-                "usp_DeleteDepartment",
-                parameters
-            );
+            string? result = await _dapper.ExecuteStoredProcedureSingle<string>("usp_DeleteDepartment", parameters);
 
-            return rowsAffected > 0;
+           return parameters.Get<string>("@ResultMessage");
         }
 
         public async Task<bool> CheckDepartmentNameExists(long companyId, string departmentName)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
             parameters.Add("@DepartmentName", departmentName);
             parameters.Add("@Exists", dbType: DbType.Boolean, direction: ParameterDirection.Output);
