@@ -44,14 +44,27 @@ public class DesignationsService : IDesignationsService
         return HttpStatusCodeResponse.SuccessResponse(designations, string.Format(ResponseMessages.Success, ResponseMessages.Designations, ActionType.Retrieved));
     }
 
-    public async Task<JsonResult> DeleteDesignations(long id)
+    public async Task<JsonResult> DeleteDesignations(long designationId, long? employeeId)
     {
-        bool result = await _designationsRepository.DeleteDesignations(id);
-        if (result)
+        try
         {
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Designations, ActionType.Deleted));
+            var (isSuccess, message) = await _designationsRepository.DeleteDesignations(designationId, employeeId);
+            if (!isSuccess)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message);
+            }
+
+            return HttpStatusCodeResponse.SuccessResponse(
+                data: string.Empty,
+                ResponseMessages.DesignationsDeletedSuccessfully
+            );
+       
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                ResponseMessages.ErrorDeletingDesignations
+            );
         }
-        return HttpStatusCodeResponse.InternalServerErrorResponse( ResponseMessages.DesignationsDeleteFailed);
 
     }
 

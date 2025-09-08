@@ -40,13 +40,23 @@ public class DesignationsRepository : IDesignationsRepository
         return result.ToList();
     }
 
-
-    public async Task<bool> DeleteDesignations(long id)
+    public async Task<(bool isSuccess, string message)> DeleteDesignations(long designationId, long? employeeId)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("@Id", id);
+        parameters.Add("@DesignationId", designationId);
+        parameters.Add("@EmployeeId", employeeId);
+        parameters.Add("@ResultMessage", dbType: DbType.String, size: 4000, direction: ParameterDirection.Output);
 
-        return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteDesignation", parameters);
+        await _dapper.ExecuteAsync(
+            "usp_DeleteDesignation",
+            parameters
+        );
+
+        string message = parameters.Get<string>("@ResultMessage");
+
+        bool success = message.Contains("successfully", StringComparison.OrdinalIgnoreCase);
+
+        return (success, message);
     }
 
     public async Task<bool> UpdateDesignations(DesignationRequestDTO request)

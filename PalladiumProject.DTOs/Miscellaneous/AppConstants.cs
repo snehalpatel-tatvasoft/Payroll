@@ -133,6 +133,10 @@
             public const string DesignationsDeleteFailed = "Failed to deleted designation";
             public const string DesignationsUpdateFailed = "Failed to update designation";
             public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
+            public const string DesignationsImportedSuccessfully = "Designations imported successfully.";
+
+            public static readonly string ErrorDeletingDesignations = "Error deleting Designation.";
+
 
             #endregion
 
