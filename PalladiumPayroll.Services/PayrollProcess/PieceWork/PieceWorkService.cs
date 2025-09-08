@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.PieceWork;
 using PalladiumPayroll.DTOs.Miscellaneous;
-using PalladiumPayroll.Helper;
+using PalladiumPayroll.Helper.ImportExport;
 using PalladiumPayroll.Repositories.PayrollProcess.PieceWork;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
@@ -126,10 +126,36 @@ public class PieceWorkService : IPieceWorkService
                 item.QuantityDelivered ?? 0,
                 item.Rate ?? 0,
                 item.TotalPaidAmount ?? 0,
-                item.PaymentDate
+                item.PaymentDate == null ? DBNull.Value : item.PaymentDate
             );
         }
-        return ExcelHelper.ExportToExcel(new Dictionary<string, DataTable> { { "Piecework", dt } });
+        string exportType = string.IsNullOrWhiteSpace(reqModel.ExportType) ? "Excel" : reqModel.ExportType;
+
+        if (exportType.Equals("Pdf", StringComparison.OrdinalIgnoreCase))
+        {
+            DataTable pdfTable = dt.Clone();
+            pdfTable.Columns["Payment Date"]!.DataType = typeof(string);
+
+            foreach (DataRow row in dt.Rows)
+            {
+                pdfTable.Rows.Add(
+                    row["Employee Code"],
+                    row["Employee Name"],
+                    row["Area"],
+                    row["Product Type"],
+                    row["Unit"],
+                    row["Quantity Delivered"],
+                    row["Rate"],
+                    row["Total Paid Amount"],
+                    row["Payment Date"] == DBNull.Value ? "" : ((DateTime)row["Payment Date"]).ToString("dd-MM-yyyy")
+                );
+            }
+              return PdfHelper.ExportToPdfTable(pdfTable, 25);
+        }
+        else
+        {
+            return ExcelHelper.ExportToExcel(new Dictionary<string, DataTable> { { "Piecework", dt } });
+        }
     }
 
 }

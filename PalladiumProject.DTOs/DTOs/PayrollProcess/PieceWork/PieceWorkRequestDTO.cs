@@ -53,4 +53,5 @@ public class PieceWorkFilterViewModel
     public bool SortType { get; set; } = true;
     public string Search { get; set; } = "";
     public bool IsExport { get; set; } = false;
+    public string? ExportType { get; set; } 
 }

@@ -153,13 +153,20 @@ public class PieceWorkController : ControllerBase
         try
         {
             byte[]? fileBytes = await _pieceWorkService.ExportPieceworkList(reqModel);
+
+            string exportType = string.IsNullOrWhiteSpace(reqModel.ExportType) ? "Excel" : reqModel.ExportType;
+
+            if (exportType.Equals("Pdf", StringComparison.OrdinalIgnoreCase))
+                return File(fileBytes, ContentTypes.Pdf, "PieceWorkList.pdf");
+
             return File(fileBytes, ContentTypes.Xlsx, "PieceWorkList.xlsx");
         }
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.ExceptionMessage, ActionType.Exporting, ResponseMessages.PieceWork+" List")
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Exporting, ResponseMessages.PieceWork + " List")
             );
         }
     }
+
 }
