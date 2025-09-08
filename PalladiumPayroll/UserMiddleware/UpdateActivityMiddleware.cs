@@ -14,11 +14,9 @@ namespace PalladiumPayroll.Helper.Middleware.Encryption
         {
             try
             {
-                string path = context.Request.Path.Value?.ToLower();
+                string? path = context.Request.Path.Value?.ToLower();
 
-                string[] excludedPaths = new[] { "/auth/checkisuserloggedin" };
-
-                if (excludedPaths.Any(p => path != null && path.Contains(p)))
+                if (path != null && path.Contains("/auth/checkisuserloggedin"))
                 {
                     await _next(context);
                     return;

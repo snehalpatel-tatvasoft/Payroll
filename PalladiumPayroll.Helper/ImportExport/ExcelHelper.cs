@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Data;
 
-namespace PalladiumPayroll.Helper
+namespace PalladiumPayroll.Helper.ImportExport
 {
     public static class ExcelHelper
     {
@@ -48,7 +48,7 @@ namespace PalladiumPayroll.Helper
                     else
                     {
                         // header Column
-                        if(headerColumn != null && headerColumn.Any())
+                        if (headerColumn != null && headerColumn.Any())
                         {
                             table.Columns.AddRange(headerColumn);
                         }

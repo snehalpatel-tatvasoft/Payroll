@@ -6,6 +6,12 @@
         public string Password { get; set; } = null!;
     }
 
+    public class ResetPasswordRequest
+    {
+        public string Token { get; set; }
+        public string Password { get; set; }
+    }
+
     public class RefreshRequest
     {
         public string AccessToken { get; set; }
@@ -14,8 +20,9 @@
 
     public class CompanyDetails
     {
-        public int CompanyId { get; set; } = 0;
+        public Guid UserId { get; set; }
+        public int CompanyId { get; set; }
         public string CompanyName { get; set; } = string.Empty;
-        public int AccessTypeId { get; set; }
+        public int RoleId { get; set; }
     }
 }

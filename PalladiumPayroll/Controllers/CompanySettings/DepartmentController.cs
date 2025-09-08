@@ -65,11 +65,11 @@ namespace PalladiumPayroll.Controllers.Department
         }
 
         [HttpDelete("[action]")]
-        public async Task<JsonResult> DeleteDepartment(long departmentId)
+        public async Task<JsonResult> DeleteDepartment(long departmentId,long? employeeId)
         {
             try
             {
-                return await _departmentService.DeleteDepartment(departmentId);
+                 return await _departmentService.DeleteDepartment(departmentId, employeeId);
             }
             catch (Exception)
             {

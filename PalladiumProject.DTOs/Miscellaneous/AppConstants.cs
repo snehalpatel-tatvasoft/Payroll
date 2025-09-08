@@ -110,6 +110,7 @@
             public const string EmailMailboxUnavailable = "Mailbox unavailable";
             public const string EmailVerified = "Email verified successfully. Please sign in to get started.";
             public const string AccountNotConfirmed = "Account not confirmed. Please contact the administrator to activate your account.";
+            public const string ResetPasswordEmailSentSuccesfully = "Reset password email sent. Please click on the link to reset new password.";
 
             #endregion
 
@@ -137,6 +138,7 @@
             public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
             public const string DesignationsImportedSuccessfully = "Designations imported successfully.";
 
+            public static readonly string ErrorDeletingDesignations = "Error deleting Designation.";
 
 
             #endregion

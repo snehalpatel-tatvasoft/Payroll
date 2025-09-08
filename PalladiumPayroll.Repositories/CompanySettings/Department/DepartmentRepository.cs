@@ -52,15 +52,23 @@ namespace PalladiumPayroll.Repositories.Department
             return rowsAffected > 0;
         }
 
-        public async Task<string> DeleteDepartment(long departmentId)
+        public async Task<(bool isSuccess, string message)> DeleteDepartment(long departmentId, long? employeeId)
         {
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@DepartmentId", departmentId);
-            parameters.Add("@ResultMessage", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
+            parameters.Add("@EmployeeId", employeeId);
+            parameters.Add("@ResultMessage", dbType: DbType.String, size: 4000, direction: ParameterDirection.Output);
 
-            string? result = await _dapper.ExecuteStoredProcedureSingle<string>("usp_DeleteDepartment", parameters);
+            await _dapper.ExecuteAsync(
+                "usp_DeleteDepartment",
+                parameters
+            );
 
-           return parameters.Get<string>("@ResultMessage");
+            string message = parameters.Get<string>("@ResultMessage");
+
+            bool success = message.Contains("successfully", StringComparison.OrdinalIgnoreCase);
+
+            return (success, message);
         }
 
         public async Task<bool> CheckDepartmentNameExists(long companyId, string departmentName)
