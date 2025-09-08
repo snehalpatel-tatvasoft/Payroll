@@ -63,7 +63,7 @@ namespace PalladiumPayroll.Controllers.DisciplinaryLog
             }
             catch (Exception)
             {
-                 return HttpStatusCodeResponse.InternalServerErrorResponse(
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
                     string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.DisciplinaryLog+" Droplist")
                 );
             }

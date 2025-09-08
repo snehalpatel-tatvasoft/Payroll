@@ -3,6 +3,8 @@ using PalladiumPayroll.DTOs.DTOs.CompanySettings.CreateTransaction;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.CompanySettings.CreateTransaction;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
+
 
 namespace PalladiumPayroll.Services.CompanySettings.CreateTransaction;
 
@@ -18,7 +20,7 @@ public class CreateTransactionService : ICreateTransactionService
     public async Task<JsonResult> GetAllTransactions(long companyId)
     {
         var transactions = await _createTransactionRepository.GetAllTransactions(companyId);
-        return HttpStatusCodeResponse.SuccessResponse(transactions, ResponseMessages.DataFetchSuccess);
+        return HttpStatusCodeResponse.SuccessResponse(transactions,string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
     }
 
     public async Task<JsonResult> AddTransaction(CreateTransactionRequestDTO request)
@@ -38,7 +40,7 @@ public class CreateTransactionService : ICreateTransactionService
 
         if (isCreated)
         {
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.TransactionCreatedSuccessfully);
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Saved));
         }
 
         return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TransactionCreationFailed);
@@ -62,7 +64,7 @@ public class CreateTransactionService : ICreateTransactionService
         bool isUpdated = await _createTransactionRepository.UpdateTransaction(request);
         if (isUpdated)
         {
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.TransactionUpdatedSuccessfully);
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Updated));
         }
 
         return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TransactionUpdateFailed);
@@ -72,7 +74,7 @@ public class CreateTransactionService : ICreateTransactionService
     {
 
         var transaction = await _createTransactionRepository.GetTransactionById(payrollProcessId);
-        return HttpStatusCodeResponse.SuccessResponse(transaction, ResponseMessages.DataFetchSuccess);
+        return HttpStatusCodeResponse.SuccessResponse(transaction, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Retrieved));
 
     }
     public async Task<JsonResult> DeleteTransaction(long id)
@@ -81,7 +83,7 @@ public class CreateTransactionService : ICreateTransactionService
         bool result = await _createTransactionRepository.DeleteTransaction(id);
         if (result)
         {
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.TransactionDeletedSuccessfully);
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Deleted));
         }
         return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TransactionDeleteFailed);
 
@@ -95,7 +97,7 @@ public class CreateTransactionService : ICreateTransactionService
             return HttpStatusCodeResponse.InternalServerErrorResponse(status ?? ResponseMessages.TransactionImportFailed);
         }
 
-        return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.TransactionImportedSuccessfully);
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Imported));
     }
 
 }
