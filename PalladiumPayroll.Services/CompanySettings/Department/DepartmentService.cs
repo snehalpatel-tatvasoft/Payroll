@@ -134,16 +134,14 @@ namespace PalladiumPayroll.Services.Department
             }
         }
 
-        public async Task<JsonResult> DeleteDepartment(long departmentId)
+        public async Task<JsonResult> DeleteDepartment(long departmentId,long? employeeId)
         {
             try
             {
-                bool success = await _departmentRepository.DeleteDepartment(departmentId);
-                if (!success)
+                var (isSuccess, message) = await _departmentRepository.DeleteDepartment(departmentId, employeeId);
+                if (!isSuccess)
                 {
-                    return HttpStatusCodeResponse.NotFoundResponse(
-                        ResponseMessages.ErrorDeletingDepartment
-                    );
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(message);
                 }
 
                 return HttpStatusCodeResponse.SuccessResponse(
