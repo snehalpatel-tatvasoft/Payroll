@@ -7,5 +7,6 @@ public interface ICustomizeReportRepository
 {
     Task<List<CustomizeReportResponseDTO>> GetAllReports(CustomizeReportRequestDTO request);
     Task<DownloadReportResponseDTO?> DownloadReport(DownloadReportRequestDTO request);
-    Task<UploadReportResponseDTO?> UploadReport(UploadReportRequestDTO request, string reportPath);
+    Task<bool> UploadReport(UploadReportRequestDTO request);
+
 }

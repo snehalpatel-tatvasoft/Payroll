@@ -37,6 +37,8 @@
             public static readonly string Valid = "{0} is valid";
             public static readonly string SomethingWrong = "Something went wrong.";
             public static readonly string ExceptionMessage = "An Error Occurred While {0} {1}";
+            public static readonly string EmptyFile = "File is empty !!";
+            public static readonly string InavalidFile = "File format is invalid !";
 
             #endregion
 
@@ -108,6 +110,7 @@
             public const string EmailMailboxUnavailable = "Mailbox unavailable";
             public const string EmailVerified = "Email verified successfully. Please sign in to get started.";
             public const string AccountNotConfirmed = "Account not confirmed. Please contact the administrator to activate your account.";
+            public const string ResetPasswordEmailSentSuccesfully = "Reset password email sent. Please click on the link to reset new password.";
 
             #endregion
 
@@ -324,6 +327,13 @@
 
             #endregion
 
+            #region Customize Report
+
+            public static readonly string CustomizeReport = "Customize Report";
+            public const string InvalidReportId = "Report Id is Invalid.";
+            public const string ErrorSavingCustomizeReport = "Error while Saving Customize Report";
+
+            #endregion
 
             #region Piece Work
             public static readonly string PieceWork = "Piece Work";

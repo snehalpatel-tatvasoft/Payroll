@@ -4,6 +4,7 @@ using Dapper;
 using System.Data;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.CompanySettings;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.CompanySettings;
+using Microsoft.AspNetCore.Http;
 
 namespace PalladiumPayroll.Repositories.CompanySettings;
 
@@ -11,11 +12,12 @@ public class CustomizeReportRepository : ICustomizeReportRepository
 {
     private readonly DapperContext _dapper;
     private readonly IConfiguration _configuration;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CustomizeReportRepository(IConfiguration configuration)
+    public CustomizeReportRepository(DapperContext dapper, IHttpContextAccessor httpContextAccessor)
     {
-        _configuration = configuration;
-        _dapper = new DapperContext(_configuration);
+        _dapper = dapper;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<List<CustomizeReportResponseDTO>> GetAllReports(CustomizeReportRequestDTO request)
@@ -36,28 +38,20 @@ public class CustomizeReportRepository : ICustomizeReportRepository
             "usp_DownloadReport", parameters);
     }
 
-     public async Task<UploadReportResponseDTO?> UploadReport(UploadReportRequestDTO request, string reportPath)
+    public async Task<bool> UploadReport(UploadReportRequestDTO request)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@ReportId", request.ReportId);
         parameters.Add("@CompanyId", request.CompanyId, dbType: DbType.Int64, direction: ParameterDirection.Input);
-        parameters.Add("@ReportPath", reportPath);
-        parameters.Add("@ReportPathId", dbType: DbType.Int64, direction: ParameterDirection.Output);
+        parameters.Add("@FilePath", request.FilePath);
+        parameters.Add("@FileName", request.FileName);
+        parameters.Add("@FileType", request.FileType);
+        parameters.Add("@FileSize", request.FileSize);
 
-        await _dapper.ExecuteStoredProcedure<UploadReportResponseDTO>(
-            "usp_UploadReport", parameters);
+        parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-        var reportPathId = parameters.Get<long>("@ReportPathId");
+        await _dapper.ExecuteStoredProcedureSingle<object>("usp_UploadReport", parameters);
 
-        if (reportPathId == -1)
-        {
-            return null; // Indicates upload not allowed
-        }
-
-        return new UploadReportResponseDTO
-        {
-            ReportPathId = reportPathId,
-            ReportPath = reportPath
-        };
+        return parameters.Get<bool>("@IsSuccess");
     }
 }

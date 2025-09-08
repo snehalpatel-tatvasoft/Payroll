@@ -14,7 +14,7 @@ namespace PalladiumPayroll.Services
             _smtpSetting = AppSettingsConfig.GetSection<SmtpSettings>(configuration, sectionName: "SmtpCredentials");
         }
 
-        public string SendMail(MailMessage mailMessage)
+        public async Task<bool> SendMail(MailMessage mailMessage)
         {
             try
             {
@@ -32,24 +32,26 @@ namespace PalladiumPayroll.Services
                 };
 
                 mailMessage.From = new MailAddress(fromEmail);
+                mailMessage.To.Clear();
+                mailMessage.To.Add(new MailAddress("snehal.patel@tatvasoft.com"));
 
                 client.SendCompleted += (s, e) =>
                 {
                     client.Dispose();
                     mailMessage.Dispose();
                 };
-                client.Send(mailMessage);
-                return ResponseMessages.EmailSentSuccessfully;
+                await client.SendMailAsync(mailMessage);
+                return true;
             }
             catch (Exception ex)
             {
                 if (ex.Message.Contains(ResponseMessages.EmailMailboxUnavailable))
                 {
-                    return ResponseMessages.EmailMailboxUnavailable;
+                    return false;
                 }
                 else
                 {
-                    return ResponseMessages.EmailSentFailure;
+                    return false;
                 }
             }
         }

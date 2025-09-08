@@ -17,6 +17,10 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.CompanySettings
     {
         public int ReportId { get; set; }
         public int? CompanyId { get; set; }
+        public string? FilePath { get; set; }
+        public string? FileName { get; set; }
+        public string? FileType { get; set; }
+        public long? FileSize { get; set; }
         public IFormFile File { get; set; } = null!;
     }
 }

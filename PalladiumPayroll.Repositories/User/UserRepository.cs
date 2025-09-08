@@ -1,8 +1,11 @@
-﻿using Dapper;
+﻿using Azure.Core;
+using Dapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
+using PalladiumPayroll.Helper;
 
 namespace PalladiumPayroll.Repositories.User
 {
@@ -23,13 +26,31 @@ namespace PalladiumPayroll.Repositories.User
             return response;
         }
 
-        public async Task<UserResponse?> GetUserInfo(string email)
+        public async Task<List<UserResponse>> GetUserInfo(string email)
         {
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@Email", email);
 
-            return await _dapper.ExecuteStoredProcedureSingle<UserResponse>("usp_GetUserDetailsByEmail", parameters);
+            return await _dapper.ExecuteStoredProcedure<UserResponse>("usp_GetUserDetailsByEmail1", parameters);
         }
+
+        public async Task<bool> ResetPassword(string userId, string password)
+        {
+            string passwordHash = new PasswordHasher<object>().HashPassword(user: string.Empty, password);
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@UserId", userId);
+            parameters.Add("@Password", SecurityHandler.Encrypt(password));
+            parameters.Add("@HasPassword", passwordHash);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_ResetUserPassword", parameters);
+        }
+
+        public async Task<UserResponse?> GetUserInfoByUserId(string userId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@UserId", userId);
+            return await _dapper.ExecuteStoredProcedureSingle<UserResponse>("usp_GetUserDetailsByUserId", parameters);
+        }
+
 
         public async Task<bool> ConfirmEmail(string userId)
         {
