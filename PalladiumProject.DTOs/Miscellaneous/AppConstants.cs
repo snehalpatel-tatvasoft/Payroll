@@ -125,17 +125,11 @@
 
             #region Designation
             public static readonly string Designations = "Designations";
-            public const string DesignationsCreatedSuccessfully = "Designation created successfully";
             public const string DesignationsCreationFailed = "Failed to create designation";
             public const string DataFetchSuccess = "Data fetched successfully";
-            public const string DesignationsDeletedSuccessfully = "Designation deleted successfully";
             public const string DesignationsDeleteFailed = "Failed to deleted designation";
-            public const string DesignationsUpdatedSuccessfully = "Designation updated successfully";
             public const string DesignationsUpdateFailed = "Failed to update designation";
             public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
-            public const string DesignationsImportedSuccessfully = "Designations imported successfully.";
-
-
 
             #endregion
 

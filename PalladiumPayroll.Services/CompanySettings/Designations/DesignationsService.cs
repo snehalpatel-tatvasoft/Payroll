@@ -4,6 +4,8 @@ using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company_Settings;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.Comany_Settings;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
+
 
 namespace PalladiumPayroll.Services.Company_Settings;
 
@@ -28,7 +30,7 @@ public class DesignationsService : IDesignationsService
         bool isCreated = await _designationsRepository.CreateDesignations(request);
         if (isCreated)
         {
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.DesignationsCreatedSuccessfully);
+            HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Designations, ActionType.Created));
 
         }
 
@@ -39,7 +41,7 @@ public class DesignationsService : IDesignationsService
     {
 
         var designations = await _designationsRepository.GetAllDesignations(companyId);
-        return HttpStatusCodeResponse.SuccessResponse(designations, ResponseMessages.DataFetchSuccess);
+        return HttpStatusCodeResponse.SuccessResponse(designations, string.Format(ResponseMessages.Success, ResponseMessages.Designations, ActionType.Retrieved));
     }
 
     public async Task<JsonResult> DeleteDesignations(long id)
@@ -47,7 +49,7 @@ public class DesignationsService : IDesignationsService
         bool result = await _designationsRepository.DeleteDesignations(id);
         if (result)
         {
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.DesignationsDeletedSuccessfully);
+            HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Designations, ActionType.Deleted));
         }
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.DesignationsDeleteFailed);
 
@@ -65,7 +67,7 @@ public class DesignationsService : IDesignationsService
         bool isUpdated = await _designationsRepository.UpdateDesignations(request);
         if (isUpdated)
         {
-            return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.DesignationsUpdatedSuccessfully);
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Designations, ActionType.Updated));
         }
 
         return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.DesignationsUpdateFailed);
@@ -79,7 +81,7 @@ public class DesignationsService : IDesignationsService
         if (!string.IsNullOrEmpty(errorMessage))
             return HttpStatusCodeResponse.InternalServerErrorResponse(errorMessage);
 
-        return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.DesignationsImportedSuccessfully);
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Designations, ActionType.Imported));
     }
 
 }
