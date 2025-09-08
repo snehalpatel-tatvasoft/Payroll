@@ -138,6 +138,7 @@
             public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
             public const string DesignationsImportedSuccessfully = "Designations imported successfully.";
 
+            public static readonly string ErrorDeletingDesignations = "Error deleting Designation.";
 
 
             #endregion

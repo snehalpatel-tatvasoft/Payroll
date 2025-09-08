@@ -7,7 +7,7 @@ public interface IDesignationsService
 {
     Task<JsonResult> CreateDesignations(DesignationRequestDTO request);
     Task<JsonResult> GetAllDesignations(long companyId);
-    Task<JsonResult> DeleteDesignations(long id);
+    Task<JsonResult> DeleteDesignations(long designationId,long? employeeId);
     Task<JsonResult> UpdateDesignations(DesignationRequestDTO request);
     Task<JsonResult> ImportDesignations(ImportDesignationRequestDTO request);
 

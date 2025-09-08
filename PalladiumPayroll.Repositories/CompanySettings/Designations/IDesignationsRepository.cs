@@ -8,7 +8,7 @@ public interface IDesignationsRepository
 {
     Task<bool> CreateDesignations(DesignationRequestDTO request);
     Task<List<DesignationResponseDTO>> GetAllDesignations(long companyId);
-    Task<bool> DeleteDesignations(long id);
+    Task<(bool isSuccess, string message)> DeleteDesignations(long designationId, long? employeeId);
     Task<bool> UpdateDesignations(DesignationRequestDTO request);
     Task<bool> CheckDuplicateDesignation(DesignationRequestDTO request);
     Task<string> ImportDesignations(ImportDesignationRequestDTO request);
