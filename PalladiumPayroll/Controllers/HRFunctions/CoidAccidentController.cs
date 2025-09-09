@@ -33,7 +33,7 @@ public class CoidAccidentController : ControllerBase
                            string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.CoidAccident));
         }
     }
-    [HttpGet("GetAccidentsByCompany")]
+    [HttpGet("[action]")]
     public async Task<IActionResult> GetAccidentsByCompany([FromQuery] long companyId)
     {
         try
