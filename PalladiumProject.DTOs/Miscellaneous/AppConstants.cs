@@ -48,7 +48,7 @@
             public static readonly string CasualWageInformation = "Employee Casual Wage Information";
             public static readonly string DirectiveInformation = "Employee  Directive Information";
             public static readonly string TaxInformation = "Employee  Tax Information";
-            public static readonly string  LeaveInformation = "Employee  Leave Information";
+            public static readonly string LeaveInformation = "Employee  Leave Information";
 
 
 
@@ -305,9 +305,9 @@
 
 
             #region Leave Settings
-             public static readonly string LeaveSettings = "Leave Settings";
-             public static readonly string LeaveSettingsUpdateFailed = "Failed to update Leave Settings.";
-             
+            public static readonly string LeaveSettings = "Leave Settings";
+            public static readonly string LeaveSettingsUpdateFailed = "Failed to update Leave Settings.";
+
             #endregion
 
 
@@ -316,7 +316,7 @@
             #region Disciplinary Log
 
             public static readonly string DisciplinaryLog = "Disciplinary Log";
-            public const string DisciplinaryLogSaveFailed  = "Failed to save Disciplinary Log";
+            public const string DisciplinaryLogSaveFailed = "Failed to save Disciplinary Log";
             public const string InvalidDisciplinaryLogId = "Disciplinary Log Id is Invalid.";
             public const string DisciplinaryLogNotFound = "Disciplinary Log was not found.";
 
@@ -338,6 +338,22 @@
             public static readonly string UnableToCreateNotificationTemplate = "Not able to create Notification Template";
             public static readonly string InvalidTemplateId = "Notification Template Id is not valid.";
 
+            #endregion
+
+
+            #region Timesheet Setup
+
+            public static readonly string TimesheetSetup = "Payroll Timesheet Setup";
+            public static readonly string UnableSaveTimesheetSetup = "Unable to save Payroll Timesheet Setup";
+            
+            #endregion
+
+
+             #region Password Policy
+
+            public static readonly string PasswordPolicy = "Password Policy";
+            public static readonly string PasswordNotFound = "Password Policy is not found.";
+            
             #endregion
         }
 

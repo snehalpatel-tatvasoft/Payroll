@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.CompanySettings;
 using PalladiumPayroll.Services.CompanySettings;
@@ -26,14 +25,13 @@ public class CustomizeReportController : ControllerBase
     {
         try
         {
-            JsonResult? res = await _customizeReportService.GetAllReports();
-            return res;
+            return await _customizeReportService.GetAllReports();
         }
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CustomizeReport)
-                );
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CustomizeReport)
+            );
         }
     }
 
@@ -54,7 +52,7 @@ public class CustomizeReportController : ControllerBase
                 if (string.IsNullOrEmpty(filePath))
                 {
                     return HttpStatusCodeResponse.NotFoundResponse(
-                        string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.CustomizeReport));
+                        ResponseMessages.CustomizeReport);
                 }
 
                 byte[]? fileBytes = await FileHandler.ReadFileBytes(filePath);

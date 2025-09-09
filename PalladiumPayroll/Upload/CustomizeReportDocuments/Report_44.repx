@@ -1,0 +1,518 @@
+﻿// CouncilLevyReturnReport.repx
+
+<?xml version="1.0" encoding="utf-8"?>
+<XtraReportsLayoutSerializer SerializerVersion="19.1.11.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.1, Version=19.1.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="XtraReport" Landscape="true" Margins="9, 9, 42, 47" PageWidth="1100" PageHeight="850" Version="19.1" DataSource="#Ref-0">
+  <Extensions>
+    <Item1 Ref="2" Key="DataSerializationExtension" Value="Custom" />
+    <Item2 Ref="3" Key="DataEditorExtension" Value="Custom" />
+    <Item3 Ref="4" Key="ParameterEditorExtension" Value="Custom" />
+  </Extensions>
+  <Parameters>
+    <Item1 Ref="6" Name="CompanyName" />
+    <Item2 Ref="7" Description="PayrollCycleIds" AllowNull="true" Name="PayrollCycleIds" />
+    <Item3 Ref="8" Description="DepartmentIds" AllowNull="true" Name="DepartmentIds" />
+    <Item4 Ref="9" Description="EmployeeIds" AllowNull="true" Name="EmployeeIds" />
+    <Item5 Ref="11" Visible="false" Description="FromDate" AllowNull="true" Name="FromDate" Type="#Ref-10" />
+    <Item6 Ref="12" Visible="false" Description="ToDate" AllowNull="true" Name="ToDate" Type="#Ref-10" />
+  </Parameters>
+  <Bands>
+    <Item1 Ref="13" ControlType="TopMarginBand" Name="TopMargin" HeightF="42" />
+    <Item2 Ref="14" ControlType="DetailBand" Name="Detail" HeightF="0" />
+    <Item3 Ref="15" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="47" />
+    <Item4 Ref="16" ControlType="DetailReportBand" Name="DetailReport" Level="0" DataMember="GetCouncilLevyReportData" DataSource="#Ref-0">
+      <Bands>
+        <Item1 Ref="17" ControlType="DetailBand" Name="Detail1" HeightF="27.8749466">
+          <Controls>
+            <Item1 Ref="18" ControlType="XRTable" Name="table6" TextAlignment="MiddleCenter" SizeF="1071,27.8749466" LocationFloat="0, 0" Font="Times New Roman, 7.75pt" Padding="2,2,0,0,96" Borders="Left, Right, Bottom">
+              <Rows>
+                <Item1 Ref="19" ControlType="XRTableRow" Name="tableRow20" Weight="1">
+                  <Cells>
+                    <Item1 Ref="20" ControlType="XRTableCell" Name="tableCell63" Weight="1.1631525798016285" Multiline="true" Font="Times New Roman, 9.75pt">
+                      <ExpressionBindings>
+                        <Item1 Ref="21" Expression="[IdNumber]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="22" UseFont="false" />
+                    </Item1>
+                    <Item2 Ref="23" ControlType="XRTableCell" Name="tableCell64" Weight="1.0376505104892224" Multiline="true" Font="Times New Roman, 9.75pt">
+                      <ExpressionBindings>
+                        <Item1 Ref="24" Expression="[EmployeeName]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="25" UseFont="false" />
+                    </Item2>
+                    <Item3 Ref="26" ControlType="XRTableCell" Name="tableCell65" Weight="1.0125500782426582" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="27" Expression="[DateOfEngagements]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item3>
+                    <Item4 Ref="28" ControlType="XRTableCell" Name="tableCell66" Weight="0.94979931934770323" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="29" Expression="[DateOfDischarges]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item4>
+                    <Item5 Ref="30" ControlType="XRTableCell" Name="tableCell67" Weight="1.062751126576619" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="31" Expression="[NICGradeValue]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item5>
+                    <Item6 Ref="32" ControlType="XRTableCell" Name="tableCell68" Weight="0.77409638554216864" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="33" Expression="FormatString('{0:N2}', [PayRate])" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item6>
+                    <Item7 Ref="34" ControlType="XRTableCell" Name="tableCell69" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="35" Expression="FormatString('{0:N2}', [CouncilAdministrationEmployeeLevyAmount])" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item7>
+                    <Item8 Ref="36" ControlType="XRTableCell" Name="tableCell70" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="37" Expression="FormatString('{0:N2}', [CouncilDisputeResolutionEmployeeLevyAmount])" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item8>
+                    <Item9 Ref="38" ControlType="XRTableCell" Name="tableCell83" Weight="1" Multiline="true" Text="tableCell83">
+                      <ExpressionBindings>
+                        <Item1 Ref="39" Expression="FormatString('{0:N2}', [CouncilCollectiveBargainingEmployeelevyAmount])" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item9>
+                    <Item10 Ref="40" ControlType="XRTableCell" Name="tableCell71" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="41" Expression="FormatString('{0:N2}', [CouncilVoluntaryleaveenhancementpay])" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item10>
+                    <Item11 Ref="42" ControlType="XRTableCell" Name="tableCell72" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="43" Expression="[TradeUnion]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item11>
+                  </Cells>
+                </Item1>
+              </Rows>
+              <StylePriority Ref="44" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+            </Item1>
+          </Controls>
+        </Item1>
+        <Item2 Ref="45" ControlType="ReportHeaderBand" Name="ReportHeader" HeightF="621.791748">
+          <Controls>
+            <Item1 Ref="46" ControlType="XRLabel" Name="label15" Multiline="true" Text="*Amounts to be completed manually." TextAlignment="MiddleLeft" SizeF="376.727234,25.000061" LocationFloat="394.793121, 449.083282" Font="Times New Roman, 14.34pt, style=Bold" Padding="2,2,0,0,100">
+              <StylePriority Ref="47" UseFont="false" UseTextAlignment="false" />
+            </Item1>
+            <Item2 Ref="48" ControlType="XRLabel" Name="label5" Multiline="true" Text="BANK ACCOUNT DETAILS:" TextAlignment="TopLeft" SizeF="228.35228,20.2534943" LocationFloat="149.374985, 127.250046" Font="Times New Roman, 10.75pt, style=Bold, Underline" Padding="2,2,0,0,100" Borders="None">
+              <StylePriority Ref="49" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+            </Item2>
+            <Item3 Ref="50" ControlType="XRTable" Name="table5" TextAlignment="MiddleCenter" SizeF="1071.00012,90.625" LocationFloat="0.00020662944, 531.166748" Font="Times New Roman, 7.75pt" Padding="2,2,0,0,96" Borders="All">
+              <Rows>
+                <Item1 Ref="51" ControlType="XRTableRow" Name="tableRow18" Weight="1">
+                  <Cells>
+                    <Item1 Ref="52" ControlType="XRTableCell" Name="tableCell61" Weight="10" Multiline="true" Text="EMPLOYEE DETAILS PLEASE LIST ALL EMPLOYEES (i.e scheduled and non scheduled employees)" Font="Times New Roman, 9.75pt" BackColor="DarkGray">
+                      <StylePriority Ref="53" UseFont="false" UseBackColor="false" />
+                    </Item1>
+                  </Cells>
+                </Item1>
+                <Item2 Ref="54" ControlType="XRTableRow" Name="tableRow17" Weight="1" Font="Times New Roman, 6.75pt" BackColor="Gainsboro" BorderColor="Black">
+                  <Cells>
+                    <Item1 Ref="55" ControlType="XRTableCell" Name="tableCell49" Weight="1.1631525798016285" Multiline="true" Text="Identity Number" Font="Times New Roman, 7.75pt">
+                      <StylePriority Ref="56" UseFont="false" />
+                    </Item1>
+                    <Item2 Ref="57" ControlType="XRTableCell" Name="tableCell52" Weight="1.0376505104892224" Multiline="true" Text="NAME" Font="Times New Roman, 9.75pt">
+                      <StylePriority Ref="58" UseFont="false" />
+                    </Item2>
+                    <Item3 Ref="59" ControlType="XRTableCell" Name="tableCell53" Weight="1.0125500782426582" Multiline="true" Text="DATE OF&#xD;&#xA;ENGAGEMENT" />
+                    <Item4 Ref="60" ControlType="XRTableCell" Name="tableCell54" Weight="0.94979931934770323" Multiline="true" Text="DATE OF&#xD;&#xA;TERMINATION" />
+                    <Item5 Ref="61" ControlType="XRTableCell" Name="tableCell55" Weight="1.062751126576619" Multiline="true" Text="EMPLOYEE&#xD;&#xA;WAGE GRADE" />
+                    <Item6 Ref="62" ControlType="XRTableCell" Name="tableCell56" Weight="0.77409638554216864" Multiline="true" Text="HOURLY RATE OF PAY or&#xD;&#xA;BASIC MONTLY SALARY" />
+                    <Item7 Ref="63" ControlType="XRTableCell" Name="tableCell57" Weight="1" Multiline="true" Text="ADMINISTRATION LEVY" Font="Times New Roman, 5.75pt">
+                      <StylePriority Ref="64" UseFont="false" />
+                    </Item7>
+                    <Item8 Ref="65" ControlType="XRTableCell" Name="tableCell58" Weight="1" Multiline="true" Text="DISPUTE&#xD;&#xA;RESOLUTION LEVY" />
+                    <Item9 Ref="66" ControlType="XRTableCell" Name="tableCell82" Weight="1" Multiline="true" Text="COLLECTIVE BARGAIN LEVY" Font="Times New Roman, 6.79pt">
+                      <StylePriority Ref="67" UseFont="false" />
+                    </Item9>
+                    <Item10 Ref="68" ControlType="XRTableCell" Name="tableCell59" Weight="1" Multiline="true" Text="VOLUNTARY LEAVE&#xD;&#xA;ENHANCEMENT PAY&#xD;&#xA;(EMPLOYER ONLY)" />
+                    <Item11 Ref="69" ControlType="XRTableCell" Name="tableCell60" Weight="1" Multiline="true" Text="TRADE UNION&#xD;&#xA;MEMBERSHIP" />
+                  </Cells>
+                  <StylePriority Ref="70" UseFont="false" UseBackColor="false" UseBorderColor="false" />
+                </Item2>
+              </Rows>
+              <StylePriority Ref="71" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+            </Item3>
+            <Item4 Ref="72" ControlType="XRLabel" Name="label14" Multiline="true" Text="*We appeal to all employers to submit their monthly returns/submissions electronically – via payroll extract to edi@mibfa.co.za or via the MIBFA website www.mibfa.co.za." TextAlignment="MiddleLeft" SizeF="1070.99988,23" LocationFloat="0.00020662944, 497.083344" Font="Times New Roman, 10.25pt" Padding="2,2,0,0,100">
+              <StylePriority Ref="73" UseFont="false" UseTextAlignment="false" />
+            </Item4>
+            <Item5 Ref="74" ControlType="XRLabel" Name="label13" Multiline="true" Text="*All monthly returns / schedules must be faxed back to the following Fax no.: 0866330526, 0866310306, 0866330507 or 0866367693 or e-mailed to: edi@mibfa.co.za" TextAlignment="MiddleLeft" SizeF="1054.375,23" LocationFloat="0, 474.083344" Font="Times New Roman, 10.75pt" Padding="2,2,0,0,100">
+              <StylePriority Ref="75" UseFont="false" UseTextAlignment="false" />
+            </Item5>
+            <Item6 Ref="76" ControlType="XRLabel" Name="label12" Multiline="true" TextAlignment="MiddleLeft" SizeF="128.2414,49.99997" LocationFloat="942.7583, 397.875061" Padding="2,2,0,0,100" Borders="Top, Right, Bottom">
+              <ExpressionBindings>
+                <Item1 Ref="77" Expression="([GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyDeduction] + [GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyContribution])&#xA;+&#xA;([GetCouncilLevyReportTopData].[CouncilDisputeResolutionEmployeeLevyDeduction] + [GetCouncilLevyReportTopData].[CouncilDisputeResolutionEmployeeLevyContribution])&#xA;+&#xA;([GetCouncilLevyReportTopData].[CouncilVoluntaryleaveenhancementpayContribution] + ([GetCouncilLevyReportTopData].[CouncilVoluntaryleaveenhancementpayContribution] * 0.15))&#xA;+&#xA;([GetCouncilLevyReportTopData].[CouncilCollectiveBargainingEmployeelevyContribution])&#xA;+Iif((221 -([GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyDeduction]+[GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyContribution]))&lt;0,0,221 -([GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyDeduction]+[GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyContribution]))" PropertyName="Text" EventName="BeforePrint" />
+              </ExpressionBindings>
+              <StylePriority Ref="78" UseBorders="false" UseTextAlignment="false" />
+            </Item6>
+            <Item7 Ref="79" ControlType="XRLabel" Name="label11" Multiline="true" Text="TOTAL AMOUNT PAYABLE&#xD;&#xA;(ALL LEVIES)" TextAlignment="MiddleLeft" SizeF="128.241455,50" LocationFloat="814.5169, 397.875031" Font="Times New Roman, 7.75pt" Padding="2,2,0,0,100" Borders="Top, Right, Bottom">
+              <StylePriority Ref="80" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+            </Item7>
+            <Item8 Ref="81" ControlType="XRTable" Name="table4" TextAlignment="MiddleLeft" SizeF="419.7238,50" LocationFloat="394.79306, 397.875" Padding="2,2,0,0,96" Borders="All">
+              <Rows>
+                <Item1 Ref="82" ControlType="XRTableRow" Name="tableRow15" Weight="1">
+                  <Cells>
+                    <Item1 Ref="83" ControlType="XRTableCell" Name="tableCell47" Weight="2.2864191148799686" Multiline="true" Text="Number of Labour Brokers being used" />
+                    <Item2 Ref="84" ControlType="XRTableCell" Name="tableCell48" Weight="1.0059405042606562" Multiline="true" />
+                  </Cells>
+                </Item1>
+                <Item2 Ref="85" ControlType="XRTableRow" Name="tableRow16" Weight="1">
+                  <Cells>
+                    <Item1 Ref="86" ControlType="XRTableCell" Name="tableCell50" Weight="2.2864195936464591" Multiline="true" Text="No. of employees supplied by Labour Brokers" />
+                    <Item2 Ref="87" ControlType="XRTableCell" Name="tableCell51" Weight="1.0059400254941657" Multiline="true" />
+                  </Cells>
+                </Item2>
+              </Rows>
+              <StylePriority Ref="88" UseBorders="false" UseTextAlignment="false" />
+            </Item8>
+            <Item9 Ref="89" ControlType="XRTable" Name="table3" TextAlignment="MiddleLeft" SizeF="377.727264,159.375092" LocationFloat="0, 302.249939" Padding="2,2,0,0,96" Borders="All">
+              <Rows>
+                <Item1 Ref="90" ControlType="XRTableRow" Name="tableRow10" Weight="1" Font="Times New Roman, 7.75pt">
+                  <Cells>
+                    <Item1 Ref="91" ControlType="XRTableCell" Name="tableCell37" Weight="2.1900360672081631" Multiline="true" Text="Employment Summary&#xD;&#xA;(Number of employees at the last day of month)" TextAlignment="MiddleCenter" BackColor="LightGray" BorderColor="Black">
+                      <StylePriority Ref="92" UseBackColor="false" UseBorderColor="false" UseTextAlignment="false" />
+                    </Item1>
+                    <Item2 Ref="93" ControlType="XRTableCell" Name="tableCell38" Weight="0.70320257259869612" Multiline="true" Text="No. of&#xD;&#xA;employees" TextAlignment="MiddleCenter" BackColor="LightGray" BorderColor="Black">
+                      <StylePriority Ref="94" UseBackColor="false" UseBorderColor="false" UseTextAlignment="false" />
+                    </Item2>
+                  </Cells>
+                  <StylePriority Ref="95" UseFont="false" />
+                </Item1>
+                <Item2 Ref="96" ControlType="XRTableRow" Name="tableRow11" Weight="1">
+                  <Cells>
+                    <Item1 Ref="97" ControlType="XRTableCell" Name="tableCell39" Weight="2.1900360672081631" Multiline="true" Text="Scheduled employees(Weekly and Monthly paid employees)" />
+                    <Item2 Ref="98" ControlType="XRTableCell" Name="tableCell40" Weight="0.70320257259869612" Multiline="true" TextAlignment="MiddleCenter">
+                      <ExpressionBindings>
+                        <Item1 Ref="99" Expression="[GetCouncilLevyReportTopData].[ScheduledEmployees]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="100" UseTextAlignment="false" />
+                    </Item2>
+                  </Cells>
+                </Item2>
+                <Item3 Ref="101" ControlType="XRTableRow" Name="tableRow12" Weight="1">
+                  <Cells>
+                    <Item1 Ref="102" ControlType="XRTableCell" Name="tableCell41" Weight="2.1900360672081631" Multiline="true" Text="Appretices/ Pre-apprentices/ Learners" />
+                    <Item2 Ref="103" ControlType="XRTableCell" Name="tableCell42" Weight="0.70320257259869612" Multiline="true" TextAlignment="MiddleCenter">
+                      <ExpressionBindings>
+                        <Item1 Ref="104" Expression="[GetCouncilLevyReportTopData].[ApprenticesEmployees]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="105" UseTextAlignment="false" />
+                    </Item2>
+                  </Cells>
+                </Item3>
+                <Item4 Ref="106" ControlType="XRTableRow" Name="tableRow13" Weight="1">
+                  <Cells>
+                    <Item1 Ref="107" ControlType="XRTableCell" Name="tableCell43" Weight="2.1900360672081631" Multiline="true" Text="Temporary employees" />
+                    <Item2 Ref="108" ControlType="XRTableCell" Name="tableCell44" Weight="0.70320257259869612" Multiline="true" TextAlignment="MiddleCenter">
+                      <ExpressionBindings>
+                        <Item1 Ref="109" Expression="[GetCouncilLevyReportTopData].[TemporaryEmployees]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="110" UseTextAlignment="false" />
+                    </Item2>
+                  </Cells>
+                </Item4>
+                <Item5 Ref="111" ControlType="XRTableRow" Name="tableRow14" Weight="1">
+                  <Cells>
+                    <Item1 Ref="112" ControlType="XRTableCell" Name="tableCell45" Weight="2.1900363799861204" Multiline="true" Text="Non scheduled employees(i.e. Admin staff, working directors, members of closed corporations, etc.)" />
+                    <Item2 Ref="113" ControlType="XRTableCell" Name="tableCell46" Weight="0.70320225982073925" Multiline="true" TextAlignment="MiddleCenter">
+                      <ExpressionBindings>
+                        <Item1 Ref="114" Expression="[GetCouncilLevyReportTopData].[NonScheduledEmployees]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="115" UseTextAlignment="false" />
+                    </Item2>
+                  </Cells>
+                </Item5>
+              </Rows>
+              <StylePriority Ref="116" UseBorders="false" UseTextAlignment="false" />
+            </Item9>
+            <Item10 Ref="117" ControlType="XRLabel" Name="label10" Multiline="true" Text="Email address: [GetCouncilLevyReportTopData.CompanyEmail]" TextAlignment="MiddleLeft" SizeF="377.727264,23" LocationFloat="0, 279.2499" Padding="2,2,0,0,100">
+              <StylePriority Ref="118" UseTextAlignment="false" />
+            </Item10>
+            <Item11 Ref="119" ControlType="XRLabel" Name="label9" Multiline="true" Text="Bank Name: First National Bank&#xD;&#xA;Bank Branch: FNB Corporate Bank&#xD;&#xA;Branch Code: 252-555&#xD;&#xA;Account Name: MIBFA Central Funds Collection Office&#xD;&#xA;Account Number: 597 300 163 66" TextAlignment="TopLeft" SizeF="226.636368,131.746368" LocationFloat="151.0909, 147.50354" Font="Times New Roman, 10.75pt" Padding="2,2,0,0,100" Borders="None">
+              <StylePriority Ref="120" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+            </Item11>
+            <Item12 Ref="121" ControlType="XRTable" Name="table2" TextAlignment="MiddleCenter" SizeF="676.2068,257.142853" LocationFloat="394.793243, 127.250046" Padding="2,2,0,0,96" Borders="All">
+              <Rows>
+                <Item1 Ref="122" ControlType="XRTableRow" Name="tableRow3" Weight="1">
+                  <Cells>
+                    <Item1 Ref="123" ControlType="XRTableCell" Name="tableCell5" Weight="3.476666015625" Multiline="true" Text="SUMMARY " TextAlignment="TopRight" Borders="Left, Top, Bottom">
+                      <StylePriority Ref="124" UseBorders="false" UseTextAlignment="false" />
+                    </Item1>
+                    <Item2 Ref="125" ControlType="XRTableCell" Name="tableCell8" Weight="4.96" Multiline="true" Text="OF ALL LEVIES PAYABLE" TextAlignment="TopLeft" Borders="Top, Right, Bottom">
+                      <StylePriority Ref="126" UseBorders="false" UseTextAlignment="false" />
+                    </Item2>
+                  </Cells>
+                </Item1>
+                <Item2 Ref="127" ControlType="XRTableRow" Name="tableRow4" Weight="1" Font="Times New Roman, 9.75pt, style=Bold" BackColor="LightGray">
+                  <Cells>
+                    <Item1 Ref="128" ControlType="XRTableCell" Name="tableCell6" Weight="1.1937490844726562" Multiline="true" BackColor="Transparent" Borders="All">
+                      <StylePriority Ref="129" UseBackColor="false" UseBorders="false" />
+                    </Item1>
+                    <Item2 Ref="130" ControlType="XRTableCell" Name="tableCell9" Weight="1.0791671752929686" Multiline="true" Text="ADMINISTRATION&#xD;&#xA;LEVY&#xD;&#xA;Scheduled&#xD;&#xA;employees only" Font="Times New Roman, 6.75pt, style=Bold" Borders="All">
+                      <StylePriority Ref="131" UseFont="false" UseBorders="false" />
+                    </Item2>
+                    <Item3 Ref="132" ControlType="XRTableCell" Name="tableCell10" Weight="1" Multiline="true" Text="DISPUTE&#xD;&#xA;RESOLUTION&#xD;&#xA;LEVY&#xD;&#xA;All employees" Font="Times New Roman, 6.75pt, style=Bold" Borders="All">
+                      <StylePriority Ref="133" UseFont="false" UseBorders="false" />
+                    </Item3>
+                    <Item4 Ref="134" ControlType="XRTableCell" Name="tableCell11" Weight="1" Multiline="true" Text="TECHNOLOGICAL&#xD;&#xA;FUND LEVY&#xD;&#xA;SEIFSA Firms only&#xD;&#xA;@ R1.69 times&#xD;&#xA;No. of employees" Font="Times New Roman, 6.75pt, style=Bold" Borders="All">
+                      <StylePriority Ref="135" UseFont="false" UseBorders="false" />
+                    </Item4>
+                    <Item5 Ref="136" ControlType="XRTableCell" Name="tableCell12" Weight="1" Multiline="true" Text="VOLUNTARY&#xD;&#xA;BARGAINING&#xD;&#xA;COUNCIL LEAVE&#xD;&#xA;ENHANCEMENT&#xD;&#xA;PAY" Font="Times New Roman, 6.75pt, style=Bold" Borders="All">
+                      <StylePriority Ref="137" UseFont="false" UseBorders="false" />
+                    </Item5>
+                  </Cells>
+                  <StylePriority Ref="138" UseFont="false" UseBackColor="false" />
+                </Item2>
+                <Item3 Ref="139" ControlType="XRTableRow" Name="tableRow5" Weight="1">
+                  <Cells>
+                    <Item1 Ref="140" ControlType="XRTableCell" Name="tableCell7" Weight="1.1937490844726562" Multiline="true" Text="Total paid by employees" Font="Times New Roman, 9.75pt" Borders="All">
+                      <StylePriority Ref="141" UseFont="false" UseBorders="false" />
+                    </Item1>
+                    <Item2 Ref="142" ControlType="XRTableCell" Name="tableCell13" Weight="1.0791671752929686" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="143" Expression="[GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyDeduction]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item2>
+                    <Item3 Ref="144" ControlType="XRTableCell" Name="tableCell14" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="145" Expression="[GetCouncilLevyReportTopData].[CouncilDisputeResolutionEmployeeLevyDeduction]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item3>
+                    <Item4 Ref="146" ControlType="XRTableCell" Name="tableCell15" Weight="1" Multiline="true" Text="n/a" />
+                    <Item5 Ref="147" ControlType="XRTableCell" Name="tableCell16" Weight="1" Multiline="true" Text="n/a" />
+                  </Cells>
+                </Item3>
+                <Item4 Ref="148" ControlType="XRTableRow" Name="tableRow6" Weight="1">
+                  <Cells>
+                    <Item1 Ref="149" ControlType="XRTableCell" Name="tableCell33" Weight="1.1937490844726562" Multiline="true" Text="Total paid by employer" Font="Times New Roman, 9.75pt" Borders="All">
+                      <StylePriority Ref="150" UseFont="false" UseBorders="false" />
+                    </Item1>
+                    <Item2 Ref="151" ControlType="XRTableCell" Name="tableCell17" Weight="1.0791671752929686" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="152" Expression="[GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyContribution]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item2>
+                    <Item3 Ref="153" ControlType="XRTableCell" Name="tableCell18" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="154" Expression="[GetCouncilLevyReportTopData].[CouncilDisputeResolutionEmployeeLevyContribution]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item3>
+                    <Item4 Ref="155" ControlType="XRTableCell" Name="tableCell19" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="156" Expression="[GetCouncilLevyReportTopData].[CouncilVoluntaryleaveenhancementpayContribution]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item4>
+                    <Item5 Ref="157" ControlType="XRTableCell" Name="tableCell20" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="158" Expression="[GetCouncilLevyReportTopData].[CouncilCollectiveBargainingEmployeelevyContribution]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item5>
+                  </Cells>
+                </Item4>
+                <Item5 Ref="159" ControlType="XRTableRow" Name="tableRow7" Weight="1">
+                  <Cells>
+                    <Item1 Ref="160" ControlType="XRTableCell" Name="tableCell34" Weight="1.1937490844726562" Multiline="true" Text="Sub total" Borders="All">
+                      <StylePriority Ref="161" UseBorders="false" />
+                    </Item1>
+                    <Item2 Ref="162" ControlType="XRTableCell" Name="tableCell21" Weight="1.0791671752929686" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="163" Expression="[GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyDeduction] + [GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyContribution]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item2>
+                    <Item3 Ref="164" ControlType="XRTableCell" Name="tableCell22" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="165" Expression="[GetCouncilLevyReportTopData].[CouncilDisputeResolutionEmployeeLevyDeduction] + [GetCouncilLevyReportTopData].[CouncilDisputeResolutionEmployeeLevyContribution]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item3>
+                    <Item4 Ref="166" ControlType="XRTableCell" Name="tableCell23" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="167" Expression="[GetCouncilLevyReportTopData].[CouncilVoluntaryleaveenhancementpayContribution]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item4>
+                    <Item5 Ref="168" ControlType="XRTableCell" Name="tableCell24" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="169" Expression="[GetCouncilLevyReportTopData].[CouncilCollectiveBargainingEmployeelevyContribution]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item5>
+                  </Cells>
+                </Item5>
+                <Item6 Ref="170" ControlType="XRTableRow" Name="tableRow21" Weight="1">
+                  <Cells>
+                    <Item1 Ref="171" ControlType="XRTableCell" Name="tableCell85" Weight="1.1937490844726562" Multiline="true" Text="Additional Levy" Borders="All">
+                      <StylePriority Ref="172" UseBorders="false" />
+                    </Item1>
+                    <Item2 Ref="173" ControlType="XRTableCell" Name="tableCell86" Weight="1.0791671752929686" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="174" Expression="Iif((221 -([GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyDeduction]+[GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyContribution]))&lt;0,0,221 -([GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyDeduction]+[GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyContribution]))" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item2>
+                    <Item3 Ref="175" ControlType="XRTableCell" Name="tableCell87" Weight="1" Multiline="true" Text="n/a" />
+                    <Item4 Ref="176" ControlType="XRTableCell" Name="tableCell88" Weight="1" Multiline="true" Text="n/a" />
+                    <Item5 Ref="177" ControlType="XRTableCell" Name="tableCell89" Weight="1" Multiline="true" Text="n/a" />
+                  </Cells>
+                </Item6>
+                <Item7 Ref="178" ControlType="XRTableRow" Name="tableRow8" Weight="1">
+                  <Cells>
+                    <Item1 Ref="179" ControlType="XRTableCell" Name="tableCell35" Weight="1.1937490844726562" Multiline="true" Text="15% VAT (Technological Fund only)" TextAlignment="MiddleCenter" Font="Times New Roman, 6.84pt" Borders="All">
+                      <StylePriority Ref="180" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                    </Item1>
+                    <Item2 Ref="181" ControlType="XRTableCell" Name="tableCell25" Weight="1.0791671752929686" Multiline="true" Text="n/a" />
+                    <Item3 Ref="182" ControlType="XRTableCell" Name="tableCell26" Weight="1" Multiline="true" Text="n/a" />
+                    <Item4 Ref="183" ControlType="XRTableCell" Name="tableCell27" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="184" Expression="[GetCouncilLevyReportTopData].[CouncilVoluntaryleaveenhancementpayContribution] * 0.15" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item4>
+                    <Item5 Ref="185" ControlType="XRTableCell" Name="tableCell28" Weight="1" Multiline="true" Text="n/a" />
+                  </Cells>
+                </Item7>
+                <Item8 Ref="186" ControlType="XRTableRow" Name="tableRow9" Weight="1">
+                  <Cells>
+                    <Item1 Ref="187" ControlType="XRTableCell" Name="tableCell36" Weight="1.1937490844726562" Multiline="true" Text="TOTAL LEVY PAYABLE&#xD;" Font="Times New Roman, 8.7pt" Borders="All">
+                      <StylePriority Ref="188" UseFont="false" UseBorders="false" />
+                    </Item1>
+                    <Item2 Ref="189" ControlType="XRTableCell" Name="tableCell29" Weight="1.0791671752929686" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="190" Expression="[GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyDeduction] + [GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyContribution]+&#xA;Iif((221 -([GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyDeduction]+[GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyContribution]))&lt;0,0,221 -([GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyDeduction]+[GetCouncilLevyReportTopData].[CouncilAdministrationEmployeeLevyContribution]))" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item2>
+                    <Item3 Ref="191" ControlType="XRTableCell" Name="tableCell30" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="192" Expression="[GetCouncilLevyReportTopData].[CouncilDisputeResolutionEmployeeLevyDeduction] + [GetCouncilLevyReportTopData].[CouncilDisputeResolutionEmployeeLevyContribution]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item3>
+                    <Item4 Ref="193" ControlType="XRTableCell" Name="tableCell31" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="194" Expression="[GetCouncilLevyReportTopData].[CouncilVoluntaryleaveenhancementpayContribution] + ([GetCouncilLevyReportTopData].[CouncilVoluntaryleaveenhancementpayContribution] * 0.15)" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item4>
+                    <Item5 Ref="195" ControlType="XRTableCell" Name="tableCell32" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="196" Expression="[GetCouncilLevyReportTopData].[CouncilCollectiveBargainingEmployeelevyContribution]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item5>
+                  </Cells>
+                </Item8>
+              </Rows>
+              <StylePriority Ref="197" UseBorders="false" UseTextAlignment="false" />
+            </Item12>
+            <Item13 Ref="198" ControlType="XRLabel" Name="label8" Multiline="true" Text="EMPLOYER NAME&#xD;&#xA;[GetCouncilLevyReportTopData.CompanyName],&#xD;&#xA;[GetCouncilLevyReportTopData.Phy_StreetNumber], [GetCouncilLevyReportTopData.Phy_StreetName]" TextAlignment="TopCenter" SizeF="148.958344,151.999863" LocationFloat="0, 127.250046" Font="Times New Roman, 8.5pt" Padding="2,2,0,0,100" Borders="All">
+              <StylePriority Ref="199" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+            </Item13>
+            <Item14 Ref="200" ControlType="XRLabel" Name="label7" Multiline="true" SizeF="272.7083,23" LocationFloat="149.375, 93.83335" Padding="2,2,0,0,100">
+              <ExpressionBindings>
+                <Item1 Ref="201" Expression="[GetCouncilLevyReportTopData.CurrentDateTime]" PropertyName="Text" EventName="BeforePrint" />
+              </ExpressionBindings>
+            </Item14>
+            <Item15 Ref="202" ControlType="XRLabel" Name="label6" Multiline="true" Text="DATE FORM MAILED:" SizeF="148.958344,23" LocationFloat="0, 93.83335" Padding="2,2,0,0,100" />
+            <Item16 Ref="203" ControlType="XRLabel" Name="label4" Multiline="true" Text="Day of week to which wages are calculated:                  [GetCouncilLevyReportTopData.WeekEndingDay]" TextAlignment="TopLeft" SizeF="505.44458,23" LocationFloat="565.555542, 93.83335" Padding="2,2,0,0,100" Borders="All">
+              <StylePriority Ref="204" UseBorders="false" UseTextAlignment="false" />
+            </Item16>
+            <Item17 Ref="205" ControlType="XRTable" Name="table1" TextAlignment="MiddleCenter" SizeF="245.208374,50" LocationFloat="825.791748, 22.9999866" Padding="2,2,0,0,96" Borders="All">
+              <Rows>
+                <Item1 Ref="206" ControlType="XRTableRow" Name="tableRow1" Weight="1">
+                  <Cells>
+                    <Item1 Ref="207" ControlType="XRTableCell" Name="tableCell1" Weight="1.4310288423716313" Multiline="true" Text="MONTH" Borders="Left, Top, Right">
+                      <StylePriority Ref="208" UseBorders="false" />
+                    </Item1>
+                    <Item2 Ref="209" ControlType="XRTableCell" Name="tableCell2" Weight="1.5689715677775491" Multiline="true" Text="YEAR" Borders="Left, Top, Right">
+                      <StylePriority Ref="210" UseBorders="false" />
+                    </Item2>
+                  </Cells>
+                </Item1>
+                <Item2 Ref="211" ControlType="XRTableRow" Name="tableRow2" Weight="1">
+                  <Cells>
+                    <Item1 Ref="212" ControlType="XRTableCell" Name="tableCell3" Weight="1.4310273489031107" Multiline="true" Borders="Left, Right, Bottom">
+                      <ExpressionBindings>
+                        <Item1 Ref="213" Expression="[GetCouncilLevyReportTopData].[Month]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="214" UseBorders="false" />
+                    </Item1>
+                    <Item2 Ref="215" ControlType="XRTableCell" Name="tableCell4" Weight="1.5689730612460697" Multiline="true" Borders="Left, Right, Bottom">
+                      <ExpressionBindings>
+                        <Item1 Ref="216" Expression="[GetCouncilLevyReportTopData].[Year]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="217" UseBorders="false" />
+                    </Item2>
+                  </Cells>
+                </Item2>
+              </Rows>
+              <StylePriority Ref="218" UseBorders="false" UseTextAlignment="false" />
+            </Item17>
+            <Item18 Ref="219" ControlType="XRLabel" Name="label3" Multiline="true" TextAlignment="TopCenter" SizeF="128.2417,23" LocationFloat="942.7583, 0" Padding="2,2,0,0,100" Borders="Left, Top, Right">
+              <StylePriority Ref="220" UseBorders="false" UseTextAlignment="false" />
+            </Item18>
+            <Item19 Ref="221" ControlType="XRLabel" Name="label2" Multiline="true" Text="INVOICE NUMBER:&#xD;" TextAlignment="MiddleLeft" SizeF="116.966553,23" LocationFloat="825.791748, 0" Font="Times New Roman, 7.75pt" Padding="2,2,0,0,100">
+              <StylePriority Ref="222" UseFont="false" UseTextAlignment="false" />
+            </Item19>
+            <Item20 Ref="223" ControlType="XRLabel" Name="label1" Multiline="true" Text="METAL AND ENGINEERING INDUSTRIES BARGAINING COUNCIL&#xD;&#xA;Council Levy Return and Tax Invoice" TextAlignment="MiddleCenter" SizeF="705.253967,72.9999847" LocationFloat="87.8709, 0" Font="Times New Roman, 11.75pt" BackColor="LightGray" Padding="2,2,0,0,100">
+              <StylePriority Ref="224" UseFont="false" UseBackColor="false" UseTextAlignment="false" />
+            </Item20>
+          </Controls>
+        </Item2>
+        <Item3 Ref="225" ControlType="ReportFooterBand" Name="ReportFooter" HeightF="25">
+          <Controls>
+            <Item1 Ref="226" ControlType="XRTable" Name="table7" TextAlignment="MiddleCenter" SizeF="1070.99988,25" LocationFloat="0, 0" Font="Times New Roman, 7.75pt" Padding="2,2,0,0,96" Borders="Left, Right, Bottom">
+              <Rows>
+                <Item1 Ref="227" ControlType="XRTableRow" Name="tableRow19" Weight="1">
+                  <Cells>
+                    <Item1 Ref="228" ControlType="XRTableCell" Name="tableCell62" Weight="1.1631527115170446" Multiline="true" Font="Times New Roman, 9.75pt" Borders="None">
+                      <StylePriority Ref="229" UseFont="false" UseBorders="false" />
+                    </Item1>
+                    <Item2 Ref="230" ControlType="XRTableCell" Name="tableCell73" Weight="1.0376503966829698" Multiline="true" Font="Times New Roman, 9.75pt" Borders="None">
+                      <StylePriority Ref="231" UseFont="false" UseBorders="false" />
+                    </Item2>
+                    <Item3 Ref="232" ControlType="XRTableCell" Name="tableCell74" Weight="1.0125503411871322" Multiline="true" Borders="None">
+                      <StylePriority Ref="233" UseBorders="false" />
+                    </Item3>
+                    <Item4 Ref="234" ControlType="XRTableCell" Name="tableCell75" Weight="0.9498023181622296" Multiline="true" Borders="None">
+                      <StylePriority Ref="235" UseBorders="false" />
+                    </Item4>
+                    <Item5 Ref="236" ControlType="XRTableCell" Name="tableCell76" Weight="1.0627482581043128" Multiline="true" Borders="None">
+                      <StylePriority Ref="237" UseBorders="false" />
+                    </Item5>
+                    <Item6 Ref="238" ControlType="XRTableCell" Name="tableCell77" Weight="0.77409597434631117" Multiline="true" Text="Sub Total" Font="Times New Roman, 9.75pt" Borders="Right">
+                      <StylePriority Ref="239" UseFont="false" UseBorders="false" />
+                    </Item6>
+                    <Item7 Ref="240" ControlType="XRTableCell" Name="tableCell78" Weight="1.0000014888362641" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="241" Expression="FormatString('{0:N2}', Sum([CouncilAdministrationEmployeeLevyAmount]))" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item7>
+                    <Item8 Ref="242" ControlType="XRTableCell" Name="tableCell79" Weight="0.999998511163736" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="243" Expression="FormatString('{0:N2}', Sum([CouncilDisputeResolutionEmployeeLevyAmount]))" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item8>
+                    <Item9 Ref="244" ControlType="XRTableCell" Name="tableCell84" Weight="1" Multiline="true" Text="tableCell84">
+                      <ExpressionBindings>
+                        <Item1 Ref="245" Expression="FormatString('{0:N2}', Sum([CouncilCollectiveBargainingEmployeelevyAmount]))" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item9>
+                    <Item10 Ref="246" ControlType="XRTableCell" Name="tableCell80" Weight="1" Multiline="true">
+                      <ExpressionBindings>
+                        <Item1 Ref="247" Expression="FormatString('{0:N2}', Sum([CouncilVoluntaryleaveenhancementpay]))" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                    </Item10>
+                    <Item11 Ref="248" ControlType="XRTableCell" Name="tableCell81" Weight="1" Multiline="true" Borders="None">
+                      <StylePriority Ref="249" UseBorders="false" />
+                    </Item11>
+                  </Cells>
+                </Item1>
+              </Rows>
+              <StylePriority Ref="250" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+            </Item1>
+          </Controls>
+        </Item3>
+      </Bands>
+    </Item4>
+  </Bands>
+  <ComponentStorage>
+    <Item1 Ref="0" ObjectType="DevExpress.DataAccess.Sql.SqlDataSource,DevExpress.DataAccess.v19.1" Name="IndustrialCouncilsDataSource" Base64="PFNxbERhdGFTb3VyY2UgTmFtZT0iSW5kdXN0cmlhbENvdW5jaWxzRGF0YVNvdXJjZSI+PENvbm5lY3Rpb24gTmFtZT0ibG9jYWxob3N0X3BhbGRiUGF5cm9sbERlbW9TbmVoYWxfVGVjaF9Db25uZWN0aW9uIiBQcm92aWRlcktleT0iTVNTcWxTZXJ2ZXIiPjxQYXJhbWV0ZXJzPjxQYXJhbWV0ZXIgTmFtZT0ic2VydmVyIiBWYWx1ZT0iUENMUFQxNjZcU1FMMjAxOSIgLz48UGFyYW1ldGVyIE5hbWU9ImRhdGFiYXNlIiBWYWx1ZT0icGFsZGJQYXlyb2xsRGVtb1NuZWhhbF9UZWNoIiAvPjxQYXJhbWV0ZXIgTmFtZT0idXNlSW50ZWdyYXRlZFNlY3VyaXR5IiBWYWx1ZT0iRmFsc2UiIC8+PFBhcmFtZXRlciBOYW1lPSJyZWFkIG9ubHkiIFZhbHVlPSIxIiAvPjxQYXJhbWV0ZXIgTmFtZT0iZ2VuZXJhdGVDb25uZWN0aW9uSGVscGVyIiBWYWx1ZT0iZmFsc2UiIC8+PFBhcmFtZXRlciBOYW1lPSJ1c2VyaWQiIFZhbHVlPSIiIC8+PFBhcmFtZXRlciBOYW1lPSJwYXNzd29yZCIgVmFsdWU9IiIgLz48L1BhcmFtZXRlcnM+PC9Db25uZWN0aW9uPjxRdWVyeSBUeXBlPSJTdG9yZWRQcm9jUXVlcnkiIE5hbWU9IkdldENvdW5jaWxMZXZ5UmVwb3J0VG9wRGF0YSI+PFBhcmFtZXRlciBOYW1lPSJAQ29tcGFueU5hbWUiIFR5cGU9IkRldkV4cHJlc3MuRGF0YUFjY2Vzcy5FeHByZXNzaW9uIj4oU3lzdGVtLlN0cmluZykoP0NvbXBhbnlOYW1lKTwvUGFyYW1ldGVyPjxQYXJhbWV0ZXIgTmFtZT0iQFBheXJvbGxDeWNsZUlkcyIgVHlwZT0iRGV2RXhwcmVzcy5EYXRhQWNjZXNzLkV4cHJlc3Npb24iPihTeXN0ZW0uU3RyaW5nKSg/UGF5cm9sbEN5Y2xlSWRzKTwvUGFyYW1ldGVyPjxQYXJhbWV0ZXIgTmFtZT0iQERlcGFydG1lbnRzSWRzIiBUeXBlPSJEZXZFeHByZXNzLkRhdGFBY2Nlc3MuRXhwcmVzc2lvbiI+KFN5c3RlbS5TdHJpbmcpKD9EZXBhcnRtZW50SWRzKTwvUGFyYW1ldGVyPjxQYXJhbWV0ZXIgTmFtZT0iQEVtcGxveWVlSWRzIiBUeXBlPSJEZXZFeHByZXNzLkRhdGFBY2Nlc3MuRXhwcmVzc2lvbiI+KFN5c3RlbS5TdHJpbmcpKD9FbXBsb3llZUlkcyk8L1BhcmFtZXRlcj48UHJvY05hbWU+R2V0Q291bmNpbExldnlSZXBvcnRUb3BEYXRhPC9Qcm9jTmFtZT48L1F1ZXJ5PjxRdWVyeSBUeXBlPSJTdG9yZWRQcm9jUXVlcnkiIE5hbWU9IkdldENvdW5jaWxMZXZ5UmVwb3J0RGF0YSI+PFBhcmFtZXRlciBOYW1lPSJAQ29tcGFueU5hbWUiIFR5cGU9IkRldkV4cHJlc3MuRGF0YUFjY2Vzcy5FeHByZXNzaW9uIj4oU3lzdGVtLlN0cmluZykoP0NvbXBhbnlOYW1lKTwvUGFyYW1ldGVyPjxQYXJhbWV0ZXIgTmFtZT0iQFBheXJvbGxDeWNsZUlkcyIgVHlwZT0iRGV2RXhwcmVzcy5EYXRhQWNjZXNzLkV4cHJlc3Npb24iPihTeXN0ZW0uU3RyaW5nKSg/UGF5cm9sbEN5Y2xlSWRzKTwvUGFyYW1ldGVyPjxQYXJhbWV0ZXIgTmFtZT0iQERlcGFydG1lbnRJZHMiIFR5cGU9IkRldkV4cHJlc3MuRGF0YUFjY2Vzcy5FeHByZXNzaW9uIj4oU3lzdGVtLlN0cmluZykoP0RlcGFydG1lbnRJZHMpPC9QYXJhbWV0ZXI+PFBhcmFtZXRlciBOYW1lPSJARW1wbG95ZWVJZHMiIFR5cGU9IkRldkV4cHJlc3MuRGF0YUFjY2Vzcy5FeHByZXNzaW9uIj4oU3lzdGVtLlN0cmluZykoP0VtcGxveWVlSWRzKTwvUGFyYW1ldGVyPjxQcm9jTmFtZT5HZXRDb3VuY2lsTGV2eVJlcG9ydERhdGE8L1Byb2NOYW1lPjwvUXVlcnk+PFJlc3VsdFNjaGVtYT48RGF0YVNldCBOYW1lPSJJbmR1c3RyaWFsQ291bmNpbHNEYXRhU291cmNlIj48VmlldyBOYW1lPSJHZXRDb3VuY2lsTGV2eVJlcG9ydFRvcERhdGEiPjxGaWVsZCBOYW1lPSJQaHlfU3RyZWV0TnVtYmVyIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlBoeV9TdHJlZXROYW1lIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkNvbXBhbnlOYW1lIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkNvbXBhbnlFbWFpbCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJTdGFydERhdGUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iRW5kRGF0ZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJXZWVrRW5kaW5nRGF5IiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkN1cnJlbnREYXRlVGltZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJNb250aCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJZZWFyIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlNjaGVkdWxlZEVtcGxveWVlcyIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9Ik5vblNjaGVkdWxlZEVtcGxveWVlcyIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9IlRlbXBvcmFyeUVtcGxveWVlcyIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9IkFwcHJlbnRpY2VzRW1wbG95ZWVzIiBUeXBlPSJJbnQzMiIgLz48RmllbGQgTmFtZT0iQ291bmNpbEFkbWluaXN0cmF0aW9uRW1wbG95ZWVMZXZ5RGVkdWN0aW9uIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJDb3VuY2lsQWRtaW5pc3RyYXRpb25FbXBsb3llZUxldnlDb250cmlidXRpb24iIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IkNvdW5jaWxEaXNwdXRlUmVzb2x1dGlvbkVtcGxveWVlTGV2eURlZHVjdGlvbiIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iQ291bmNpbERpc3B1dGVSZXNvbHV0aW9uRW1wbG95ZWVMZXZ5Q29udHJpYnV0aW9uIiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJDb3VuY2lsQ29sbGVjdGl2ZUJhcmdhaW5pbmdFbXBsb3llZWxldnlEZWR1Y3Rpb24iIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IkNvdW5jaWxDb2xsZWN0aXZlQmFyZ2FpbmluZ0VtcGxveWVlbGV2eUNvbnRyaWJ1dGlvbiIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iQ291bmNpbFZvbHVudGFyeWxlYXZlZW5oYW5jZW1lbnRwYXlEZWR1Y3Rpb24iIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IkNvdW5jaWxWb2x1bnRhcnlsZWF2ZWVuaGFuY2VtZW50cGF5Q29udHJpYnV0aW9uIiBUeXBlPSJEZWNpbWFsIiAvPjwvVmlldz48VmlldyBOYW1lPSJHZXRDb3VuY2lsTGV2eVJlcG9ydERhdGEiPjxGaWVsZCBOYW1lPSJFbXBsb3llZUlkIiBUeXBlPSJVbmtub3duIiAvPjxGaWVsZCBOYW1lPSJJZE51bWJlciIgVHlwZT0iVW5rbm93biIgLz48RmllbGQgTmFtZT0iRW1wbG95ZWVDb2RlIiBUeXBlPSJVbmtub3duIiAvPjxGaWVsZCBOYW1lPSJFbXBsb3llZU5hbWUiIFR5cGU9IlVua25vd24iIC8+PEZpZWxkIE5hbWU9IkRhdGVPZkVuZ2FnZW1lbnRzIiBUeXBlPSJVbmtub3duIiAvPjxGaWVsZCBOYW1lPSJEYXRlT2ZEaXNjaGFyZ2VzIiBUeXBlPSJVbmtub3duIiAvPjxGaWVsZCBOYW1lPSJQYXlSYXRlIiBUeXBlPSJVbmtub3duIiAvPjxGaWVsZCBOYW1lPSJDb3VuY2lsQWRtaW5pc3RyYXRpb25FbXBsb3llZUxldnlBbW91bnQiIFR5cGU9IlVua25vd24iIC8+PEZpZWxkIE5hbWU9IkNvdW5jaWxEaXNwdXRlUmVzb2x1dGlvbkVtcGxveWVlTGV2eUFtb3VudCIgVHlwZT0iVW5rbm93biIgLz48RmllbGQgTmFtZT0iQ291bmNpbENvbGxlY3RpdmVCYXJnYWluaW5nRW1wbG95ZWVsZXZ5QW1vdW50IiBUeXBlPSJVbmtub3duIiAvPjxGaWVsZCBOYW1lPSJDb3VuY2lsVm9sdW50YXJ5bGVhdmVlbmhhbmNlbWVudHBheSIgVHlwZT0iVW5rbm93biIgLz48RmllbGQgTmFtZT0iTklDR3JhZGVWYWx1ZSIgVHlwZT0iVW5rbm93biIgLz48RmllbGQgTmFtZT0iVHJhZGVVbmlvbiIgVHlwZT0iVW5rbm93biIgLz48L1ZpZXc+PC9EYXRhU2V0PjwvUmVzdWx0U2NoZW1hPjxDb25uZWN0aW9uT3B0aW9ucyBDbG9zZUNvbm5lY3Rpb249InRydWUiIC8+PC9TcWxEYXRhU291cmNlPg==" />
+  </ComponentStorage>
+  <ObjectStorage>
+    <Item1 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v19.1" Ref="10" Content="System.DateTime" Type="System.Type" />
+  </ObjectStorage>
+</XtraReportsLayoutSerializer>

@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.CompanySettings;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.CompanySettings;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.CompanySettings;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Services.CompanySettings
 {
@@ -18,50 +19,25 @@ namespace PalladiumPayroll.Services.CompanySettings
 
         public async Task<JsonResult> GetPayrollCycles(long companyId)
         {
-            try
-            {
-                var cycles = await _timesheetSetupRepository.GetPayrollCycles(companyId);
-                if (cycles.Any())
-                {
-                    return HttpStatusCodeResponse.SuccessResponse(cycles, ResponseMessages.DataFetchSuccess);
-                }
-                return HttpStatusCodeResponse.NotFoundResponse("Payroll Cycles");
-            }
-            catch (Exception ex)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching payroll cycles: {ex.Message}");
-            }
+            List<TimesheetSetupResponseDTO>? cycles = await _timesheetSetupRepository.GetPayrollCycles(companyId);
+
+            return HttpStatusCodeResponse.SuccessResponse(cycles, string.Format(ResponseMessages.Success, ResponseMessages.PayrollCycle, ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetTimesheetPayrollSetup(long companyId)
         {
-            try
-            {
-                var setup = await _timesheetSetupRepository.GetTimesheetPayrollSetup(companyId);
-                return HttpStatusCodeResponse.SuccessResponse(setup, ResponseMessages.DataFetchSuccess);
-            }
-            catch (Exception ex)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching timesheet setup: {ex.Message}");
-            }
+            List<TimesheetPayrollSetupResponseDTO>? setup = await _timesheetSetupRepository.GetTimesheetPayrollSetup(companyId);
+
+            return HttpStatusCodeResponse.SuccessResponse(setup, string.Format(ResponseMessages.Success, ResponseMessages.TimesheetSetup, ActionType.Retrieved));
         }
 
         public async Task<JsonResult> UpsertTimesheetPayrollSetup(TimesheetSetupRequestDTO request)
         {
-            try
-            {
-                if (request.CompanyId <= 0)
-                {
-                    return HttpStatusCodeResponse.InternalServerErrorResponse("Invalid CompanyId.");
-                }
+            bool isSaved = await _timesheetSetupRepository.UpsertTimesheetPayrollSetup(request);
 
-                var setup = await _timesheetSetupRepository.UpsertTimesheetPayrollSetup(request);
-                return HttpStatusCodeResponse.SuccessResponse(setup, "Timesheet setup saved successfully.");
-            }
-            catch (Exception ex)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Failed to save timesheet setup: {ex.Message}");
-            }
+            return isSaved
+            ? HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.TimesheetSetup, ActionType.Saved))
+            : HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnableSaveTimesheetSetup);
         }
     }
 }

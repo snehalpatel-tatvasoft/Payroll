@@ -32,7 +32,7 @@ public class CustomizeReportService : ICustomizeReportService
 
     public async Task<JsonResult> DownloadReport(DownloadReportRequestDTO request)
     {
-        var reportPath = await _customizeReportRepository.DownloadReport(request);
+        DownloadReportResponseDTO? reportPath = await _customizeReportRepository.DownloadReport(request);
         if (reportPath != null)
         {
             return HttpStatusCodeResponse.SuccessResponse(reportPath, ResponseMessages.DataFetchSuccess);
@@ -44,16 +44,16 @@ public class CustomizeReportService : ICustomizeReportService
     {
         if (request.File != null && request.File.Length > 0)
         {
-            var basePath = _directoryPathSetting.CustomizeReportDocument;
-            var finalPath = FileHandler.CombinePath(basePath, "");
+            string? basePath = _directoryPathSetting.CustomizeReportDocument;
+            string? finalPath = FileHandler.CombinePath(basePath, "");
 
             FileHandler.CreateDirectory(finalPath);
 
-            var filePath = Path.Combine(finalPath, request.File.FileName);
+            string? filePath = Path.Combine(finalPath, request.File.FileName);
             FileHandler.DeleteFile(filePath);
             await FileHandler.UploadFile(filePath, request.File);
 
-            var relativePath = Path.Combine(basePath, request.File.FileName).Replace("\\", "/");
+            string? relativePath = Path.Combine(basePath, request.File.FileName).Replace("\\", "/");
 
             request.FileName = request.File.FileName;
             request.FilePath = relativePath;

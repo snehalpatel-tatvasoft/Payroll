@@ -3,6 +3,8 @@ using System.Net;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.CompanySettings;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.CompanySettings;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.CompanySettings
 {
@@ -17,84 +19,67 @@ namespace PalladiumPayroll.Controllers.CompanySettings
             _passwordPolicyService = passwordPolicyService;
         }
 
-        [HttpGet("GetPasswordPolicyByCompanyId/{companyId}")]
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetPasswordPolicyByCompanyId(long companyId)
         {
             try
             {
-                JsonResult? res = await _passwordPolicyService.GetPasswordPolicyByCompanyId(companyId);
-                return res;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
+                if (companyId <= 0)
                 {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                    return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+                }
+                return await _passwordPolicyService.GetPasswordPolicyByCompanyId(companyId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.PasswordPolicy));
             }
         }
 
-        [HttpPost("CreatePasswordPolicy")]
+        [HttpPost("[action]")]
         public async Task<ActionResult> CreatePasswordPolicy([FromBody] PasswordPolicyRequestDTO request)
         {
             try
             {
-                JsonResult? res = await _passwordPolicyService.CreatePasswordPolicy(request);
-                return res;
+                return await _passwordPolicyService.CreatePasswordPolicy(request);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-                {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+               string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.PasswordPolicy)
+           );
             }
         }
 
-        [HttpPut("UpdatePasswordPolicy/{passwordPolicyId}")]
+        [HttpPut("[action]")]
         public async Task<ActionResult> UpdatePasswordPolicy([FromBody] PasswordPolicyRequestDTO request, long passwordPolicyId)
         {
             try
             {
-                JsonResult? res = await _passwordPolicyService.UpdatePasswordPolicy(request, passwordPolicyId);
-                return res;
+                return await _passwordPolicyService.UpdatePasswordPolicy(request, passwordPolicyId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-                {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = request,
-
-                });
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.PasswordPolicy));
             }
         }
 
-        [HttpDelete("DeletePasswordPolicy/{passwordPolicyId}/{companyId}")]
+        [HttpDelete("[action]")]
         public async Task<ActionResult> DeletePasswordPolicy(long passwordPolicyId, long companyId)
         {
             try
             {
-                JsonResult? res = await _passwordPolicyService.DeletePasswordPolicy(passwordPolicyId, companyId);
-                return res;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
+                if (passwordPolicyId <= 0 || companyId <= 0)
                 {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                    return HttpStatusCodeResponse.InternalServerErrorResponse("Invalid companyId or PasswordId.");
+                }
+                return await _passwordPolicyService.DeletePasswordPolicy(passwordPolicyId, companyId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+               string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.PasswordPolicy)
+           );
             }
         }
     }
