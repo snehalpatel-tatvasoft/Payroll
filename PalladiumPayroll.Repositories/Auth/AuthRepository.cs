@@ -277,7 +277,8 @@ namespace PalladiumPayroll.Repositories.Auth
                 IsBodyHtml = true,
             };
             mailMessage.To.Add(userEmail);
-            return await _emailService.SendMail(mailMessage);
+            return true;
+            //return await _emailService.SendMail(mailMessage);
         }
         #endregion
 
