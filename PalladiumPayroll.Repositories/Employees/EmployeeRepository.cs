@@ -6,6 +6,7 @@ using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
@@ -152,7 +153,7 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@Address3", reqModel.Address3);
             parameters.Add("@Pos_PostalCode", reqModel.Pos_PostalCode);
             parameters.Add("@Pos_CountryId", reqModel.Pos_CountryId);
-            parameters.Add("@UserId", reqModel.UserId);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value);
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeePersonalInfo", parameters);
             return result;
         }

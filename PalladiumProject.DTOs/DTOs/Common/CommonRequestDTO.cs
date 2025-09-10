@@ -1,4 +1,5 @@
-﻿using static PalladiumPayroll.Helper.Constants.AppConstants;
+﻿using Microsoft.AspNetCore.Http;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
 
 namespace PalladiumPayroll.DTOs.DTOs.Common
 {
@@ -16,5 +17,11 @@ namespace PalladiumPayroll.DTOs.DTOs.Common
         public int PageSize { get; set; } = DefaultPageSize;
         public string? SortBy { get; set; }
         public bool? SortType { get; set; } = false;
+    }
+
+    public class ImportFileModel
+    {
+        public IFormFile File { get; set; } = null!;
+        public long Id { get; set; }
     }
 }
