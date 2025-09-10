@@ -292,11 +292,11 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpDelete("[action]")]
-        public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type)
+        public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type, long? employeeId)
         {
             try
             {
-                return await _employeeService.DeleteWorkOrganizationalDropdownItem(id, type);
+                return await _employeeService.DeleteWorkOrganizationalDropdownItem(id, type, employeeId);
             }
             catch (Exception ex)
             {

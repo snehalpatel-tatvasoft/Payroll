@@ -376,12 +376,24 @@ namespace PalladiumPayroll.Repositories.Employees
             return result;
         }
 
-        public async Task<bool> DeleteWorkOrganizationalDropdownItem(int id, int type)
+        public async Task<(bool isSuccess, string message)> DeleteWorkOrganizationalDropdownItem(int id, int type, long? employeeId)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@id", id);
+            parameters.Add("@EmployeeId", employeeId);
             parameters.Add("@type", type);
-            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteOrgnizationDropDownItem", parameters);
+            parameters.Add("@ResultMessage", dbType: DbType.String, size: 4000, direction: ParameterDirection.Output);
+
+            await _dapper.ExecuteAsync(
+                "usp_DeleteOrgnizationDropDownItem_New",
+                parameters
+            );
+
+            string message = parameters.Get<string>("@ResultMessage");
+
+            bool success = message.Contains("successfully", StringComparison.OrdinalIgnoreCase);
+
+            return (success, message);
         }
 
         public async Task<JsonResult> GetEmployeeWorkOrganizationalData(long employeeId)
