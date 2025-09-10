@@ -713,6 +713,21 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeForAssignManager(int seniorEmployeeId, int companyId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeForAssignManager(seniorEmployeeId,companyId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Employee)
+                );
+            }
+        }
+
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetPreviousService(int employeeId)
         {
             try

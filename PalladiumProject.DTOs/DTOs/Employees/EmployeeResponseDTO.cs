@@ -67,11 +67,11 @@
 		public long PayrollProcessId { get; set; }
 		public string Description { get; set; } = "";
 	}
-    public class TimeSheetSetup
-    {
-        public int EmployeeId { get; set; }
-        public bool? EnableTimeSheet { get; set; }
-        public string? TimeSheetPassword { get; set; }
+	public class TimeSheetSetup
+	{
+		public int EmployeeId { get; set; }
+		public bool? EnableTimeSheet { get; set; }
+		public string? TimeSheetPassword { get; set; }
 
 	}
 
@@ -290,6 +290,15 @@
 		public bool Result { get; set; }
 		public Guid? UserId { get; set; }
 		public int? ErrorNumber { get; set; }
-		public string ErrorMessage { get; set; }
+		public string ErrorMessage { get; set; } = "";
+	}
+
+	public class EmployeeAssignDTO
+	{
+		public long EmployeeId { get; set; }
+		public string EmployeeCode { get; set; } = "";
+		public string EmployeeName { get; set; } = "";
+		public string EmployeeSurName { get; set; } ="";
+		public bool IsAssigned { get; set; }     
 	}
 }
