@@ -54,7 +54,7 @@ public class EmployeeTransferController : ControllerBase
         }
     }
 
-    [HttpPost("AddEmployeeTransfer")]
+    [HttpPost("[action]")]
     public async Task<ActionResult> AddEmployeeTransfer([FromBody] EmployeeTransferRequestDTO request)
     {
         try
