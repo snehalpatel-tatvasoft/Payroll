@@ -77,5 +77,25 @@ namespace PalladiumPayroll.Services.User
             }
             return HttpStatusCodeResponse.SuccessResponse("OldMisMatch" ,ResponseMessages.LoginPasswordMismatch);
         }
+
+        public async Task<JsonResult> UserHeaderInfo()
+        {
+            var info = await _userRepository.UserHeaderInfo();
+            if(info != null)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(info, string.Format(ResponseMessages.Success, "User Info", ActionType.Retrieved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.InternalServerError);
+        }
+
+        public async Task<JsonResult> ReceiveEmailNotification(bool isReceive)
+        {
+            var res = await _userRepository.ReceiveEmailNotification(isReceive);
+            if (res)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Receive Email Login Notification", ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, ActionType.Updating, "Receive Email Login Notification"));
+        }
     }
 }

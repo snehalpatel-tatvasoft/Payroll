@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DTOs.DTOs;
@@ -64,7 +65,11 @@ namespace PalladiumPayroll.Repositories.Auth
                         }
                         var tokens = GetAccessTokenAndRefreshToken(validUser);
                         var result = new LoginResposeModel() { Token = tokens[0], RefreshToken = tokens[1], IsMultiUser = false, CompanyId = validUser.CompanyId };
-                        await _userRepository.UpdateLastActivity(validUser.Id.ToString());
+                        await _userRepository.UpdateUserIsLogin(validUser.Id.ToString());
+                        if(validUser.RoleId == 0)
+                        {
+                            _ = SendLoginEmail(validUser.UserName, validUser.Email);
+                        }
                         return HttpStatusCodeResponse.SuccessResponse(result, ResponseMessages.LoginSuccessfully);
                     }
                     else
@@ -100,7 +105,11 @@ namespace PalladiumPayroll.Repositories.Auth
                 {
                     var tokens = GetAccessTokenAndRefreshToken(user);
                     var result = new LoginResposeModel() { Token = tokens[0], RefreshToken = tokens[1], IsMultiUser = false, CompanyId = user.CompanyId };
-                    await _userRepository.UpdateLastActivity(userId);
+                    await _userRepository.UpdateUserIsLogin(userId);
+                    if (user.RoleId == 0)
+                    {
+                        _ = SendLoginEmail(user.UserName, user.Email);
+                    }
                     return HttpStatusCodeResponse.SuccessResponse(result, ResponseMessages.LoginSuccessfully);
                 }
             }
@@ -255,6 +264,23 @@ namespace PalladiumPayroll.Repositories.Auth
         }
         #endregion
 
+        #region Send Login Email
+        private async Task<bool> SendLoginEmail(string userName, string userEmail)
+        {
+            string templatePath = FileHandler.EmailTemplatePath("SuperAdminLoginEmail.html");
+            string bodyTemplate = await FileHandler.ReadFileContent(templatePath);
+            string emailBody = bodyTemplate.Replace("{UserName}", userName);
+            MailMessage mailMessage = new MailMessage
+            {
+                Body = emailBody,
+                Subject = "New login detected on Premium Pay",
+                IsBodyHtml = true,
+            };
+            mailMessage.To.Add(userEmail);
+            return await _emailService.SendMail(mailMessage);
+        }
+        #endregion
+
         #region Send ForgotPassword Email
         private async Task<bool> SendResetPasswordEmail(Guid userId, string email, string userName, string companyName)
         {
@@ -273,7 +299,7 @@ namespace PalladiumPayroll.Repositories.Auth
             string bodyTemplate = await FileHandler.ReadFileContent(templatePath);
 
             string emailBody = bodyTemplate
-                            .Replace("{fullName}", userName ?? "User")
+                            .Replace("{fullName}", userName)
                             .Replace("{companyName}", companyName)
                             .Replace("{passwordResetLink}", $"<a href='{finalUrl}' target='_blank'>Click here</a>");
 

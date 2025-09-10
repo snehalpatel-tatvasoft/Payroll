@@ -36,4 +36,10 @@ namespace PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Admin
         public string PayrollCycleName { get; set; } = string.Empty;
         public bool IsAllow { get; set; }
     }
+
+    public class UserHeaderModel
+    {
+        public string? ProfileLogo { get; set; }
+        public bool IsReceiveEmailNotification { get; set; }
+    }
 }

@@ -39,6 +39,7 @@
             public static readonly string ExceptionMessage = "An Error Occurred While {0} {1}";
             public static readonly string EmptyFile = "File is empty !!";
             public static readonly string InavalidFile = "File format is invalid !";
+            public static readonly string Failed = "Failed to {0} {1}";
 
             #endregion
 
