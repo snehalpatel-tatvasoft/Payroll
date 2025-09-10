@@ -69,7 +69,7 @@ public class CommissionReportController : ControllerBase
         {
             if (companyId <= 0)
             {
-                return BadRequest("Invalid request: CompanyId must be greater than 0.");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.InvalidCompanyId);
             }
             var res = await _commissionReportService.GetCommissions(companyId, cycleId);
             return res;
@@ -88,15 +88,11 @@ public class CommissionReportController : ControllerBase
         {
             if (request == null || request.CommissionIds == null || !request.CommissionIds.Any())
             {
-                return BadRequest("Invalid request: CommissionIds are required.");
+                return HttpStatusCodeResponse.InternalServerErrorResponse("Invalid request: CommissionIds are required.");
             }
             if (request.CompanyId <= 0)
             {
-                return BadRequest("Invalid request: CompanyId must be greater than 0.");
-            }
-            if (!request.CycleId.HasValue || !request.PeriodId.HasValue)
-            {
-                return BadRequest("Invalid request: Both cycleId and periodId are required.");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.InvalidCompanyId);
             }
             var res = await _commissionReportService.ProcessCommission(request);
             return res;
