@@ -28,4 +28,16 @@ namespace PalladiumPayroll.DTOs.DTOs.RequestDTOs.Admin
         public long CompanyPayrollId { get; set; }
         public bool IsAllow { get; set; }
     }
+
+    public class ChangePasswordModel
+    {
+        public string Password { get; set; } = null!;
+        public string NewPassword { get; set; } = null!;
+    }
+
+    public class ChangeEmailModel
+    {
+        public string Email { get; set; } = null!;
+        public string NewEmail { get; set; } = null!;
+    }
 }

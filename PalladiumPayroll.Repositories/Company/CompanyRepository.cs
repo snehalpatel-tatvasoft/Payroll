@@ -9,7 +9,6 @@ using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
-using System.ComponentModel.Design;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
@@ -377,6 +376,15 @@ namespace PalladiumPayroll.Repositories.Company
             List<TransactionListForCompany> response = await _dapper.ExecuteStoredProcedure<TransactionListForCompany>("usp_GetTransactionListForCompany", parameters);
             return response;
         }
+
+        public async Task<bool> ImportGLTransaction(DataTable transactionDataTable, long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@TransactionRecord", transactionDataTable.AsTableValuedParameter("GLTransactionImportType"));
+            parameters.Add("@CompanyId", companyId);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateGlAccountNumber", parameters);
+        }
+
         public async Task<bool> UpdateCompanyRepresentativeInfo(CompanyRepresentative companyRepresentativeInfo)
         {
             DynamicParameters parameters = new DynamicParameters();

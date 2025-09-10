@@ -9,8 +9,10 @@ using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using PalladiumPayroll.Helper;
+using PalladiumPayroll.Helper.ImportExport;
 using PalladiumPayroll.Helper.JWTToken;
 using PalladiumPayroll.Repositories.Company;
+using System.Data;
 using System.Net.Mail;
 using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -156,8 +158,8 @@ namespace PalladiumPayroll.Services.Company
         public async Task<List<CompanyInfo>> GetCompanyInformation(int companyId)
         {
             return await _companyRepository.GetCompanyInformation(companyId);
-        } 
-        
+        }
+
         public async Task<List<GLSetup>> GetCompanyGLInfo(int companyId)
         {
             return await _companyRepository.GetCompanyGLInfo(companyId);
@@ -317,6 +319,42 @@ namespace PalladiumPayroll.Services.Company
         {
             return await _companyRepository.GetTransactionList(companyId);
         }
+
+        public async Task<byte[]> ExportGLTransactionList(long companyId)
+        {
+            var data = await GetTransactionList(companyId);
+            var transactionDT = new DataTable();
+            transactionDT.Columns.Add("Description", typeof(string));
+            transactionDT.Columns.Add("Debit Account Number", typeof(long));
+            transactionDT.Columns.Add("Credit Account Number", typeof(long));
+            transactionDT.Columns.Add("Contra Account Number", typeof(long));
+            foreach (var item in data)
+            {
+                transactionDT.Rows.Add(item.Description, item.DebitAccountNumber, item.CreditAccountNumber, item.ContraAccountNumber);
+            }
+            return ExcelHelper.ExportToExcel(new Dictionary<string, DataTable> { { "Sheet 1", transactionDT } });
+        }
+
+        public async Task<JsonResult> ImportGLTransaction(ImportFileModel requestData)
+        {
+            DataColumn[] sheetColumn =
+                [
+                    new DataColumn("Description", typeof(string)),
+                    new DataColumn("Type", typeof(string)),
+                    new DataColumn("DebitAccountNumber", typeof(string)),
+                    new DataColumn("CreditAccountNumber", typeof(string)),
+                    new DataColumn("ContraAccountNumber", typeof(string)),
+                ];
+            var transactionDT = ExcelHelper.ImportFromExcel(requestData.File, true, sheetColumn);
+            var res = await _companyRepository.ImportGLTransaction(transactionDT, requestData.Id);
+            if (res)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Transaction, ActionType.Imported));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TransactionUpdateFailed);
+
+        }
+
         public async Task<bool> SaveGlAccountNumber(TransactionListForCompany model)
         {
             return await _companyRepository.SaveGlAccountNumber(model);

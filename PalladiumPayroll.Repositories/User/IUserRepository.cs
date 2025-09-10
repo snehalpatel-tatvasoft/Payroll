@@ -15,5 +15,8 @@ namespace PalladiumPayroll.Repositories.User
         Task<bool> LoginUser(string userId);
         Task<bool> LogoutInactiveUsers();
         Task<List<CompanyDetails>> GetCompaniesByEmail(string email);
+        Task<int> UpdateUserEmail(string email, string newEmail);
+        Task<string?> GetUserPassword();
+        Task<bool> UpdateUserPassword(string newPassword);
     }
 }
