@@ -1,10 +1,11 @@
-﻿using Azure.Core;
-using Dapper;
+﻿using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
+using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using PalladiumPayroll.Helper;
 
 namespace PalladiumPayroll.Repositories.User
@@ -12,9 +13,11 @@ namespace PalladiumPayroll.Repositories.User
     public class UserRepository : IUserRepository
     {
         private readonly DapperContext _dapper;
-        public UserRepository(IConfiguration configuration)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UserRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _dapper = new DapperContext(configuration);
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<bool> CheckEmailExist(string email)
@@ -99,8 +102,30 @@ namespace PalladiumPayroll.Repositories.User
             var parameters = new DynamicParameters();
             parameters.Add("@Email", email);
 
-            List<CompanyDetails>? result = await _dapper.ExecuteStoredProcedure<CompanyDetails>("usp_GetCompaniesByUserEmail", parameters);
-            return result.ToList();
+            List<CompanyDetails> result = await _dapper.ExecuteStoredProcedure<CompanyDetails>("usp_GetCompaniesByUserEmail", parameters);
+            return result;
+        }
+
+        public async Task<int> UpdateUserEmail(string email, string newEmail)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@Email", email);
+            parameters.Add("@NewEmail", newEmail);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value);
+            return await _dapper.ExecuteStoredProcedureSingle<int>("usp_UpdateUserEamil", parameters);
+        }
+
+        public async Task<string?> GetUserPassword()
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value);
+            return await _dapper.ExecuteStoredProcedureSingle<string>("usp_GetUserPassword", parameters);
+        }
+
+        public async Task<bool> UpdateUserPassword(string newPassword)
+        {
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value;
+            return await ResetPassword(userId!, newPassword);
         }
     }
 }
