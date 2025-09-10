@@ -35,8 +35,7 @@ public class CoidAccidentRepository : ICoidAccidentRepository
         parameters.Add("@Settled", request.Settled);
         parameters.Add("@Comments", request.Comments);
         parameters.Add("@CompanyId", request.CompanyId);
-        parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
-        parameters.Add("@LastUpdatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertCOIDAccident", parameters);
     }

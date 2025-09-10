@@ -129,12 +129,9 @@
 
             #region Designation
             public static readonly string Designations = "Designations";
-            public const string DesignationsCreatedSuccessfully = "Designation created successfully";
             public const string DesignationsCreationFailed = "Failed to create designation";
             public const string DataFetchSuccess = "Data fetched successfully";
-            public const string DesignationsDeletedSuccessfully = "Designation deleted successfully";
             public const string DesignationsDeleteFailed = "Failed to deleted designation";
-            public const string DesignationsUpdatedSuccessfully = "Designation updated successfully";
             public const string DesignationsUpdateFailed = "Failed to update designation";
             public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
             public const string DesignationsImportedSuccessfully = "Designations imported successfully.";
@@ -193,15 +190,11 @@
             #region Create Transaction
             public static readonly string Transaction = "Transaction";
             public static readonly string CreateTransaction = "Create Transaction";
-            public static readonly string TransactionCreatedSuccessfully = "Create transaction successfully.";
             public static readonly string TransactionCreationFailed = "Failed to create transaction.";
             public static readonly string DuplicateTransaction = "Transaction exists with the same type and description.";
-            public static readonly string TransactionUpdatedSuccessfully = "Transaction updated successfully.";
             public static readonly string TransactionUpdateFailed = "Failed to update transaction.";
-            public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
-            public static readonly string TransactionImportedSuccessfully = "Transaction imported successfully.";
             public static readonly string TransactionImportFailed = "Error occurred while importing the data";
-            public static readonly string TransactionDeleteFailed = "Failed to deleted Transaction.";
+            public static readonly string TransactionDeleteFailed = "Failed to delete Transaction.";
 
 
             #endregion
@@ -291,7 +284,7 @@
 
             #endregion
 
-            #region coid accident
+            #region Coid Accident
             public static readonly string CoidAccident = "COID accident";
             public static readonly string CoidAccidentFailedDelete = "Failed to delete COID Accident ";
             public static readonly string CoidAccidentUpdatedSuccessfully = "COID Accident updated successfully";
