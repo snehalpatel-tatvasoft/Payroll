@@ -18,7 +18,7 @@ namespace PalladiumPayroll.Controllers.DisciplinaryLog
             _disciplinaryLogService = disciplinaryLogService;
         }
 
-        [HttpGet("GetDisciplinaryLogByCompanyId/{companyId}")]
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetDisciplinaryLogByCompanyId(long companyId)
         {
             try
@@ -53,7 +53,7 @@ namespace PalladiumPayroll.Controllers.DisciplinaryLog
             }
         }
 
-        [HttpGet("GetEmployeesForDisciplinaryLogDropdown/{companyId}")]
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetEmployeesForDisciplinaryLogDropdown(long companyId)
         {
             try
@@ -63,14 +63,14 @@ namespace PalladiumPayroll.Controllers.DisciplinaryLog
             }
             catch (Exception)
             {
-                 return HttpStatusCodeResponse.InternalServerErrorResponse(
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
                     string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.DisciplinaryLog+" Droplist")
                 );
             }
         }
 
 
-        [HttpGet("GetDisciplinaryLogById/{disciplinaryLogId}")]
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetDisciplinaryLogById(long disciplinaryLogId)
         {
             try
@@ -87,7 +87,7 @@ namespace PalladiumPayroll.Controllers.DisciplinaryLog
         }
 
 
-        [HttpDelete("DeleteDisciplinaryLog/{disciplinaryLogId}")]
+        [HttpDelete("[action]")]
         public async Task<ActionResult> DeleteDisciplinaryLog(long disciplinaryLogId)
         {
             try

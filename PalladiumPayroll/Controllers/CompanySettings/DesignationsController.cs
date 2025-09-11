@@ -20,7 +20,7 @@ namespace PalladiumPayroll.Controllers.Company_Settings
             _designationsService = designationsService;
         }
 
-        [HttpPost("CreateDesignations")]
+        [HttpPost("[action]")]
         public async Task<ActionResult> CreateDesignations([FromBody] DesignationRequestDTO request)
         {
             try
@@ -34,7 +34,7 @@ namespace PalladiumPayroll.Controllers.Company_Settings
             }
         }
 
-        [HttpGet("GetAllDesignations")]
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetAllDesignations([FromQuery] long companyId)
         {
             try
@@ -48,7 +48,7 @@ namespace PalladiumPayroll.Controllers.Company_Settings
             }
         }
 
-        [HttpDelete("DeleteDesignations/{id}")]
+        [HttpDelete("[action]")]
         public async Task<ActionResult> DeleteDesignations(long id, long? employeeId)
         {
             try
@@ -62,7 +62,7 @@ namespace PalladiumPayroll.Controllers.Company_Settings
             }
         }
 
-        [HttpPatch("UpdateDesignations")]
+        [HttpPatch("[action]")]
         public async Task<ActionResult> UpdateDesignations([FromBody] DesignationRequestDTO request)
         {
             try
@@ -76,7 +76,7 @@ namespace PalladiumPayroll.Controllers.Company_Settings
             }
         }
         
-        [HttpPost("ImportDesignations")]
+        [HttpPost("[action]")]
         public async Task<ActionResult> ImportDesignations([FromBody] ImportDesignationRequestDTO request)
         {
             try

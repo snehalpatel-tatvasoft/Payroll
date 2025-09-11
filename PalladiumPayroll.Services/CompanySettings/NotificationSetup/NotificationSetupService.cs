@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.CompanySettings;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.CompanySettings;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.CompanySettings;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Services.CompanySettings
 {
@@ -17,159 +19,82 @@ namespace PalladiumPayroll.Services.CompanySettings
 
         public async Task<JsonResult> GetNotificationTemplatesByCompanyId(long companyId)
         {
-            try
-            {
-                if (companyId <= 0)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
+            List<NotificationTemplateResponseDTO> templates = await _notificationSetupRepository.GetNotificationTemplatesByCompanyId(companyId);
 
-                var templates = await _notificationSetupRepository.GetNotificationTemplatesByCompanyId(companyId);
-                if (templates.Any())
-                {
-                    return HttpStatusCodeResponse.SuccessResponse(templates, ResponseMessages.DataFetchSuccess);
-                }
-                return HttpStatusCodeResponse.NotFoundResponse("Notification Templates");
-            }
-            catch (Exception ex)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching notification templates: {ex.Message}");
-            }
+            return HttpStatusCodeResponse.SuccessResponse(templates, string.Format(ResponseMessages.Success, ResponseMessages.NotificationTemplate, ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetNotificationTypes()
         {
-            try
-            {
-                var types = await _notificationSetupRepository.GetNotificationTypes();
-                if (types.Any())
-                {
-                    return HttpStatusCodeResponse.SuccessResponse(types, ResponseMessages.DataFetchSuccess);
-                }
-                return HttpStatusCodeResponse.NotFoundResponse("Notification Types");
-            }
-            catch (Exception ex)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching notification types: {ex.Message}");
-            }
+            List<NotificationTypeResponseDTO>? types = await _notificationSetupRepository.GetNotificationTypes();
+
+            return HttpStatusCodeResponse.SuccessResponse(types, string.Format(ResponseMessages.Success, ResponseMessages.Notification + " Types", ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetEmployeesByCompanyIdForNotification(long companyId)
         {
-            try
-            {
-                if (companyId <= 0)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
+            List<EmployeeResponseDTO>? employees = await _notificationSetupRepository.GetEmployeesByCompanyIdForNotification(companyId);
 
-                var employees = await _notificationSetupRepository.GetEmployeesByCompanyIdForNotification(companyId);
-                if (employees.Any())
-                {
-                    return HttpStatusCodeResponse.SuccessResponse(employees, ResponseMessages.DataFetchSuccess);
-                }
-                return HttpStatusCodeResponse.NotFoundResponse("Employees");
-            }
-            catch (Exception ex)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching employees: {ex.Message}");
-            }
+            return HttpStatusCodeResponse.SuccessResponse(employees, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieved));
         }
 
         public async Task<JsonResult> CreateNotificationTemplate(NotificationTemplateRequestDTO request)
         {
-            try
-            {
-                if (request.CompanyId <= 0 || request.NotificationTypeId <= 0 || string.IsNullOrWhiteSpace(request.NotificationTemplateName) ||
+            if (request.CompanyId <= 0 || request.NotificationTypeId <= 0 || string.IsNullOrWhiteSpace(request.NotificationTemplateName) ||
                     string.IsNullOrWhiteSpace(request.Subject))
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
-
-                var templateId = await _notificationSetupRepository.CreateNotificationTemplate(request);
-                return HttpStatusCodeResponse.SuccessResponse(templateId, "Notification template created successfully.");
-            }
-            catch (Exception ex)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error creating notification template: {ex.Message}");
+                return HttpStatusCodeResponse.BadRequestResponse();
             }
+
+            int templateId = await _notificationSetupRepository.CreateNotificationTemplate(request);
+
+            if (templateId <= 0)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnableToCreateNotificationTemplate);
+            }
+            return HttpStatusCodeResponse.SuccessResponse(templateId, string.Format(ResponseMessages.Success, ResponseMessages.NotificationTemplate, ActionType.Created));
         }
 
         public async Task<JsonResult> GetNotificationTemplateById(int notificationTemplateId)
         {
-            try
+            NotificationTemplateResponseDTO? template = await _notificationSetupRepository.GetNotificationTemplateById(notificationTemplateId);
+            if (template != null)
             {
-                if (notificationTemplateId <= 0)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
-
-                var template = await _notificationSetupRepository.GetNotificationTemplateById(notificationTemplateId);
-                if (template != null)
-                {
-                    return HttpStatusCodeResponse.SuccessResponse(template, ResponseMessages.DataFetchSuccess);
-                }
-                return HttpStatusCodeResponse.NotFoundResponse("Notification Template");
+                return HttpStatusCodeResponse.SuccessResponse(template, string.Format(ResponseMessages.Success, ResponseMessages.NotificationTemplate, ActionType.Retrieved));
             }
-            catch (Exception ex)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching notification template: {ex.Message}");
-            }
+            return HttpStatusCodeResponse.NotFoundResponse("Notification Template");
         }
 
         public async Task<JsonResult> GetEmployeesByNotificationTemplateId(int notificationTemplateId)
         {
-            try
-            {
-                if (notificationTemplateId <= 0)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
+            List<long>? employeeIds = await _notificationSetupRepository.GetEmployeesByNotificationTemplateId(notificationTemplateId);
 
-                var employeeIds = await _notificationSetupRepository.GetEmployeesByNotificationTemplateId(notificationTemplateId);
-                return HttpStatusCodeResponse.SuccessResponse(employeeIds, ResponseMessages.DataFetchSuccess);
-            }
-            catch (Exception ex)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching employees: {ex.Message}");
-            }
+            return HttpStatusCodeResponse.SuccessResponse(employeeIds, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieved));
         }
 
         public async Task<JsonResult> UpdateNotificationTemplate(NotificationTemplateRequestDTO request)
         {
-            try
+            if (request.NotificationTemplateId <= 0 || request.CompanyId <= 0 || request.NotificationTypeId <= 0 ||
+                string.IsNullOrWhiteSpace(request.NotificationTemplateName) || string.IsNullOrWhiteSpace(request.Subject))
             {
-                if (request.NotificationTemplateId <= 0 || request.CompanyId <= 0 || request.NotificationTypeId <= 0 ||
-                    string.IsNullOrWhiteSpace(request.NotificationTemplateName) || string.IsNullOrWhiteSpace(request.Subject))
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
+                return HttpStatusCodeResponse.BadRequestResponse();
+            }
 
-                var templateId = await _notificationSetupRepository.UpdateNotificationTemplate(request);
-                return HttpStatusCodeResponse.SuccessResponse(templateId, "Notification template updated successfully.");
-            }
-            catch (Exception ex)
+            int templateId = await _notificationSetupRepository.UpdateNotificationTemplate(request);
+
+            if (templateId <= 0)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error updating notification template: {ex.Message}");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnableToCreateNotificationTemplate);
             }
+            return HttpStatusCodeResponse.SuccessResponse(templateId, string.Format(ResponseMessages.Success, ResponseMessages.NotificationTemplate, ActionType.Updated));
         }
 
         public async Task<JsonResult> DeleteNotificationTemplate(int notificationTemplateId)
         {
-            try
-            {
-                if (notificationTemplateId <= 0)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
+            int templateId = await _notificationSetupRepository.DeleteNotificationTemplate(notificationTemplateId);
 
-                var templateId = await _notificationSetupRepository.DeleteNotificationTemplate(notificationTemplateId);
-                return HttpStatusCodeResponse.SuccessResponse(templateId, "Notification template deleted successfully.");
-            }
-            catch (Exception ex)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error deleting notification template: {ex.Message}");
-            }
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.NotificationTemplate, ActionType.Deleted));
+
         }
     }
 }

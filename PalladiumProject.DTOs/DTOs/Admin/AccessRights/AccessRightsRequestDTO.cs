@@ -24,3 +24,9 @@ public class SavePayFrequencyAccessRightsDTO
     public long CompanyPayrollId { get; set; }
     public bool IsAllow { get; set; }
 }
+
+public class DeleteAccessRoleResultDTO
+{
+    public bool IsSuccess { get; set; }
+    public string Message { get; set; }=string.Empty;
+}

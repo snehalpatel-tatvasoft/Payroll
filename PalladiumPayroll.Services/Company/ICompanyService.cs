@@ -37,6 +37,8 @@ namespace PalladiumPayroll.Services.Company
         Task<JsonResult> DeleteCompanyBenefitFund(int fundId);
         Task<JsonResult> GetGLSetup(DBConnectionModel dbConnectionModel);
         Task<List<TransactionListForCompany>> GetTransactionList(long companyId);
+        Task<byte[]> ExportGLTransactionList(long companyId);
+        Task<JsonResult> ImportGLTransaction(ImportFileModel requestData);
         Task<bool> SaveGlAccountNumber(TransactionListForCompany model);
     }
 }

@@ -39,6 +39,7 @@
             public static readonly string ExceptionMessage = "An Error Occurred While {0} {1}";
             public static readonly string EmptyFile = "File is empty !!";
             public static readonly string InavalidFile = "File format is invalid !";
+            public static readonly string Failed = "Failed to {0} {1}";
 
             #endregion
 
@@ -48,7 +49,7 @@
             public static readonly string CasualWageInformation = "Employee Casual Wage Information";
             public static readonly string DirectiveInformation = "Employee  Directive Information";
             public static readonly string TaxInformation = "Employee  Tax Information";
-            public static readonly string  LeaveInformation = "Employee  Leave Information";
+            public static readonly string LeaveInformation = "Employee  Leave Information";
 
 
 
@@ -128,12 +129,9 @@
 
             #region Designation
             public static readonly string Designations = "Designations";
-            public const string DesignationsCreatedSuccessfully = "Designation created successfully";
             public const string DesignationsCreationFailed = "Failed to create designation";
             public const string DataFetchSuccess = "Data fetched successfully";
-            public const string DesignationsDeletedSuccessfully = "Designation deleted successfully";
             public const string DesignationsDeleteFailed = "Failed to deleted designation";
-            public const string DesignationsUpdatedSuccessfully = "Designation updated successfully";
             public const string DesignationsUpdateFailed = "Failed to update designation";
             public const string DesignationDuplicate = "Designation with the same Name and Code already exists.";
             public const string DesignationsImportedSuccessfully = "Designations imported successfully.";
@@ -155,19 +153,11 @@
             #endregion
 
             #region Department
-
-            public static readonly string DepartmentsRetrievedSuccessfully = "Departments retrieved successfully.";
-            public static readonly string NoDepartmentsForThisCompanyId = "No departments found for the specified company.";
-            public static readonly string ErrorRetrievingDepartments = "Error retrieving departments.";
+            public static readonly string Department = "Department";
             public static readonly string CheckDuplicateDepartment = "This department name already exists. Please choose a different one.";
-            public static readonly string DepartmentCreateSuccessfully = "Department created successfully.";
-            public static readonly string DepartmentNameRequired = "Department name is required.";
-            public static readonly string ErrorCreatingDepartment = "Error while creating the department.";
-            public static readonly string DepartmentUpdateSuccessfully = "Department updated successfully.";
+            public static readonly string UnableToCreateDepartment = "Unable to create department.";
             public static readonly string ErrorUpdatingDepartment = "Error updating department.";
             public static readonly string ErrorDeletingDepartment = "Error deleting department.";
-            public static readonly string DepartmentDeleteSuccessfully = "Department deleted successfully.";
-
 
             #endregion
 
@@ -192,15 +182,11 @@
             #region Create Transaction
             public static readonly string Transaction = "Transaction";
             public static readonly string CreateTransaction = "Create Transaction";
-            public static readonly string TransactionCreatedSuccessfully = "Create transaction successfully.";
             public static readonly string TransactionCreationFailed = "Failed to create transaction.";
             public static readonly string DuplicateTransaction = "Transaction exists with the same type and description.";
-            public static readonly string TransactionUpdatedSuccessfully = "Transaction updated successfully.";
             public static readonly string TransactionUpdateFailed = "Failed to update transaction.";
-            public static readonly string TransactionDeletedSuccessfully = "Transaction deleted successfully.";
-            public static readonly string TransactionImportedSuccessfully = "Transaction imported successfully.";
             public static readonly string TransactionImportFailed = "Error occurred while importing the data";
-            public static readonly string TransactionDeleteFailed = "Failed to deleted Transaction.";
+            public static readonly string TransactionDeleteFailed = "Failed to delete Transaction.";
 
 
             #endregion
@@ -290,7 +276,7 @@
 
             #endregion
 
-            #region coid accident
+            #region Coid Accident
             public static readonly string CoidAccident = "COID accident";
             public static readonly string CoidAccidentFailedDelete = "Failed to delete COID Accident ";
             public static readonly string CoidAccidentUpdatedSuccessfully = "COID Accident updated successfully";
@@ -313,9 +299,9 @@
 
 
             #region Leave Settings
-             public static readonly string LeaveSettings = "Leave Settings";
-             public static readonly string LeaveSettingsUpdateFailed = "Failed to update Leave Settings.";
-             
+            public static readonly string LeaveSettings = "Leave Settings";
+            public static readonly string LeaveSettingsUpdateFailed = "Failed to update Leave Settings.";
+
             #endregion
 
 
@@ -324,7 +310,7 @@
             #region Disciplinary Log
 
             public static readonly string DisciplinaryLog = "Disciplinary Log";
-            public const string DisciplinaryLogSaveFailed  = "Failed to save Disciplinary Log";
+            public const string DisciplinaryLogSaveFailed = "Failed to save Disciplinary Log";
             public const string InvalidDisciplinaryLogId = "Disciplinary Log Id is Invalid.";
             public const string DisciplinaryLogNotFound = "Disciplinary Log was not found.";
 
@@ -336,6 +322,32 @@
             public const string InvalidReportId = "Report Id is Invalid.";
             public const string ErrorSavingCustomizeReport = "Error while Saving Customize Report";
 
+            #endregion
+
+            #region Notification Setup
+
+            public static readonly string NotificationSetup = "Notification Setup";
+            public static readonly string Notification = "Notification";
+            public static readonly string NotificationTemplate = "Notification Template";
+            public static readonly string UnableToCreateNotificationTemplate = "Not able to create Notification Template";
+            public static readonly string InvalidTemplateId = "Notification Template Id is not valid.";
+
+            #endregion
+
+
+            #region Timesheet Setup
+
+            public static readonly string TimesheetSetup = "Payroll Timesheet Setup";
+            public static readonly string UnableSaveTimesheetSetup = "Unable to save Payroll Timesheet Setup";
+            
+            #endregion
+
+
+             #region Password Policy
+
+            public static readonly string PasswordPolicy = "Password Policy";
+            public static readonly string PasswordNotFound = "Password Policy is not found.";
+            
             #endregion
         }
 

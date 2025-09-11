@@ -7,12 +7,10 @@ namespace PalladiumPayroll.Controllers.EmployeesLoan;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 
-
 [ApiController]
 [Route("api/[controller]")]
 public class EmployeesLoanController : ControllerBase
 {
-
     private readonly IEmployeesLoanService _service;
 
     public EmployeesLoanController(IEmployeesLoanService service)
@@ -20,7 +18,7 @@ public class EmployeesLoanController : ControllerBase
         _service = service;
     }
 
-    [HttpPost("CreateEmployeeLoan")]
+    [HttpPost("[action]")]
     public async Task<IActionResult> CreateEmployeeLoan([FromBody] EmployeeLoanRequestDTO request)
     {
         try
@@ -33,8 +31,9 @@ public class EmployeesLoanController : ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.EmployeeLoan));
         }
     }
-    [HttpPut("UpdateEmployeeLoan")]
-    public async Task<ActionResult> EditEmployeeLoan([FromBody] EmployeeLoanRequestDTO request)
+
+    [HttpPut("[action]")]
+    public async Task<ActionResult> UpdateEmployeeLoan([FromBody] EmployeeLoanRequestDTO request)
     {
         try
         {
@@ -47,8 +46,8 @@ public class EmployeesLoanController : ControllerBase
         }
     }
 
-    [HttpPut("PauseLoan/{employeeLoanId}")]
-    public async Task<ActionResult> PauseLoan(long employeeLoanId)
+    [HttpPut("[action]")]
+    public async Task<ActionResult> PauseEmployeeLoan(long employeeLoanId)
     {
         try
         {
@@ -61,8 +60,8 @@ public class EmployeesLoanController : ControllerBase
         }
     }
 
-    [HttpPut("FullPaidLoan/{employeeLoanId}")]
-    public async Task<ActionResult> FullPaidLoan(long employeeLoanId)
+    [HttpPut("[action]")]
+    public async Task<ActionResult> FullPaidEmployeeLoan(long employeeLoanId)
     {
         try
         {
@@ -75,7 +74,7 @@ public class EmployeesLoanController : ControllerBase
         }
     }
 
-    [HttpGet("GetLoansByCompany")]
+    [HttpGet("[action]")]
     public async Task<ActionResult> GetLoansByCompany([FromQuery] LoanFilterViewModel reqModel)
     {
         try
@@ -85,11 +84,11 @@ public class EmployeesLoanController : ControllerBase
         }
         catch (Exception ex)
         {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeLoan,ex.Message));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ActionType.Retrieving, ResponseMessages.EmployeeLoan, ex.Message));
         }
     }
 
-    [HttpGet("GetEmployeeLoanDropdowns")]
+    [HttpGet("[action]")]
     public async Task<IActionResult> GetEmployeeLoanDropdowns(long companyId)
     {
         try

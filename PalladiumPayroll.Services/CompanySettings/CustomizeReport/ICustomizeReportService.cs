@@ -5,7 +5,7 @@ namespace PalladiumPayroll.Services.CompanySettings;
 
 public interface ICustomizeReportService
 {
-    Task<JsonResult> GetAllReports(CustomizeReportRequestDTO request);
+    Task<JsonResult> GetAllReports();
     Task<JsonResult> DownloadReport(DownloadReportRequestDTO request);
     Task<JsonResult> UploadReport(UploadReportRequestDTO request);
 

@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.CompanySettings;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.CompanySettings;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.CompanySettings
 {
@@ -17,63 +18,56 @@ namespace PalladiumPayroll.Controllers.CompanySettings
             _timesheetSetupService = timesheetSetupService;
         }
 
-        [HttpGet("GetPayrollCycles/{companyId}")]
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetPayrollCycles(long companyId)
         {
             try
             {
-                JsonResult? res = await _timesheetSetupService.GetPayrollCycles(companyId);
-                return res;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
+                if (companyId <= 0)
                 {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                    return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+                }
+                return await _timesheetSetupService.GetPayrollCycles(companyId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.PayrollCycle));
             }
         }
 
-        [HttpGet("GetTimesheetPayrollSetup/{companyId}")]
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetTimesheetPayrollSetup(long companyId)
         {
             try
             {
-                JsonResult? res = await _timesheetSetupService.GetTimesheetPayrollSetup(companyId);
-                return res;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
+                if (companyId <= 0)
                 {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                    return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+                }
+                return await _timesheetSetupService.GetTimesheetPayrollSetup(companyId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.TimesheetSetup));
             }
         }
 
-        [HttpPost("UpsertTimesheetPayrollSetup")]
+        [HttpPost("[action]")]
         public async Task<ActionResult> UpsertTimesheetPayrollSetup([FromBody] TimesheetSetupRequestDTO request)
         {
             try
             {
-                JsonResult? res = await _timesheetSetupService.UpsertTimesheetPayrollSetup(request);
-                return res;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
+                if (request.CompanyId <= 0)
                 {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.CompanyIdNotFound);
+                }
+                return await _timesheetSetupService.UpsertTimesheetPayrollSetup(request);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                   string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.TimesheetSetup)
+                );
             }
         }
     }
