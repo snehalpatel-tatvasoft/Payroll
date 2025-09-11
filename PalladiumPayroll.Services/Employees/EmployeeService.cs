@@ -436,7 +436,20 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model)
         {
-            return await _employeeRepository.UpdateEmployeeSelfService(model);
+            var result = await _employeeRepository.UpdateEmployeeSelfService(model);
+            if (result.Result == 1)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(
+                    true,
+                    string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Updated)
+                );
+            }
+            else
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                  result.ErrorMessage ?? "Error in Saving Employee Self Service."
+                );
+            }
         }
 
         public async Task<JsonResult> GetAccessRolesByCompanyId(long companyId)
@@ -475,7 +488,7 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> GetEmployeeForAssignManager(int seniorEmployeeId, int companyId)
         {
-            List<EmployeeAssignDTO>? employees = await _employeeRepository.GetEmployeeForAssignManager(seniorEmployeeId,companyId);
+            List<EmployeeAssignDTO>? employees = await _employeeRepository.GetEmployeeForAssignManager(seniorEmployeeId, companyId);
 
             return HttpStatusCodeResponse.SuccessResponse(employees, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieved));
         }

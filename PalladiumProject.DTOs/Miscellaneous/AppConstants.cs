@@ -348,6 +348,16 @@
 
             #endregion
 
+
+             #region Employee Self Service
+
+            public static readonly string EmployeeSelfService = "Employee Self Service";
+            public static readonly string UserCredential = "User Credentials";
+            public static readonly string SecondApprovalEmployees = "Second Approval Employees";
+            
+            #endregion
+
+
             #region Piece Work
             
             public static readonly string PieceWork = "Piece Work";
