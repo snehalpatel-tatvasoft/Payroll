@@ -1,5 +1,33 @@
+using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.CompanySettings.EmployeeProfile;
+using PalladiumPayroll.DTOs.Miscellaneous;
+using PalladiumPayroll.Services.CompanySettings.EmployeeProfile;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
+
 namespace PalladiumPayroll.Controllers.CompanySettings;
 
-public class EmployeeProfileController
+[ApiController]
+[Route("api/[controller]")]
+public class EmployeeProfileController : ControllerBase
 {
+    private readonly IEmployeeProfileService _employeeProfileService;
+
+    public EmployeeProfileController(IEmployeeProfileService employeeProfileService)
+    {
+        _employeeProfileService = employeeProfileService;
+    }
+    [HttpPost("[action]")]
+    public async Task<ActionResult> CreateProfile([FromBody] EmployeeProfileRequestDTO request)
+    {
+        try
+        {
+            JsonResult? res = await _employeeProfileService.CreateProfile(request);
+            return res;
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.Designations));
+        }
+    }
 }
