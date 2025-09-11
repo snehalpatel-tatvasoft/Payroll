@@ -39,13 +39,17 @@ public class AccessRightsService : IAccessRightsService
 
     public async Task<JsonResult> DeleteAccessRole(int accessRoleId)
     {
-        bool isDeleted = await _accessRightsRepository.DeleteAccessRoles(accessRoleId);
+        var result = await _accessRightsRepository.DeleteAccessRoles(accessRoleId);
 
-        if (!isDeleted)
+        if (!result.IsSuccess)
         {
-            return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.MinimumWageNotFound);
+            return HttpStatusCodeResponse.NotFoundResponse(result.Message);
         }
-        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.AccessRole, ActionType.Deleted));
+
+        return HttpStatusCodeResponse.SuccessResponse(
+            string.Empty,
+            string.Format(ResponseMessages.Success, ResponseMessages.AccessRole, ActionType.Deleted)
+        );
     }
 
     public async Task<JsonResult> GetAccessRightsByRoleType(int accessRoleId)

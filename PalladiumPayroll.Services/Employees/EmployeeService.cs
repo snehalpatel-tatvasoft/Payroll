@@ -446,34 +446,38 @@ namespace PalladiumPayroll.Services.Employees
 
         public async Task<JsonResult> UpsertEmployeeUser(UpsertUserRequestDTO request)
         {
-            try
+            string passwordHash = new PasswordHasher<object>().HashPassword(null, request.Password);
+
+            var createUserRequest = new UpsertUserRequestDTO
             {
-                if (request == null || string.IsNullOrWhiteSpace(request.Email) ||
-                    string.IsNullOrWhiteSpace(request.Password) || request.CompanyId <= 0 ||
-                    request.AccessRoleId <= 0 || request.EmployeeId <= 0)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
+                AccessRoleId = request.AccessRoleId,
+                Email = request.Email,
+                Password = request.Password,
+                PasswordHash = passwordHash,
+                CompanyId = request.CompanyId,
+                EmployeeId = request.EmployeeId
+            };
 
-                // Hash password using PasswordHasher
-                string passwordHash = new PasswordHasher<object>().HashPassword(null, request.Password);
+            var result = await _employeeRepository.UpsertEmployeeUser(createUserRequest);
 
-                var createUserRequest = new UpsertUserRequestDTO
-                {
-                    AccessRoleId = request.AccessRoleId,
-                    Email = request.Email,
-                    Password = request.Password,
-                    PasswordHash = passwordHash,
-                    CompanyId = request.CompanyId,
-                    EmployeeId = request.EmployeeId
-                };
-
-                return await _employeeRepository.UpsertEmployeeUser(createUserRequest);
-            }
-            catch (Exception ex)
+            if (result.Result)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error upserting user: {ex.Message}");
+                return HttpStatusCodeResponse.SuccessResponse(result, "User upserted successfully.");
             }
+            else
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                  result.ErrorMessage
+                );
+            }
+
+        }
+
+        public async Task<JsonResult> GetEmployeeForAssignManager(int seniorEmployeeId, int companyId)
+        {
+            List<EmployeeAssignDTO>? employees = await _employeeRepository.GetEmployeeForAssignManager(seniorEmployeeId,companyId);
+
+            return HttpStatusCodeResponse.SuccessResponse(employees, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieved));
         }
 
         public async Task<JsonResult> GetPreviousService(int employeeId)
@@ -481,7 +485,7 @@ namespace PalladiumPayroll.Services.Employees
             var previousServiceList = await _employeeRepository.GetPreviousService(employeeId);
             return HttpStatusCodeResponse.SuccessResponse(previousServiceList, string.Format(ResponseMessages.Success, "Previous Service", ActionType.Retrieved));
         }
-        
+
 
         public async Task<List<LeaveModel>> GetEmployeeLeaves(int employeeId)
         {

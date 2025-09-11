@@ -11,7 +11,7 @@ public interface IAccessRightsRepository
 
     Task<bool> CheckAccessRoleExists(string accessRoleName, long companyId, int? accessRoleId = null);
 
-    Task<bool> DeleteAccessRoles(int accessRoleId);
+    Task<DeleteAccessRoleResultDTO> DeleteAccessRoles(int accessRoleId);
 
     Task<List<AccessRightsByRoleTypeDTO>> GetAccessRightsByRoleType(int accessRoleId);
 

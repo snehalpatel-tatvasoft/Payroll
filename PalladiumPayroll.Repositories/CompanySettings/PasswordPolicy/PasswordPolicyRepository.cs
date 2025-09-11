@@ -17,19 +17,17 @@ namespace PalladiumPayroll.Repositories.CompanySettings
 
         public async Task<List<PasswordPolicyResponseDTO>> GetPasswordPolicyByCompanyId(long companyId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId, dbType: DbType.Int64);
 
-            var paramsfe = new DynamicParameters();
-
-            var result = await _dapper.ExecuteStoredProcedure<PasswordPolicyResponseDTO>(
+             List<PasswordPolicyResponseDTO>? result = await _dapper.ExecuteStoredProcedure<PasswordPolicyResponseDTO>(
                 "usp_GetPasswordPolicyByCompanyId", parameters);
             return result.ToList();
         }
 
         public async Task<long> CreatePasswordPolicy(PasswordPolicyRequestDTO request)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@PolicyName", request.PolicyName, dbType: DbType.String);
             parameters.Add("@MinLength", request.MinLength, dbType: DbType.Int32);
             parameters.Add("@MaxLength", request.MaxLength, dbType: DbType.Int32);
@@ -52,7 +50,7 @@ namespace PalladiumPayroll.Repositories.CompanySettings
 
         public async Task<long> UpdatePasswordPolicy(PasswordPolicyRequestDTO request, long passwordPolicyId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@PasswordPolicyId", passwordPolicyId, dbType: DbType.Int64);
             parameters.Add("@PolicyName", request.PolicyName, dbType: DbType.String);
             parameters.Add("@MinLength", request.MinLength, dbType: DbType.Int32);
@@ -76,7 +74,7 @@ namespace PalladiumPayroll.Repositories.CompanySettings
 
         public async Task<long> DeletePasswordPolicy(long passwordPolicyId, long companyId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@PasswordPolicyId", passwordPolicyId, dbType: DbType.Int64);
             parameters.Add("@CompanyId", companyId, dbType: DbType.Int64);
             parameters.Add("@Result", dbType: DbType.Int64, direction: ParameterDirection.Output);
