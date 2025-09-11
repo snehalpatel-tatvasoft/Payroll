@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.CompanySettings.EmployeeProfile;
 
 namespace PalladiumPayroll.Repositories.CompanySettings.EmployeeProfile;
 
 public interface IEmployeeProfileRepository
 {
-    Task<string> CreateProfile(EmployeeProfileRequestDTO request);
+    Task<(string Message, int EmployeeProfileId)> CreateProfile(EmployeeProfileRequestDTO request);
+
+    Task<JsonResult> GetWorkInformatiionDropdownData(int companyId);
+    Task<bool> SaveWorkInformation(WorkInformationRequestDTO request);
 
 }

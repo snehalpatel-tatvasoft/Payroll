@@ -30,4 +30,31 @@ public class EmployeeProfileController : ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.Designations));
         }
     }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetWorkInformatiionDropdownData(int companyId)
+    {
+        try
+        {
+            return await _employeeProfileService.GetWorkInformatiionDropdownData(companyId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+    }
+    [HttpPost("[action]")]
+    public async Task<ActionResult> SaveWorkInformation([FromBody] WorkInformationRequestDTO request)
+    {
+        try
+        {
+            JsonResult? res = await _employeeProfileService.SaveWorkInformation(request);
+            return res;
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, "Work Information"));
+        }
+    }
+
 }
