@@ -127,14 +127,25 @@ namespace PalladiumPayroll.Services.Employees
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
 
-        public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type)
+        public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type, long? employeeId)
         {
-            var result = await _employeeRepository.DeleteWorkOrganizationalDropdownItem(id, type);
-            if (result)
+            try
             {
+                var (isSuccess, message) = await _employeeRepository.DeleteWorkOrganizationalDropdownItem(id, type, employeeId);
+                if (!isSuccess)
+                {
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(message);
+                }
+
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Item", ActionType.Deleted));
+
             }
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    ResponseMessages.UnexpectedError
+                );
+            }
         }
 
         public async Task<JsonResult> GetEmployeeWorkOrganizationalData(long employeeId)
