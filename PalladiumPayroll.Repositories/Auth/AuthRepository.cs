@@ -66,7 +66,7 @@ namespace PalladiumPayroll.Repositories.Auth
                         var tokens = GetAccessTokenAndRefreshToken(validUser);
                         var result = new LoginResposeModel() { Token = tokens[0], RefreshToken = tokens[1], IsMultiUser = false, CompanyId = validUser.CompanyId };
                         await _userRepository.UpdateUserIsLogin(validUser.Id.ToString());
-                        if(validUser.RoleId == 0)
+                        if(validUser.RoleId == 0 && validUser.IsReceiveEmailLogin)
                         {
                             _ = SendLoginEmail(validUser.UserName, validUser.Email);
                         }
@@ -106,7 +106,7 @@ namespace PalladiumPayroll.Repositories.Auth
                     var tokens = GetAccessTokenAndRefreshToken(user);
                     var result = new LoginResposeModel() { Token = tokens[0], RefreshToken = tokens[1], IsMultiUser = false, CompanyId = user.CompanyId };
                     await _userRepository.UpdateUserIsLogin(userId);
-                    if (user.RoleId == 0)
+                    if (user.RoleId == 0 && user.IsReceiveEmailLogin)
                     {
                         _ = SendLoginEmail(user.UserName, user.Email);
                     }

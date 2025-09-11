@@ -9,6 +9,7 @@
         public string PasswordHash { get; set; } = null!;
         public int RoleId { get; set; }
         public bool ConfirmedEmail { get; set; }
+        public bool IsReceiveEmailLogin { get; set; }
         public string CompanyName { get; set; } = null!;
         public int CompanyId { get; set; }
     }

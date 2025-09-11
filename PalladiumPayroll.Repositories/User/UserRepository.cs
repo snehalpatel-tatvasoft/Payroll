@@ -35,7 +35,7 @@ namespace PalladiumPayroll.Repositories.User
             DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@Email", email);
 
-            return await _dapper.ExecuteStoredProcedure<UserResponse>("usp_GetUserDetailsByEmail1", parameters);
+            return await _dapper.ExecuteStoredProcedure<UserResponse>("usp_GetUserDetailsByEmail", parameters);
         }
 
         public async Task<bool> ResetPassword(string userId, string password)
