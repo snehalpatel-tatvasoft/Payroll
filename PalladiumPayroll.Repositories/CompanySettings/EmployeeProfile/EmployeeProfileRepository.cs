@@ -76,5 +76,31 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
         return parameters.Get<bool>("@Result");
     }
 
+    public async Task<List<LeaveRulesListDTO>> GetLeaveRulesForEmployeeProfile(int companyId, int caseId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", companyId);
+        parameters.Add("@CaseId", caseId);
 
+        return await _dapper.ExecuteStoredProcedure<LeaveRulesListDTO>("usp_GetLeaveRulesInLeaveSettings", parameters);
+    }
+
+    public async Task<bool> UpdateLeaveSettingsInEmployeeProfile(LeaveSettingsUpdateRequestDTO request)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+
+        parameters.Add("@LeaveRuleId", request.LeaveRuleId);
+        parameters.Add("@CaseId", request.CaseId);
+        parameters.Add("@Duration", request.Duration);
+        parameters.Add("@LeaveAccumulationDays", request.LeaveAccumulationDays);
+        parameters.Add("@ExceedDue", request.ExceedDue);
+        parameters.Add("@LeaveCarriedForward", request.LeaveCarriedForward);
+        parameters.Add("@LeaveCarriedForwardMaxDays", request.LeaveCarriedForwardMaxDays);
+        parameters.Add("@Recurring", request.Recurring);
+        parameters.Add("@NoOfTimeReccuring", request.NoOfTimeReccuring);
+        parameters.Add("@AnnualEntitlementDays", request.AnnualEntitlementDays);
+
+        bool isSuccess = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateLeaveRulesInLeaveSettings", parameters);
+        return isSuccess;
+    }
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.CompanySettings.EmployeeProfile;
+using PalladiumPayroll.DTOs.DTOs.CompanySettings.LeaveSettings;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.CompanySettings.EmployeeProfile;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -57,4 +58,42 @@ public class EmployeeProfileController : ControllerBase
         }
     }
 
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetRulesForEmployeeProfile(int companyId, int caseId)
+    {
+        try
+        {
+            if (companyId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+            }
+
+            if (caseId < 1 || caseId > 8)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse("Invalid Case ID.");
+            }
+
+            return await _employeeProfileService.GetLeaveRulesForEmployeeProfile(companyId,caseId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.LeaveSettings));
+        }
+    }
+
+
+    [HttpPut("[action]")]
+    public async Task<ActionResult> UpdateLeaveSettingsInEmployeeProfile(LeaveSettingsUpdateRequestDTO request)
+    {
+        try
+        {
+            return await _employeeProfileService.UpdateLeaveSettingsInEmployeeProfile(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.LeaveSettings)
+            );
+        }
+    }
 }

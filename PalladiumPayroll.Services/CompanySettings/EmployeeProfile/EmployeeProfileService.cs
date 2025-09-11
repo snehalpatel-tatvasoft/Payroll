@@ -49,4 +49,22 @@ public class EmployeeProfileService : IEmployeeProfileService
         }
     }
 
+
+    public async  Task<JsonResult> GetLeaveRulesForEmployeeProfile(int companyId, int caseId)
+    {
+        List<LeaveRulesListDTO>? data = await _employeeProfileRepository.GetLeaveRulesForEmployeeProfile(companyId,caseId);
+
+        return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.LeaveSettings, ActionType.Retrieved));
+    }
+
+    public async Task<JsonResult> UpdateLeaveSettingsInEmployeeProfile(LeaveSettingsUpdateRequestDTO request)
+    {
+        bool isSaved = await _employeeProfileRepository.UpdateLeaveSettingsInEmployeeProfile(request);
+
+        if (!isSaved)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.LeaveSettingsUpdateFailed);
+        }
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.LeaveSettings, ActionType.Saved));
+    }
 }
