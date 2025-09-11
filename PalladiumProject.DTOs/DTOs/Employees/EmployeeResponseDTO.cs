@@ -230,24 +230,24 @@
 
 	public class EmployeeDetailForEmployeeSelfservice
 	{
-		public string Email { get; set; }
-		public string Password { get; set; }
+		public string Email { get; set; } = string.Empty;
+		public string Password { get; set; } = string.Empty;
 		public int? AccessRoleID { get; set; }
-		public string AccessRoleName { get; set; }
+		public string AccessRoleName { get; set; } = string.Empty;
 		public int FunctionalityId { get; set; }
-		public string FunctionalityName { get; set; }
+		public string FunctionalityName { get; set; } = string.Empty;
 		public bool? View { get; set; }
 		public bool? Edit { get; set; }
 		public bool? Delete { get; set; }
 		public bool? IsManager { get; set; }
 		public int? SecondApprovalId { get; set; }
-		public string SecondApprovalFullName { get; set; }
+		public string SecondApprovalFullName { get; set; } = string.Empty;
 	}
 
 	public class FunctionalityPermissionDto
 	{
 		public int FunctionalityId { get; set; }
-		public string FunctionalityName { get; set; }
+		public string FunctionalityName { get; set; } = string.Empty;
 		public bool? View { get; set; }
 		public bool? Edit { get; set; }
 		public bool? Delete { get; set; }
@@ -255,27 +255,27 @@
 
 	public class EmployeeSelfServiceResponse
 	{
-		public string Email { get; set; }
-		public string Password { get; set; }
+		public string Email { get; set; } = string.Empty;
+		public string Password { get; set; } = string.Empty;
 		public int? AccessRoleID { get; set; }
-		public string AccessRoleName { get; set; }
+		public string AccessRoleName { get; set; } = string.Empty;
 		public bool? IsManager { get; set; }
 		public int? SecondApprovalId { get; set; }
-		public string SecondApprovalFullName { get; set; }
+		public string SecondApprovalFullName { get; set; } = string.Empty;
 
-		public List<FunctionalityPermissionDto> Functionalities { get; set; }
+		public List<FunctionalityPermissionDto> Functionalities { get; set; }=new List<FunctionalityPermissionDto>();
 	}
 
 	public class SecondApprovalEmployeeDTO
 	{
 		public long EmployeeId { get; set; }
-		public string EmployeeFullname { get; set; }
+		public string EmployeeFullname { get; set; } = string.Empty;
 	}
 
 	public class AccessRoleDto
 	{
 		public int AccessRoleId { get; set; }
-		public string AccessRoleName { get; set; }
+		public string AccessRoleName { get; set; } = string.Empty;
 	}
 
 	public class EmployeePreviousService
@@ -298,7 +298,13 @@
 		public long EmployeeId { get; set; }
 		public string EmployeeCode { get; set; } = "";
 		public string EmployeeName { get; set; } = "";
-		public string EmployeeSurName { get; set; } ="";
-		public bool IsAssigned { get; set; }     
+		public bool IsAssigned { get; set; }
+	}
+
+	public class UpdateEmployeeSelfServiceResult
+	{
+		public int Result { get; set; }
+		public int? ErrorNumber { get; set; }
+		public string? ErrorMessage { get; set; }
 	}
 }
