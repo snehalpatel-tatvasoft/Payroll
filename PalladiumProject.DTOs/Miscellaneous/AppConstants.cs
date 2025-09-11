@@ -349,6 +349,15 @@
             public static readonly string PasswordNotFound = "Password Policy is not found.";
             
             #endregion
+
+
+             #region Employee Self Service
+
+            public static readonly string EmployeeSelfService = "Employee Self Service";
+            public static readonly string UserCredential = "User Credentials";
+            public static readonly string SecondApprovalEmployees = "Second Approval Employees";
+            
+            #endregion
         }
 
 

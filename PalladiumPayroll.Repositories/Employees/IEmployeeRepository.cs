@@ -55,7 +55,7 @@ namespace PalladiumPayroll.Repositories.Employees
 
         Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId);
         Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId);
-        Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model);
+        Task<UpdateEmployeeSelfServiceResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model);
         Task<JsonResult> GetAccessRolesByCompanyId(long companyId);
         Task<UpsertUserResponseDTO> UpsertEmployeeUser(UpsertUserRequestDTO request);
         Task<List<EmployeeAssignDTO>> GetEmployeeForAssignManager(int seniorEmployeeId, int companyId);

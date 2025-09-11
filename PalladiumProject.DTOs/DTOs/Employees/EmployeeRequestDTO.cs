@@ -224,17 +224,18 @@ namespace PalladiumPayroll.DTOs.DTOs.Employees
     {
         public long EmployeeId { get; set; }
         public long CompanyId { get; set; }
-        public List<FunctionalityUpdate> FunctionalityList { get; set; }
+        public List<FunctionalityUpdate> FunctionalityList { get; set; }=new List<FunctionalityUpdate>();
         public bool IsManager { get; set; }
         public int? SecondApprovalId { get; set; }
+        public List<long> EmployeeAssignList { get; set; } = new List<long>();
     }
 
     public class UpsertUserRequestDTO
     {
         public int AccessRoleId { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string PasswordHash { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string PasswordHash { get; set; } = string.Empty;
         public long CompanyId { get; set; }
         public long EmployeeId { get; set; }
     }
