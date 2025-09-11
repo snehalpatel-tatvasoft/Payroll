@@ -64,16 +64,21 @@ public class AccessRightsRepository : IAccessRightsRepository
     }
 
 
-    public async Task<bool> DeleteAccessRoles(int accessRoleId)
+    public async Task<DeleteAccessRoleResultDTO> DeleteAccessRoles(int accessRoleId)
     {
         DynamicParameters parameters = new DynamicParameters();
         parameters.Add("@AccessRoleId", accessRoleId);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+        parameters.Add("@Message", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeleteAccessRole", parameters);
-        return parameters.Get<bool>("@IsSuccess");
-    }
 
+        return new DeleteAccessRoleResultDTO
+        {
+            IsSuccess = parameters.Get<bool>("@IsSuccess"),
+            Message = parameters.Get<string>("@Message")
+        };
+    }
 
     public async Task<List<AccessRightsByRoleTypeDTO>> GetAccessRightsByRoleType(int accessRoleId)
     {

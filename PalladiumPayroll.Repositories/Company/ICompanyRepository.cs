@@ -4,6 +4,7 @@ using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
+using System.Data;
 
 namespace PalladiumPayroll.Repositories.Company
 {
@@ -39,6 +40,7 @@ namespace PalladiumPayroll.Repositories.Company
         Task<List<DropDownViewModelWithString>> GetGLDepartments(DBConnectionModel dbConnectionModel);
         Task<List<DropDownViewModelWithString>> GetGLAccounts(DBConnectionModel dbConnectionModel);
         Task<List<TransactionListForCompany>> GetTransactionList(long companyId);
+        Task<bool> ImportGLTransaction(DataTable transactionDataTable, long companyId);
         Task<bool> SaveGlAccountNumber(TransactionListForCompany model);
         Task<bool> CheckGLDBConnection(DBConnectionModel dbConnectionModel);
         Task<bool> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation);

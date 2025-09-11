@@ -20,7 +20,7 @@ public class CustomizeReportRepository : ICustomizeReportRepository
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<List<CustomizeReportResponseDTO>> GetAllReports(CustomizeReportRequestDTO request)
+    public async Task<List<CustomizeReportResponseDTO>> GetAllReports()
     {
 
         var result = await _dapper.ExecuteStoredProcedure<CustomizeReportResponseDTO>(

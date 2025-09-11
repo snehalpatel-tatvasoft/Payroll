@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.CompanySettings;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.CompanySettings;
-using System.Net;
+using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.CompanySettings
 {
@@ -17,127 +18,104 @@ namespace PalladiumPayroll.Controllers.CompanySettings
             _notificationSetupService = notificationSetupService;
         }
 
-        [HttpGet("GetNotificationTemplatesByCompanyId/{companyId}")]
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetNotificationTemplatesByCompanyId(long companyId)
         {
             try
             {
-                JsonResult? res = await _notificationSetupService.GetNotificationTemplatesByCompanyId(companyId);
-                return res;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
+                if (companyId <= 0)
                 {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                    return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+                }
+                return await _notificationSetupService.GetNotificationTemplatesByCompanyId(companyId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.NotificationTemplate));
             }
         }
 
-        [HttpGet("GetNotificationTypes")]
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetNotificationTypes()
         {
             try
             {
-                JsonResult? res = await _notificationSetupService.GetNotificationTypes();
-                return res;
+                return await _notificationSetupService.GetNotificationTypes();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-                {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Notification + " Types"));
             }
         }
 
-        [HttpGet("GetEmployeesByCompanyIdForNotification/{companyId}")]
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetEmployeesByCompanyIdForNotification(long companyId)
         {
             try
             {
-                JsonResult? res = await _notificationSetupService.GetEmployeesByCompanyIdForNotification(companyId);
-                return res;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
+                if (companyId <= 0)
                 {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                    return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+                }
+                return await _notificationSetupService.GetEmployeesByCompanyIdForNotification(companyId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Employee + " for " + ResponseMessages.NotificationSetup));
             }
         }
 
-        [HttpPost("CreateNotificationTemplate")]
+        [HttpPost("[action]")]
         public async Task<ActionResult> CreateNotificationTemplate([FromBody] NotificationTemplateRequestDTO request)
         {
             try
             {
-                JsonResult? res = await _notificationSetupService.CreateNotificationTemplate(request);
-                return res;
+                return await _notificationSetupService.CreateNotificationTemplate(request);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-                {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.NotificationTemplate)
+             );
             }
         }
 
-        [HttpGet("GetNotificationTemplateById/{notificationTemplateId}")]
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetNotificationTemplateById(int notificationTemplateId)
         {
             try
             {
-                JsonResult? res = await _notificationSetupService.GetNotificationTemplateById(notificationTemplateId);
-                return res;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
+                if (notificationTemplateId <= 0)
                 {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.InvalidTemplateId);
+                }
+                return await _notificationSetupService.GetNotificationTemplateById(notificationTemplateId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.NotificationTemplate));
             }
         }
 
-        [HttpGet("GetEmployeesByNotificationTemplateId/{notificationTemplateId}")]
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetEmployeesByNotificationTemplateId(int notificationTemplateId)
         {
             try
             {
-                JsonResult? res = await _notificationSetupService.GetEmployeesByNotificationTemplateId(notificationTemplateId);
-                return res;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
+                 if (notificationTemplateId <= 0)
                 {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.InvalidTemplateId);
+                }
+
+                return await _notificationSetupService.GetEmployeesByNotificationTemplateId(notificationTemplateId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Employee));
             }
         }
 
-        [HttpPut("UpdateNotificationTemplate")]
+        [HttpPut("[action]")]
         public async Task<ActionResult> UpdateNotificationTemplate([FromBody] NotificationTemplateRequestDTO request)
         {
             try
@@ -145,35 +123,29 @@ namespace PalladiumPayroll.Controllers.CompanySettings
                 JsonResult? res = await _notificationSetupService.UpdateNotificationTemplate(request);
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-                {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.NotificationTemplate));
             }
         }
 
-        [HttpDelete("DeleteNotificationTemplate/{notificationTemplateId}")]
+        [HttpDelete("[action]")]
         public async Task<ActionResult> DeleteNotificationTemplate(int notificationTemplateId)
         {
             try
             {
+                 if (notificationTemplateId <= 0)
+                {
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.InvalidTemplateId);
+                }
                 JsonResult? res = await _notificationSetupService.DeleteNotificationTemplate(notificationTemplateId);
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new HttpApiResponse<object>
-                {
-                    Result = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Message = ex.Message,
-                    Data = null
-                });
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.NotificationTemplate)
+            );
             }
         }
     }

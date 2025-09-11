@@ -33,7 +33,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.TimeSheet
                     new DataColumn("ClockInTime", typeof(DateTime)),
                     new DataColumn("ClockOutTime", typeof(DateTime)),
                 ];
-                var data = ExcelHelper.ImportFromExcel(requestData.File, false, sheetColumn);
+                var data = ExcelHelper.ImportFromExcel(requestData.File, true, sheetColumn);
                 result = await _timeSheetRepository.ImportTimeSheetData(data);
             }
             else

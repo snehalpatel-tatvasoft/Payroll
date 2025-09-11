@@ -1,5 +1,6 @@
 ﻿using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Auth;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Admin;
 
 namespace PalladiumPayroll.Repositories.User
 {
@@ -12,8 +13,13 @@ namespace PalladiumPayroll.Repositories.User
         Task<bool> ConfirmEmail(string userId);
         Task<bool> CheckIsUserLoggedIn(string userId);
         Task<bool> UpdateLastActivity(string userId);
-        Task<bool> LoginUser(string userId);
+        Task<bool> UpdateUserIsLogin(string userId);
         Task<bool> LogoutInactiveUsers();
         Task<List<CompanyDetails>> GetCompaniesByEmail(string email);
+        Task<int> UpdateUserEmail(string email, string newEmail);
+        Task<string?> GetUserPassword();
+        Task<bool> UpdateUserPassword(string newPassword);
+        Task<UserHeaderModel?> UserHeaderInfo();
+        Task<bool> ReceiveEmailNotification(bool isReceive);
     }
 }

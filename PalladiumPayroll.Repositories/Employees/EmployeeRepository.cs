@@ -6,6 +6,7 @@ using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.Employees;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
@@ -152,7 +153,7 @@ namespace PalladiumPayroll.Repositories.Employees
             parameters.Add("@Address3", reqModel.Address3);
             parameters.Add("@Pos_PostalCode", reqModel.Pos_PostalCode);
             parameters.Add("@Pos_CountryId", reqModel.Pos_CountryId);
-            parameters.Add("@UserId", reqModel.UserId);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value);
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmployeePersonalInfo", parameters);
             return result;
         }
@@ -375,12 +376,24 @@ namespace PalladiumPayroll.Repositories.Employees
             return result;
         }
 
-        public async Task<bool> DeleteWorkOrganizationalDropdownItem(int id, int type)
+        public async Task<(bool isSuccess, string message)> DeleteWorkOrganizationalDropdownItem(int id, int type, long? employeeId)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@id", id);
+            parameters.Add("@EmployeeId", employeeId);
             parameters.Add("@type", type);
-            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteOrgnizationDropDownItem", parameters);
+            parameters.Add("@ResultMessage", dbType: DbType.String, size: 4000, direction: ParameterDirection.Output);
+
+            await _dapper.ExecuteAsync(
+                "usp_DeleteOrgnizationDropDownItem_New",
+                parameters
+            );
+
+            string message = parameters.Get<string>("@ResultMessage");
+
+            bool success = message.Contains("successfully", StringComparison.OrdinalIgnoreCase);
+
+            return (success, message);
         }
 
         public async Task<JsonResult> GetEmployeeWorkOrganizationalData(long employeeId)
@@ -856,9 +869,14 @@ namespace PalladiumPayroll.Repositories.Employees
                 "usp_GetEmployeeByEmployeeIdForEmployeeSelfservice", parameters);
 
             if (flatList == null || !flatList.Any())
-                return HttpStatusCodeResponse.NotFoundResponse("Employee not found.");
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieved));
+
+
+            // if (flatList == null || !flatList.Any())
+            //     return HttpStatusCodeResponse.NotFoundResponse("Employee not found.");
 
             var first = flatList.First();
+
 
             var response = new EmployeeSelfServiceResponse
             {
@@ -936,7 +954,7 @@ namespace PalladiumPayroll.Repositories.Employees
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Access Roles", ActionType.Retrieved));
         }
 
-        public async Task<JsonResult> UpsertEmployeeUser(UpsertUserRequestDTO request)
+        public async Task<UpsertUserResponseDTO> UpsertEmployeeUser(UpsertUserRequestDTO request)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@AccessRoleId", request.AccessRoleId);
@@ -948,24 +966,27 @@ namespace PalladiumPayroll.Repositories.Employees
 
             var result = await _dapper.ExecuteStoredProcedureSingle<dynamic>("usp_UpsertEmployeeUser", parameters);
 
-            var response = new UpsertUserResponseDTO
+            return new UpsertUserResponseDTO
             {
-                Result = result.Result == 1,
-                UserId = result.UserId,
-                ErrorNumber = result.ErrorNumber,
-                ErrorMessage = result.ErrorMessage
+                Result = result?.Result == 1,
+                UserId = result?.UserId,
+                ErrorNumber = result?.ErrorNumber,
+                ErrorMessage = result?.ErrorMessage ?? ""
             };
-
-            if (response.Result)
-            {
-                return HttpStatusCodeResponse.SuccessResponse(response, "User upserted successfully.");
-            }
-            else
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error: {response.ErrorMessage} (Error Number: {response.ErrorNumber})");
-            }
         }
 
+        public async Task<List<EmployeeAssignDTO>> GetEmployeeForAssignManager(int seniorEmployeeId, int companyId)
+        {
+            DynamicParameters? parameters = new DynamicParameters();
+            parameters.Add("@SeniorEmployeeId", seniorEmployeeId);
+            parameters.Add("@CompanyId", companyId);
+
+            List<EmployeeAssignDTO>? result = await _dapper.ExecuteStoredProcedure<EmployeeAssignDTO>(
+                "usp_GetEmployeesForAssignManager",
+                parameters
+            );
+            return result;
+        }
         #endregion
 
         public async Task<List<EmployeePreviousService>> GetPreviousService(int employeeId)
