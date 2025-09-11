@@ -292,11 +292,11 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpDelete("[action]")]
-        public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type)
+        public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type, long? employeeId)
         {
             try
             {
-                return await _employeeService.DeleteWorkOrganizationalDropdownItem(id, type);
+                return await _employeeService.DeleteWorkOrganizationalDropdownItem(id, type, employeeId);
             }
             catch (Exception ex)
             {
@@ -709,6 +709,21 @@ namespace PalladiumPayroll.Controllers.Employee
             catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeForAssignManager(int seniorEmployeeId, int companyId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeForAssignManager(seniorEmployeeId,companyId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Employee)
+                );
             }
         }
 

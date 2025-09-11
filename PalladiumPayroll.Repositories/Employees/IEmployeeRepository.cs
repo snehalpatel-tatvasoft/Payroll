@@ -19,7 +19,7 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<bool> EmployeeWorkInfoSave(EmployeeWorkInformation reqModel);
         Task<JsonResult> GetEmployeeWorkOrganizationalDropdownData(long companyId);
         Task<List<DropDownViewModel>> AddWorkOrganizationalDropdownItem(WorkOrgnizationItem reqItem);
-        Task<bool> DeleteWorkOrganizationalDropdownItem(int id, int type);
+        Task<(bool isSuccess, string message)> DeleteWorkOrganizationalDropdownItem(int id, int type, long? employeeId);
         Task<JsonResult> GetEmployeeWorkOrganizationalData(long employeeId);
         Task<bool> SaveEmployeeWorkOrganizationalData(EmployeeOrgnizationalModel reqModel);
 
@@ -57,7 +57,8 @@ namespace PalladiumPayroll.Repositories.Employees
         Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId);
         Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model);
         Task<JsonResult> GetAccessRolesByCompanyId(long companyId);
-        Task<JsonResult> UpsertEmployeeUser(UpsertUserRequestDTO request);
+        Task<UpsertUserResponseDTO> UpsertEmployeeUser(UpsertUserRequestDTO request);
+        Task<List<EmployeeAssignDTO>> GetEmployeeForAssignManager(int seniorEmployeeId, int companyId);
 
         Task<List<EmployeePreviousService>> GetPreviousService(int employeeId);
         Task<List<LeaveModel>> GetEmployeeLeaves(int employeeId);

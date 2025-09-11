@@ -15,5 +15,7 @@ namespace PalladiumPayroll.Services.User
         Task<List<CompanyDetails>> GetCompaniesByEmail(string email);
         Task<JsonResult> ChangeEmail(ChangeEmailModel reqModel);
         Task<JsonResult> ChangePassword(ChangePasswordModel reqModel);
+        Task<JsonResult> UserHeaderInfo();
+        Task<JsonResult> ReceiveEmailNotification(bool isReceive);
     }
 }

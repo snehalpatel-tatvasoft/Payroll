@@ -19,7 +19,7 @@ namespace PalladiumPayroll.Services.Employees
         Task<JsonResult> EmployeeWorkInfoSave(EmployeeWorkInformation reqModel);
         Task<JsonResult> GetEmployeeWorkOrganizationalDropdownData(long companyId);
         Task<JsonResult> AddWorkOrganizationalDropdownItem(WorkOrgnizationItem reqItem);
-        Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type);
+        Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type, long? employeeId);
         Task<JsonResult> GetEmployeeWorkOrganizationalData(long employeeId);
         Task<JsonResult> SaveEmployeeWorkOrganizationalData(EmployeeOrgnizationalModel reqModel);
         Task<JsonResult> GetEmployeeTimeSheetSetup(long employeeId);
@@ -55,6 +55,7 @@ namespace PalladiumPayroll.Services.Employees
         Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model);
         Task<JsonResult> GetAccessRolesByCompanyId(long companyId);
         Task<JsonResult> UpsertEmployeeUser(UpsertUserRequestDTO request);
+        Task<JsonResult> GetEmployeeForAssignManager(int seniorEmployeeId, int companyId);
         Task<JsonResult> GetPreviousService(int employeeId);
         Task<List<LeaveModel>> GetEmployeeLeaves(int employeeId);
         Task<JsonResult> SaveEmpLeaveEntitlementNew(EditLeaveRequest reqModel, string oprType);

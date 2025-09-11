@@ -41,5 +41,31 @@ namespace PalladiumPayroll.Controllers.User
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TryLater);
             }
         }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> UserHeaderInfo()
+        {
+            try
+            {
+                return await _userService.UserHeaderInfo();
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TryLater);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> ReceiveEmailNotification(bool isReceive)
+        {
+            try
+            {
+                return await _userService.ReceiveEmailNotification(isReceive);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TryLater);
+            }
+        }
     }
 }
