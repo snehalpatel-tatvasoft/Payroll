@@ -21,3 +21,9 @@ public class LeaveRulesListDTO
     public bool? Recurring { get; set; }
     public int? NoOfTimeReccuring { get; set; }
 }
+
+public class EmployeeProfileListDTO
+{
+    public long ProfileId { get; set; }   
+    public string ProfileName { get; set; } = string.Empty;
+}

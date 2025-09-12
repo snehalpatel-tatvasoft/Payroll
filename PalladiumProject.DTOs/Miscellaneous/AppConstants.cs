@@ -358,6 +358,11 @@
             public static readonly string SecondApprovalEmployees = "Second Approval Employees";
             
             #endregion
+
+
+            #region Employee Profile
+             public static readonly string EmployeeProfile = "Employee Profile";
+            #endregion
         }
 
 

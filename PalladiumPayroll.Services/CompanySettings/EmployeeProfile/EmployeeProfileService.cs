@@ -16,6 +16,9 @@ public class EmployeeProfileService : IEmployeeProfileService
     {
         _employeeProfileRepository = employeeProfileRepository;
     }
+
+    #region Profile
+
     public async Task<JsonResult> CreateProfile(EmployeeProfileRequestDTO request)
     {
         var (message, employeeProfileId) = await _employeeProfileRepository.CreateProfile(request);
@@ -26,6 +29,29 @@ public class EmployeeProfileService : IEmployeeProfileService
 
         return HttpStatusCodeResponse.InternalServerErrorResponse(message);
     }
+
+    public async Task<JsonResult> GetAllEmployeeProfiles(int companyId)
+    {
+        List<EmployeeProfileListDTO> wages = await _employeeProfileRepository.GetAllEmployeeProfiles(companyId);
+
+        return HttpStatusCodeResponse.SuccessResponse(wages, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeProfile, ActionType.Retrieved));
+    }
+
+    public async Task<JsonResult> DeleteEmployeeProfile(long profileId)
+    {
+        var (isSuccess, message) = await _employeeProfileRepository.DeleteEmployeeProfile(profileId);
+        if (!isSuccess)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(message);
+        }
+
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeProfile, ActionType.Deleted));
+    }
+
+    #endregion
+
+
+    #region work information
 
     public async Task<JsonResult> GetWorkInformatiionDropdownData(int companyId)
     {
@@ -49,10 +75,14 @@ public class EmployeeProfileService : IEmployeeProfileService
         }
     }
 
+    #endregion
 
-    public async  Task<JsonResult> GetLeaveRulesForEmployeeProfile(int companyId, int caseId, long profileId)
+
+    #region Leave Settings
+
+    public async Task<JsonResult> GetLeaveRulesForEmployeeProfile(int companyId, int caseId, long profileId)
     {
-        List<LeaveRulesListDTO>? data = await _employeeProfileRepository.GetLeaveRulesForEmployeeProfile(companyId,caseId,profileId);
+        List<LeaveRulesListDTO>? data = await _employeeProfileRepository.GetLeaveRulesForEmployeeProfile(companyId, caseId, profileId);
 
         return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.LeaveSettings, ActionType.Retrieved));
     }
@@ -67,4 +97,6 @@ public class EmployeeProfileService : IEmployeeProfileService
         }
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.LeaveSettings, ActionType.Saved));
     }
+
+    #endregion
 }

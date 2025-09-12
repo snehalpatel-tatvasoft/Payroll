@@ -21,6 +21,9 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
         _configuration = configuration;
         _dapper = new DapperContext(_configuration);
     }
+
+    #region Profile
+
     public async Task<(string Message, int EmployeeProfileId)> CreateProfile(EmployeeProfileRequestDTO request)
     {
         var parameters = new DynamicParameters();
@@ -36,6 +39,42 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
 
         return (message, employeeProfileId);
     }
+
+    public async Task<List<EmployeeProfileListDTO>> GetAllEmployeeProfiles(int companyId)
+    {
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", companyId);
+
+        List<EmployeeProfileListDTO>? result = await _dapper.ExecuteStoredProcedure<EmployeeProfileListDTO>(
+            "usp_GetAllEmployeeProfiles",
+            parameters
+        );
+
+        return result;
+    }
+
+    public async Task<(bool isSuccess, string message)> DeleteEmployeeProfile(long profileId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@ProfileId", profileId);
+        parameters.Add("@ResultMessage", dbType: DbType.String, size: 4000, direction: ParameterDirection.Output);
+
+        await _dapper.ExecuteAsync(
+            "usp_DeleteEmployeeProfile",
+            parameters
+        );
+
+        string message = parameters.Get<string>("@ResultMessage");
+
+        bool success = message.Contains("successfully", StringComparison.OrdinalIgnoreCase);
+
+        return (success, message);
+    }
+
+    #endregion
+
+
+    #region work information
     public async Task<JsonResult> GetWorkInformatiionDropdownData(int companyId)
     {
         var parameters = new DynamicParameters();
@@ -76,6 +115,11 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
         return parameters.Get<bool>("@Result");
     }
 
+    #endregion
+
+
+    #region Leave Settings
+
     public async Task<List<LeaveRulesListDTO>> GetLeaveRulesForEmployeeProfile(int companyId, int caseId, long profileId)
     {
         DynamicParameters? parameters = new DynamicParameters();
@@ -104,4 +148,6 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
         bool isSuccess = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpdateLeaveRulesInEmployeeProfile", parameters);
         return isSuccess;
     }
+
+    #endregion
 }

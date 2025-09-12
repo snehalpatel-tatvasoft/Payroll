@@ -13,4 +13,7 @@ public interface IEmployeeProfileService
     Task<JsonResult> GetLeaveRulesForEmployeeProfile(int companyId, int caseId, long profileId);
     Task<JsonResult> UpdateLeaveSettingsInEmployeeProfile(LeaveSettingsUpdateRequestDTO request);
 
+    Task<JsonResult> GetAllEmployeeProfiles(int companyId);
+    Task<JsonResult> DeleteEmployeeProfile(long profileId);
+
 }
