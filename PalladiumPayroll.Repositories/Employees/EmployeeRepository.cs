@@ -861,24 +861,20 @@ namespace PalladiumPayroll.Repositories.Employees
 
         public async Task<JsonResult> GetEmployeeByEmployeeId(long employeeId, long companyId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", employeeId);
             parameters.Add("@CompanyId", companyId);
 
-            var flatList = await _dapper.ExecuteStoredProcedure<EmployeeDetailForEmployeeSelfservice>(
+            List<EmployeeDetailForEmployeeSelfservice>? flatList = await _dapper.ExecuteStoredProcedure<EmployeeDetailForEmployeeSelfservice>(
                 "usp_GetEmployeeByEmployeeIdForEmployeeSelfservice", parameters);
 
             if (flatList == null || !flatList.Any())
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Retrieved));
 
 
-            // if (flatList == null || !flatList.Any())
-            //     return HttpStatusCodeResponse.NotFoundResponse("Employee not found.");
+            EmployeeDetailForEmployeeSelfservice? first = flatList.First();
 
-            var first = flatList.First();
-
-
-            var response = new EmployeeSelfServiceResponse
+            EmployeeSelfServiceResponse? response = new EmployeeSelfServiceResponse
             {
                 Email = first.Email,
                 Password = first.Password,
@@ -902,61 +898,76 @@ namespace PalladiumPayroll.Repositories.Employees
 
         public async Task<JsonResult> GetSecondApprovalEmployeeListByCompanyId(long companyId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
 
-            var data = await _dapper.ExecuteStoredProcedure<SecondApprovalEmployeeDTO>("usp_GetSecondApprovalEmployeeListByCompanyId", parameters);
+            List<SecondApprovalEmployeeDTO>? data = await _dapper.ExecuteStoredProcedure<SecondApprovalEmployeeDTO>("usp_GetSecondApprovalEmployeeListByCompanyId", parameters);
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Second Approval Employees", ActionType.Retrieved));
         }
 
-
-        public async Task<JsonResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model)
+        public async Task<UpdateEmployeeSelfServiceResult> UpdateEmployeeSelfService(UpdateEmployeeSelfServiceModel model)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", model.EmployeeId);
             parameters.Add("@CompanyId", model.CompanyId);
             parameters.Add("@IsManager", model.IsManager);
             parameters.Add("@SecondApprovalId", model.SecondApprovalId);
 
-            // Create a DataTable for the TVP
-            var functionalityTable = new DataTable();
+            DataTable? functionalityTable = new DataTable();
             functionalityTable.Columns.Add("FunctionalityID", typeof(int));
             functionalityTable.Columns.Add("View", typeof(bool));
             functionalityTable.Columns.Add("Edit", typeof(bool));
             functionalityTable.Columns.Add("Delete", typeof(bool));
 
-            // Populate the DataTable with the functionality list
             foreach (var functionality in model.FunctionalityList)
             {
-                functionalityTable.Rows.Add(functionality.FunctionalityId, functionality.View, functionality.Edit, functionality.Delete);
+                functionalityTable.Rows.Add(
+                    functionality.FunctionalityId,
+                    functionality.View,
+                    functionality.Edit,
+                    functionality.Delete
+                );
             }
-
             parameters.Add("@FunctionalityList", functionalityTable.AsTableValuedParameter("UserFunctionalityListType"));
 
-            var result = await _dapper.ExecuteStoredProcedureSingle<dynamic>("usp_UpdateEmployeeSelfService", parameters);
-            if (result.Result == 1)
+            DataTable? seniorEmployeeTable = new DataTable();
+            seniorEmployeeTable.Columns.Add("EmployeeId", typeof(long));
+
+            if (model.EmployeeAssignList != null && model.EmployeeAssignList.Count > 0)
             {
-                return HttpStatusCodeResponse.SuccessResponse(true, string.Format(ResponseMessages.Success, ResponseMessages.Employee, ActionType.Updated));
+                foreach (var empId in model.EmployeeAssignList)
+                {
+                    seniorEmployeeTable.Rows.Add(empId);
+                }
             }
-            else
+            parameters.Add("@SeniorEmployeeList", seniorEmployeeTable.AsTableValuedParameter("EmployeeIdListType"));
+
+            UpdateEmployeeSelfServiceResult? result = await _dapper.ExecuteStoredProcedureSingle<UpdateEmployeeSelfServiceResult>(
+                "usp_UpdateEmployeeSelfService",
+                parameters
+            );
+
+            return result ?? new UpdateEmployeeSelfServiceResult
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error: {result.ErrorMessage} (Error Number: {result.ErrorNumber})");
-            }
+                Result = 0,
+                ErrorMessage = "No response from stored procedure."
+            };
         }
+
 
         public async Task<JsonResult> GetAccessRolesByCompanyId(long companyId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
 
-            var data = await _dapper.ExecuteStoredProcedure<AccessRoleDto>(
+            List<AccessRoleDto>? data = await _dapper.ExecuteStoredProcedure<AccessRoleDto>(
                 "usp_GetAccessRolesNamesByCompanyIdForEmployee", parameters);
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Access Roles", ActionType.Retrieved));
         }
 
         public async Task<UpsertUserResponseDTO> UpsertEmployeeUser(UpsertUserRequestDTO request)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@AccessRoleId", request.AccessRoleId);
             parameters.Add("@Email", request.Email);
             parameters.Add("@Password", request.Password);
