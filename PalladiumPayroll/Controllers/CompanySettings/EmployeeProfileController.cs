@@ -56,5 +56,28 @@ public class EmployeeProfileController : ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, "Work Information"));
         }
     }
-
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetModalTransactionsList(int transactionId)
+    {
+        try
+        {
+            return await _employeeProfileService.GetModalTransactionsList(transactionId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Transaction list"));
+        }
+    }
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetTransactionsList(int transactionId)
+    {
+        try
+        {
+            return await _employeeProfileService.GetTransactionsList(transactionId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Transaction list"));
+        }
+    }
 }

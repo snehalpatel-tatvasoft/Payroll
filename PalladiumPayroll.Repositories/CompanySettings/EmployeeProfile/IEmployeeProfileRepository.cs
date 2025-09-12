@@ -9,5 +9,9 @@ public interface IEmployeeProfileRepository
 
     Task<JsonResult> GetWorkInformatiionDropdownData(int companyId);
     Task<bool> SaveWorkInformation(WorkInformationRequestDTO request);
+    Task<List<TransactionListModel>> GetModalTransactionsList(int transactionId);
+    Task<List<TransactionListModel>> GetTransactionsList(int transactionId); // New method
+
 
 }
+

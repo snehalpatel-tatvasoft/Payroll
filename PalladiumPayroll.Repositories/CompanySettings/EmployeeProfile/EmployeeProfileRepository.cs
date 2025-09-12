@@ -75,6 +75,30 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
 
         return parameters.Get<bool>("@Result");
     }
+    public async Task<List<TransactionListModel>> GetModalTransactionsList(int transactionId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@TransactionId", transactionId);
 
+        var transactions = await _dapper.ExecuteStoredProcedure<TransactionListModel>(
+            "usp_GetModalTransactionsList",
+            parameters
+        );
+
+        return transactions ?? new List<TransactionListModel>();
+    }
+    public async Task<List<TransactionListModel>> GetTransactionsList(int transactionId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@TransactionId", transactionId);
+
+        var transactions = await _dapper.ExecuteStoredProcedure<TransactionListModel>(
+            "usp_GetTransactionsList",
+            parameters
+        );
+
+        return transactions ?? new List<TransactionListModel>();
+    }
+    
 
 }
