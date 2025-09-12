@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.PayrollProcess.ManageLeave;
@@ -18,7 +17,7 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> GetEmployeeLeaveDetail([FromQuery]EmployeeLeaveFilterViewModel reqModel)
+        public async Task<ActionResult> GetEmployeeLeaveDetail([FromQuery] EmployeeLeaveFilterViewModel reqModel)
         {
             try
             {
@@ -49,6 +48,100 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
             try
             {
                 return await _manageLeaveService.UpsertEmployeeLeave(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpdateBatchDetail(BatchInfoRequest reqModel)
+        {
+            try
+            {
+                return await _manageLeaveService.UpdateBatchDetail(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> BatchLeaveImport([FromForm] BatchLeaveImport reqModel)
+        {
+            try
+            {
+                return await _manageLeaveService.BatchLeaveImport(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpsertBatchSingleLeave(BatchLeaveDetail reqModel)
+        {
+            try
+            {
+                return await _manageLeaveService.UpsertBatchSingleLeave(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetExistingBatchList(long companyId)
+        {
+            try
+            {
+                return await _manageLeaveService.GetExistingBatchList(companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetImportBatchLeave([FromQuery] BatchInfoRequest reqModal)
+        {
+            try
+            {
+                return await _manageLeaveService.GetImportBatchLeave(reqModal);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> SaveImportBatchLeave(int batchId)
+        {
+            try
+            {
+                return await _manageLeaveService.SaveImportBatchLeave(batchId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetImportActualBatchLeave(int batchId)
+        {
+            try
+            {
+                return await _manageLeaveService.GetImportActualBatchLeave(batchId);
             }
             catch (Exception ex)
             {

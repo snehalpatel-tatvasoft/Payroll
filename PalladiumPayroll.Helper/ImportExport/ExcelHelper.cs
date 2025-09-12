@@ -36,10 +36,11 @@ namespace PalladiumPayroll.Helper.ImportExport
             using (var stream = new MemoryStream())
             {
                 file.CopyTo(stream);
+                stream.Position = 0;
                 using (var workbook = new XLWorkbook(stream))
                 {
-                    var worksheet = workbook.Worksheets.First();
-                    var rows = worksheet.RangeUsed()?.RowsUsed().ToList();
+                    var worksheet = workbook.Worksheets.FirstOrDefault();
+                    var rows = worksheet?.RangeUsed()?.RowsUsed().ToList();
 
                     if (rows == null || !rows.Any())
                     {

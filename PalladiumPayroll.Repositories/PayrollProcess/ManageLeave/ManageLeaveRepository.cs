@@ -4,7 +4,9 @@ using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave;
+using PalladiumPayroll.DTOs.Miscellaneous.Constants;
 using System.Data;
+using System.Numerics;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 
 namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
@@ -20,6 +22,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
             _httpContextAccessor = httpContextAccessor;
         }
 
+        #region Leave Detail
         public async Task<TableDataModel<EmployeeLeaveViewModel>> GetEmployeeLeaveDetail(EmployeeLeaveFilterViewModel reqModel)
         {
             var parameters = new DynamicParameters();
@@ -66,8 +69,89 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
             parameters.Add("@Duration", reqModel.Duration);
             parameters.Add("@RequestedDate", reqModel.RequestedDate);
             parameters.Add("@Comment", reqModel.Comment);
-            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value);
             return await _dapper.ExecuteStoredProcedureSingle<int>("usp_UpsertEmployeeLeave", parameters);
         }
+        #endregion
+
+        #region Batch Leave
+        public async Task<int> UpdateBatchDetail(BatchInfoRequest reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", reqModel.BatchId);
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@Description", reqModel.BatchDescription);
+            parameters.Add("@BatchName", reqModel.BatchNumber);
+            parameters.Add("@CycleId", reqModel.PayrollCycle);
+            parameters.Add("@PeriodId", reqModel.ProcessPeriod);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value);
+            return await _dapper.ExecuteStoredProcedureSingle<int>("usp_UpsertBatchLeaveInfo", parameters);
+        }
+
+        public async Task<bool> BatchLeaveImport(BatchLeaveImport reqModel, DataTable batchLeaveTable)
+        {
+            if(reqModel.BatchId <= 0)
+            {
+                reqModel.BatchId = await UpdateBatchDetail(reqModel);
+            }
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", reqModel.BatchId);
+            parameters.Add("@IsActualLeave", reqModel.IsActualLeave);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value);
+            parameters.Add("@LeaveRecord", batchLeaveTable.AsTableValuedParameter("LeaveBatchImportType"));
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_ImportBatchLeave", parameters);
+        }
+
+        public async Task<bool> UpsertBatchSingleLeave(BatchLeaveDetail reqModel)
+        {
+            if (reqModel.BatchId <= 0)
+            {
+                reqModel.BatchId = await UpdateBatchDetail(reqModel);
+            }
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", reqModel.BatchId);
+            parameters.Add("@IsActualLeave", reqModel.IsActualLeave);
+            parameters.Add("@LeaveDetailId", reqModel.LeaveDetailId);
+            parameters.Add("@EmployeeCode", reqModel.EmployeeCode);
+            parameters.Add("@LeaveType", reqModel.LeaveType);
+            parameters.Add("@DateFrom", reqModel.DateFrom);
+            parameters.Add("@DateTo", reqModel.DateTo);
+            parameters.Add("@DueDays", reqModel.DueDays);
+            parameters.Add("@Comment", reqModel.Comment);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpserttBatchSingleLeave", parameters);
+        }
+
+        public async Task<List<BatchLeave>> GetExistingBatchList(long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            return await _dapper.ExecuteStoredProcedure<BatchLeave>("usp_GetExistingBatch", parameters);
+        }
+
+        public async Task<List<BatchLeaveImportData>> GetImportBatchLeave(BatchInfoRequest reqModal)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchName", reqModal.BatchNumber);
+            parameters.Add("@CompanyPayrollId", reqModal.PayrollCycle);
+            parameters.Add("@ProcessCycleId", reqModal.ProcessPeriod);
+            return await _dapper.ExecuteStoredProcedure<BatchLeaveImportData>("usp_GetImportBatchLeave", parameters);
+        }
+
+        public async Task<bool> SaveImportBatchLeave(int batchId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", batchId);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SaveImportBatchLeave", parameters);
+        }
+
+        public async Task<List<BatchLeaveImportActualData>> GetImportActualBatchLeave(int batchId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", batchId);
+            return await _dapper.ExecuteStoredProcedure<BatchLeaveImportActualData>("usp_GetImportActualBatchLeave", parameters);
+        }
+
+        #endregion
     }
 }
