@@ -11,6 +11,6 @@ public interface IEmployeeProfileRepository
     Task<bool> SaveWorkInformation(WorkInformationRequestDTO request);
 
     Task<bool> UpdateLeaveSettingsInEmployeeProfile(LeaveSettingsUpdateRequestDTO request);
-    Task<List<LeaveRulesListDTO>> GetLeaveRulesForEmployeeProfile(int companyId, int caseId);
+    Task<List<LeaveRulesListDTO>> GetLeaveRulesForEmployeeProfile(int companyId, int caseId, long profileId);
 
 }

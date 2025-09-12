@@ -50,9 +50,9 @@ public class EmployeeProfileService : IEmployeeProfileService
     }
 
 
-    public async  Task<JsonResult> GetLeaveRulesForEmployeeProfile(int companyId, int caseId)
+    public async  Task<JsonResult> GetLeaveRulesForEmployeeProfile(int companyId, int caseId, long profileId)
     {
-        List<LeaveRulesListDTO>? data = await _employeeProfileRepository.GetLeaveRulesForEmployeeProfile(companyId,caseId);
+        List<LeaveRulesListDTO>? data = await _employeeProfileRepository.GetLeaveRulesForEmployeeProfile(companyId,caseId,profileId);
 
         return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, ResponseMessages.LeaveSettings, ActionType.Retrieved));
     }

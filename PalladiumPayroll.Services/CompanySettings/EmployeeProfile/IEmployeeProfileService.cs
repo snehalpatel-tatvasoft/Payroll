@@ -10,7 +10,7 @@ public interface IEmployeeProfileService
     Task<JsonResult> GetWorkInformatiionDropdownData(int companyId);
     Task<JsonResult> SaveWorkInformation(WorkInformationRequestDTO request);
 
-    Task<JsonResult> GetLeaveRulesForEmployeeProfile(int companyId, int caseId);
+    Task<JsonResult> GetLeaveRulesForEmployeeProfile(int companyId, int caseId, long profileId);
     Task<JsonResult> UpdateLeaveSettingsInEmployeeProfile(LeaveSettingsUpdateRequestDTO request);
 
 }

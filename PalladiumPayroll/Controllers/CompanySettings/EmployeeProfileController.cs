@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.CompanySettings.EmployeeProfile;
-using PalladiumPayroll.DTOs.DTOs.CompanySettings.LeaveSettings;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.CompanySettings.EmployeeProfile;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -59,7 +58,7 @@ public class EmployeeProfileController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    public async Task<ActionResult> GetRulesForEmployeeProfile(int companyId, int caseId)
+    public async Task<ActionResult> GetLeaveRulesForEmployeeProfile(int companyId, int caseId,long profileId)
     {
         try
         {
@@ -68,12 +67,17 @@ public class EmployeeProfileController : ControllerBase
                 return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
             }
 
+            if (profileId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse("Invalid Profile Id.");
+            }
+
             if (caseId < 1 || caseId > 8)
             {
                 return HttpStatusCodeResponse.NotFoundResponse("Invalid Case ID.");
             }
 
-            return await _employeeProfileService.GetLeaveRulesForEmployeeProfile(companyId,caseId);
+            return await _employeeProfileService.GetLeaveRulesForEmployeeProfile(companyId,caseId,profileId);
         }
         catch (Exception)
         {
@@ -83,7 +87,7 @@ public class EmployeeProfileController : ControllerBase
 
 
     [HttpPut("[action]")]
-    public async Task<ActionResult> UpdateLeaveSettingsInEmployeeProfile(LeaveSettingsUpdateRequestDTO request)
+    public async Task<ActionResult> UpdateLeaveRulesInEmployeeProfile(LeaveSettingsUpdateRequestDTO request)
     {
         try
         {
