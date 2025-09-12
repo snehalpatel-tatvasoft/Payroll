@@ -15,5 +15,6 @@ public interface IEmployeeProfileRepository
 
     Task<List<EmployeeProfileListDTO>> GetAllEmployeeProfiles(int companyId);
     Task<(bool isSuccess, string message)> DeleteEmployeeProfile(long profileId);
+    Task<EmployeeProfileDetailsDTO?> GetEmployeeProfileDetailsById(long profileId);
 
 }

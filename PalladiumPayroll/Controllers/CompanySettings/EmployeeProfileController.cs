@@ -57,11 +57,34 @@ public class EmployeeProfileController : ControllerBase
     {
         try
         {
+            if (profileId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidProfileId);
+            }
             return await _employeeProfileService.DeleteEmployeeProfile(profileId);
         }
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.EmployeeProfile));
+        }
+    }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetEmployeeProfileDetailsById(long profileId)
+    {
+        try
+        {
+            if (profileId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.InvalidProfileId);
+            }
+            return await _employeeProfileService.GetEmployeeProfileDetailsById(profileId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeProfile)
+            );
         }
     }
 

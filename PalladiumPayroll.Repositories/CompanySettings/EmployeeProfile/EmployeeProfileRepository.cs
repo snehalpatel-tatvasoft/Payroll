@@ -114,6 +114,15 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
 
         return parameters.Get<bool>("@Result");
     }
+    
+    public async Task<EmployeeProfileDetailsDTO?> GetEmployeeProfileDetailsById(long profileId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@ProfileId", profileId);
+
+        return await _dapper.ExecuteStoredProcedureSingle<EmployeeProfileDetailsDTO>(
+            "usp_GetEmployeeProfileDetailsByProfileId", parameters);
+    }
 
     #endregion
 

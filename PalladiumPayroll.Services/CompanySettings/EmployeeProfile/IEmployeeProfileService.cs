@@ -15,5 +15,6 @@ public interface IEmployeeProfileService
 
     Task<JsonResult> GetAllEmployeeProfiles(int companyId);
     Task<JsonResult> DeleteEmployeeProfile(long profileId);
+    Task<JsonResult> GetEmployeeProfileDetailsById(long profileId);
 
 }

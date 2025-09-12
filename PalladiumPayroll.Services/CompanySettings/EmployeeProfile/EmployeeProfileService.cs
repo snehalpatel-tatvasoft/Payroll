@@ -48,6 +48,13 @@ public class EmployeeProfileService : IEmployeeProfileService
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeProfile, ActionType.Deleted));
     }
 
+     public async Task<JsonResult> GetEmployeeProfileDetailsById(long profileId)
+    {
+        EmployeeProfileDetailsDTO? profileDetails = await _employeeProfileRepository.GetEmployeeProfileDetailsById(profileId);
+        return HttpStatusCodeResponse.SuccessResponse(profileDetails, string.Empty);
+    }
+
+
     #endregion
 
 

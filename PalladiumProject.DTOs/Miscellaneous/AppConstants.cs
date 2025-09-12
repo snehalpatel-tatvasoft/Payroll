@@ -362,6 +362,7 @@
 
             #region Employee Profile
              public static readonly string EmployeeProfile = "Employee Profile";
+             public const string InvalidProfileId = "Employee Profile Id is Invalid.";
             #endregion
         }
 
