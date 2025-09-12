@@ -17,6 +17,9 @@ public class EmployeeProfileController : ControllerBase
     {
         _employeeProfileService = employeeProfileService;
     }
+
+    #region Profile
+
     [HttpPost("[action]")]
     public async Task<ActionResult> CreateProfile([FromBody] EmployeeProfileRequestDTO request)
     {
@@ -32,6 +35,42 @@ public class EmployeeProfileController : ControllerBase
     }
 
     [HttpGet("[action]")]
+    public async Task<ActionResult> GetAllEmployeeProfiles(int companyId)
+    {
+        try
+        {
+            if (companyId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+            }
+
+            return await _employeeProfileService.GetAllEmployeeProfiles(companyId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.EmployeeProfile));
+        }
+    }
+
+    [HttpDelete("[action]")]
+    public async Task<ActionResult> DeleteEmployeeProfile(long profileId)
+    {
+        try
+        {
+            return await _employeeProfileService.DeleteEmployeeProfile(profileId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, ResponseMessages.EmployeeProfile));
+        }
+    }
+
+    #endregion
+
+
+    #region work information
+
+    [HttpGet("[action]")]
     public async Task<ActionResult> GetWorkInformatiionDropdownData(int companyId)
     {
         try
@@ -43,6 +82,7 @@ public class EmployeeProfileController : ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
     }
+
     [HttpPost("[action]")]
     public async Task<ActionResult> SaveWorkInformation([FromBody] WorkInformationRequestDTO request)
     {
@@ -56,6 +96,57 @@ public class EmployeeProfileController : ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, "Work Information"));
         }
     }
+
+    #endregion
+
+
+    #region Leave Settings
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetLeaveRulesForEmployeeProfile(int companyId, int caseId, long profileId)
+    {
+        try
+        {
+            if (companyId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+            }
+
+            if (profileId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse("Invalid Profile Id.");
+            }
+
+            if (caseId < 1 || caseId > 8)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse("Invalid Case ID.");
+            }
+
+            return await _employeeProfileService.GetLeaveRulesForEmployeeProfile(companyId, caseId, profileId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.LeaveSettings));
+        }
+    }
+
+
+    [HttpPut("[action]")]
+    public async Task<ActionResult> UpdateLeaveRulesInEmployeeProfile(LeaveSettingsUpdateRequestDTO request)
+    {
+        try
+        {
+            return await _employeeProfileService.UpdateLeaveSettingsInEmployeeProfile(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.LeaveSettings)
+            );
+        }
+    }
+
+    #endregion
     [HttpGet("[action]")]
     public async Task<ActionResult> GetModalTransactionsList(int transactionId)
     {

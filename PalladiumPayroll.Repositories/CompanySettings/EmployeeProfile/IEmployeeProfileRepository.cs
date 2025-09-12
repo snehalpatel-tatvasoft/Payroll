@@ -13,5 +13,11 @@ public interface IEmployeeProfileRepository
     Task<List<TransactionListModel>> GetTransactionsList(int transactionId); // New method
 
 
+    Task<bool> UpdateLeaveSettingsInEmployeeProfile(LeaveSettingsUpdateRequestDTO request);
+    Task<List<LeaveRulesListDTO>> GetLeaveRulesForEmployeeProfile(int companyId, int caseId, long profileId);
+
+    Task<List<EmployeeProfileListDTO>> GetAllEmployeeProfiles(int companyId);
+    Task<(bool isSuccess, string message)> DeleteEmployeeProfile(long profileId);
+
 }
 

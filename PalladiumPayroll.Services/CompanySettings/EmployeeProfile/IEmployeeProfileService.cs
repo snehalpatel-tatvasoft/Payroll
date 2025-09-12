@@ -9,6 +9,12 @@ public interface IEmployeeProfileService
     Task<JsonResult> CreateProfile(EmployeeProfileRequestDTO request);
     Task<JsonResult> GetWorkInformatiionDropdownData(int companyId);
     Task<JsonResult> SaveWorkInformation(WorkInformationRequestDTO request);
+
+    Task<JsonResult> GetLeaveRulesForEmployeeProfile(int companyId, int caseId, long profileId);
+    Task<JsonResult> UpdateLeaveSettingsInEmployeeProfile(LeaveSettingsUpdateRequestDTO request);
+
+    Task<JsonResult> GetAllEmployeeProfiles(int companyId);
+    Task<JsonResult> DeleteEmployeeProfile(long profileId);
     Task<JsonResult> GetModalTransactionsList(int transactionId);
     Task<JsonResult> GetTransactionsList(int transactionId);
 
