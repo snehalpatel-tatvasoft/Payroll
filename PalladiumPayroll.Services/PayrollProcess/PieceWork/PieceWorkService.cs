@@ -107,26 +107,32 @@ public class PieceWorkService : IPieceWorkService
         DataTable? dt = new DataTable();
         dt.Columns.Add("Employee Code", typeof(string));
         dt.Columns.Add("Employee Name", typeof(string));
-        dt.Columns.Add("Area", typeof(string));
         dt.Columns.Add("Product Type", typeof(string));
+        dt.Columns.Add("Area", typeof(string));
         dt.Columns.Add("Unit", typeof(string));
-        dt.Columns.Add("Quantity Delivered", typeof(decimal));
         dt.Columns.Add("Rate", typeof(decimal));
-        dt.Columns.Add("Total Paid Amount", typeof(decimal));
+        dt.Columns.Add("Quantity Delivered", typeof(decimal));
         dt.Columns.Add("Payment Date", typeof(DateTime));
+        dt.Columns.Add("Total Paid Amount", typeof(decimal));
+        dt.Columns.Add("Include SDL", typeof(bool));
+        dt.Columns.Add("Include UIF", typeof(bool));
+        dt.Columns.Add("Created Date", typeof(DateTime));
 
         foreach (var item in data.DataList)
         {
             dt.Rows.Add(
                 item.EmployeeCode,
                 item.EmployeeName,
-                item.Area,
                 item.ProductType,
+                item.Area,
                 item.Unit,
-                item.QuantityDelivered ?? 0,
                 item.Rate ?? 0,
+                item.QuantityDelivered ?? 0,
+                item.PaymentDate == null ? DBNull.Value : item.PaymentDate,
                 item.TotalPaidAmount ?? 0,
-                item.PaymentDate == null ? DBNull.Value : item.PaymentDate
+                item.InfluenceSDL,
+                item.InfluenceUIF,
+                item.CreatedDate == null ? DBNull.Value : item.CreatedDate
             );
         }
         string exportType = string.IsNullOrWhiteSpace(reqModel.ExportType) ? "Excel" : reqModel.ExportType;
@@ -135,19 +141,23 @@ public class PieceWorkService : IPieceWorkService
         {
             DataTable pdfTable = dt.Clone();
             pdfTable.Columns["Payment Date"]!.DataType = typeof(string);
+            pdfTable.Columns["Created Date"]!.DataType = typeof(string);
 
             foreach (DataRow row in dt.Rows)
             {
                 pdfTable.Rows.Add(
                     row["Employee Code"],
                     row["Employee Name"],
-                    row["Area"],
                     row["Product Type"],
+                    row["Area"],
                     row["Unit"],
-                    row["Quantity Delivered"],
                     row["Rate"],
+                    row["Quantity Delivered"],
+                    row["Payment Date"] == DBNull.Value ? "" : ((DateTime)row["Payment Date"]).ToString("dd-MM-yyyy"),
                     row["Total Paid Amount"],
-                    row["Payment Date"] == DBNull.Value ? "" : ((DateTime)row["Payment Date"]).ToString("dd-MM-yyyy")
+                    row["Include SDL"],
+                    row["Include UIF"],
+                    row["Created Date"]== DBNull.Value ? "" : ((DateTime)row["Created Date"]).ToString("dd-MM-yyyy")
                 );
             }
               return PdfHelper.ExportToPdfTable(pdfTable, 25);
