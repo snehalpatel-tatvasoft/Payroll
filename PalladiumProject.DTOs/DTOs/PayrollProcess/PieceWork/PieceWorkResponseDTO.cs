@@ -59,4 +59,5 @@ public class PieceworkListDTO
     public bool? InfluenceSDL { get; set; }
     public DateTime? PaymentDate { get; set; }
     public long CompanyId { get; set; }
+    public DateTime? CreatedDate { get; set; }
 }
