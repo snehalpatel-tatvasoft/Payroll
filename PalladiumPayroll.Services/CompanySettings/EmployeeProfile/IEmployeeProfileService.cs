@@ -15,6 +15,7 @@ public interface IEmployeeProfileService
 
     Task<JsonResult> GetAllEmployeeProfiles(int companyId);
     Task<JsonResult> DeleteEmployeeProfile(long profileId);
+    Task<JsonResult> GetEmployeeProfileDetailsById(long profileId);
     Task<JsonResult> GetModalTransactionsList(int transactionId);
     Task<JsonResult> GetTransactionsList(int transactionId, int companyId,int profileId);
     Task<JsonResult> SaveTransactionAssignments(SaveTransactionAssignmentsRequestDTO request);

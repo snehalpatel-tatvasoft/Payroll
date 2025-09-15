@@ -22,7 +22,7 @@ public class EmployeeProfileService : IEmployeeProfileService
     public async Task<JsonResult> CreateProfile(EmployeeProfileRequestDTO request)
     {
         var (message, employeeProfileId) = await _employeeProfileRepository.CreateProfile(request);
-        if (message == "Employee profile created successfully.")
+        if (message == "Employee profile created successfully." || message=="Employee profile updated successfully.")
         {
             return HttpStatusCodeResponse.SuccessResponse(new { EmployeeProfileId = employeeProfileId }, message);
         }
@@ -47,6 +47,13 @@ public class EmployeeProfileService : IEmployeeProfileService
 
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeProfile, ActionType.Deleted));
     }
+
+     public async Task<JsonResult> GetEmployeeProfileDetailsById(long profileId)
+    {
+        EmployeeProfileDetailsDTO? profileDetails = await _employeeProfileRepository.GetEmployeeProfileDetailsById(profileId);
+        return HttpStatusCodeResponse.SuccessResponse(profileDetails, string.Empty);
+    }
+
 
     #endregion
 

@@ -15,6 +15,7 @@ public interface IEmployeeProfileRepository
 
     Task<List<EmployeeProfileListDTO>> GetAllEmployeeProfiles(int companyId);
     Task<(bool isSuccess, string message)> DeleteEmployeeProfile(long profileId);
+    Task<EmployeeProfileDetailsDTO?> GetEmployeeProfileDetailsById(long profileId);
     Task<List<TransactionListModel>> GetModalTransactionsList(int transactionId);
     Task<List<TransactionListModel>> GetTransactionsList(int transactionId, int companyId,int profileId);
     Task<bool> SaveTransactionAssignments(SaveTransactionAssignmentsRequestDTO request);

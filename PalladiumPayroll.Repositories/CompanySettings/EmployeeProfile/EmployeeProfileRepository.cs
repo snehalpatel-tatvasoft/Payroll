@@ -31,12 +31,12 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
     public async Task<(string Message, int EmployeeProfileId)> CreateProfile(EmployeeProfileRequestDTO request)
     {
         var parameters = new DynamicParameters();
+        parameters.Add("@EmployeeProfileId", request.Id, DbType.Int32, ParameterDirection.InputOutput);
         parameters.Add("@Name", request.Name);
         parameters.Add("@CompanyID", request.CompanyId);
-        parameters.Add("@EmployeeProfileId", dbType: DbType.Int32, direction: ParameterDirection.Output);
         parameters.Add("@ErrorMessage", dbType: DbType.String, direction: ParameterDirection.Output, size: 4000);
 
-        await _dapper.ExecuteStoredProcedureSingle<bool>("usp_CreateEmployeeProfile", parameters);
+        await _dapper.ExecuteStoredProcedureSingle<bool>("usp_CreateOrUpdateEmployeeProfile", parameters);
 
         var message = parameters.Get<string>("@ErrorMessage");
         var employeeProfileId = parameters.Get<int>("@EmployeeProfileId");
@@ -118,6 +118,15 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
         await _dapper.ExecuteAsync("usp_SaveCompanyWorkInformation", parameters);
 
         return parameters.Get<bool>("@Result");
+    }
+
+    public async Task<EmployeeProfileDetailsDTO?> GetEmployeeProfileDetailsById(long profileId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@ProfileId", profileId);
+
+        return await _dapper.ExecuteStoredProcedureSingle<EmployeeProfileDetailsDTO>(
+            "usp_GetEmployeeProfileDetailsByProfileId", parameters);
     }
 
     #endregion
