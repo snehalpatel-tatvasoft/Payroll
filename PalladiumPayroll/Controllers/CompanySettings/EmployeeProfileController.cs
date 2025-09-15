@@ -173,11 +173,11 @@ public class EmployeeProfileController : ControllerBase
 
     #region Transaction
     [HttpGet("[action]")]
-    public async Task<ActionResult> GetModalTransactionsList(int transactionId)
+    public async Task<ActionResult> GetModalTransactionsList(int transactionId,int companyId)
     {
         try
         {
-            return await _employeeProfileService.GetModalTransactionsList(transactionId);
+            return await _employeeProfileService.GetModalTransactionsList(transactionId,companyId);
         }
         catch (Exception)
         {
@@ -185,11 +185,11 @@ public class EmployeeProfileController : ControllerBase
         }
     }
     [HttpGet("[action]")]
-    public async Task<ActionResult> GetTransactionsList(int transactionId , int companyId,int profileId)
+    public async Task<ActionResult> GetTransactionsList(int transactionId, int companyId, int profileId)
     {
         try
         {
-            return await _employeeProfileService.GetTransactionsList(transactionId,companyId,profileId);
+            return await _employeeProfileService.GetTransactionsList(transactionId, companyId, profileId);
         }
         catch (Exception)
         {
@@ -212,6 +212,23 @@ public class EmployeeProfileController : ControllerBase
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, "Transaction Assignments"));
+        }
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> DeleteTransactionAssignments([FromBody] List<long> ids)
+    {
+        try
+        {
+            if (ids == null || !ids.Any())
+                return HttpStatusCodeResponse.InternalServerErrorResponse("No ids provided for deletion.");
+
+            return await _employeeProfileService.DeleteTransactionAssignments(ids);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, "Transaction Assignments"));
         }
     }
 

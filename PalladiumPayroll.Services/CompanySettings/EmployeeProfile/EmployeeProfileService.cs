@@ -22,7 +22,7 @@ public class EmployeeProfileService : IEmployeeProfileService
     public async Task<JsonResult> CreateProfile(EmployeeProfileRequestDTO request)
     {
         var (message, employeeProfileId) = await _employeeProfileRepository.CreateProfile(request);
-        if (message == "Employee profile created successfully." || message=="Employee profile updated successfully.")
+        if (message == "Employee profile created successfully." || message == "Employee profile updated successfully.")
         {
             return HttpStatusCodeResponse.SuccessResponse(new { EmployeeProfileId = employeeProfileId }, message);
         }
@@ -48,7 +48,7 @@ public class EmployeeProfileService : IEmployeeProfileService
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.EmployeeProfile, ActionType.Deleted));
     }
 
-     public async Task<JsonResult> GetEmployeeProfileDetailsById(long profileId)
+    public async Task<JsonResult> GetEmployeeProfileDetailsById(long profileId)
     {
         EmployeeProfileDetailsDTO? profileDetails = await _employeeProfileRepository.GetEmployeeProfileDetailsById(profileId);
         return HttpStatusCodeResponse.SuccessResponse(profileDetails, string.Empty);
@@ -107,11 +107,11 @@ public class EmployeeProfileService : IEmployeeProfileService
 
     #endregion
     #region Transaction
-    public async Task<JsonResult> GetModalTransactionsList(int transactionId)
+    public async Task<JsonResult> GetModalTransactionsList(int transactionId, int companyId)
     {
         try
         {
-            var transactions = await _employeeProfileRepository.GetModalTransactionsList(transactionId);
+            var transactions = await _employeeProfileRepository.GetModalTransactionsList(transactionId,companyId);
             if (transactions.Any())
             {
                 return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, "Transaction list", ActionType.Retrieved));
@@ -124,11 +124,11 @@ public class EmployeeProfileService : IEmployeeProfileService
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, "Transaction list", ActionType.Retrieving, ex.Message));
         }
     }
-    public async Task<JsonResult> GetTransactionsList(int transactionId, int companyId,int profileId)
+    public async Task<JsonResult> GetTransactionsList(int transactionId, int companyId, int profileId)
     {
         try
         {
-            var transactions = await _employeeProfileRepository.GetTransactionsList(transactionId, companyId,profileId);
+            var transactions = await _employeeProfileRepository.GetTransactionsList(transactionId, companyId, profileId);
             if (transactions.Any())
             {
                 return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, "Transaction list", ActionType.Retrieved));
@@ -153,6 +153,19 @@ public class EmployeeProfileService : IEmployeeProfileService
 
         return HttpStatusCodeResponse.InternalServerErrorResponse("Failed to save transaction assignments.");
     }
+    public async Task<JsonResult> DeleteTransactionAssignments(List<long> ids)
+    {
+        bool isDeleted = await _employeeProfileRepository.DeleteTransactionAssignments(ids);
+
+        if (isDeleted)
+        {
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty,
+                string.Format(ResponseMessages.Success, "Transaction Assignments", ActionType.Deleted));
+        }
+
+        return HttpStatusCodeResponse.InternalServerErrorResponse("Failed to delete transaction assignments.");
+    }
+
     #endregion
 
 }

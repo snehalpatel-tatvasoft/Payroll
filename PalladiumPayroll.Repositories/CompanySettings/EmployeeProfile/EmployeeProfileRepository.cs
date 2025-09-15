@@ -165,10 +165,12 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
 
     #endregion
     #region  Transaction
-    public async Task<List<TransactionListModel>> GetModalTransactionsList(int transactionId)
+    public async Task<List<TransactionListModel>> GetModalTransactionsList(int transactionId,int companyId)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@TransactionId", transactionId);
+        parameters.Add("@CompanyId", companyId);
+
 
         var transactions = await _dapper.ExecuteStoredProcedure<TransactionListModel>(
             "usp_GetModalTransactionsList",
@@ -177,7 +179,7 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
 
         return transactions ?? new List<TransactionListModel>();
     }
-    public async Task<List<TransactionListModel>> GetTransactionsList(int transactionId, int companyId,int profileId)
+    public async Task<List<TransactionListModel>> GetTransactionsList(int transactionId, int companyId, int profileId)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@TransactionId", transactionId);
@@ -207,6 +209,19 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
 
         return parameters.Get<bool>("@Result");
     }
+    public async Task<bool> DeleteTransactionAssignments(List<long> ids)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@Ids", string.Join(",", ids));
+
+        var result = await _dapper.ExecuteStoredProcedure<bool>(
+            "usp_DeleteProfileTransactionDetails",
+            parameters
+        );
+
+        return result.FirstOrDefault(); // true if deleted successfully
+    }
+
 
     #endregion
 
