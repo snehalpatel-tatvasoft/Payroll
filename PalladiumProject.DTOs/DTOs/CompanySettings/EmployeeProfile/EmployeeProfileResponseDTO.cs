@@ -53,6 +53,7 @@ public class EmployeeProfileDetailsDTO
 
 public class TransactionListModel
 {
+    public int  ProfileTransactionDetailsId  { get; set; }
     public int PayrollProcessId { get; set; }
     public string Description { get; set; }
 }
