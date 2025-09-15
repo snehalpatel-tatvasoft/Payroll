@@ -22,7 +22,7 @@ public class EmployeeProfileService : IEmployeeProfileService
     public async Task<JsonResult> CreateProfile(EmployeeProfileRequestDTO request)
     {
         var (message, employeeProfileId) = await _employeeProfileRepository.CreateProfile(request);
-        if (message == "Employee profile created successfully.")
+        if (message == "Employee profile created successfully." || message=="Employee profile updated successfully.")
         {
             return HttpStatusCodeResponse.SuccessResponse(new { EmployeeProfileId = employeeProfileId }, message);
         }

@@ -8,6 +8,7 @@ using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
+using Microsoft.AspNetCore.Http;
 
 namespace PalladiumPayroll.Repositories.CompanySettings.EmployeeProfile;
 
@@ -15,11 +16,13 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
 {
     private readonly DapperContext _dapper;
     private readonly IConfiguration _configuration;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public EmployeeProfileRepository(IConfiguration configuration)
+    public EmployeeProfileRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _configuration = configuration;
         _dapper = new DapperContext(_configuration);
+        _httpContextAccessor = httpContextAccessor;
     }
 
     #region Profile
@@ -27,12 +30,12 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
     public async Task<(string Message, int EmployeeProfileId)> CreateProfile(EmployeeProfileRequestDTO request)
     {
         var parameters = new DynamicParameters();
+        parameters.Add("@EmployeeProfileId", request.Id, DbType.Int32, ParameterDirection.InputOutput);
         parameters.Add("@Name", request.Name);
         parameters.Add("@CompanyID", request.CompanyId);
-        parameters.Add("@EmployeeProfileId", dbType: DbType.Int32, direction: ParameterDirection.Output);
         parameters.Add("@ErrorMessage", dbType: DbType.String, direction: ParameterDirection.Output, size: 4000);
 
-        await _dapper.ExecuteStoredProcedureSingle<bool>("usp_CreateEmployeeProfile", parameters);
+        await _dapper.ExecuteStoredProcedureSingle<bool>("usp_CreateOrUpdateEmployeeProfile", parameters);
 
         var message = parameters.Get<string>("@ErrorMessage");
         var employeeProfileId = parameters.Get<int>("@EmployeeProfileId");
@@ -107,6 +110,7 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
         parameters.Add("@HoursPerDay", request.HoursPerDay);
         parameters.Add("@DayPerMonth", request.DayPerMonth);
         parameters.Add("@DayPerWeek", request.DayPerWeek);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         parameters.Add("@Result", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
@@ -114,7 +118,7 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
 
         return parameters.Get<bool>("@Result");
     }
-    
+
     public async Task<EmployeeProfileDetailsDTO?> GetEmployeeProfileDetailsById(long profileId)
     {
         DynamicParameters? parameters = new DynamicParameters();
