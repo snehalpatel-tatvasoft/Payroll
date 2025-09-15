@@ -147,6 +147,8 @@ public class EmployeeProfileController : ControllerBase
     }
 
     #endregion
+
+    #region Transaction
     [HttpGet("[action]")]
     public async Task<ActionResult> GetModalTransactionsList(int transactionId)
     {
@@ -160,15 +162,36 @@ public class EmployeeProfileController : ControllerBase
         }
     }
     [HttpGet("[action]")]
-    public async Task<ActionResult> GetTransactionsList(int transactionId)
+    public async Task<ActionResult> GetTransactionsList(int transactionId , int companyId,int profileId)
     {
         try
         {
-            return await _employeeProfileService.GetTransactionsList(transactionId);
+            return await _employeeProfileService.GetTransactionsList(transactionId,companyId,profileId);
         }
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Transaction list"));
         }
     }
+    [HttpPost("[action]")]
+    public async Task<ActionResult> SaveTransactionAssignments([FromBody] SaveTransactionAssignmentsRequestDTO request)
+    {
+        try
+        {
+            if (request.CompanyId <= 0 || request.ProfileId <= 0 || request.PayrollProcessId == null || !request.PayrollProcessId.Any())
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse("Invalid request data.");
+            }
+
+            return await _employeeProfileService.SaveTransactionAssignments(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, "Transaction Assignments"));
+        }
+    }
+
+    #endregion
+
 }

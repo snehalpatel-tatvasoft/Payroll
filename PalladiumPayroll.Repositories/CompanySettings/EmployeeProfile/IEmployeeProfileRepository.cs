@@ -9,15 +9,15 @@ public interface IEmployeeProfileRepository
 
     Task<JsonResult> GetWorkInformatiionDropdownData(int companyId);
     Task<bool> SaveWorkInformation(WorkInformationRequestDTO request);
-    Task<List<TransactionListModel>> GetModalTransactionsList(int transactionId);
-    Task<List<TransactionListModel>> GetTransactionsList(int transactionId); // New method
-
 
     Task<bool> UpdateLeaveSettingsInEmployeeProfile(LeaveSettingsUpdateRequestDTO request);
     Task<List<LeaveRulesListDTO>> GetLeaveRulesForEmployeeProfile(int companyId, int caseId, long profileId);
 
     Task<List<EmployeeProfileListDTO>> GetAllEmployeeProfiles(int companyId);
     Task<(bool isSuccess, string message)> DeleteEmployeeProfile(long profileId);
+    Task<List<TransactionListModel>> GetModalTransactionsList(int transactionId);
+    Task<List<TransactionListModel>> GetTransactionsList(int transactionId, int companyId,int profileId);
+    Task<bool> SaveTransactionAssignments(SaveTransactionAssignmentsRequestDTO request);
 
 }
 

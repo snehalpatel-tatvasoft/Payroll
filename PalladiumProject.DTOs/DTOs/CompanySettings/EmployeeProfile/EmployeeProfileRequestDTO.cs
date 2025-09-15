@@ -40,3 +40,10 @@ public class LeaveSettingsUpdateRequestDTO
     public decimal? AnnualEntitlementDays { get; set; }
 }
 
+public class SaveTransactionAssignmentsRequestDTO
+{
+    public int TransactionId { get; set; }
+    public int CompanyId { get; set; }
+    public int ProfileId { get; set; }
+    public List<int> PayrollProcessId { get; set; } = new();
+}

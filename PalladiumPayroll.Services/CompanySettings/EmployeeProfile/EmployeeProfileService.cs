@@ -74,41 +74,6 @@ public class EmployeeProfileService : IEmployeeProfileService
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, ResponseMessages.WorkInformation, ActionType.Saving, ex.Message));
         }
     }
-    public async Task<JsonResult> GetModalTransactionsList(int transactionId)
-    {
-        try
-        {
-            var transactions = await _employeeProfileRepository.GetModalTransactionsList(transactionId);
-            if (transactions.Any())
-            {
-                return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, "Transaction list", ActionType.Retrieved));
-            }
-
-            return HttpStatusCodeResponse.SuccessResponse(new List<TransactionListModel>(), "No transactions found for the provided ID.");
-        }
-        catch (Exception ex)
-        {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, "Transaction list", ActionType.Retrieving, ex.Message));
-        }
-    }
-    public async Task<JsonResult> GetTransactionsList(int transactionId)
-    {
-        try
-        {
-            var transactions = await _employeeProfileRepository.GetTransactionsList(transactionId);
-            if (transactions.Any())
-            {
-                return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, "Transaction list", ActionType.Retrieved));
-            }
-
-            return HttpStatusCodeResponse.SuccessResponse(new List<TransactionListModel>(), "No transactions found for the provided ID.");
-        }
-        catch (Exception ex)
-        {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, "Transaction list", ActionType.Retrieving, ex.Message));
-        }
-    }
-    
 
     #endregion
 
@@ -134,4 +99,53 @@ public class EmployeeProfileService : IEmployeeProfileService
     }
 
     #endregion
+    #region Transaction
+    public async Task<JsonResult> GetModalTransactionsList(int transactionId)
+    {
+        try
+        {
+            var transactions = await _employeeProfileRepository.GetModalTransactionsList(transactionId);
+            if (transactions.Any())
+            {
+                return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, "Transaction list", ActionType.Retrieved));
+            }
+
+            return HttpStatusCodeResponse.SuccessResponse(new List<TransactionListModel>(), "No transactions found for the provided ID.");
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, "Transaction list", ActionType.Retrieving, ex.Message));
+        }
+    }
+    public async Task<JsonResult> GetTransactionsList(int transactionId, int companyId,int profileId)
+    {
+        try
+        {
+            var transactions = await _employeeProfileRepository.GetTransactionsList(transactionId, companyId,profileId);
+            if (transactions.Any())
+            {
+                return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, "Transaction list", ActionType.Retrieved));
+            }
+
+            return HttpStatusCodeResponse.SuccessResponse(new List<TransactionListModel>(), "No transactions found for the provided ID.");
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, "Transaction list", ActionType.Retrieving, ex.Message));
+        }
+    }
+    public async Task<JsonResult> SaveTransactionAssignments(SaveTransactionAssignmentsRequestDTO request)
+    {
+        bool isSaved = await _employeeProfileRepository.SaveTransactionAssignments(request);
+
+        if (isSaved)
+        {
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty,
+                string.Format(ResponseMessages.Success, "Transaction Assignments", ActionType.Saved));
+        }
+
+        return HttpStatusCodeResponse.InternalServerErrorResponse("Failed to save transaction assignments.");
+    }
+    #endregion
+
 }

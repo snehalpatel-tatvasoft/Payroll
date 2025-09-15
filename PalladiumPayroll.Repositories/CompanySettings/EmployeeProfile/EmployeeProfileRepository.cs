@@ -8,6 +8,7 @@ using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
+using Microsoft.AspNetCore.Http;
 
 namespace PalladiumPayroll.Repositories.CompanySettings.EmployeeProfile;
 
@@ -15,11 +16,14 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
 {
     private readonly DapperContext _dapper;
     private readonly IConfiguration _configuration;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public EmployeeProfileRepository(IConfiguration configuration)
+
+    public EmployeeProfileRepository(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _configuration = configuration;
         _dapper = new DapperContext(_configuration);
+        _httpContextAccessor = httpContextAccessor;
     }
 
     #region Profile
@@ -107,6 +111,7 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
         parameters.Add("@HoursPerDay", request.HoursPerDay);
         parameters.Add("@DayPerMonth", request.DayPerMonth);
         parameters.Add("@DayPerWeek", request.DayPerWeek);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         parameters.Add("@Result", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
@@ -150,6 +155,7 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
     }
 
     #endregion
+    #region  Transaction
     public async Task<List<TransactionListModel>> GetModalTransactionsList(int transactionId)
     {
         var parameters = new DynamicParameters();
@@ -162,18 +168,37 @@ public class EmployeeProfileRepository : IEmployeeProfileRepository
 
         return transactions ?? new List<TransactionListModel>();
     }
-    public async Task<List<TransactionListModel>> GetTransactionsList(int transactionId)
+    public async Task<List<TransactionListModel>> GetTransactionsList(int transactionId, int companyId,int profileId)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@TransactionId", transactionId);
+        parameters.Add("@CompanyId", companyId);
+        parameters.Add("@ProfileId", profileId);
+
+
 
         var transactions = await _dapper.ExecuteStoredProcedure<TransactionListModel>(
-            "usp_GetTransactionsList",
+            "usp_GetProfileTransactionDetails",
             parameters
         );
 
         return transactions ?? new List<TransactionListModel>();
     }
-    
+    public async Task<bool> SaveTransactionAssignments(SaveTransactionAssignmentsRequestDTO request)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", request.CompanyId);
+        parameters.Add("@ProfileId", request.ProfileId);
+        parameters.Add("@TransactionId", request.TransactionId); // if needed for grouping/filter
+        parameters.Add("@PayrollProcessIds", string.Join(",", request.PayrollProcessId)); // pass as CSV
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+        parameters.Add("@Result", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+        await _dapper.ExecuteAsync("usp_SaveTransactionAssignments", parameters);
+
+        return parameters.Get<bool>("@Result");
+    }
+
+    #endregion
 
 }
