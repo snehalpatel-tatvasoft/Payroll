@@ -104,7 +104,6 @@ public class CommissionReportRepository : ICommissionReportRepository
         parameters.Add("@CycleId", request.CycleId, dbType: DbType.Int32, direction: ParameterDirection.Input);
         parameters.Add("@PeriodId", request.PeriodId, dbType: DbType.Int32, direction: ParameterDirection.Input);
 
-        // Convert commissionIds to DataTable for table-valued parameter
         var commissionIdsTable = new DataTable();
         commissionIdsTable.Columns.Add("Id", typeof(long));
         foreach (var id in request.CommissionIds)
