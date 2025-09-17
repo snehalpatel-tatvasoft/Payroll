@@ -19,7 +19,7 @@ public class CreateTransactionController : ControllerBase
         _createTransactionService = createTransactionService;
     }
 
-    [HttpGet("Transactions")]
+    [HttpGet("[action]")]
     public async Task<ActionResult> GetAllTransactions([FromQuery] long companyId)
     {
         try
@@ -35,7 +35,7 @@ public class CreateTransactionController : ControllerBase
         }
     }
 
-    [HttpPost("AddTransaction")]
+    [HttpPost("[action]")]
     public async Task<ActionResult> AddTransaction([FromBody] CreateTransactionRequestDTO request)
     {
         try
@@ -51,7 +51,7 @@ public class CreateTransactionController : ControllerBase
         }
     }
 
-    [HttpPut("UpdateTransaction/{id}")]
+    [HttpPut("[action]")]
     public async Task<ActionResult> UpdateTransaction(long id, [FromBody] CreateTransactionRequestDTO request)
     {
         try
@@ -68,7 +68,7 @@ public class CreateTransactionController : ControllerBase
         }
     }
 
-    [HttpGet("Transactions/{id}")]
+    [HttpGet("[action]")]
     public async Task<ActionResult> GetTransactionById(long id)
     {
         try
@@ -84,7 +84,7 @@ public class CreateTransactionController : ControllerBase
         }
     }
 
-    [HttpDelete("DeleteTransaction/{id}")]
+    [HttpDelete("[action]")]
     public async Task<ActionResult> DeleteTransaction(long id)
     {
         try
@@ -100,7 +100,7 @@ public class CreateTransactionController : ControllerBase
         }
     }
 
-    [HttpPost("ImportTransactions")]
+    [HttpPost("[action]")]
     public async Task<ActionResult> ImportTransactions([FromBody] ImportTransactionRequestDTO request)
     {
         try
@@ -115,5 +115,4 @@ public class CreateTransactionController : ControllerBase
             );
         }
     }
-
 }

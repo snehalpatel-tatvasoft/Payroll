@@ -292,11 +292,11 @@ namespace PalladiumPayroll.Controllers.Employee
         }
 
         [HttpDelete("[action]")]
-        public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type)
+        public async Task<JsonResult> DeleteWorkOrganizationalDropdownItem(int id, int type, long? employeeId)
         {
             try
             {
-                return await _employeeService.DeleteWorkOrganizationalDropdownItem(id, type);
+                return await _employeeService.DeleteWorkOrganizationalDropdownItem(id, type, employeeId);
             }
             catch (Exception ex)
             {
@@ -656,9 +656,11 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return await _employeeService.GetSecondApprovalEmployeeListByCompanyId(companyId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.SecondApprovalEmployees)
+                );
             }
         }
 
@@ -673,9 +675,11 @@ namespace PalladiumPayroll.Controllers.Employee
                 }
                 return await _employeeService.UpdateEmployeeSelfService(model);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+               return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Updating, ResponseMessages.EmployeeSelfService)
+                );
             }
         }
 
@@ -686,9 +690,11 @@ namespace PalladiumPayroll.Controllers.Employee
             {
                 return await _employeeService.GetAccessRolesByCompanyId(companyId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.AccessRole)
+                );
             }
         }
 
@@ -697,18 +703,28 @@ namespace PalladiumPayroll.Controllers.Employee
         {
             try
             {
-                if (request == null || string.IsNullOrWhiteSpace(request.Email) ||
-                    string.IsNullOrWhiteSpace(request.Password) || request.CompanyId <= 0 ||
-                    request.AccessRoleId <= 0 || request.EmployeeId <= 0)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
-
                 return await _employeeService.UpsertEmployeeUser(request);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, ResponseMessages.UserCredential)
+                );
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeForAssignManager(int seniorEmployeeId, int companyId)
+        {
+            try
+            {
+                return await _employeeService.GetEmployeeForAssignManager(seniorEmployeeId,companyId);
+            }
+            catch (Exception)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(
+                    string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.Employee)
+                );
             }
         }
 

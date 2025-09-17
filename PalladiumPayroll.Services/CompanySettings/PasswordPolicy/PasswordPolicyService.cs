@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.CompanySettings;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.CompanySettings;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.CompanySettings;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Services.CompanySettings
 {
@@ -17,113 +19,78 @@ namespace PalladiumPayroll.Services.CompanySettings
 
         public async Task<JsonResult> GetPasswordPolicyByCompanyId(long companyId)
         {
-            try
-            {
-                if (companyId <= 0)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
+            List<PasswordPolicyResponseDTO>? policies = await _passwordPolicyRepository.GetPasswordPolicyByCompanyId(companyId);
 
-                var policies = await _passwordPolicyRepository.GetPasswordPolicyByCompanyId(companyId);
-                if (policies.Any())
-                {
-                    return HttpStatusCodeResponse.SuccessResponse(policies, ResponseMessages.DataFetchSuccess);
-                }
-                return HttpStatusCodeResponse.NotFoundResponse("Password Policies");
-            }
-            catch (Exception ex)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error fetching password policies: {ex.Message}");
-            }
+            return HttpStatusCodeResponse.SuccessResponse(policies, string.Format(ResponseMessages.Success, ResponseMessages.PasswordPolicy, ActionType.Retrieved));
         }
 
         public async Task<JsonResult> CreatePasswordPolicy(PasswordPolicyRequestDTO request)
         {
-            try
+            if (request == null || string.IsNullOrWhiteSpace(request.PolicyName) || request.CompanyId <= 0)
             {
-                if (request == null || string.IsNullOrWhiteSpace(request.PolicyName) || request.CompanyId <= 0)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
-
-                if (request.MinLength < 0 || request.MaxLength < request.MinLength ||
-                    request.NoOfUppercaseLetters < 0 || request.NoOfDigits < 0 ||
-                    request.NoOfSpecialLetters < 0 || request.PasswordAgeInterval <= 0 ||
-                    request.SessionTimeOutInterval <= 0)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
-
-                var passwordPolicyId = await _passwordPolicyRepository.CreatePasswordPolicy(request);
-                if (passwordPolicyId == -1)
-                {
-                    return HttpStatusCodeResponse.InternalServerErrorResponse("Password policy with this name already exists for the company.");
-                }
-
-                return HttpStatusCodeResponse.SuccessResponse(passwordPolicyId, "Password policy created successfully.");
+                return HttpStatusCodeResponse.BadRequestResponse();
             }
-            catch (Exception ex)
+
+            if (request.MinLength < 0 || request.MaxLength < request.MinLength ||
+                request.NoOfUppercaseLetters < 0 || request.NoOfDigits < 0 ||
+                request.NoOfSpecialLetters < 0 || request.PasswordAgeInterval <= 0 ||
+                request.SessionTimeOutInterval <= 0)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error creating password policy: {ex.Message}");
+                return HttpStatusCodeResponse.BadRequestResponse();
             }
+
+            long passwordPolicyId = await _passwordPolicyRepository.CreatePasswordPolicy(request);
+            if (passwordPolicyId == -1)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(
+                    ResponseMessages.AlreadyExist,
+                    ResponseMessages.PasswordPolicy + " with this name"
+                ));
+            }
+
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.PasswordPolicy, ActionType.Created));
         }
 
         public async Task<JsonResult> UpdatePasswordPolicy(PasswordPolicyRequestDTO request, long passwordPolicyId)
         {
-            try
+            if (request == null || string.IsNullOrWhiteSpace(request.PolicyName) || request.CompanyId <= 0 || passwordPolicyId <= 0)
             {
-                if (request == null || string.IsNullOrWhiteSpace(request.PolicyName) || request.CompanyId <= 0 || passwordPolicyId <= 0)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
-
-                if (request.MinLength < 0 || request.MaxLength < request.MinLength ||
-                    request.NoOfUppercaseLetters < 0 || request.NoOfDigits < 0 ||
-                    request.NoOfSpecialLetters < 0 || request.PasswordAgeInterval <= 0 ||
-                    request.SessionTimeOutInterval <= 0)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
-
-                var result = await _passwordPolicyRepository.UpdatePasswordPolicy(request, passwordPolicyId);
-                if (result == -1)
-                {
-                    return HttpStatusCodeResponse.InternalServerErrorResponse("Password policy with this name already exists for the company.");
-                }
-                if (result == -2)
-                {
-                    return HttpStatusCodeResponse.NotFoundResponse("Password policy not found.");
-                }
-
-                return HttpStatusCodeResponse.SuccessResponse(result, "Password policy updated successfully.");
+                return HttpStatusCodeResponse.BadRequestResponse();
             }
-            catch (Exception ex)
+
+            if (request.MinLength < 0 || request.MaxLength < request.MinLength ||
+                request.NoOfUppercaseLetters < 0 || request.NoOfDigits < 0 ||
+                request.NoOfSpecialLetters < 0 || request.PasswordAgeInterval <= 0 ||
+                request.SessionTimeOutInterval <= 0)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error updating password policy: {ex.Message}");
+                return HttpStatusCodeResponse.BadRequestResponse();
             }
+
+            long result = await _passwordPolicyRepository.UpdatePasswordPolicy(request, passwordPolicyId);
+            
+            if (result == -1)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(
+                    ResponseMessages.AlreadyExist,
+                    ResponseMessages.PasswordPolicy + " with this name"
+                ));
+            }
+            if (result == -2)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.PasswordNotFound);
+            }
+
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.PasswordPolicy, ActionType.Updated));
         }
-        
+
         public async Task<JsonResult> DeletePasswordPolicy(long passwordPolicyId, long companyId)
         {
-            try
+            long result = await _passwordPolicyRepository.DeletePasswordPolicy(passwordPolicyId, companyId);
+            if (result == -2)
             {
-                if (passwordPolicyId <= 0 || companyId <= 0)
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
-
-                var result = await _passwordPolicyRepository.DeletePasswordPolicy(passwordPolicyId, companyId);
-                if (result == -2)
-                {
-                    return HttpStatusCodeResponse.NotFoundResponse("Password policy not found.");
-                }
-
-                return HttpStatusCodeResponse.SuccessResponse(result, "Password policy deleted successfully.");
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.PasswordNotFound);
             }
-            catch (Exception ex)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse($"Error deleting password policy: {ex.Message}");
-            }
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.PasswordPolicy, ActionType.Deleted));
         }
     }
 }

@@ -81,6 +81,7 @@ public class MinimumWageRepository : IMinimumWageRepository
     {
         DynamicParameters parameters = new DynamicParameters();
         parameters.Add("@Id", wageId);
+        parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@IsSuccess", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
         await _dapper.ExecuteStoredProcedureSingle<object>("usp_DeleteMinimumWage", parameters);

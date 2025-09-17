@@ -28,4 +28,10 @@
         public int? CompanyId { get; set; }
         public List<CompanyDetails>? CompanyDetails { get; set; }
     }
+
+    public class ForgotResponseModel
+    {
+        public bool IsMultiUser { get; set; }
+        public List<CompanyDetails>? CompanyDetails { get; set; }
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.TimeSheet;
 using PalladiumPayroll.DTOs.Miscellaneous;
-using PalladiumPayroll.Helper;
+using PalladiumPayroll.Helper.ImportExport;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
@@ -33,7 +33,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.TimeSheet
                     new DataColumn("ClockInTime", typeof(DateTime)),
                     new DataColumn("ClockOutTime", typeof(DateTime)),
                 ];
-                var data = ExcelHelper.ImportFromExcel(requestData.File, false, sheetColumn);
+                var data = ExcelHelper.ImportFromExcel(requestData.File, true, sheetColumn);
                 result = await _timeSheetRepository.ImportTimeSheetData(data);
             }
             else

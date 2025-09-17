@@ -23,6 +23,7 @@ using PalladiumPayroll.Repositories.Utilities.DataImport;
 using PalladiumPayroll.Repositories.CompanySettings.LeaveSettings;
 using PalladiumPayroll.Services.PayrollProcess.ManageLeave;
 using PalladiumPayroll.Services.PayrollProcess.TimeSheet;
+using PalladiumPayroll.Repositories.PayrollProcess.PieceWork;
 using PalladiumPayroll.Repositories.PayrollProcess.CommissionReport;
 
 namespace PalladiumPayroll.Repositories
@@ -62,6 +63,7 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<ILeaveSettingsRepository, LeaveSettingsRepository>();
             services.AddScoped<IManageLeaveRepository, ManageLeaveRepository>();
             services.AddScoped<ITimeSheetRepository, TimeSheetRepository>();
+            services.AddScoped<IPieceWorkRepository, PieceWorkRepository>();
             services.AddScoped<ICommissionReportRepository, CommissionReportRepository>();
             return services;
         }

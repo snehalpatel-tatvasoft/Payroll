@@ -40,13 +40,23 @@ public class DesignationsRepository : IDesignationsRepository
         return result.ToList();
     }
 
-
-    public async Task<bool> DeleteDesignations(long id)
+    public async Task<(bool isSuccess, string message)> DeleteDesignations(long designationId, long? employeeId)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("@Id", id);
+        parameters.Add("@DesignationId", designationId);
+        parameters.Add("@EmployeeId", employeeId);
+        parameters.Add("@ResultMessage", dbType: DbType.String, size: 4000, direction: ParameterDirection.Output);
 
-        return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteDesignation", parameters);
+        await _dapper.ExecuteAsync(
+            "usp_DeleteDesignation",
+            parameters
+        );
+
+        string message = parameters.Get<string>("@ResultMessage");
+
+        bool success = message.Contains("successfully", StringComparison.OrdinalIgnoreCase);
+
+        return (success, message);
     }
 
     public async Task<bool> UpdateDesignations(DesignationRequestDTO request)
@@ -71,28 +81,42 @@ public class DesignationsRepository : IDesignationsRepository
         await _dapper.ExecuteStoredProcedure<object>("usp_CheckDuplicateDesignation", parameters);
         return parameters.Get<bool>("@IsDuplicate");
     }
-    
-    
+
     public async Task<string?> ImportDesignations(ImportDesignationRequestDTO request)
     {
-        foreach (var item in request.Designations)
-        {
-            var parameters = new DynamicParameters();
-            parameters.Add("@DesignationsName", item.DesignationsName);
-            parameters.Add("@DesignationsCode", item.DesignationsCode);
-            parameters.Add("@CompanyId", request.CompanyId);
+        var table = DesignationsToDataTable(request.Designations);
 
-            var result = await _dapper.ExecuteStoredProcedureSingle<string>("usp_ImportDesignations", parameters);
+        var parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", request.CompanyId);
+        parameters.Add("@Designations", table.AsTableValuedParameter("dbo.DesignationImportType"));
 
-            if (result == "DUPLICATE")
-                return $"Duplicate record";
+        var result = await _dapper.ExecuteStoredProcedureSingle<string>(
+            "usp_ImportDesignations", parameters
+        );
 
-            if (result == "DUPLICATE_CODE")
-                return $"Code already exists for another designation";
-        }
+        if (result == "DUPLICATE")
+            return "Duplicate record";
+        if (result == "DUPLICATE_CODE")
+            return "Code already exists for another designation";
 
-        return null; 
+        return result;
     }
 
+    private DataTable DesignationsToDataTable(List<DesignationRequestDTO> data)
+    {
+        var table = new DataTable();
+        table.Columns.Add("DesignationName", typeof(string));
+        table.Columns.Add("DesignationCode", typeof(string));
+
+        foreach (var item in data)
+        {
+            table.Rows.Add(
+                item.DesignationsName ?? (object)DBNull.Value,
+                item.DesignationsCode ?? (object)DBNull.Value
+            );
+        }
+
+        return table;
+    }
 
 }

@@ -113,6 +113,42 @@ namespace PalladiumPayroll.Controllers.Company
                 return HttpStatusCodeResponse.InternalServerErrorResponse(message: "An error occurred on the server");
             }
         }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> ExportGLTransactionList(long companyId)
+        {
+            try
+            {
+                var fileBytes = await _companyService.ExportGLTransactionList(companyId);
+                return File(fileBytes, ContentTypes.Xlsx, "Transaction Information.xlsx");
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> ImportGLTransaction([FromForm] ImportFileModel requestData)
+        {
+            try
+            {
+                if (requestData.File.Length <= 0)
+                {
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.EmptyFile);
+                }
+                else if (requestData.File.ContentType != ContentTypes.Xlsx)
+                {
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.InavalidFile);
+                }
+                return await _companyService.ImportGLTransaction(requestData);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TryLater);
+            }
+        }
+
         [HttpPost("[action]")]
         public async Task<ActionResult> SaveGlAccountNumber(TransactionListForCompany model)
         {

@@ -17,34 +17,34 @@ namespace PalladiumPayroll.Repositories.CompanySettings
 
         public async Task<List<NotificationTemplateResponseDTO>> GetNotificationTemplatesByCompanyId(long companyId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId, dbType: DbType.Int64);
 
-            var result = await _dapper.ExecuteStoredProcedure<NotificationTemplateResponseDTO>(
+            List<NotificationTemplateResponseDTO>? result = await _dapper.ExecuteStoredProcedure<NotificationTemplateResponseDTO>(
                 "usp_GetNotificationTemplatesByCompanyId", parameters);
             return result.ToList();
         }
 
         public async Task<List<NotificationTypeResponseDTO>> GetNotificationTypes()
         {
-            var result = await _dapper.ExecuteStoredProcedure<NotificationTypeResponseDTO>(
+            List<NotificationTypeResponseDTO>? result = await _dapper.ExecuteStoredProcedure<NotificationTypeResponseDTO>(
                 "usp_GetNotificationTypes", null);
             return result.ToList();
         }
 
         public async Task<List<EmployeeResponseDTO>> GetEmployeesByCompanyIdForNotification(long companyId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId, dbType: DbType.Int64);
 
-            var result = await _dapper.ExecuteStoredProcedure<EmployeeResponseDTO>(
+            List<EmployeeResponseDTO>? result = await _dapper.ExecuteStoredProcedure<EmployeeResponseDTO>(
                 "usp_GetEmployeesByCompanyIdForNotification", parameters);
             return result.ToList();
         }
 
         public async Task<int> CreateNotificationTemplate(NotificationTemplateRequestDTO request)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@CompanyId", request.CompanyId, dbType: DbType.Int64);
             parameters.Add("@NotificationTypeId", request.NotificationTypeId, dbType: DbType.Int32);
             parameters.Add("@NotificationTemplateName", request.NotificationTemplateName, dbType: DbType.String);
@@ -65,27 +65,27 @@ namespace PalladiumPayroll.Repositories.CompanySettings
 
         public async Task<NotificationTemplateResponseDTO> GetNotificationTemplateById(int notificationTemplateId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@NotificationTemplateId", notificationTemplateId, dbType: DbType.Int32);
 
-            var result = await _dapper.ExecuteStoredProcedure<NotificationTemplateResponseDTO>(
-                "usp_GetNotificationTemplateById", parameters);
+            List<NotificationTemplateResponseDTO>? result = await _dapper.ExecuteStoredProcedure<NotificationTemplateResponseDTO>(
+               "usp_GetNotificationTemplateById", parameters);
             return result.FirstOrDefault();
         }
 
         public async Task<List<long>> GetEmployeesByNotificationTemplateId(int notificationTemplateId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@NotificationTemplateId", notificationTemplateId, dbType: DbType.Int32);
 
-            var result = await _dapper.ExecuteStoredProcedure<long>(
+            List<long>? result = await _dapper.ExecuteStoredProcedure<long>(
                 "usp_GetEmployeesByNotificationTemplateId", parameters);
             return result.ToList();
         }
 
         public async Task<int> UpdateNotificationTemplate(NotificationTemplateRequestDTO request)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@NotificationTemplateId", request.NotificationTemplateId, dbType: DbType.Int32);
             parameters.Add("@CompanyId", request.CompanyId, dbType: DbType.Int64);
             parameters.Add("@NotificationTypeId", request.NotificationTypeId, dbType: DbType.Int32);
@@ -106,7 +106,7 @@ namespace PalladiumPayroll.Repositories.CompanySettings
 
         public async Task<int> DeleteNotificationTemplate(int notificationTemplateId)
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters? parameters = new DynamicParameters();
             parameters.Add("@NotificationTemplateId", notificationTemplateId, dbType: DbType.Int32);
 
             await _dapper.ExecuteStoredProcedure<object>("usp_DeleteNotificationTemplate", parameters);

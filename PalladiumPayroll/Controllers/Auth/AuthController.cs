@@ -12,6 +12,7 @@ using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Controllers.Auth
 {
+    [AllowAnonymous]
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
@@ -26,9 +27,8 @@ namespace PalladiumPayroll.Controllers.Auth
             _userService = userService;
         }
 
-        [AllowAnonymous]
-        [HttpPost("Login")]
-        public async Task<ActionResult> Login([FromBody] LoginRequest loginRequest)
+        [HttpPost("[action]")]
+        public async Task<ActionResult> Login(LoginRequest loginRequest)
         {
             try
             {
@@ -40,8 +40,6 @@ namespace PalladiumPayroll.Controllers.Auth
             }
         }
 
-
-        [AllowAnonymous]
         [HttpGet("[action]")]
         public async Task<ActionResult> LoginSelectedUser(string userId)
         {
@@ -55,8 +53,46 @@ namespace PalladiumPayroll.Controllers.Auth
             }
         }
 
-        [AllowAnonymous]
-        [HttpPost("CreateCompany")]
+        [HttpGet("[action]")]
+        public async Task<ActionResult> ForgotPassWord(string email)
+        {
+            try
+            {
+                return await _authService.ForgotPassWord(email);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TryLater);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> ForgotPassWordSelectedUser(string userId)
+        {
+            try
+            {
+                return await _authService.ForgotPassWordSelectedUser(userId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TryLater);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> ResetPassword(ResetPasswordRequest requestData)
+        {
+            try
+            {
+                return await _authService.ResetPassword(requestData);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.TryLater);
+            }
+        }
+
+        [HttpPost("[action]")]
         public async Task<ActionResult> CreateCompany(CreateCompanyRequest request)
         {
             try
@@ -70,7 +106,7 @@ namespace PalladiumPayroll.Controllers.Auth
             }
         }
 
-        [HttpPost("ConfirmEmail")]
+        [HttpPost("[action]")]
         public async Task<ActionResult> ConfirmEmail(string userId)
         {
             try
@@ -90,7 +126,7 @@ namespace PalladiumPayroll.Controllers.Auth
             }
         }
 
-        [HttpPost("CheckIsUserLoggedIn")]
+        [HttpPost("[action]")]
         public async Task<ActionResult> CheckIsUserLoggedIn(string userId)
         {
             try
@@ -108,7 +144,7 @@ namespace PalladiumPayroll.Controllers.Auth
             }
         }
 
-        [HttpGet("GetCompaniesByEmail")]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetCompaniesByEmail(string email)
         {
             try
@@ -122,7 +158,6 @@ namespace PalladiumPayroll.Controllers.Auth
             }
         }
 
-        [AllowAnonymous]
         [HttpPost("[action]")]
         public IActionResult RefreshToken(RefreshRequest request)
         {

@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Repositories.Department;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
+using static PalladiumPayroll.Helper.Constants.AppEnums;
 
 namespace PalladiumPayroll.Services.Department
 {
@@ -20,143 +18,62 @@ namespace PalladiumPayroll.Services.Department
 
         public async Task<JsonResult> GetDepartmentsByCompanyId(long companyId)
         {
-            try
-            {
-                var departments = await _departmentRepository.GetDepartmentsByCompanyId(companyId);
+            List<DepartmentResponseDTO>? departments = await _departmentRepository.GetDepartmentsByCompanyId(companyId);
 
-                if (departments == null)
-                {
-                    return HttpStatusCodeResponse.NotFoundResponse(
-                        ResponseMessages.NoDepartmentsForThisCompanyId
-                    );
-                }
-
-                return HttpStatusCodeResponse.SuccessResponse(
-                    data: departments,
-                    ResponseMessages.DepartmentsRetrievedSuccessfully
-                );
-            }
-            catch (Exception)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    ResponseMessages.ErrorRetrievingDepartments
-                );
-            }
+            return HttpStatusCodeResponse.SuccessResponse(departments, string.Format(ResponseMessages.Success, ResponseMessages.Department, ActionType.Retrieved));
         }
 
         public async Task<JsonResult> CreateDepartment(DepartmentRequestDTO request)
         {
-            try
+            bool exists = await _departmentRepository.CheckDepartmentNameExists(request.CompanyId, request.DepartmentName);
+            if (exists)
             {
-                string normalizedName = request.DepartmentName?.Trim().ToLower();
-                if (string.IsNullOrWhiteSpace(normalizedName))
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
-
-                bool exists = await _departmentRepository.CheckDepartmentNameExists(request.CompanyId, normalizedName);
-                if (exists)
-                {
-                    return HttpStatusCodeResponse.GenerateResponse(
-                        result: false,
-                        statusCode: HttpStatusCode.Conflict,
-                        ResponseMessages.CheckDuplicateDepartment,
-                        data: string.Empty
-                    );
-                }
-
-                long departmentId = await _departmentRepository.CreateDepartment(request);
-                if (departmentId <= 0)
-                {
-                    return HttpStatusCodeResponse.InternalServerErrorResponse(
-                        ResponseMessages.ErrorCreatingDepartment
-                    );
-                }
-
-                return HttpStatusCodeResponse.SuccessResponse(
-                    data: departmentId,
-                    message: ResponseMessages.DepartmentCreateSuccessfully
-                );
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.CheckDuplicateDepartment);
             }
-            catch (Exception)
+
+            long departmentId = await _departmentRepository.CreateDepartment(request);
+            if (departmentId <= 0)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    ResponseMessages.ErrorCreatingDepartment
-                );
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnableToCreateDepartment);
             }
+
+            return HttpStatusCodeResponse.SuccessResponse(departmentId, string.Format(ResponseMessages.Success, ResponseMessages.Department, ActionType.Created));
         }
 
         public async Task<JsonResult> EditDepartment(long departmentId, DepartmentRequestDTO request)
         {
-            try
+            List<DepartmentResponseDTO>? departments = await _departmentRepository.GetDepartmentsByCompanyId(request.CompanyId);
+
+            DepartmentResponseDTO? existingDepartment = departments.FirstOrDefault(d => d.DepartmentId == departmentId);
+            if (existingDepartment != null)
             {
-                string normalizedName = request.DepartmentName?.Trim().ToLower();
-                if (string.IsNullOrWhiteSpace(normalizedName))
-                {
-                    return HttpStatusCodeResponse.BadRequestResponse();
-                }
+                bool exists = await _departmentRepository.CheckDepartmentNameExists(request.CompanyId, request.DepartmentName);
 
-                // Fetch the current department to exclude it from the duplicate check
-                var departments = await _departmentRepository.GetDepartmentsByCompanyId(request.CompanyId);
-                var existingDepartment = departments.FirstOrDefault(d => d.DepartmentId == departmentId);
-                if (existingDepartment != null)
+                if (exists)
                 {
-                    bool exists = await _departmentRepository.CheckDepartmentNameExists(request.CompanyId, normalizedName);
-                    if (exists && existingDepartment.DepartmentName?.Trim().ToLower() != normalizedName)
-                    {
-                        return HttpStatusCodeResponse.GenerateResponse(
-                            result: false,
-                            statusCode: HttpStatusCode.Conflict,
-                            ResponseMessages.CheckDuplicateDepartment,
-                            data: string.Empty
-                        );
-                    }
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.CheckDuplicateDepartment);
                 }
-
-                bool success = await _departmentRepository.EditDepartment(departmentId, request);
-                if (!success)
-                {
-                    return HttpStatusCodeResponse.NotFoundResponse(
-                        ResponseMessages.ErrorUpdatingDepartment
-                    );
-                }
-
-                return HttpStatusCodeResponse.SuccessResponse(
-                    data: departmentId,
-                    ResponseMessages.DepartmentUpdateSuccessfully
-                );
             }
-            catch (Exception)
+
+            bool success = await _departmentRepository.EditDepartment(departmentId, request);
+            if (!success)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    ResponseMessages.ErrorUpdatingDepartment
-                );
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.ErrorUpdatingDepartment);
             }
+
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Department, ActionType.Updated));
         }
 
-        public async Task<JsonResult> DeleteDepartment(long departmentId)
+        public async Task<JsonResult> DeleteDepartment(long departmentId, long? employeeId)
         {
-            try
-            {
-                bool success = await _departmentRepository.DeleteDepartment(departmentId);
-                if (!success)
-                {
-                    return HttpStatusCodeResponse.NotFoundResponse(
-                        ResponseMessages.ErrorDeletingDepartment
-                    );
-                }
 
-                return HttpStatusCodeResponse.SuccessResponse(
-                    data: string.Empty,
-                    ResponseMessages.DepartmentDeleteSuccessfully
-                );
-            }
-            catch (Exception)
+            var (isSuccess, message) = await _departmentRepository.DeleteDepartment(departmentId, employeeId);
+            if (!isSuccess)
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(
-                    ResponseMessages.ErrorDeletingDepartment
-                );
+                return HttpStatusCodeResponse.InternalServerErrorResponse(message);
             }
+
+            return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.Department, ActionType.Deleted));
         }
     }
 }

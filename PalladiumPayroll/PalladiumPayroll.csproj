@@ -5,10 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="EmailTemplate\WelcomeEmail.html" />
+    <None Remove="EmailTemplate\**\*.*" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="EmailTemplate\WelcomeEmail.html">
+    <Content Include="EmailTemplate\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

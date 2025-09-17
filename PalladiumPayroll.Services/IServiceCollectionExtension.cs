@@ -24,6 +24,7 @@ using PalladiumPayroll.Services.Utilities.DataImport;
 using PalladiumPayroll.Services.CompanySettings.LeaveSettings;
 using PalladiumPayroll.Services.PayrollProcess.ManageLeave;
 using PalladiumPayroll.Services.PayrollProcess.TimeSheet;
+using PalladiumPayroll.Services.PayrollProcess.PieceWork;
 using PalladiumPayroll.Services.PayrollProcess.CommissionReport;
 
 namespace PalladiumPayroll.Services
@@ -64,6 +65,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<ILeaveSettingsService, LeaveSettingsService>();
             services.AddScoped<IManageLeaveService, ManageLeaveService>();
             services.AddScoped<ITimeSheetService, TimeSheetService>();
+            services.AddScoped<IPieceWorkService, PieceWorkService>();
             services.AddScoped<ICommissionReportService, CommissionReportService>();
             services.AddHttpContextAccessor();
             return services;
