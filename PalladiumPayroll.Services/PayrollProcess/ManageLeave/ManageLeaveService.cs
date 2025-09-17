@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using PalladiumPayroll.Helper;
 using PalladiumPayroll.Helper.ImportExport;
 using System.Data;
+using System.Transactions;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 
@@ -11,9 +13,12 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
     public class ManageLeaveService : IManageLeaveService
     {
         private readonly IManageLeaveRepository _manageLeaveRepository;
-        public ManageLeaveService(IManageLeaveRepository manageLeaveRepository)
+        private readonly DirectoryPathSetting _directoryPathSetting;
+
+        public ManageLeaveService(IManageLeaveRepository manageLeaveRepository, AppSettingPathHelper directoryPathSetting)
         {
             _manageLeaveRepository = manageLeaveRepository;
+            _directoryPathSetting = directoryPathSetting.GetAppSettingDirectoryPath();
         }
 
         public async Task<JsonResult> GetEmployeeLeaveDetail(EmployeeLeaveFilterViewModel reqModel)
@@ -43,6 +48,11 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
         }
 
 
+        public async Task<JsonResult> GetEmployeeBaseOnPeriodWithDueDays(int periodId)
+        {
+            return await _manageLeaveRepository.GetEmployeeBaseOnPeriodWithDueDays(periodId);
+        }
+
         public async Task<JsonResult> UpdateBatchDetail(BatchInfoRequest reqModel)
         {
             var batchId = await _manageLeaveRepository.UpdateBatchDetail(reqModel);
@@ -62,6 +72,10 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
                 new DataColumn("DueDays", typeof(decimal)), new DataColumn("Comment", typeof(string))
             };
             var excelData = ExcelHelper.ImportFromExcel(reqModel.File, true, headerColumn);
+            excelData.Rows.RemoveAt(2);
+            excelData.Rows.RemoveAt(1);
+
+
             var res = await _manageLeaveRepository.BatchLeaveImport(reqModel, excelData);
             if (res)
             {
@@ -72,10 +86,10 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
 
         public async Task<JsonResult> UpsertBatchSingleLeave(BatchLeaveDetail reqModel)
         {
-            var res = await _manageLeaveRepository.UpsertBatchSingleLeave(reqModel);
-            if (res)
+            var leaveDetailId = await _manageLeaveRepository.UpsertBatchSingleLeave(reqModel);
+            if (leaveDetailId > 0)
             {
-                return HttpStatusCodeResponse.SuccessResponse(reqModel.BatchId, string.Format(ResponseMessages.Success, "Batch Leave", ActionType.Saved));
+                return HttpStatusCodeResponse.SuccessResponse<int?[]>([reqModel.BatchId, leaveDetailId], string.Format(ResponseMessages.Success, "Batch Leave", ActionType.Saved));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch Leave", ActionType.Saved));
         }
@@ -85,6 +99,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
             var data = await _manageLeaveRepository.GetExistingBatchList(companyId);
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Batch list", ActionType.Retrieved));
         }
+
 
         public async Task<JsonResult> GetImportBatchLeave(BatchInfoRequest reqModal)
         {
@@ -108,5 +123,103 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Batch leave", ActionType.Retrieved));
         }
 
+        public async Task<JsonResult> DeleteExistingBatch(int batchId)
+        {
+            var res = await _manageLeaveRepository.DeleteExistingBatch(batchId);
+            if (res)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Batch Leave", ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch Leave", ActionType.Deleting));
+        }
+
+        public async Task<JsonResult> DeleteLeaveBatch(int leaveDetailId, bool isActualLeave)
+        {
+            var res = await _manageLeaveRepository.DeleteLeaveBatch(leaveDetailId, isActualLeave);
+            if (res)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Leave", ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Leave", ActionType.Deleting));
+        }
+
+
+        public async Task<JsonResult> GetLeaveAttachment(int leaveDetailId, bool isActualLeave)
+        {
+            var data = await _manageLeaveRepository.GetLeaveAttachment(leaveDetailId, isActualLeave);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "leave attchament", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> AddLeaveAttachment(AddBatchLeaveAttachment reqModel)
+        {
+            var basePath = _directoryPathSetting.LeaveAttachment;
+            var leaveFolder = $"Leave_{reqModel.LeaveDetailId}";
+            var finalPath = FileHandler.CombinePath(basePath, leaveFolder);
+            FileHandler.CreateDirectory(finalPath);
+            var filePath = Path.Combine(finalPath, reqModel.File.FileName);
+            var isFileUploded =  await FileHandler.UploadFile(filePath, reqModel.File);
+            if (isFileUploded)
+            {
+                var relativePath = Path.Combine(leaveFolder, reqModel.File.FileName).Replace(Path.DirectorySeparatorChar.ToString(), "/");
+
+                var res = await _manageLeaveRepository.AddLeaveAttachment(new BatchLeaveDocument()
+                {
+                    LeaveDetailId = reqModel.LeaveDetailId,
+                    EmployeeId = reqModel.EmployeeId,
+                    BatchId = reqModel.BatchId,
+                    IsActualLeave = reqModel.IsActualLeave,
+                    DocFileUrl = relativePath,
+                    DocFileName = reqModel.File.FileName,
+                });
+
+                if (res)
+                {
+                    return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Leave attachment", ActionType.uploaded));
+                }
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Leave attachment", ActionType.uploaded));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Leave attachment", ActionType.uploaded));
+        }
+
+        public async Task<JsonResult> DeleteLeaveAttachment(int documentLeaveId, string path, bool isActualLeave)
+        {
+            var res = await _manageLeaveRepository.DeleteLeaveAttachment(documentLeaveId, isActualLeave);
+            if (res)
+            {
+                var basePath = _directoryPathSetting.LeaveAttachment;
+                FileHandler.DeleteFile(FileHandler.CombinePath(basePath, path));
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Leave attachment", ActionType.Deleted));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Leave attachment", ActionType.Deleting));
+        }
+
+        public async Task<byte[]> DownloadLeaveAttachment(string documentUrl)
+        {
+            var basePath = _directoryPathSetting.LeaveAttachment;
+            return await FileHandler.ReadFileBytes(FileHandler.CombinePath(basePath, documentUrl));
+        }
+
+
+        public async Task<JsonResult> GetUnapprovedLeave(int cycleId)
+        {
+            var data = await _manageLeaveRepository.GetUnapprovedLeave(cycleId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Unapproved leave", ActionType.Retrieved));
+        }
+
+        public async Task<JsonResult> ApproveLeaves(List<int> leaveDetailId)
+        {
+            var res = await _manageLeaveRepository.ApproveLeaves(leaveDetailId);
+            if (res)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Leave", "Approved"));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Leave", "Approving"));
+        }
+
+        public async Task<JsonResult> GetLeaveHistory(int leaveDetailId)
+        {
+            var data = await _manageLeaveRepository.GetLeaveHistory(leaveDetailId);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Leave history", ActionType.Retrieved));
+        }
     }
 }

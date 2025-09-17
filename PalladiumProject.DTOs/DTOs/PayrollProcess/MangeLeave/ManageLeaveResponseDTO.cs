@@ -26,20 +26,60 @@
     public class BatchLeaveImportData
     {
         public int BatchId { get; set; }
-        public int BatchLeaveId { get; set; }
+        public int LeaveDetailId { get; set; }
         public int EmployeeId { get; set; }
         public int LeaveTypeId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public decimal DueDays { get; set; }
-        public string Comment { get; set; }
+        public decimal? TotalDays { get; set; }
+        public string? Comment { get; set; }
     }
 
     public class BatchLeaveImportActualData : BatchLeaveImportData
     {
         public string BatchNumber { get; set; }
-        public string Description { get; set; }
+        public string BatchDescription { get; set; }
         public int PayrollCycle { get; set; }
         public int ProcessPeriod { get; set; }
+        public decimal? DaysPaid { get; set; }
+        public decimal? DaysUnpaid { get; set; }
+    }
+
+
+    public class BatchLeaveAttachment
+    {
+        public int DocumentLeaveId { get; set; }
+        public string DocumentName { get; set; }
+        public string DocumentUrl { get; set; }
+    }
+
+    public class UnApprovedLeaves
+    {
+        public int EmployeeLeaveDetailId { get; set; }
+        public string EmployeeCode { get; set; }
+        public string EmployeeName { get; set; }
+        public string ApproverName { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string RequestedDate { get; set; }
+        public decimal Duration { get; set; }
+    }
+
+    public class LeaveHistory
+    {
+        public int LeaveId { get; set; }
+        public int LeaveTypeId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public DateTime RequestedDate { get; set; }
+        public decimal Duration { get; set; }
+    }
+
+    public class EmployeeDueDays
+    {
+        public int EmployeeId { get; set; }
+        public int LeaveTypeId { get; set; }
+        public int DaysDue { get; set; }
     }
 }

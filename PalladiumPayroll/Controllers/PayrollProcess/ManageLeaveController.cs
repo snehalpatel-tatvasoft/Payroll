@@ -55,6 +55,18 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetEmployeeBaseOnPeriodWithDueDays(int periodId)
+        {
+            try
+            {
+                return await _manageLeaveService.GetEmployeeBaseOnPeriodWithDueDays(periodId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
 
         [HttpPost("[action]")]
         public async Task<ActionResult> UpdateBatchDetail(BatchInfoRequest reqModel)
@@ -142,6 +154,123 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
             try
             {
                 return await _manageLeaveService.GetImportActualBatchLeave(batchId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeleteExistingBatch(int batchId)
+        {
+            try
+            {
+                return await _manageLeaveService.DeleteExistingBatch(batchId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeleteLeaveBatch([FromQuery] int leaveDetailId, bool isActualLeave)
+        {
+            try
+            {
+                return await _manageLeaveService.DeleteLeaveBatch(leaveDetailId, isActualLeave);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetLeaveAttachment(int leaveDetailId, bool isActualLeave)
+        {
+            try
+            {
+                return await _manageLeaveService.GetLeaveAttachment(leaveDetailId, isActualLeave);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> AddLeaveAttachment([FromForm] AddBatchLeaveAttachment reqModel)
+        {
+            try
+            {
+                return await _manageLeaveService.AddLeaveAttachment(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeleteLeaveAttachment([FromQuery] int documentLeaveId, string path, bool isActualLeave)
+        {
+            try
+            {
+                return await _manageLeaveService.DeleteLeaveAttachment(documentLeaveId, path, isActualLeave);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> DownloadLeaveAttachment(string fileUrl)
+        {
+            try
+            {
+                return File(await _manageLeaveService.DownloadLeaveAttachment(fileUrl), ContentTypes.OctetStream, fileUrl.Split("\\").LastOrDefault());
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetUnapprovedLeave(int cycleId)
+        {
+            try
+            {
+                return await _manageLeaveService.GetUnapprovedLeave(cycleId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> ApproveLeaves([FromBody] List<int> leaveDetailId)
+        {
+            try
+            {
+                return await _manageLeaveService.ApproveLeaves(leaveDetailId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetLeaveHistory(int leaveDetailId)
+        {
+            try
+            {
+                return await _manageLeaveService.GetLeaveHistory(leaveDetailId);
             }
             catch (Exception ex)
             {

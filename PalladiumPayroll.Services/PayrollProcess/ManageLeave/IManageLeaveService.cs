@@ -9,6 +9,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
         Task<JsonResult> GetEmployeeLeave(int leaveDetailId);
         Task<JsonResult> UpsertEmployeeLeave(AddEmployeeLeaves reqModel);
 
+        Task<JsonResult> GetEmployeeBaseOnPeriodWithDueDays(int periodId);
         Task<JsonResult> UpdateBatchDetail(BatchInfoRequest reqModel);
         Task<JsonResult> BatchLeaveImport(BatchLeaveImport reqModel);
         Task<JsonResult> UpsertBatchSingleLeave(BatchLeaveDetail reqModel);
@@ -16,5 +17,17 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
         Task<JsonResult> GetImportBatchLeave(BatchInfoRequest reqModal);
         Task<JsonResult> SaveImportBatchLeave(int batchId);
         Task<JsonResult> GetImportActualBatchLeave(int batchId);
+        Task<JsonResult> DeleteExistingBatch(int batchId);
+        Task<JsonResult> DeleteLeaveBatch(int leaveDetailId, bool isActualLeave);
+
+        Task<JsonResult> GetLeaveAttachment(int leaveDetailId, bool isActualLeave);
+        Task<JsonResult> AddLeaveAttachment(AddBatchLeaveAttachment reqModel);
+        Task<JsonResult> DeleteLeaveAttachment(int documentLeaveId, string path, bool isActualLeave);
+        Task<byte[]> DownloadLeaveAttachment(string documentUrl);
+
+        Task<JsonResult> GetUnapprovedLeave(int cycleId);
+        Task<JsonResult> ApproveLeaves(List<int> leaveDetailId);
+
+        Task<JsonResult> GetLeaveHistory(int leaveDetailId);
     }
 }
