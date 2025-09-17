@@ -4,6 +4,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.SinglePayslip;
 
 public interface ISinglePayslipRepository
 {
+    Task<List<EmployeeForProcessingResponseDTO>> GetEmployeesForProcessing(GetEmployeesForProcessingRequestDTO request);
     Task<List<PayrollCycleDropdownDTO>> GetPayrollCycleDropdown(long companyId);
 
     Task<string?> GetNextUnprocessedPeriod(long companyId, long companyPayrollId);

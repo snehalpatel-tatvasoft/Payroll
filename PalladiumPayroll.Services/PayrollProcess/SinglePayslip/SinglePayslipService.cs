@@ -10,10 +10,19 @@ namespace PalladiumPayroll.Services.PayrollProcess.SinglePayslip;
 public class SinglePayslipService : ISinglePayslipService
 {
     private readonly ISinglePayslipRepository _singlePayslipRepository;
+
     public SinglePayslipService(ISinglePayslipRepository singlePayslipRepository)
     {
         _singlePayslipRepository = singlePayslipRepository;
     }
+
+    public async Task<JsonResult> GetEmployeesForProcessing(GetEmployeesForProcessingRequestDTO request)
+    {
+        var employees = await _singlePayslipRepository.GetEmployeesForProcessing(request);
+        return HttpStatusCodeResponse.SuccessResponse(employees, 
+            string.Format(ResponseMessages.Success, "Employees for processing", ActionType.Retrieved));
+    }
+
 
      public async Task<JsonResult> GetPayrollCycleDropdown(long companyId)
     {
