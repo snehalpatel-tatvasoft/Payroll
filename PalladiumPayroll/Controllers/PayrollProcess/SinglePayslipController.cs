@@ -17,8 +17,8 @@ public class SinglePayslipController : ControllerBase
         _singlePayslipService = singlePayslipService;
     }
 
-    [HttpGet("[action]")]
-    public async Task<ActionResult> GetEmployeesForProcessing([FromQuery] GetEmployeesForProcessingRequestDTO request)
+    [HttpPost("[action]")]
+    public async Task<ActionResult> GetEmployeesForProcessing([FromBody] GetEmployeesForProcessingRequestDTO request)
     {
         try
         {
