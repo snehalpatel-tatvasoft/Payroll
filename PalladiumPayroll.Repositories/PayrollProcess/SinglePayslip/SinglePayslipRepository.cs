@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.SinglePayslip;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace PalladiumPayroll.Repositories.PayrollProcess.SinglePayslip;
 
 public class SinglePayslipRepository : ISinglePayslipRepository
@@ -30,5 +27,32 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         var result = await _dapper.ExecuteStoredProcedure<EmployeeForProcessingResponseDTO>(
             "usp_GetEmployeesForProcessing", parameters);
         return result.ToList();
+    }
+
+    public async Task<List<PayrollCycleDropdownDTO>> GetPayrollCycleDropdown(long companyId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", companyId);
+
+        List<PayrollCycleDropdownDTO>? result = await _dapper.ExecuteStoredProcedure<PayrollCycleDropdownDTO>(
+            "usp_GetSinglePayslipPayrollCycleDropdown",
+            parameters
+        );
+
+        return result ?? new List<PayrollCycleDropdownDTO>();
+    }
+
+    public async Task<string?> GetNextUnprocessedPeriod(long companyId, long companyPayrollId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@CompanyId", companyId);
+        parameters.Add("@CompanyPayrollId", companyPayrollId);
+
+        string? result = await _dapper.ExecuteStoredProcedureSingle<string>(
+            "usp_GetNextProcessingPeriod",
+            parameters
+        );
+
+        return result; 
     }
 }

@@ -4,7 +4,6 @@ using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.PayrollProcess.SinglePayslip;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
-
 namespace PalladiumPayroll.Controllers.PayrollProcess;
 
 [Route("api/[controller]")]
@@ -32,4 +31,45 @@ public class SinglePayslipController : ControllerBase
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Employees for processing"));
         }
     }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetPayrollCycleDropdown(long companyId)
+    {
+        try
+        {
+            if (companyId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+            }
+
+            return await _singlePayslipService.GetPayrollCycleDropdown(companyId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, ResponseMessages.PayrollCycle)
+            );
+        }
+    }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetNextUnprocessedPeriod(long companyId, long companyPayrollId)
+    {
+        try
+        {
+            if (companyId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
+            }
+
+            return await _singlePayslipService.GetNextUnprocessedPeriod(companyId,companyPayrollId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Processing Period")
+            );
+        }
+    }
+
 }

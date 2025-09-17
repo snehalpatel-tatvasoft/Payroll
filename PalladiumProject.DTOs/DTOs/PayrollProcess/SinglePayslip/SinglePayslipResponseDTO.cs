@@ -11,3 +11,10 @@ public class EmployeeForProcessingResponseDTO
     public string EmployeeName { get; set; }
     public string EmployeeSurname { get; set; }
 }
+
+public class PayrollCycleDropdownDTO
+{
+    public long CompanyPayrollId { get; set; }
+    public string PayrollCycleName { get; set; }=string.Empty;
+}
+
