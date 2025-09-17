@@ -369,6 +369,12 @@
 
             #endregion
 
+            #region Commission Report
+            public static readonly string CommissionReport = "Commission Report";
+            public static readonly string InvalidCompanyId = "Invalid request: CompanyId must be greater than 0.";
+
+            #endregion
+
         }
 
 
