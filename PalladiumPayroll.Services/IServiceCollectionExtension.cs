@@ -25,6 +25,7 @@ using PalladiumPayroll.Services.CompanySettings.LeaveSettings;
 using PalladiumPayroll.Services.PayrollProcess.ManageLeave;
 using PalladiumPayroll.Services.PayrollProcess.TimeSheet;
 using PalladiumPayroll.Services.PayrollProcess.PieceWork;
+using PalladiumPayroll.Services.CompanySettings.EmployeeProfile;
 using PalladiumPayroll.Services.PayrollProcess.SinglePayslip;
 
 namespace PalladiumPayroll.Services
@@ -66,6 +67,7 @@ namespace PalladiumPayroll.Services
             services.AddScoped<IManageLeaveService, ManageLeaveService>();
             services.AddScoped<ITimeSheetService, TimeSheetService>();
             services.AddScoped<IPieceWorkService, PieceWorkService>();
+            services.AddScoped<IEmployeeProfileService, EmployeeProfileService>();
             services.AddScoped<ISinglePayslipService, SinglePayslipService>();
             services.AddHttpContextAccessor();
             return services;

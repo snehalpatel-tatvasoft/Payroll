@@ -1,0 +1,26 @@
+using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.CompanySettings.EmployeeProfile;
+
+namespace PalladiumPayroll.Repositories.CompanySettings.EmployeeProfile;
+
+public interface IEmployeeProfileRepository
+{
+    Task<(string Message, int EmployeeProfileId)> CreateProfile(EmployeeProfileRequestDTO request);
+
+    Task<JsonResult> GetWorkInformatiionDropdownData(int companyId);
+    Task<bool> SaveWorkInformation(WorkInformationRequestDTO request);
+
+    Task<bool> UpdateLeaveSettingsInEmployeeProfile(LeaveSettingsUpdateRequestDTO request);
+    Task<List<LeaveRulesListDTO>> GetLeaveRulesForEmployeeProfile(int companyId, int caseId, long profileId);
+
+    Task<List<EmployeeProfileListDTO>> GetAllEmployeeProfiles(int companyId);
+    Task<(bool isSuccess, string message)> DeleteEmployeeProfile(long profileId);
+    Task<EmployeeProfileDetailsDTO?> GetEmployeeProfileDetailsById(long profileId);
+    Task<List<TransactionListModel>> GetModalTransactionsList(int transactionId, int companyId);
+    Task<List<TransactionListModel>> GetTransactionsList(int transactionId, int companyId, int profileId);
+    Task<bool> SaveTransactionAssignments(SaveTransactionAssignmentsRequestDTO request);
+    Task<bool> DeleteTransactionAssignments(List<long> ids);
+
+
+}
+
