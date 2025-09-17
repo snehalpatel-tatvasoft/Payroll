@@ -68,12 +68,14 @@
 
     public class LeaveHistory
     {
+        public string BatchName { get; set; }
         public int LeaveId { get; set; }
         public int LeaveTypeId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public DateTime RequestedDate { get; set; }
         public decimal Duration { get; set; }
+        public string? DocumnetUrl { get; set; }
+        public int LeaveStatusTypeId { get; set; }
     }
 
     public class EmployeeDueDays
