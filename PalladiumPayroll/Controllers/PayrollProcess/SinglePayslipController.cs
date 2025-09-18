@@ -62,7 +62,7 @@ public class SinglePayslipController : ControllerBase
                 return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
             }
 
-            return await _singlePayslipService.GetNextUnprocessedPeriods(companyId,companyPayrollId);
+            return await _singlePayslipService.GetNextUnprocessedPeriods(companyId, companyPayrollId);
         }
         catch (Exception)
         {
@@ -92,4 +92,18 @@ public class SinglePayslipController : ControllerBase
         }
     }
 
+    #region Transaction
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetModalTransactionsListForPayslip(int transactionId,int companyId)
+    {
+        try
+        {
+            return await _singlePayslipService.GetModalTransactionsListForPayslip(transactionId,companyId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Transaction list"));
+        }
+    }
+    #endregion
 }

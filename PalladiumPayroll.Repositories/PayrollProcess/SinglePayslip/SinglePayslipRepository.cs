@@ -70,5 +70,19 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return result;
     }
+    public async Task<List<TransactionListModelForPayslip>> GetModalTransactionsListForPayslip(int transactionId, int companyId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@TransactionId", transactionId);
+        parameters.Add("@CompanyId", companyId);
+
+
+        var transactions = await _dapper.ExecuteStoredProcedure<TransactionListModelForPayslip>(
+            "usp_GetTransactionsListForPayslip",
+            parameters
+        );
+
+        return transactions ?? new List<TransactionListModelForPayslip>();
+    }
 
 }

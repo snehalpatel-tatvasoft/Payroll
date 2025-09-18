@@ -31,10 +31,10 @@ public class SinglePayslipService : ISinglePayslipService
         return HttpStatusCodeResponse.SuccessResponse(payrollCycle, string.Format(ResponseMessages.Success, ResponseMessages.PayrollCycle, ActionType.Retrieved));
     }
 
-     public async Task<JsonResult> GetNextUnprocessedPeriods(long companyId, long companyPayrollId)
+    public async Task<JsonResult> GetNextUnprocessedPeriods(long companyId, long companyPayrollId)
     {
-        var processPeriod = await _singlePayslipRepository.GetNextUnprocessedPeriods(companyId,companyPayrollId);
-        
+        var processPeriod = await _singlePayslipRepository.GetNextUnprocessedPeriods(companyId, companyPayrollId);
+
         return HttpStatusCodeResponse.SuccessResponse(processPeriod, string.Format(ResponseMessages.Success, "Process Period", ActionType.Retrieved));
     }
     public async Task<JsonResult> GetEmployeeRateAndDaysWorked(long employeeId, long processingPeriodId)
@@ -45,6 +45,23 @@ public class SinglePayslipService : ISinglePayslipService
             result,
             string.Format(ResponseMessages.Success, "Rate And Days Worked", ActionType.Retrieved)
         );
+    }
+    public async Task<JsonResult> GetModalTransactionsListForPayslip(int transactionId, int companyId)
+    {
+        try
+        {
+            var transactions = await _singlePayslipRepository.GetModalTransactionsListForPayslip(transactionId, companyId);
+            if (transactions.Any())
+            {
+                return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, "Transaction list", ActionType.Retrieved));
+            }
+
+            return HttpStatusCodeResponse.SuccessResponse(new List<TransactionListModelForPayslip>(), "No transactions found for the provided ID.");
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, "Transaction list", ActionType.Retrieving, ex.Message));
+        }
     }
 
 }
