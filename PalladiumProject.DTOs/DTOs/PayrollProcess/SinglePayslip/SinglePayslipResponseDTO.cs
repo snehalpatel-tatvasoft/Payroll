@@ -24,3 +24,9 @@ public class EmployeeRateAndDaysWorkedDto
 }
 
 
+
+public class ProcessingPeriodDTO
+{
+    public long ProcessingCyclePeriodId { get; set; }
+    public string ProcessPeriod { get; set; } = string.Empty;
+}

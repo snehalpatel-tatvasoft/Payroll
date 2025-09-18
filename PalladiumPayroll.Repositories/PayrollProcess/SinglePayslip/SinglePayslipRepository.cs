@@ -22,7 +22,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@PayrollCycleId", request.PayrollCycleId);
         parameters.Add("@EmployeeStatusId", request.EmployeeStatusId);
         parameters.Add("@TransactionTypeId", request.TransactionTypeId);
-        parameters.Add("@ProcessPeriod", request.ProcessPeriod);
+        parameters.Add("@ProcessingCyclePeriodId", request.ProcessPeriodId);
 
         var result = await _dapper.ExecuteStoredProcedure<EmployeeForProcessingResponseDTO>(
             "usp_GetEmployeesForProcessing", parameters);
@@ -42,19 +42,21 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         return result ?? new List<PayrollCycleDropdownDTO>();
     }
 
-    public async Task<string?> GetNextUnprocessedPeriod(long companyId, long companyPayrollId)
+    public async Task<List<ProcessingPeriodDTO>> GetNextUnprocessedPeriods(long companyId, long companyPayrollId)
     {
         DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@CompanyId", companyId);
         parameters.Add("@CompanyPayrollId", companyPayrollId);
 
-        string? result = await _dapper.ExecuteStoredProcedureSingle<string>(
+        List<ProcessingPeriodDTO>? result = await _dapper.ExecuteStoredProcedure<ProcessingPeriodDTO>(
             "usp_GetNextProcessingPeriod",
             parameters
         );
 
+        return result ?? new List<ProcessingPeriodDTO>();
         return result;
     }
+
     public async Task<EmployeeRateAndDaysWorkedDto?> GetEmployeeRateAndDaysWorked(long employeeId, long processingPeriodId)
     {
         var parameters = new DynamicParameters();
