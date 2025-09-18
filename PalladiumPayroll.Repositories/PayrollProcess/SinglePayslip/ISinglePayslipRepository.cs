@@ -8,4 +8,6 @@ public interface ISinglePayslipRepository
     Task<List<PayrollCycleDropdownDTO>> GetPayrollCycleDropdown(long companyId);
 
     Task<string?> GetNextUnprocessedPeriod(long companyId, long companyPayrollId);
+    Task<EmployeeRateAndDaysWorkedDto?> GetEmployeeRateAndDaysWorked(long employeeId, long processingPeriodId);
+    
 }

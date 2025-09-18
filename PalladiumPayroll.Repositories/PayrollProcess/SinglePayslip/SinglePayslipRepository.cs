@@ -53,6 +53,20 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             parameters
         );
 
-        return result; 
+        return result;
     }
+    public async Task<EmployeeRateAndDaysWorkedDto?> GetEmployeeRateAndDaysWorked(long employeeId, long processingPeriodId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@EmployeeId", employeeId);
+        parameters.Add("@ProcessingPeriodId", processingPeriodId);
+
+        var result = await _dapper.ExecuteStoredProcedureSingle<EmployeeRateAndDaysWorkedDto>(
+            "usp_GetEmployeeRateAndDaysWorked",
+            parameters
+        );
+
+        return result;
+    }
+
 }

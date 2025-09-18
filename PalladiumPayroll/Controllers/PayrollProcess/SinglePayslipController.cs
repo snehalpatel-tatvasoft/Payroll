@@ -17,7 +17,7 @@ public class SinglePayslipController : ControllerBase
         _singlePayslipService = singlePayslipService;
     }
 
-    [HttpGet("[action]")]
+    [HttpPost("[action]")]
     public async Task<ActionResult> GetEmployeesForProcessing([FromQuery] GetEmployeesForProcessingRequestDTO request)
     {
         try
@@ -62,7 +62,27 @@ public class SinglePayslipController : ControllerBase
                 return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.CompanyIdNotFound);
             }
 
-            return await _singlePayslipService.GetNextUnprocessedPeriod(companyId,companyPayrollId);
+            return await _singlePayslipService.GetNextUnprocessedPeriod(companyId, companyPayrollId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Processing Period")
+            );
+        }
+    }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetEmployeeRateAndDaysWorked(long employeeId, long processingPeriodId)
+    {
+        try
+        {
+            if (employeeId <= 0)
+            {
+                return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.EmployeeNotFound);
+            }
+
+            return await _singlePayslipService.GetEmployeeRateAndDaysWorked(employeeId, processingPeriodId);
         }
         catch (Exception)
         {
