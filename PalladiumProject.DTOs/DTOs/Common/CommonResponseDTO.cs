@@ -20,5 +20,9 @@
         public int TotalCount { get; set; }
     }
 
-
+    public class SPResultMessage
+    {
+        public bool Result { get; set; }
+        public string Message { get; set; } = string.Empty;
+    }
 }

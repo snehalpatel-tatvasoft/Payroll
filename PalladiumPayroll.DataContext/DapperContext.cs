@@ -35,6 +35,14 @@ namespace PalladiumPayroll.DataContext
             }
         }
 
+        public async Task<T> ExecuteStoredProcedureFirst<T>(string storedProcedureName, DynamicParameters? parameters = null)
+        {
+            using (IDbConnection db = CreateConnection())
+            {
+                return await db.QueryFirstAsync<T>(storedProcedureName, parameters, commandTimeout: SQLCommandTimeOut, commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public async Task<T> ExecuteStoredProcedureMultipleAsync<T>(string storedProcedureName, DynamicParameters? parameters, Func<SqlMapper.GridReader, Task<T>> mapFunc)
         {
             using (IDbConnection db = CreateConnection())
