@@ -31,9 +31,9 @@ public class SinglePayslipService : ISinglePayslipService
         return HttpStatusCodeResponse.SuccessResponse(payrollCycle, string.Format(ResponseMessages.Success, ResponseMessages.PayrollCycle, ActionType.Retrieved));
     }
 
-     public async Task<JsonResult> GetNextUnprocessedPeriod(long companyId, long companyPayrollId)
+     public async Task<JsonResult> GetNextUnprocessedPeriods(long companyId, long companyPayrollId)
     {
-        string? processPeriod = await _singlePayslipRepository.GetNextUnprocessedPeriod(companyId,companyPayrollId);
+        var processPeriod = await _singlePayslipRepository.GetNextUnprocessedPeriods(companyId,companyPayrollId);
         
         return HttpStatusCodeResponse.SuccessResponse(processPeriod, string.Format(ResponseMessages.Success, "Process Period", ActionType.Retrieved));
     }

@@ -42,17 +42,18 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         return result ?? new List<PayrollCycleDropdownDTO>();
     }
 
-    public async Task<string?> GetNextUnprocessedPeriod(long companyId, long companyPayrollId)
+    public async Task<List<ProcessingPeriodDTO>> GetNextUnprocessedPeriods(long companyId, long companyPayrollId)
     {
         DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@CompanyId", companyId);
         parameters.Add("@CompanyPayrollId", companyPayrollId);
 
-        string? result = await _dapper.ExecuteStoredProcedureSingle<string>(
+        List<ProcessingPeriodDTO>? result = await _dapper.ExecuteStoredProcedure<ProcessingPeriodDTO>(
             "usp_GetNextProcessingPeriod",
             parameters
         );
 
-        return result; 
+        return result ?? new List<ProcessingPeriodDTO>();
     }
+
 }

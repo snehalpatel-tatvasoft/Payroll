@@ -18,3 +18,9 @@ public class PayrollCycleDropdownDTO
     public string PayrollCycleName { get; set; }=string.Empty;
 }
 
+
+public class ProcessingPeriodDTO
+{
+    public long ProcessingCyclePeriodId { get; set; }
+    public string ProcessPeriod { get; set; } = string.Empty;
+}
