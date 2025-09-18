@@ -35,8 +35,6 @@ public class SinglePayslipService : ISinglePayslipService
     {
         var processPeriod = await _singlePayslipRepository.GetNextUnprocessedPeriods(companyId,companyPayrollId);
         
-        string? processPeriod = await _singlePayslipRepository.GetNextUnprocessedPeriod(companyId, companyPayrollId);
-
         return HttpStatusCodeResponse.SuccessResponse(processPeriod, string.Format(ResponseMessages.Success, "Process Period", ActionType.Retrieved));
     }
     public async Task<JsonResult> GetEmployeeRateAndDaysWorked(long employeeId, long processingPeriodId)
