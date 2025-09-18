@@ -277,5 +277,31 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> ProcessBatchLeave([FromBody]int batchId)
+        {
+            try
+            {
+                return await _manageLeaveService.ProcessBatchLeave(batchId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UnProcessBatchLeave([FromBody] int batchId)
+        {
+            try
+            {
+                return await _manageLeaveService.UnProcessBatchLeave(batchId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
     }
 }

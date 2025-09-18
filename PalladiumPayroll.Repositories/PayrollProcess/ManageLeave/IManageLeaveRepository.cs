@@ -28,5 +28,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
         Task<List<UnApprovedLeaves>> GetUnapprovedLeave(int cycleId);
         Task<bool> ApproveLeaves(List<int> leaveDetailId);
         Task<List<LeaveHistory>> GetLeaveHistory(int leaveDetailId);
+        Task<SPResultMessage> ProcessBatchLeave(int batchId);
+        Task<bool> UnProcessBatchLeave(int batchId);
     }
 }

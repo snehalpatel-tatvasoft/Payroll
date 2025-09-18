@@ -246,5 +246,22 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
             parameters.Add("@LeaveId", leaveDetailId);
             return await _dapper.ExecuteStoredProcedure<LeaveHistory>("usp_GetLeaveHistoryDetail", parameters);
         }
+
+        #region Leave Process & Unprocess
+        public async Task<SPResultMessage> ProcessBatchLeave(int batchId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", batchId);
+            parameters.Add("@ActionBy", _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value);
+            return await _dapper.ExecuteStoredProcedureFirst<SPResultMessage>("usp_LeaveProcessing", parameters);
+        }
+
+        public async Task<bool> UnProcessBatchLeave(int batchId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", batchId);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UnProcessbatch", parameters);
+        }
+        #endregion
     }
 }

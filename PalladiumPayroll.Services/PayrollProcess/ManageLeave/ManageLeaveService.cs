@@ -221,5 +221,25 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
             var data = await _manageLeaveRepository.GetLeaveHistory(leaveDetailId);
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Leave history", ActionType.Retrieved));
         }
+
+        public async Task<JsonResult> ProcessBatchLeave(int batchId)
+        {
+            var resultData = await _manageLeaveRepository.ProcessBatchLeave(batchId);
+            if (resultData.Result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, resultData.Message);
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(resultData.Message);
+        }
+
+        public async Task<JsonResult> UnProcessBatchLeave(int batchId)
+        {
+            var res = await _manageLeaveRepository.UnProcessBatchLeave(batchId);
+            if (res)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Batch leave", "Unprocessed"));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch leave", "Unprocessing"));
+        }
     }
 }

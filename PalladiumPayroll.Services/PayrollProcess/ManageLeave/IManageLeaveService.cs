@@ -29,5 +29,8 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
         Task<JsonResult> ApproveLeaves(List<int> leaveDetailId);
 
         Task<JsonResult> GetLeaveHistory(int leaveDetailId);
+
+        Task<JsonResult> ProcessBatchLeave(int batchId);
+        Task<JsonResult> UnProcessBatchLeave(int batchId);
     }
 }
