@@ -22,7 +22,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@PayrollCycleId", request.PayrollCycleId);
         parameters.Add("@EmployeeStatusId", request.EmployeeStatusId);
         parameters.Add("@TransactionTypeId", request.TransactionTypeId);
-        parameters.Add("@ProcessPeriod", request.ProcessPeriod);
+        parameters.Add("@ProcessingCyclePeriodId", request.ProcessPeriodId);
 
         var result = await _dapper.ExecuteStoredProcedure<EmployeeForProcessingResponseDTO>(
             "usp_GetEmployeesForProcessing", parameters);
