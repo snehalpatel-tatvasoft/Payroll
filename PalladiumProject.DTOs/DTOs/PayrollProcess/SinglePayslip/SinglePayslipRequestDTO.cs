@@ -10,12 +10,4 @@ public class GetEmployeesForProcessingRequestDTO
     public int TransactionTypeId { get; set; }
     public long ProcessPeriodId { get; set; }
 }
-public class TransactionListModelForPayslip
-{
-    public int ProfileTransactionDetailsId { get; set; }
-    public int PayrollProcessId { get; set; }
-    public string Description { get; set; }
 
-    public string AllowanceType { get; set; }
-    public int AllowanceTypeId { get; set; }
-}

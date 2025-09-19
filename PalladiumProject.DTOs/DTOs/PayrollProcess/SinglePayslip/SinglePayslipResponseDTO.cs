@@ -30,3 +30,13 @@ public class ProcessingPeriodDTO
     public long ProcessingCyclePeriodId { get; set; }
     public string ProcessPeriod { get; set; } = string.Empty;
 }
+public class TransactionListModelForPayslip
+{
+    public int ProfileTransactionDetailsId { get; set; }
+    public int PayrollProcessId { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public string AllowanceType { get; set; }= string.Empty;
+    public int AllowanceTypeId { get; set; }
+    public string CalculationType { get; set; }= string.Empty;
+    public int FixedAmount { get; set; }
+}
