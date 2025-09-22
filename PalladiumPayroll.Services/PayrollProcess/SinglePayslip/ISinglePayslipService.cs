@@ -10,8 +10,9 @@ public interface ISinglePayslipService
 
     Task<JsonResult> GetNextUnprocessedPeriods(long companyId, long companyPayrollId);
     Task<JsonResult> GetEmployeeRateAndDaysWorked(long employeeId, long processingPeriodId);
-    
+
     Task<JsonResult> GetModalTransactionsListForPayslip(int transactionId, int companyId);
+    Task<JsonResult> ProcessSinglePayslip(ProcessSinglePayslipRequestDTO request);
 
     
 }

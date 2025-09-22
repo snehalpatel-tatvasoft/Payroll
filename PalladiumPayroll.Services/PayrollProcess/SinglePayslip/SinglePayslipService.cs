@@ -63,5 +63,15 @@ public class SinglePayslipService : ISinglePayslipService
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, "Transaction list", ActionType.Retrieving, ex.Message));
         }
     }
+    public async Task<JsonResult> ProcessSinglePayslip(ProcessSinglePayslipRequestDTO request)
+    {
+        long payslipId = await _singlePayslipRepository.ProcessSinglePayslip(request);
+
+        return HttpStatusCodeResponse.SuccessResponse(
+            new { EmployeePayslipPreviewId = payslipId },
+            string.Format(ResponseMessages.Success, "Payslip", ActionType.Created)
+        );
+    }
+
 
 }

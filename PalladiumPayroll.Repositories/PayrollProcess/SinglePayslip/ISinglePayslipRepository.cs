@@ -10,5 +10,5 @@ public interface ISinglePayslipRepository
     Task<List<ProcessingPeriodDTO>> GetNextUnprocessedPeriods(long companyId, long companyPayrollId);
     Task<EmployeeRateAndDaysWorkedDto?> GetEmployeeRateAndDaysWorked(long employeeId, long processingPeriodId);
     Task<List<TransactionListModelForPayslip>> GetModalTransactionsListForPayslip(int transactionId, int companyId);
-
+    Task<long> ProcessSinglePayslip(ProcessSinglePayslipRequestDTO request);
 }

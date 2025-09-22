@@ -84,5 +84,22 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return transactions ?? new List<TransactionListModelForPayslip>();
     }
+    public async Task<long> ProcessSinglePayslip(ProcessSinglePayslipRequestDTO request)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@EmployeeId", request.EmployeeId);
+        parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
+        parameters.Add("@ProcessingCyclePeriodId", request.ProcessingCyclePeriodId);
+        parameters.Add("@PayrollProcessId", request.PayrollProcessId);
+        parameters.Add("@Amount", request.Amount);
+        parameters.Add("@IsRecurring", request.IsRecurring);
+        parameters.Add("@Hours", request.Hours);
+        parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+
+        var result = await _dapper.ExecuteStoredProcedureSingle<long>(
+            "usp_ProcessSinglePayslip", parameters);
+
+        return result;
+    }
 
 }

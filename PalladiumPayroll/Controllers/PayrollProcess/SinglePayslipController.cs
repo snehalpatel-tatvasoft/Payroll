@@ -94,11 +94,11 @@ public class SinglePayslipController : ControllerBase
 
     #region Transaction
     [HttpGet("[action]")]
-    public async Task<ActionResult> GetModalTransactionsListForPayslip(int transactionId,int companyId)
+    public async Task<ActionResult> GetModalTransactionsListForPayslip(int transactionId, int companyId)
     {
         try
         {
-            return await _singlePayslipService.GetModalTransactionsListForPayslip(transactionId,companyId);
+            return await _singlePayslipService.GetModalTransactionsListForPayslip(transactionId, companyId);
         }
         catch (Exception)
         {
@@ -106,4 +106,18 @@ public class SinglePayslipController : ControllerBase
         }
     }
     #endregion
+    [HttpPost("[action]")]
+    public async Task<ActionResult> ProcessSinglePayslip([FromBody] ProcessSinglePayslipRequestDTO request)
+    {
+        try
+        {
+            return await _singlePayslipService.ProcessSinglePayslip(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, "Payslip"));
+        }
+    }
+
 }
