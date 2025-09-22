@@ -46,11 +46,11 @@ namespace PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company
 
     public class MIBFACouncil
     {
-        public List<Int32> SickFundReport { get; set; } = new List<Int32>();
-        public List<Int32> PensionFundReport { get; set; } = new List<Int32>();
-        public List<Int32> ProvidentFundReport { get; set; } = new List<Int32>();
-        public List<Int32> CouncilLevyReturnReport { get; set; } = new List<Int32>();
-        public List<Int32> MIBFAReport { get; set; } = new List<Int32>();
+        public List<Int32>? SickFundReport { get; set; } = new List<Int32>();
+        public List<Int32>? PensionFundReport { get; set; } = new List<Int32>();
+        public List<Int32>? ProvidentFundReport { get; set; } = new List<Int32>();
+        public List<Int32>? CouncilLevyReturnReport { get; set; } = new List<Int32>();
+        public List<Int32>? MIBFAReport { get; set; } = new List<Int32>();
         public string FirmNumber { get; set; }
         public string TradeUnionCode { get; set; }
     }
