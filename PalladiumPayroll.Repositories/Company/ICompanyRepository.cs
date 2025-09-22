@@ -45,5 +45,8 @@ namespace PalladiumPayroll.Repositories.Company
         Task<bool> CheckGLDBConnection(DBConnectionModel dbConnectionModel);
         Task<bool> UpsertEmploymentEquityInfo(EmploymentEquityInformation employmentEquityInformation);
         Task<List<EmploymentEquityInformation>> GetEmploymentEquityInfo(int companyId);
+        Task<IndustryCouncil> GetIndustrialCouncil(int companyId);
+        Task<bool> SaveIndustrialCouncil(IndustryCouncil industryCouncil);
+        Task<List<TransactionDropdown>> GetMIBFADropdown(int companyId);
     }
 }
