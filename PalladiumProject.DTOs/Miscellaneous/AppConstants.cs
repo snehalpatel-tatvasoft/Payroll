@@ -63,6 +63,7 @@
             public static readonly string CompanyRepresentativeInfo = "Company Representative";
             public static readonly string CompanyBankDetails = "Company Bank Details";
             public static readonly string EmploymentEquityInformation = "Employment Equity Information";
+            public static readonly string IndustrialCouncil = "Industrial Council";
             public const string CompanyAlreadyExists = "Company Already Exists";
             public const string CompanyRegisteredSuccessfully = "Company Registered Successfully";
             public const string ErrorCreatingCompany = "Error While Creating Company!!";

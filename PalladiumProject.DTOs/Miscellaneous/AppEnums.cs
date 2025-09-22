@@ -33,5 +33,16 @@
             Nine = 9,
             Ten = 10
         }
+
+        public enum IndustrialCouncilOptions
+        {
+            Furniture = 1,
+            MIBFA = 2,
+            MICFA = 3,
+            Clothing = 4,
+            Building = 5,
+            Transport = 6,
+            Other = 7
+        }
     }
 }
