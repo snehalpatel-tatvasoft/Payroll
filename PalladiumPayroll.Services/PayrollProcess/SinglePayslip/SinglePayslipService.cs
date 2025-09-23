@@ -69,7 +69,7 @@ public class SinglePayslipService : ISinglePayslipService
 
         return HttpStatusCodeResponse.SuccessResponse(
             new { EmployeePayslipPreviewId = payslipId },
-            string.Format(ResponseMessages.Success, "Payslip", ActionType.Created)
+            string.Format(ResponseMessages.Success, "Payslip Data", ActionType.Saved)
         );
     }
 

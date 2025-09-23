@@ -1,3 +1,4 @@
+using System.Data;
 using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -54,7 +55,6 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         );
 
         return result ?? new List<ProcessingPeriodDTO>();
-        return result;
     }
 
     public async Task<EmployeeRateAndDaysWorkedDto?> GetEmployeeRateAndDaysWorked(long employeeId, long processingPeriodId)
@@ -90,16 +90,30 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@EmployeeId", request.EmployeeId);
         parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
         parameters.Add("@ProcessingCyclePeriodId", request.ProcessingCyclePeriodId);
-        parameters.Add("@PayrollProcessId", request.PayrollProcessId);
-        parameters.Add("@Amount", request.Amount);
-        parameters.Add("@IsRecurring", request.IsRecurring);
-        parameters.Add("@Hours", request.Hours);
         parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
+        // Create DataTable for TVP
+        var dt = new DataTable();
+        dt.Columns.Add("PayrollCycleId", typeof(long));
+        dt.Columns.Add("Description", typeof(string));
+        dt.Columns.Add("Amount", typeof(decimal));
+        dt.Columns.Add("IsRecurring", typeof(bool));
+        dt.Columns.Add("Hours", typeof(decimal));
+
+        foreach (var item in request.PayslipDetails)
+        {
+            dt.Rows.Add(item.PayrollProcessId, item.Description, item.Amount, item.IsRecurring, item.Hours);
+        }
+
+        // Add TVP parameter
+        parameters.Add("@PayslipDetails", dt.AsTableValuedParameter("dbo.PayslipDetailType"));
+
+        // Call the new SP
         var result = await _dapper.ExecuteStoredProcedureSingle<long>(
             "usp_ProcessSinglePayslip", parameters);
 
         return result;
     }
+
 
 }
