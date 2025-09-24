@@ -72,6 +72,31 @@ public class SinglePayslipService : ISinglePayslipService
             string.Format(ResponseMessages.Success, "Payslip Data", ActionType.Saved)
         );
     }
+    public async Task<JsonResult> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
+    {
+        try
+        {
+            var result = await _singlePayslipRepository.GetSinglePayslipDetails(request);
 
+            if (result == null || (result.Description == null && result.Amount == null && result.Hours == null))
+            {
+                return HttpStatusCodeResponse.SuccessResponse(
+                    new SinglePayslipDetailsResponseDTO(),
+                    "No payslip details found for the provided parameters."
+                );
+            }
+
+            return HttpStatusCodeResponse.SuccessResponse(
+                result,
+                string.Format(ResponseMessages.Success, "Payslip Details", ActionType.Retrieved)
+            );
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Payslip Details", ex.Message)
+            );
+        }
+    }
 
 }

@@ -35,8 +35,14 @@ public class TransactionListModelForPayslip
     public int ProfileTransactionDetailsId { get; set; }
     public int PayrollProcessId { get; set; }
     public string Description { get; set; } = string.Empty;
-    public string AllowanceType { get; set; }= string.Empty;
+    public string AllowanceType { get; set; } = string.Empty;
     public int AllowanceTypeId { get; set; }
-    public string CalculationType { get; set; }= string.Empty;
+    public string CalculationType { get; set; } = string.Empty;
     public int FixedAmount { get; set; }
+}
+public class SinglePayslipDetailsResponseDTO
+{
+    public string? Description { get; set; }
+    public decimal? Amount { get; set; }
+    public decimal? Hours { get; set; }
 }
