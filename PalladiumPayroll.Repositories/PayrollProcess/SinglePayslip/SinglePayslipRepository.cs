@@ -120,7 +120,6 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@EmployeeId", request.EmployeeId);
         parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
         parameters.Add("@PayrollProcessId", request.PayrollProcessId);
-        parameters.Add("@AllowanceTypeId", request.AllowanceTypeId);
         parameters.Add("@TransactionTypeId", request.TransactionTypeId);
         parameters.Add("@NoOfDaysWorked", request.NoOfDaysWorked);
         parameters.Add("@RatePerHour", request.RatePerHour);

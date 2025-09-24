@@ -33,7 +33,6 @@ public class GetSinglePayslipDetailsRequestDTO
     public long EmployeeId { get; set; }
     public long CompanyPayrollId { get; set; }
     public long PayrollProcessId { get; set; }
-    public int AllowanceTypeId { get; set; }
     public int TransactionTypeId { get; set; }
     public int NoOfDaysWorked { get; set; }
     public decimal RatePerHour { get; set; }

@@ -119,7 +119,7 @@ public class SinglePayslipController : ControllerBase
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, "Payslip"));
         }
     }
-    [HttpGet("[action]")]
+    [HttpPost("[action]")]
     public async Task<ActionResult> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
     {
         try
