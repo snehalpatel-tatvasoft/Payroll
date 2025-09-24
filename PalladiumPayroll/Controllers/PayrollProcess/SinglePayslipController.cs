@@ -119,5 +119,19 @@ public class SinglePayslipController : ControllerBase
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, "Payslip"));
         }
     }
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
+    {
+        try
+        {
+            return await _singlePayslipService.GetSinglePayslipDetails( request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Payslip Details")
+            );
+        }
+    }
 
 }
