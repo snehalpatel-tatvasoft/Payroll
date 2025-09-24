@@ -25,5 +25,5 @@ public class PayslipDetailDTO
     public string Description { get; set; } = string.Empty;
     public decimal Amount { get; set; }
     public bool IsRecurring { get; set; }
-    public decimal Hours { get; set; }
+    public decimal? Hours { get; set; }
 }
