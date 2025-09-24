@@ -1,3 +1,5 @@
+using System.Reflection.Metadata;
+
 namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.SinglePayslip;
 
 public class SinglePayslipResponseDTO
@@ -45,4 +47,5 @@ public class SinglePayslipDetailsResponseDTO
     public string? Description { get; set; }
     public decimal? Amount { get; set; }
     public decimal? Hours { get; set; }
+    public bool IsRecurring { get; set; }
 }
