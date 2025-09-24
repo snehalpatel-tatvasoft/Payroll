@@ -12,7 +12,9 @@ using PalladiumPayroll.Helper;
 using PalladiumPayroll.Helper.ImportExport;
 using PalladiumPayroll.Helper.JWTToken;
 using PalladiumPayroll.Repositories.Company;
+using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Net.Mail;
 using System.Security.Claims;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
@@ -374,5 +376,65 @@ namespace PalladiumPayroll.Services.Company
         {
             return await _companyRepository.GetEmploymentEquityInfo(companyId);
         }
+
+        public async Task<IndustryCouncil> GetIndustrialCouncil(int companyId)
+        {
+
+            IndustryCouncil industryCouncil = await _companyRepository.GetIndustrialCouncil(companyId);
+            industryCouncil.MIBFACouncil = new MIBFACouncil()
+            {
+                FirmNumber = industryCouncil.MIBFACouncilSetupDetail.FirmNumber,
+                TradeUnionCode = industryCouncil.MIBFACouncilSetupDetail.TradeUnionCode,
+                CouncilLevyReturnReport = GetIntegerList(industryCouncil.MIBFACouncilSetupDetail.CouncilLevyReturnTransactionsIds),
+                SickFundReport = GetIntegerList(industryCouncil.MIBFACouncilSetupDetail.SickFundTransactionsIds),
+                ProvidentFundReport = GetIntegerList(industryCouncil.MIBFACouncilSetupDetail.ProvidentFundTransactionsIds),
+                PensionFundReport = GetIntegerList(industryCouncil.MIBFACouncilSetupDetail.PensionFundTransactionsIds),
+                MIBFAReport = GetIntegerList(industryCouncil.MIBFACouncilSetupDetail.MIBFATransactionsIds),
+
+            };
+            return industryCouncil;
+
+        }
+
+        public async Task<JsonResult> SaveIndustrialCouncil(IndustryCouncil idustryCouncil)
+        {
+            bool isAdded = await _companyRepository.SaveIndustrialCouncil(idustryCouncil);
+            if (isAdded)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.IndustrialCouncil, ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.SomethingWrong);
+        }
+
+        public async Task<ActionResult> GetMIBFADropdown(int companyId)
+        {
+            List<TransactionDropdown> list = await _companyRepository.GetMIBFADropdown(companyId);
+            MIBFAOptions mibfaOptions = new MIBFAOptions();
+            mibfaOptions.MIBFAReportOptions = list.Select(mibfaMapper).ToList();
+            mibfaOptions.SickFundReportOptions = list.Select(mibfaMapper).ToList();
+            mibfaOptions.PensionFundReportOptions = list.Select(mibfaMapper).ToList();
+            mibfaOptions.ProvidentFundReportOptions = list.Select(mibfaMapper).ToList();
+            mibfaOptions.CouncilLevyReturnReportOptions = list.Select(mibfaMapper).ToList();
+            return HttpStatusCodeResponse.SuccessResponse(mibfaOptions, string.Format(ResponseMessages.Success, "MIBFA", ActionType.Retrieved));
+        }
+
+        private List<Int32> GetIntegerList(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+                return new List<Int32>();
+            List<Int32> list;
+            list = s.Split(',').Select(a => Int32.Parse(a)).ToList();
+            return list;
+        }
+
+        private static readonly Func<TransactionDropdown, MIBFASelectOptions> mibfaMapper = (input) =>
+        {
+            return new MIBFASelectOptions()
+            {
+                Id = input.PayrollProcessId,
+                Key = input.Description,
+                Value = input.Description
+            };
+        };
     }
 }

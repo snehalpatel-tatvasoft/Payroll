@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.Company;
+using System.Globalization;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 
 namespace PalladiumPayroll.Controllers.Company
@@ -442,5 +445,46 @@ namespace PalladiumPayroll.Controllers.Company
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetIndustrialCouncil(int companyId)
+        {
+            try
+            {
+                IndustryCouncil councilInfo = await _companyService.GetIndustrialCouncil(companyId);
+                return HttpStatusCodeResponse.SuccessResponse(councilInfo, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> SaveIndustrialCouncil(IndustryCouncil industryCouncil)
+        {
+            try
+            {
+                return await _companyService.SaveIndustrialCouncil(industryCouncil);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpGet("[Action]")]
+        public async Task<ActionResult> GetMIBFADropdown(int companyId)
+        {
+            try
+            {
+                return await _companyService.GetMIBFADropdown(companyId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
     }
 }

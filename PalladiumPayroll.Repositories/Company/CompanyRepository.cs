@@ -9,6 +9,7 @@ using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
 using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using System.Collections.Immutable;
 using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
@@ -594,5 +595,93 @@ namespace PalladiumPayroll.Repositories.Company
             bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_UpsertEmploymentEquityInformation", parameters);
             return isUpsert;
         }
+
+        public async Task<IndustryCouncil> GetIndustrialCouncil(int companyId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+
+            IndustryCouncil industryCouncil = await _dapper.ExecuteStoredProcedureMultipleAsync("GetIndustrialCouncil", parameters, async (multi) =>
+            {
+                var industryCouncil = ((await multi.ReadAsync<IndustryCouncil>()).FirstOrDefault()) ?? new IndustryCouncil();
+                var furnitureCouncil = (await multi.ReadAsync<FurnitureCouncil>()).FirstOrDefault() ?? new FurnitureCouncil();
+                var MIBFACouncilSetupDetail = (await multi.ReadAsync<MIBFACouncilSetupDetail>()).FirstOrDefault() ?? new MIBFACouncilSetupDetail();
+                industryCouncil.FurnitureCouncil = furnitureCouncil;
+                industryCouncil.MIBFACouncilSetupDetail = MIBFACouncilSetupDetail;
+                return industryCouncil;
+            });
+
+            return industryCouncil;
+        }
+
+        public async Task<bool> SaveIndustrialCouncil(IndustryCouncil industryCouncil)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+
+            parameters.Add("@CompanyId", industryCouncil.CompanyId);
+            parameters.Add("@ShiftOnTimeTakeonScreen", industryCouncil.ShiftOnTimeTakeonScreen);
+            parameters.Add("@LimitShiftsToDaysPerCycle", industryCouncil.LimitShiftsToDaysPerCycle);
+            parameters.Add("@PaySeifsa4thLeaveWeekSeparately", industryCouncil.PaySeifsa4thLeaveWeekSeparately);
+            parameters.Add("@TotalShiftPerYear", industryCouncil.TotalShiftPerYear);
+            parameters.Add("@BonusPercentage", industryCouncil.BonusPercentage);
+            parameters.Add("@CouncilOptionId", industryCouncil.CouncilOptionId);
+            bool isUpsert = await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SaveIndustrialCouncil", parameters);
+
+            switch (industryCouncil.CouncilOptionId)
+            {
+                case (int)IndustrialCouncilOptions.Furniture:
+                    await SaveFurnitureOptions(industryCouncil.CompanyId, industryCouncil.FurnitureCouncil);
+                    break;
+                case (int)IndustrialCouncilOptions.MIBFA:
+                    await SaveMIBFAOptions(industryCouncil.CompanyId, industryCouncil.MIBFACouncil);
+                    break;
+            }
+            return isUpsert;
+        }
+
+        private async Task SaveFurnitureOptions(int companyId, FurnitureCouncil furnitureCouncil)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            parameters.Add("@HolidayHours1", furnitureCouncil.HolidayHours1);
+            parameters.Add("@HolidayHours2", furnitureCouncil.HolidayHours2);
+            parameters.Add("@HolidayHours3", furnitureCouncil.HolidayHours3);
+            parameters.Add("@Entitlement1", furnitureCouncil.Entitlement1);
+            parameters.Add("@Entitlement2", furnitureCouncil.Entitlement2);
+            parameters.Add("@Entitlement3", furnitureCouncil.Entitlement3);
+            parameters.Add("@Entitlement3", furnitureCouncil.Entitlement3);
+            parameters.Add("@LoadSheddingHours", furnitureCouncil.LoadSheddingHours);
+            await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SaveFurnitureOptions", parameters);
+        }
+
+        private async Task SaveMIBFAOptions(int companyId, MIBFACouncil mibfaCouncil)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            parameters.Add("@SickFundTransactionsIds", GetStringFromIntList(mibfaCouncil.SickFundReport));
+            parameters.Add("@PensionFundTransactionsIds", GetStringFromIntList(mibfaCouncil.PensionFundReport));
+            parameters.Add("@ProvidentFundTransactionsIds", GetStringFromIntList(mibfaCouncil.ProvidentFundReport));
+            parameters.Add("@CouncilLevyReturnTransactionsIds", GetStringFromIntList(mibfaCouncil.CouncilLevyReturnReport));
+            parameters.Add("@MIBFATransactionsIds", GetStringFromIntList(mibfaCouncil.MIBFAReport));
+            parameters.Add("@FirmNumber", mibfaCouncil.FirmNumber);
+            parameters.Add("@TradeUnionCode", mibfaCouncil.TradeUnionCode);
+
+            await _dapper.ExecuteStoredProcedureSingle<bool>("usp_SaveMIBFAOptions", parameters);
+        }
+
+        public async Task<List<TransactionDropdown>> GetMIBFADropdown(int companyId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            List<TransactionDropdown>? result = await _dapper.ExecuteStoredProcedure<TransactionDropdown>("GetTransactionsListByCouncilOptionsId", parameters);
+            return result;
+        }
+
+        private string GetStringFromIntList(List<int> list)
+        {
+            string result = (list == null || list.Count == 0) ? string.Empty : string.Join(",", list);
+            return result;
+        }
+
     }
 }

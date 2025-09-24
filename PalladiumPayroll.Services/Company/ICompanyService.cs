@@ -3,6 +3,7 @@ using PalladiumPayroll.DTOs.DTOs;
 using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs;
 using PalladiumPayroll.DTOs.DTOs.RequestDTOs.Company;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs.Company;
 
 namespace PalladiumPayroll.Services.Company
 {
@@ -40,5 +41,8 @@ namespace PalladiumPayroll.Services.Company
         Task<byte[]> ExportGLTransactionList(long companyId);
         Task<JsonResult> ImportGLTransaction(ImportFileModel requestData);
         Task<bool> SaveGlAccountNumber(TransactionListForCompany model);
+        Task<IndustryCouncil> GetIndustrialCouncil(int companyId);
+        Task<JsonResult> SaveIndustrialCouncil(IndustryCouncil industryCouncil);
+        Task<ActionResult> GetMIBFADropdown(int companyId);
     }
 }
