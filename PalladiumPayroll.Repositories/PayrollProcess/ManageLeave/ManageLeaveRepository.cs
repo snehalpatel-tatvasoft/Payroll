@@ -11,7 +11,7 @@ using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 
-namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
+namespace PalladiumPayroll.Repositories.PayrollProcess.ManageLeave
 {
     public class ManageLeaveRepository : IManageLeaveRepository
     {

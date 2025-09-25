@@ -1,7 +1,7 @@
 ﻿using PalladiumPayroll.DTOs.DTOs.PayrollProcess.TimeSheet;
 using System.Data;
 
-namespace PalladiumPayroll.Services.PayrollProcess.TimeSheet
+namespace PalladiumPayroll.Repositories.PayrollProcess.TimeSheet
 {
     public interface ITimeSheetRepository
     {

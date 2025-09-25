@@ -3,7 +3,7 @@ using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave;
 using System.Data;
 
-namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
+namespace PalladiumPayroll.Repositories.PayrollProcess.ManageLeave
 {
     public interface IManageLeaveRepository
     {

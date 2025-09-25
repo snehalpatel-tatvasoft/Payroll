@@ -21,11 +21,12 @@ using PalladiumPayroll.Repositories.CheckInOut;
 using PalladiumPayroll.Repositories.HRFunctions.CoidAccident;
 using PalladiumPayroll.Repositories.Utilities.DataImport;
 using PalladiumPayroll.Repositories.CompanySettings.LeaveSettings;
-using PalladiumPayroll.Services.PayrollProcess.ManageLeave;
-using PalladiumPayroll.Services.PayrollProcess.TimeSheet;
+using PalladiumPayroll.Repositories.PayrollProcess.ManageLeave;
+using PalladiumPayroll.Repositories.PayrollProcess.TimeSheet;
 using PalladiumPayroll.Repositories.PayrollProcess.PieceWork;
 using PalladiumPayroll.Repositories.PayrollProcess.CommissionReport;
 using PalladiumPayroll.Repositories.CompanySettings.EmployeeProfile;
+using PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip;
 
 namespace PalladiumPayroll.Repositories
 {
@@ -67,6 +68,8 @@ namespace PalladiumPayroll.Repositories
             services.AddScoped<IPieceWorkRepository, PieceWorkRepository>();
             services.AddScoped<ICommissionReportRepository, CommissionReportRepository>();
             services.AddScoped<IEmployeeProfileRepository, EmployeeProfileRepository>();
+
+            services.AddScoped<IBatchPayslipRepository, BatchPayslipRepository>();
             return services;
         }
     }

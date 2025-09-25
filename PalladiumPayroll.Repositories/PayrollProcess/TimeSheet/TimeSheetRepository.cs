@@ -4,7 +4,7 @@ using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.TimeSheet;
 using System.Data;
 
-namespace PalladiumPayroll.Services.PayrollProcess.TimeSheet
+namespace PalladiumPayroll.Repositories.PayrollProcess.TimeSheet
 {
     public class TimeSheetRepository : ITimeSheetRepository
     {
