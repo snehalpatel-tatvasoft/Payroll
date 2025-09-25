@@ -114,7 +114,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return result;
     }
-    public async Task<SinglePayslipDetailsResponseDTO?> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
+    public async Task<List<SinglePayslipDetailsResponseDTO?>> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@EmployeeId", request.EmployeeId);
@@ -124,12 +124,12 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@NoOfDaysWorked", request.NoOfDaysWorked);
         parameters.Add("@RatePerHour", request.RatePerHour);
 
-        var result = await _dapper.ExecuteStoredProcedureSingle<SinglePayslipDetailsResponseDTO>(
+        var result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
             "usp_GetSinglePayslipDetails",
             parameters
         );
 
-        return result;
+        return result ?? new List<SinglePayslipDetailsResponseDTO>() ;
     }
 
 

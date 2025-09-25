@@ -78,7 +78,7 @@ public class SinglePayslipService : ISinglePayslipService
         {
             var result = await _singlePayslipRepository.GetSinglePayslipDetails(request);
 
-            if (result == null || (result.Description == null && result.Amount == null && result.Hours == null))
+            if (result == null)
             {
                 return HttpStatusCodeResponse.SuccessResponse(
                     new SinglePayslipDetailsResponseDTO(),
