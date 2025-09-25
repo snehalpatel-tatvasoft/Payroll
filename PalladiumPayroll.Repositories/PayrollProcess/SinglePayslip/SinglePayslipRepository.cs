@@ -119,7 +119,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         var parameters = new DynamicParameters();
         parameters.Add("@EmployeeId", request.EmployeeId);
         parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
-        parameters.Add("@PayrollProcessId", request.PayrollProcessId);
+        parameters.Add("@PayrollPeriodId", request.PayrollPeriodId);
         parameters.Add("@TransactionTypeId", request.TransactionTypeId);
         parameters.Add("@NoOfDaysWorked", request.NoOfDaysWorked);
         parameters.Add("@RatePerHour", request.RatePerHour);
