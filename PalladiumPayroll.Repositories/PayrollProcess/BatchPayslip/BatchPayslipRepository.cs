@@ -48,5 +48,20 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@Mode", mode);
             return await _dapper.ExecuteStoredProcedure<BatchPayslipLeave>("usp_BatchLoadEmployeesLeaveDetails", parameters);
         }
+
+        public async Task<BatchFirstTransaction> BatchPayslipTransactionDetailInsert(BatchPayslipInsert reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", reqModel.BatchId);
+            parameters.Add("@BatchName", reqModel.BatchName);
+            parameters.Add("@BatchDescription", reqModel.BatchDescription);
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@CycleId", reqModel.CycleId);
+            parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
+            parameters.Add("@IsRecurring", reqModel.IsRecurring);
+            parameters.Add("@IsSpecialRun", reqModel.IsSpecialRun);
+            parameters.Add("@IsLeavePay", reqModel.IsLeavePay);
+            return await _dapper.ExecuteStoredProcedureFirst<BatchFirstTransaction>("BatchPayslipTransactionDetailsInsert", parameters);
+        }
     }
 }

@@ -40,4 +40,10 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
         public int LeaveBatchId { get; set; }
         public int EmployeeLeaveId { get; set; }
     }
+
+    public class BatchFirstTransaction
+    {
+        public int BatchTransactionId { get; set; }
+        public int BatchId { get; set; }
+    }
 }

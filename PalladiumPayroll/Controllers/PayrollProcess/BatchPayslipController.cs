@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave;
 using PalladiumPayroll.DTOs.Miscellaneous;
 using PalladiumPayroll.Services.PayrollProcess.BatchPayslip;
@@ -18,12 +19,12 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
 
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> GetExistingBatch(int reqModel)
+        public async Task<ActionResult> GetExistingBatch(int companyId)
         {
             try
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
-                //return await _batchPayslipService.CheckCompanyExist(reqModel);
+                //return await _batchPayslipService.GetExistingBatch(companyId);
             }
             catch (Exception)
             {
@@ -45,16 +46,17 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> LoadPayslipTransaction(int batchId, bool mode)
+        public async Task<ActionResult> LoadPayslipTransaction(BatchPayslipInsert reqModel)
         {
             try
             {
-                return await _batchPayslipService.LoadPayslipTransaction(batchId, mode);
+                return await _batchPayslipService.LoadPayslipTransaction(reqModel);
             }
             catch (Exception)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
     }
 }
