@@ -42,6 +42,7 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave
         public string? BatchDescription { get; set; }
         public int PayrollCycle { get; set; }
         public int ProcessPeriod { get; set; }
+        public bool? IsRecurring { get; set; }
     }
 
     public class BatchLeaveDetail : BatchInfoRequest
