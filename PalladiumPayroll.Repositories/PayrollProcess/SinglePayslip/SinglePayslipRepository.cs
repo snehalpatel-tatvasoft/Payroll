@@ -141,8 +141,6 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             dt.Columns.Add("TransactionName", typeof(string));
             dt.Columns.Add("TransactionValue", typeof(decimal));
 
-            // Populate TVP from request.TransactionDetails
-            // 🔴 You need to add TransactionDetails list in your DTO (GetSinglePayslipDetailsRequestDTO)
             foreach (var item in request.TransactionDetails)
             {
                 dt.Rows.Add(item.TransactionID, item.TransactionName, item.TransactionValue);
@@ -152,6 +150,27 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
             var result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
                 "usp_DeductionGetSinglePayslipDetails",
+                parameters
+            );
+            return result ?? new List<SinglePayslipDetailsResponseDTO>();
+        }
+        else if (request.TransactionTypeId == 3)
+        {
+            // Case 2 → UIF calculation (requires TVP)
+            var dt = new DataTable();
+            dt.Columns.Add("TransactionID", typeof(long));
+            dt.Columns.Add("TransactionName", typeof(string));
+            dt.Columns.Add("TransactionValue", typeof(decimal));
+
+            foreach (var item in request.TransactionDetails)
+            {
+                dt.Rows.Add(item.TransactionID, item.TransactionName, item.TransactionValue);
+            }
+
+            parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails_UIF"));
+
+            var result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
+                "usp_CompanyContributionGetSinglePayslipDetails",
                 parameters
             );
             return result ?? new List<SinglePayslipDetailsResponseDTO>();
