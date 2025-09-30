@@ -26,19 +26,19 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
 
         public async Task<JsonResult> LoadPayslipTransaction(BatchPayslipInsert reqModel)
         {
-            var batchTransactionId = new BatchFirstTransaction();
+            int? batchId = 0;
             if(reqModel.BatchId == null || reqModel.BatchId == 0)
             {
-                batchTransactionId = await _batchPayslipRepository.BatchPayslipTransactionDetailInsert(reqModel);
+                batchId = await _batchPayslipRepository.BatchPayslipTransactionDetailInsert(reqModel);
             }
-            if(batchTransactionId != null)
+            if(batchId != null && batchId > 0)
             {
-                var transaction = await _batchPayslipRepository.LoadPayslipTransaction(batchTransactionId.BatchId, reqModel.Mode?? false);
-                var leaves = await _batchPayslipRepository.LoadPayslipEmployeeLeave(batchTransactionId.BatchId, reqModel.Mode ?? false);
+                var transaction = await _batchPayslipRepository.LoadPayslipTransaction(batchId ?? 0, reqModel.Mode?? false);
+                var leaves = await _batchPayslipRepository.LoadPayslipEmployeeLeave(batchId ?? 0, reqModel.Mode ?? false);
                 var data = new { transactionList = transaction , leaveList = leaves };
                 return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Batch payslip Detail", "load"));
             }
-            return HttpStatusCodeResponse.InternalServerErrorResponse("No Record for this period");
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
 
     }

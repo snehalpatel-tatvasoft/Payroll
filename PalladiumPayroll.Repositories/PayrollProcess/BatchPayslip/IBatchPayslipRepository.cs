@@ -8,6 +8,6 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
         Task<int> UpdateBatchDetail(BatchInfoRequest reqModel);
         Task<List<BatchPayslipTransaction>> LoadPayslipTransaction(int batchId, bool mode);
         Task<List<BatchPayslipLeave>> LoadPayslipEmployeeLeave(int batchId, bool mode);
-        Task<BatchFirstTransaction?> BatchPayslipTransactionDetailInsert(BatchPayslipInsert reqModel);
+        Task<int?> BatchPayslipTransactionDetailInsert(BatchPayslipInsert reqModel);
     }
 }
