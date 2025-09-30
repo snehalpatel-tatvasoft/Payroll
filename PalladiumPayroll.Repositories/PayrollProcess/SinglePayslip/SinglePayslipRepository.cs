@@ -124,12 +124,43 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@NoOfDaysWorked", request.NoOfDaysWorked);
         parameters.Add("@RatePerHour", request.RatePerHour);
 
-        var result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
-            "usp_GetSinglePayslipDetails",
-            parameters
-        );
+        if (request.TransactionTypeId == 1)
+        {
+            // Case 1 → Normal Allowance/Salary calculation
+            var result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
+                "usp_GetSinglePayslipDetails",
+                parameters
+            );
+            return result ?? new List<SinglePayslipDetailsResponseDTO>();
+        }
+        else if (request.TransactionTypeId == 2)
+        {
+            // Case 2 → UIF calculation (requires TVP)
+            var dt = new DataTable();
+            dt.Columns.Add("TransactionID", typeof(long));
+            dt.Columns.Add("TransactionName", typeof(string));
+            dt.Columns.Add("TransactionValue", typeof(decimal));
 
-        return result ?? new List<SinglePayslipDetailsResponseDTO>() ;
+            // Populate TVP from request.TransactionDetails
+            // 🔴 You need to add TransactionDetails list in your DTO (GetSinglePayslipDetailsRequestDTO)
+            foreach (var item in request.TransactionDetails)
+            {
+                dt.Rows.Add(item.TransactionID, item.TransactionName, item.TransactionValue);
+            }
+
+            parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails_UIF"));
+
+            var result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
+                "usp_DeductionGetSinglePayslipDetails",
+                parameters
+            );
+            return result ?? new List<SinglePayslipDetailsResponseDTO>();
+        }
+        else
+        {
+            // Default → return empty if TransactionType not supported
+            return new List<SinglePayslipDetailsResponseDTO>();
+        }
     }
 
 
