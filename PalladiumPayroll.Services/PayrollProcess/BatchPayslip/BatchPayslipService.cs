@@ -31,10 +31,14 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
             {
                 batchTransactionId = await _batchPayslipRepository.BatchPayslipTransactionDetailInsert(reqModel);
             }
-            var transaction = await _batchPayslipRepository.LoadPayslipTransaction(batchTransactionId.BatchId, reqModel.Mode?? false);
-            var leaves = await _batchPayslipRepository.LoadPayslipEmployeeLeave(batchTransactionId.BatchId, reqModel.Mode ?? false);
-            var data = new { transactionList = transaction , leaveList = leaves };
-            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Batch payslip Detail", "load"));
+            if(batchTransactionId != null)
+            {
+                var transaction = await _batchPayslipRepository.LoadPayslipTransaction(batchTransactionId.BatchId, reqModel.Mode?? false);
+                var leaves = await _batchPayslipRepository.LoadPayslipEmployeeLeave(batchTransactionId.BatchId, reqModel.Mode ?? false);
+                var data = new { transactionList = transaction , leaveList = leaves };
+                return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Batch payslip Detail", "load"));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse("No Record for this period");
         }
 
     }

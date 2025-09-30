@@ -45,14 +45,14 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
             }
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         public async Task<ActionResult> LoadPayslipTransaction(BatchPayslipInsert reqModel)
         {
             try
             {
                 return await _batchPayslipService.LoadPayslipTransaction(reqModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
