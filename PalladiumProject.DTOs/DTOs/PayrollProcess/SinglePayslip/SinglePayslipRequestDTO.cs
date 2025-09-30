@@ -27,6 +27,12 @@ public class PayslipDetailDTO
     public bool IsRecurring { get; set; }
     public decimal? Hours { get; set; }
 }
+public class TransactionDetailDTO
+{
+    public long TransactionID { get; set; }
+    public string? TransactionName { get; set; }
+    public decimal TransactionValue { get; set; }
+}
 public class GetSinglePayslipDetailsRequestDTO
 {
 
@@ -34,6 +40,8 @@ public class GetSinglePayslipDetailsRequestDTO
     public long CompanyPayrollId { get; set; }
     public long PayrollPeriodId { get; set; }
     public int TransactionTypeId { get; set; }
-    public int NoOfDaysWorked { get; set; }
-    public decimal RatePerHour { get; set; }
+    public int? NoOfDaysWorked { get; set; }
+    public decimal? RatePerHour { get; set; }
+    public List<TransactionDetailDTO> TransactionDetails { get; set; } = new();
+
 }
