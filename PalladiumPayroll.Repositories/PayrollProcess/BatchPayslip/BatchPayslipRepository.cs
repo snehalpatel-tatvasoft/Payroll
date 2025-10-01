@@ -39,14 +39,14 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
         {
             var parameters = new DynamicParameters();
             parameters.Add("@BatchId", reqModel.BatchId);
-            parameters.Add("@BatchName", reqModel.BatchName);
+            parameters.Add("@BatchName", reqModel.BatchNumber);
             parameters.Add("@BatchDescription", reqModel.BatchDescription);
             parameters.Add("@CompanyId", reqModel.CompanyId);
             parameters.Add("@CycleId", reqModel.CycleId);
             parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
             parameters.Add("@IsRecurring", reqModel.IsRecurring);
-            parameters.Add("@IsSpecialRun", reqModel.IsSpecialRun);
-            parameters.Add("@IsLeavePay", reqModel.IsLeavePay);
+            parameters.Add("@IsSpecialRun", reqModel.TransactionType == 2);
+            parameters.Add("@IsLeavePay", reqModel.TransactionType == 3);
             return await _dapper.ExecuteStoredProcedureSingle<int?>("BatchPayslipTransactionDetailsInsert", parameters);
         }
 
@@ -97,12 +97,12 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             transTbl.Columns.Add("Hours", typeof(decimal));
             foreach (var transaction in reqModel.BatchTransaction)
             {
-                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchName, reqModel.BatchDescription, reqModel.CycleId, reqModel.ProcessPriod, transaction.TransactionName, transaction.Amount, transaction.Hours);
+                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchNumber, reqModel.BatchDescription, reqModel.CycleId, reqModel.ProcessPriod, transaction.TransactionName, transaction.Amount, transaction.Hours);
             }
 
             var parameters = new DynamicParameters();
             parameters.Add("@BatchId", reqModel.BatchId);
-            parameters.Add("@BatchName", reqModel.BatchName);
+            parameters.Add("@BatchName", reqModel.BatchNumber);
             parameters.Add("@BatchDescription", reqModel.BatchDescription);
             parameters.Add("@CompanyId", reqModel.CompanyId);
             parameters.Add("@CycleId", reqModel.CycleId);
@@ -111,7 +111,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@tblEmployees", empTbl.AsTableValuedParameter("dbo.tblEmployee"));
             parameters.Add("@tblBatchTransaction", transTbl.AsTableValuedParameter("dbo.tblBatchTransaction"));
             parameters.Add("@IsSpecialRun", reqModel.IsRecurring);
-            parameters.Add("@IsLeavePay", reqModel.IsLeavePay);
+            parameters.Add("@IsLeavePay", reqModel.TransactionType == 3);
             return await _dapper.ExecuteStoredProcedure<BatchPayslipTransaction>("BatchPayslipTransactionDetailsInsertORUpdate", parameters);
         }
 
@@ -134,12 +134,12 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             transTbl.Columns.Add("Hours", typeof(decimal));
             foreach (var transaction in reqModel.BatchTransaction)
             {
-                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchName, reqModel.BatchDescription, reqModel.CycleId, reqModel.ProcessPriod, transaction.TransactionName, transaction.Amount, transaction.Hours);
+                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchNumber, reqModel.BatchDescription, reqModel.CycleId, reqModel.ProcessPriod, transaction.TransactionName, transaction.Amount, transaction.Hours);
             }
 
             var parameters = new DynamicParameters();
             parameters.Add("@BatchId", reqModel.BatchId);
-            parameters.Add("@BatchName", reqModel.BatchName);
+            parameters.Add("@BatchName", reqModel.BatchNumber);
             parameters.Add("@BatchDescription", reqModel.BatchDescription);
             parameters.Add("@CompanyId", reqModel.CompanyId);
             parameters.Add("@CycleId", reqModel.CycleId);
