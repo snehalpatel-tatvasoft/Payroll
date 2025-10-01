@@ -113,12 +113,7 @@ namespace PalladiumPayroll.Controllers.Auth
             {
                 await _userService.ConfirmEmail(userId);
 
-                return HttpStatusCodeResponse.GenerateResponse(
-                            result: true,
-                            statusCode: HttpStatusCode.OK,
-                            message: ResponseMessages.EmailVerified,
-                            data: string.Empty
-                        );
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, ResponseMessages.EmailVerified);
             }
             catch (Exception ex)
             {
@@ -134,9 +129,9 @@ namespace PalladiumPayroll.Controllers.Auth
                 bool res = await _userService.CheckIsUserLoggedIn(userId);
                 if (!res)
                 {
-                    return HttpStatusCodeResponse.GenerateResponse(result: false, statusCode: HttpStatusCode.OK, message: ResponseMessages.LoggedOutDueToInActivity, data: string.Empty);
+                    return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.LoggedOutDueToInActivity);
                 }
-                return HttpStatusCodeResponse.GenerateResponse(result: true, statusCode: HttpStatusCode.OK, message: string.Empty, data: string.Empty);
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Empty);
             }
             catch (Exception ex)
             {
