@@ -70,7 +70,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return result;
     }
-    
+
     public async Task<List<TransactionListModelForPayslip>> GetModalTransactionsListForPayslip(int transactionId, int companyId)
     {
         DynamicParameters? parameters = new DynamicParameters();
@@ -121,11 +121,14 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
         parameters.Add("@PayrollPeriodId", request.PayrollPeriodId);
         parameters.Add("@TransactionTypeId", request.TransactionTypeId);
-        parameters.Add("@NoOfDaysWorked", request.NoOfDaysWorked);
-        parameters.Add("@RatePerHour", request.RatePerHour);
+        
+        
 
         if (request.TransactionTypeId == 1)
         {
+            parameters.Add("@RatePerHour", request.RatePerHour);
+            parameters.Add("@NoOfDaysWorked", request.NoOfDaysWorked);
+            
             List<SinglePayslipDetailsResponseDTO>? result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
                 "usp_GetSinglePayslipDetails",
                 parameters
@@ -134,14 +137,18 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         }
         else if (request.TransactionTypeId == 2)
         {
-            DataTable? dt = new DataTable();
+            parameters.Add("@RatePerHour", request.RatePerHour);
+            parameters.Add("@NoOfDaysWorked", request.NoOfDaysWorked);
+
+            DataTable? dt = new DataTable(); 
             dt.Columns.Add("TransactionID", typeof(long));
             dt.Columns.Add("TransactionName", typeof(string));
             dt.Columns.Add("TransactionValue", typeof(decimal));
+            dt.Columns.Add("TransactionType", typeof(string));
 
             foreach (var item in request.TransactionDetails)
             {
-                dt.Rows.Add(item.TransactionID, item.TransactionName, item.TransactionValue);
+                dt.Rows.Add(item.TransactionID, item.TransactionName, item.TransactionValue,item.TransactionType);
             }
 
             parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails_UIF"));
@@ -154,14 +161,19 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         }
         else if (request.TransactionTypeId == 3)
         {
+            parameters.Add("@RatePerHour", request.RatePerHour);
+            parameters.Add("@NoOfDaysWorked", request.NoOfDaysWorked);
+
             DataTable? dt = new DataTable();
             dt.Columns.Add("TransactionID", typeof(long));
             dt.Columns.Add("TransactionName", typeof(string));
             dt.Columns.Add("TransactionValue", typeof(decimal));
+             dt.Columns.Add("TransactionType", typeof(string));
+
 
             foreach (var item in request.TransactionDetails)
             {
-                dt.Rows.Add(item.TransactionID, item.TransactionName, item.TransactionValue);
+                dt.Rows.Add(item.TransactionID, item.TransactionName, item.TransactionValue,item.TransactionType);
             }
 
             parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails_UIF"));

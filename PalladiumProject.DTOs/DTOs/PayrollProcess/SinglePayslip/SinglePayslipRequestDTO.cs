@@ -32,6 +32,7 @@ public class TransactionDetailDTO
     public long TransactionID { get; set; }
     public string? TransactionName { get; set; }
     public decimal TransactionValue { get; set; }
+    public string? TransactionType { get; set; }
 }
 public class GetSinglePayslipDetailsRequestDTO
 {
