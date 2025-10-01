@@ -172,6 +172,14 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             );
             return result ?? new List<SinglePayslipDetailsResponseDTO>();
         }
+        else if (request.TransactionTypeId == 4)
+        {
+            List<SinglePayslipDetailsResponseDTO>? result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
+                "usp_FringeBenefitsGetSinglePayslipDetails",
+                parameters
+            );
+            return result ?? new List<SinglePayslipDetailsResponseDTO>();
+        }
         else
         {
             return new List<SinglePayslipDetailsResponseDTO>();
