@@ -70,20 +70,22 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return result;
     }
+    
     public async Task<List<TransactionListModelForPayslip>> GetModalTransactionsListForPayslip(int transactionId, int companyId)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@TransactionId", transactionId);
         parameters.Add("@CompanyId", companyId);
 
 
-        var transactions = await _dapper.ExecuteStoredProcedure<TransactionListModelForPayslip>(
+        List<TransactionListModelForPayslip>? transactions = await _dapper.ExecuteStoredProcedure<TransactionListModelForPayslip>(
             "usp_GetTransactionsListForPayslip",
             parameters
         );
 
         return transactions ?? new List<TransactionListModelForPayslip>();
     }
+
     public async Task<long> ProcessSinglePayslip(ProcessSinglePayslipRequestDTO request)
     {
         var parameters = new DynamicParameters();
@@ -92,8 +94,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@ProcessingCyclePeriodId", request.ProcessingCyclePeriodId);
         parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
-        // Create DataTable for TVP
-        var dt = new DataTable();
+        DataTable? dt = new DataTable();
         dt.Columns.Add("PayrollCycleId", typeof(long));
         dt.Columns.Add("Description", typeof(string));
         dt.Columns.Add("Amount", typeof(decimal));
@@ -105,16 +106,15 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             dt.Rows.Add(item.PayrollProcessId, item.Description, item.Amount, item.IsRecurring, item.Hours);
         }
 
-        // Add TVP parameter
         parameters.Add("@PayslipDetails", dt.AsTableValuedParameter("dbo.PayslipDetailType"));
 
-        // Call the new SP
-        var result = await _dapper.ExecuteStoredProcedureSingle<long>(
+        long result = await _dapper.ExecuteStoredProcedureSingle<long>(
             "usp_ProcessSinglePayslip", parameters);
 
         return result;
     }
-    public async Task<List<SinglePayslipDetailsResponseDTO?>> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
+
+    public async Task<List<SinglePayslipDetailsResponseDTO>> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@EmployeeId", request.EmployeeId);
@@ -126,8 +126,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         if (request.TransactionTypeId == 1)
         {
-            // Case 1 → Normal Allowance/Salary calculation
-            var result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
+            List<SinglePayslipDetailsResponseDTO>? result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
                 "usp_GetSinglePayslipDetails",
                 parameters
             );
@@ -135,8 +134,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         }
         else if (request.TransactionTypeId == 2)
         {
-            // Case 2 → UIF calculation (requires TVP)
-            var dt = new DataTable();
+            DataTable? dt = new DataTable();
             dt.Columns.Add("TransactionID", typeof(long));
             dt.Columns.Add("TransactionName", typeof(string));
             dt.Columns.Add("TransactionValue", typeof(decimal));
@@ -148,7 +146,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
             parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails_UIF"));
 
-            var result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
+            List<SinglePayslipDetailsResponseDTO>? result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
                 "usp_DeductionGetSinglePayslipDetails",
                 parameters
             );
@@ -156,8 +154,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         }
         else if (request.TransactionTypeId == 3)
         {
-            // Case 2 → UIF calculation (requires TVP)
-            var dt = new DataTable();
+            DataTable? dt = new DataTable();
             dt.Columns.Add("TransactionID", typeof(long));
             dt.Columns.Add("TransactionName", typeof(string));
             dt.Columns.Add("TransactionValue", typeof(decimal));
@@ -169,7 +166,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
             parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails_UIF"));
 
-            var result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
+            List<SinglePayslipDetailsResponseDTO>? result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
                 "usp_CompanyContributionGetSinglePayslipDetails",
                 parameters
             );
@@ -177,7 +174,6 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         }
         else
         {
-            // Default → return empty if TransactionType not supported
             return new List<SinglePayslipDetailsResponseDTO>();
         }
     }
