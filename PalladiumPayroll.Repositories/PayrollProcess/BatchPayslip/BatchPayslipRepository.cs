@@ -4,7 +4,9 @@ using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave;
+using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
+using System.Data;
 
 namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
 {
@@ -33,6 +35,21 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             return await _dapper.ExecuteStoredProcedureSingle<int>("usp_UpdateBatchPayslip", parameters);
         }
 
+        public async Task<int?> BatchPayslipTransactionDetailInsert(BatchPayslipInsert reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", reqModel.BatchId);
+            parameters.Add("@BatchName", reqModel.BatchName);
+            parameters.Add("@BatchDescription", reqModel.BatchDescription);
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@CycleId", reqModel.CycleId);
+            parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
+            parameters.Add("@IsRecurring", reqModel.IsRecurring);
+            parameters.Add("@IsSpecialRun", reqModel.IsSpecialRun);
+            parameters.Add("@IsLeavePay", reqModel.IsLeavePay);
+            return await _dapper.ExecuteStoredProcedureSingle<int?>("BatchPayslipTransactionDetailsInsert", parameters);
+        }
+
         public async Task<List<BatchPayslipTransaction>> LoadPayslipTransaction(int batchId, bool mode)
         {
             var parameters = new DynamicParameters();
@@ -49,8 +66,40 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             return await _dapper.ExecuteStoredProcedure<BatchPayslipLeave>("usp_BatchLoadEmployeesLeaveDetails", parameters);
         }
 
-        public async Task<int?> BatchPayslipTransactionDetailInsert(BatchPayslipInsert reqModel)
+
+        #region MultiTransaction
+        public async Task<List<SpecialTransaction>> GetSpecialRunTransaction(MultiTransactionGet reqModel)
         {
+            var parameters = new DynamicParameters();
+            parameters.Add("@ProcessPreiodId", reqModel.ProcessPreiodId);
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@TransactionType", reqModel.TransactionType);
+            return await _dapper.ExecuteStoredProcedure<SpecialTransaction>("SP_GetSpecialRunTransactions", parameters);
+        } 
+
+        public async Task<List<BatchPayslipTransaction>> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel)
+        {
+            var empTbl = new DataTable();
+            empTbl.Columns.Add("EmployeeId", typeof(int));
+            foreach (var empId in reqModel.EmployeeIds)
+            {
+                empTbl.Rows.Add(empId);
+            }
+
+            var transTbl = new DataTable();
+            transTbl.Columns.Add("BatchId", typeof(int));
+            transTbl.Columns.Add("BatchName", typeof(string));
+            transTbl.Columns.Add("Description", typeof(string));
+            transTbl.Columns.Add("CycleId", typeof(int));
+            transTbl.Columns.Add("ProcessPreiodId", typeof(int));
+            transTbl.Columns.Add("TransactionName", typeof(string));
+            transTbl.Columns.Add("Amount", typeof(decimal));
+            transTbl.Columns.Add("Hours", typeof(decimal));
+            foreach (var transaction in reqModel.BatchTransaction)
+            {
+                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchName, reqModel.BatchDescription, reqModel.CycleId, reqModel.ProcessPriod, transaction.TransactionName, transaction.Amount, transaction.Hours);
+            }
+
             var parameters = new DynamicParameters();
             parameters.Add("@BatchId", reqModel.BatchId);
             parameters.Add("@BatchName", reqModel.BatchName);
@@ -59,9 +108,60 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@CycleId", reqModel.CycleId);
             parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
             parameters.Add("@IsRecurring", reqModel.IsRecurring);
-            parameters.Add("@IsSpecialRun", reqModel.IsSpecialRun);
+            parameters.Add("@tblEmployees", empTbl.AsTableValuedParameter("dbo.tblEmployee"));
+            parameters.Add("@tblBatchTransaction", transTbl.AsTableValuedParameter("dbo.tblBatchTransaction"));
+            parameters.Add("@IsSpecialRun", reqModel.IsRecurring);
             parameters.Add("@IsLeavePay", reqModel.IsLeavePay);
-            return await _dapper.ExecuteStoredProcedureSingle<int?>("BatchPayslipTransactionDetailsInsert", parameters);
+            return await _dapper.ExecuteStoredProcedure<BatchPayslipTransaction>("BatchPayslipTransactionDetailsInsertORUpdate", parameters);
+        }
+
+        public async Task<bool> BatchTransactionDeleteBulk(BatchPayslipBulkInsert reqModel)
+        {
+            var empTbl = new DataTable();
+            empTbl.Columns.Add("EmployeeId", typeof(int));
+            foreach (var empId in reqModel.EmployeeIds)
+            {
+                empTbl.Rows.Add(empId);
+            }
+            var transTbl = new DataTable();
+            transTbl.Columns.Add("BatchId", typeof(int));
+            transTbl.Columns.Add("BatchName", typeof(string));
+            transTbl.Columns.Add("Description", typeof(string));
+            transTbl.Columns.Add("CycleId", typeof(int));
+            transTbl.Columns.Add("ProcessPreiodId", typeof(int));
+            transTbl.Columns.Add("TransactionName", typeof(string));
+            transTbl.Columns.Add("Amount", typeof(decimal));
+            transTbl.Columns.Add("Hours", typeof(decimal));
+            foreach (var transaction in reqModel.BatchTransaction)
+            {
+                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchName, reqModel.BatchDescription, reqModel.CycleId, reqModel.ProcessPriod, transaction.TransactionName, transaction.Amount, transaction.Hours);
+            }
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", reqModel.BatchId);
+            parameters.Add("@BatchName", reqModel.BatchName);
+            parameters.Add("@BatchDescription", reqModel.BatchDescription);
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@CycleId", reqModel.CycleId);
+            parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
+            parameters.Add("@tblEmployees", empTbl.AsTableValuedParameter("dbo.tblEmployee"));
+            parameters.Add("@tblBatchTransaction", transTbl.AsTableValuedParameter("dbo.tblBatchTransaction"));
+            var result = await _dapper.ExecuteStoredProcedureSingle<bool>("BatchPayslipTransactionDetailsDelete", parameters);
+            return result;
+        }
+        #endregion
+
+        public async Task<BatchPayslipTransaction?> UpdateTransactionDetail(BatchTransactionUpdate reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchTransactionId", reqModel.BatchTransactionId);
+            parameters.Add("@EmployeeId", reqModel.EmployeeId);
+            parameters.Add("@TransactionType", reqModel.TransactionType);
+            parameters.Add("@TransactionName", reqModel.TransactionName);
+            parameters.Add("@Unit", reqModel.Unit);
+            parameters.Add("@TransactionValues", reqModel.TransactionValues);
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            return await _dapper.ExecuteStoredProcedureSingle<BatchPayslipTransaction>("SP_UpadteTransactionDetailsForBulk", parameters);
         }
     }
 }

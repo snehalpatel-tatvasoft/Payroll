@@ -58,5 +58,56 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult> MultiTransactionLoad([FromQuery]MultiTransactionGet reqModel)
+        {
+            try
+            {
+                return await _batchPayslipService.MultiTransactionLoad(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel)
+        {
+            try
+            {
+                return await _batchPayslipService.BatchTransactionUpsertBulk(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> BatchTransactionDeleteBulk(BatchPayslipBulkInsert reqModel)
+        {
+            try
+            {
+                return await _batchPayslipService.BatchTransactionDeleteBulk(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpdateTransactionDetail(BatchTransactionUpdate reqModel)
+        {
+            try
+            {
+                return await _batchPayslipService.UpdateTransactionDetail(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
     }
 }

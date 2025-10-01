@@ -41,5 +41,34 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
             return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
         }
 
+
+        public async Task<JsonResult> MultiTransactionLoad(MultiTransactionGet reqModel)
+        {
+            var transaction = await _batchPayslipRepository.GetSpecialRunTransaction(reqModel);
+            return HttpStatusCodeResponse.SuccessResponse(transaction, string.Format(ResponseMessages.Success, "multi Transaction", "load"));
+        }
+
+        public async Task<JsonResult> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel)
+        {
+            var transaction = await _batchPayslipRepository.BatchTransactionUpsertBulk(reqModel);
+            return HttpStatusCodeResponse.SuccessResponse(transaction, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Updated));
+        }
+
+        public async Task<JsonResult> BatchTransactionDeleteBulk(BatchPayslipBulkInsert reqModel)
+        {
+            var isDeleted = await _batchPayslipRepository.BatchTransactionDeleteBulk(reqModel);
+            if (isDeleted)
+                return HttpStatusCodeResponse.SuccessResponse(isDeleted, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Deleted));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
+        public async Task<JsonResult> UpdateTransactionDetail(BatchTransactionUpdate reqModel)
+        {
+            var transaction = await _batchPayslipRepository.UpdateTransactionDetail(reqModel);
+            if (transaction != null)
+                return HttpStatusCodeResponse.SuccessResponse(transaction, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Updated));
+            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+        }
+
     }
 }

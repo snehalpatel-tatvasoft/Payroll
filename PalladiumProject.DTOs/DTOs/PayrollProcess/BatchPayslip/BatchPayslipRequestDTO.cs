@@ -13,4 +13,35 @@
         public bool? IsSpecialRun { get; set; }
         public bool? IsLeavePay { get; set; }
     }
+
+    public class MultiTransactionGet
+    {
+        public int ProcessPreiodId { get; set; }
+        public int CompanyId { get; set; }
+        public int TransactionType { get; set; }
+    }
+
+    public class BatchTransactionUpdate
+    {
+        public int BatchTransactionId { get; set; }
+        public int EmployeeId { get; set; }
+        public int TransactionType { get; set; }
+        public string? TransactionName { get; set; }
+        public decimal Unit { get; set; } = 0.00M;
+        public decimal TransactionValues { get; set; } = 0.00M;
+        public int CompanyId { get; set; }
+    }
+
+    public class BatchPayslipBulkInsert : BatchPayslipInsert
+    {
+        public List<int> EmployeeIds { get; set; }
+        public List<BatchTransactionTbl> BatchTransaction { get; set; }
+    }
+
+    public class BatchTransactionTbl
+    {
+	    public string TransactionName { get; set; }
+        public decimal Amount { get; set; }
+        public decimal Hours { get; set; }
+    }
 }

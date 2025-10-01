@@ -46,4 +46,13 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
         public int BatchTransactionId { get; set; }
         public int BatchId { get; set; }
     }
+
+    public class SpecialTransaction
+    {
+        public int PayrollProcessId { get; set; }
+        public string Description { get; set; }
+        public int Type { get; set; }
+        public bool IsUnit { get; set; }
+        public int CouncilOptionsId { get; set; }
+    }
 }
