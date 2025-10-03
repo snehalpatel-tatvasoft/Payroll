@@ -36,7 +36,6 @@ public class TransactionDetailDTO
 }
 public class GetSinglePayslipDetailsRequestDTO
 {
-
     public long EmployeeId { get; set; }
     public long CompanyPayrollId { get; set; }
     public long PayrollPeriodId { get; set; }
