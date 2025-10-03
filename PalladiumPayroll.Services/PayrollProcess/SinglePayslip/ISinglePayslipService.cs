@@ -14,5 +14,6 @@ public interface ISinglePayslipService
     Task<JsonResult> GetModalTransactionsListForPayslip(int transactionId, int companyId);
     Task<JsonResult> ProcessSinglePayslip(ProcessSinglePayslipRequestDTO request);
     Task<JsonResult> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request);
+    Task<JsonResult> GetUIFCalculation(GetSinglePayslipDetailsRequestDTO request);
     
 }

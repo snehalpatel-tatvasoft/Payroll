@@ -121,14 +121,14 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
         parameters.Add("@PayrollPeriodId", request.PayrollPeriodId);
         parameters.Add("@TransactionTypeId", request.TransactionTypeId);
-        
-        
+
+
 
         if (request.TransactionTypeId == 1)
         {
             parameters.Add("@RatePerHour", request.RatePerHour);
             parameters.Add("@NoOfDaysWorked", request.NoOfDaysWorked);
-            
+
             List<SinglePayslipDetailsResponseDTO>? result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
                 "usp_GetSinglePayslipDetails",
                 parameters
@@ -140,7 +140,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             parameters.Add("@RatePerHour", request.RatePerHour);
             parameters.Add("@NoOfDaysWorked", request.NoOfDaysWorked);
 
-            DataTable? dt = new DataTable(); 
+            DataTable? dt = new DataTable();
             dt.Columns.Add("TransactionID", typeof(long));
             dt.Columns.Add("TransactionName", typeof(string));
             dt.Columns.Add("TransactionValue", typeof(decimal));
@@ -148,7 +148,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
             foreach (var item in request.TransactionDetails)
             {
-                dt.Rows.Add(item.TransactionID, item.TransactionName, item.TransactionValue,item.TransactionType);
+                dt.Rows.Add(item.TransactionID, item.TransactionName, item.TransactionValue, item.TransactionType);
             }
 
             parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails_UIF"));
@@ -168,12 +168,12 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             dt.Columns.Add("TransactionID", typeof(long));
             dt.Columns.Add("TransactionName", typeof(string));
             dt.Columns.Add("TransactionValue", typeof(decimal));
-             dt.Columns.Add("TransactionType", typeof(string));
+            dt.Columns.Add("TransactionType", typeof(string));
 
 
             foreach (var item in request.TransactionDetails)
             {
-                dt.Rows.Add(item.TransactionID, item.TransactionName, item.TransactionValue,item.TransactionType);
+                dt.Rows.Add(item.TransactionID, item.TransactionName, item.TransactionValue, item.TransactionType);
             }
 
             parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails_UIF"));
@@ -197,6 +197,35 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             return new List<SinglePayslipDetailsResponseDTO>();
         }
     }
+    public async Task<(decimal UIFCal, decimal UIFIncome)> GetUIFCalculation(GetSinglePayslipDetailsRequestDTO request)
+    {
+        var parameters = new DynamicParameters();
 
+        parameters.Add("@EmployeeId", request.EmployeeId);
+        parameters.Add("@ProcessingCyclePeriodId", request.PayrollPeriodId);
+        parameters.Add("@CycleType", ""); 
 
+        DataTable dt = new DataTable();
+        dt.Columns.Add("TransactionID", typeof(long));
+        dt.Columns.Add("TransactionName", typeof(string));
+        dt.Columns.Add("TransactionValue", typeof(decimal));
+        dt.Columns.Add("TransactionType", typeof(string));
+
+        foreach (var item in request.TransactionDetails)
+        {
+            dt.Rows.Add(item.TransactionID, item.TransactionName ?? "", item.TransactionValue, item.TransactionType ?? "");
+        }
+
+        parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails_UIF"));
+
+        parameters.Add("@UIFCal", dbType: DbType.Decimal, direction: ParameterDirection.Output);
+        parameters.Add("@UIFIncome", dbType: DbType.Decimal, direction: ParameterDirection.Output);
+
+        await _dapper.ExecuteStoredProcedureSingle<(decimal UIFCal, decimal UIFIncome)>("usp_UIFCalculation_Normal", parameters);
+
+        decimal uifCal = parameters.Get<decimal>("@UIFCal");
+        decimal uifIncome = parameters.Get<decimal>("@UIFIncome");
+
+        return (uifCal, uifIncome);
+    }
 }

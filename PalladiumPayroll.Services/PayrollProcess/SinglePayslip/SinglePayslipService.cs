@@ -99,4 +99,31 @@ public class SinglePayslipService : ISinglePayslipService
         }
     }
 
+    public async Task<JsonResult> GetUIFCalculation(GetSinglePayslipDetailsRequestDTO request)
+    {
+        try
+        {
+            // Call repository method that executes usp_UIFCalculation_Normal
+            var (uifCal, uifIncome) = await _singlePayslipRepository.GetUIFCalculation(request);
+
+            // Prepare response DTO
+            var response = new
+            {
+                UIFCal = uifCal,
+                UIFIncome = uifIncome
+            };
+
+            return HttpStatusCodeResponse.SuccessResponse(
+                response,
+                "UIF calculation retrieved successfully."
+            );
+        }
+        catch (Exception ex)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, "Calculating", "UIF", ex.Message)
+            );
+        }
+    }
+
 }

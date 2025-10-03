@@ -12,4 +12,5 @@ public interface ISinglePayslipRepository
     Task<List<TransactionListModelForPayslip>> GetModalTransactionsListForPayslip(int transactionId, int companyId);
     Task<long> ProcessSinglePayslip(ProcessSinglePayslipRequestDTO request);
     Task<List<SinglePayslipDetailsResponseDTO>> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request);
+    Task<(decimal UIFCal, decimal UIFIncome)> GetUIFCalculation(GetSinglePayslipDetailsRequestDTO request);
 }

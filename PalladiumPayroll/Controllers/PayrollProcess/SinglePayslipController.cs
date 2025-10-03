@@ -124,12 +124,27 @@ public class SinglePayslipController : ControllerBase
     {
         try
         {
-            return await _singlePayslipService.GetSinglePayslipDetails( request);
+            return await _singlePayslipService.GetSinglePayslipDetails(request);
         }
         catch (Exception)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Payslip Details")
+            );
+        }
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> GetUIFCalculation(GetSinglePayslipDetailsRequestDTO request)
+    {
+        try
+        {
+            return await _singlePayslipService.GetUIFCalculation(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "UIF Calculation")
             );
         }
     }
