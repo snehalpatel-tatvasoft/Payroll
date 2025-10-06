@@ -149,4 +149,19 @@ public class SinglePayslipController : ControllerBase
         }
     }
 
+    [HttpPost("[action]")]
+    public async Task<ActionResult> DeleteSinglePayslipTransactions(List<PayslipDeleteTransactionDTO> transactions)
+    {
+        try
+        {
+            return await _singlePayslipService.DeleteSinglePayslipTransactions(transactions);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Deleting, "Payslip Transactions")
+            );
+        }
+    }
+
 }

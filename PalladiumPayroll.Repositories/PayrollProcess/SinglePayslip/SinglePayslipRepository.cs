@@ -203,7 +203,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         parameters.Add("@EmployeeId", request.EmployeeId);
         parameters.Add("@ProcessingCyclePeriodId", request.PayrollPeriodId);
-        parameters.Add("@CycleType", ""); 
+        parameters.Add("@CycleType", "");
 
         DataTable dt = new DataTable();
         dt.Columns.Add("TransactionID", typeof(long));
@@ -228,4 +228,24 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return (uifCal, uifIncome);
     }
+
+    public async Task<bool> DeleteSinglePayslipTransactions(List<PayslipDeleteTransactionDTO> transactions)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+
+        DataTable dt = new DataTable();
+        dt.Columns.Add("EmployeePayslipPreviewDtlId", typeof(int));
+
+        foreach (var item in transactions)
+        {
+            dt.Rows.Add(item.EmployeePayslipPreviewDtlId);
+        }
+
+        parameters.Add("@Transactions", dt.AsTableValuedParameter("dbo.PayslipDeleteTransactionType"));
+
+        await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteSinglePayslipTransactions", parameters);
+
+        return true;
+    }
+
 }

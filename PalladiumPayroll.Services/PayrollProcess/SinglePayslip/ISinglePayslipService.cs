@@ -15,5 +15,6 @@ public interface ISinglePayslipService
     Task<JsonResult> ProcessSinglePayslip(ProcessSinglePayslipRequestDTO request);
     Task<JsonResult> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request);
     Task<JsonResult> GetUIFCalculation(GetSinglePayslipDetailsRequestDTO request);
+    Task<JsonResult> DeleteSinglePayslipTransactions(List<PayslipDeleteTransactionDTO> transactions);
     
 }

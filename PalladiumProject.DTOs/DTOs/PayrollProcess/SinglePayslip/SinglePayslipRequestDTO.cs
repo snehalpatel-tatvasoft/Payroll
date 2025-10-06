@@ -45,3 +45,7 @@ public class GetSinglePayslipDetailsRequestDTO
     public List<TransactionDetailDTO> TransactionDetails { get; set; } = new();
 
 }
+public class PayslipDeleteTransactionDTO
+{
+    public int EmployeePayslipPreviewDtlId { get; set; }
+}

@@ -13,4 +13,5 @@ public interface ISinglePayslipRepository
     Task<long> ProcessSinglePayslip(ProcessSinglePayslipRequestDTO request);
     Task<List<SinglePayslipDetailsResponseDTO>> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request);
     Task<(decimal UIFCal, decimal UIFIncome)> GetUIFCalculation(GetSinglePayslipDetailsRequestDTO request);
+    Task<bool> DeleteSinglePayslipTransactions(List<PayslipDeleteTransactionDTO> transactions);
 }

@@ -37,6 +37,7 @@ public class SinglePayslipService : ISinglePayslipService
 
         return HttpStatusCodeResponse.SuccessResponse(processPeriod, string.Format(ResponseMessages.Success, "Process Period", ActionType.Retrieved));
     }
+
     public async Task<JsonResult> GetEmployeeRateAndDaysWorked(long employeeId, long processingPeriodId)
     {
         var result = await _singlePayslipRepository.GetEmployeeRateAndDaysWorked(employeeId, processingPeriodId);
@@ -46,6 +47,7 @@ public class SinglePayslipService : ISinglePayslipService
             string.Format(ResponseMessages.Success, "Rate And Days Worked", ActionType.Retrieved)
         );
     }
+
     public async Task<JsonResult> GetModalTransactionsListForPayslip(int transactionId, int companyId)
     {
         try
@@ -63,6 +65,7 @@ public class SinglePayslipService : ISinglePayslipService
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, "Transaction list", ActionType.Retrieving, ex.Message));
         }
     }
+
     public async Task<JsonResult> ProcessSinglePayslip(ProcessSinglePayslipRequestDTO request)
     {
         long payslipId = await _singlePayslipRepository.ProcessSinglePayslip(request);
@@ -72,6 +75,7 @@ public class SinglePayslipService : ISinglePayslipService
             string.Format(ResponseMessages.Success, "Payslip Data", ActionType.Saved)
         );
     }
+
     public async Task<JsonResult> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
     {
         try
@@ -103,10 +107,8 @@ public class SinglePayslipService : ISinglePayslipService
     {
         try
         {
-            // Call repository method that executes usp_UIFCalculation_Normal
             var (uifCal, uifIncome) = await _singlePayslipRepository.GetUIFCalculation(request);
 
-            // Prepare response DTO
             var response = new
             {
                 UIFCal = uifCal,
@@ -126,4 +128,14 @@ public class SinglePayslipService : ISinglePayslipService
         }
     }
 
+    public async Task<JsonResult> DeleteSinglePayslipTransactions(List<PayslipDeleteTransactionDTO> transactions)
+    {
+       bool isDeleted = await _singlePayslipRepository.DeleteSinglePayslipTransactions(transactions);
+
+        if (!isDeleted)
+        {
+            return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.MinimumWageNotFound);
+        }
+        return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Deleted));
+    }
 }
