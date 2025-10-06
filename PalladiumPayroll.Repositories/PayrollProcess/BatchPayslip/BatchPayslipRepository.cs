@@ -4,8 +4,8 @@ using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave;
-using PalladiumPayroll.DTOs.DTOs.ResponseDTOs;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
+using PalladiumPayroll.Helper;
 using System.Data;
 
 namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
@@ -45,8 +45,8 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@CycleId", reqModel.CycleId);
             parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
             parameters.Add("@IsRecurring", reqModel.IsRecurring);
-            parameters.Add("@IsSpecialRun", reqModel.TransactionType == 2);
-            parameters.Add("@IsLeavePay", reqModel.TransactionType == 3);
+            parameters.Add("@IsSpecialRun", reqModel.TransactionType == (int)PayslipTransactionType.SpecialRun);
+            parameters.Add("@IsLeavePay", reqModel.TransactionType == (int)PayslipTransactionType.LeavePay);
             return await _dapper.ExecuteStoredProcedureSingle<int?>("BatchPayslipTransactionDetailsInsert", parameters);
         }
 
@@ -111,7 +111,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@tblEmployees", empTbl.AsTableValuedParameter("dbo.tblEmployee"));
             parameters.Add("@tblBatchTransaction", transTbl.AsTableValuedParameter("dbo.tblBatchTransaction"));
             parameters.Add("@IsSpecialRun", reqModel.IsRecurring);
-            parameters.Add("@IsLeavePay", reqModel.TransactionType == 3);
+            parameters.Add("@IsLeavePay", reqModel.TransactionType == (int)PayslipTransactionType.LeavePay);
             return await _dapper.ExecuteStoredProcedure<BatchPayslipTransaction>("BatchPayslipTransactionDetailsInsertORUpdate", parameters);
         }
 
