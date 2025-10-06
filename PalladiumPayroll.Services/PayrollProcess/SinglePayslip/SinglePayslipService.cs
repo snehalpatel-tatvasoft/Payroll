@@ -130,12 +130,8 @@ public class SinglePayslipService : ISinglePayslipService
 
     public async Task<JsonResult> DeleteSinglePayslipTransactions(List<PayslipDeleteTransactionDTO> transactions)
     {
-       bool isDeleted = await _singlePayslipRepository.DeleteSinglePayslipTransactions(transactions);
+        await _singlePayslipRepository.DeleteSinglePayslipTransactions(transactions);
 
-        if (!isDeleted)
-        {
-            return HttpStatusCodeResponse.NotFoundResponse(ResponseMessages.MinimumWageNotFound);
-        }
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Deleted));
     }
 }
