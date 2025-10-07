@@ -80,7 +80,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
         public async Task<List<BatchPayslipTransaction>> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel)
         {
             var empTbl = new DataTable();
-            empTbl.Columns.Add("EmployeeId", typeof(int));
+            empTbl.Columns.Add("Employee", typeof(int));
             foreach (var empId in reqModel.EmployeeIds)
             {
                 empTbl.Rows.Add(empId);
@@ -118,7 +118,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
         public async Task<bool> BatchTransactionDeleteBulk(BatchPayslipBulkInsert reqModel)
         {
             var empTbl = new DataTable();
-            empTbl.Columns.Add("EmployeeId", typeof(int));
+            empTbl.Columns.Add("Employee", typeof(int));
             foreach (var empId in reqModel.EmployeeIds)
             {
                 empTbl.Rows.Add(empId);
