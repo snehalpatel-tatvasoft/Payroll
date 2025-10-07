@@ -176,7 +176,13 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@IsRecurring", reqModel.IsRecurring);
             parameters.Add("@IsSpecialRun", reqModel.TransactionType == (int)PayslipTransactionType.SpecialRun);
             return await _dapper.ExecuteStoredProcedureSingle<int>("SP_SaveActualBatchPayslip", parameters); 
+        }
 
+        public async Task<bool> DeleteBatchTransaction(long transactionId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", transactionId);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("SP_DeleteTransactionDetails", parameters);
         }
     }
 }

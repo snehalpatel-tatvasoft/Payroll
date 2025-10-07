@@ -14,5 +14,6 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
         Task<bool> BatchTransactionDeleteBulk(BatchPayslipBulkInsert reqModel);
         Task<BatchPayslipTransaction?> UpdateTransactionDetail(BatchTransactionUpdate reqModel);
         Task<int> SaveBatchPayslip(BatchPayslipInsert reqModel);
+        Task<bool> DeleteBatchTransaction(long transactionId);
     }
 }

@@ -122,5 +122,18 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> DeleteBatchTransaction(long transactionId)
+        {
+            try
+            {
+                return await _batchPayslipService.DeleteBatchTransaction(transactionId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
     }
 }
