@@ -109,5 +109,18 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
                 return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
             }
         }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> SaveBatchPayslip(BatchPayslipInsert reqModel)
+        {
+            try
+            {
+                return await _batchPayslipService.SaveBatchPayslip(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
     }
 }

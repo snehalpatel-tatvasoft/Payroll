@@ -35,7 +35,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             return await _dapper.ExecuteStoredProcedureSingle<int>("usp_UpdateBatchPayslip", parameters);
         }
 
-        public async Task<int?> BatchPayslipTransactionDetailInsert(BatchPayslipInsert reqModel)
+        public async Task<int> BatchPayslipTransactionDetailInsert(BatchPayslipInsert reqModel)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@BatchId", reqModel.BatchId);
@@ -47,7 +47,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@IsRecurring", reqModel.IsRecurring);
             parameters.Add("@IsSpecialRun", reqModel.TransactionType == (int)PayslipTransactionType.SpecialRun);
             parameters.Add("@IsLeavePay", reqModel.TransactionType == (int)PayslipTransactionType.LeavePay);
-            return await _dapper.ExecuteStoredProcedureSingle<int?>("BatchPayslipTransactionDetailsInsert", parameters);
+            return await _dapper.ExecuteStoredProcedureFirst<int>("BatchPayslipTransactionDetailsInsert", parameters);
         }
 
         public async Task<List<BatchPayslipTransaction>> LoadPayslipTransaction(int batchId, bool mode)
@@ -162,6 +162,21 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@TransactionValues", reqModel.TransactionValues);
             parameters.Add("@CompanyId", reqModel.CompanyId);
             return await _dapper.ExecuteStoredProcedureSingle<BatchPayslipTransaction>("SP_UpadteTransactionDetailsForBulk", parameters);
+        }
+
+        public async Task<int> SaveBatchPayslip(BatchPayslipInsert reqModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", reqModel.BatchId);
+            parameters.Add("@BatchName", reqModel.BatchNumber);
+            parameters.Add("@BatchDescription", reqModel.BatchDescription);
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@CycleId", reqModel.CycleId);
+            parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
+            parameters.Add("@IsRecurring", reqModel.IsRecurring);
+            parameters.Add("@IsSpecialRun", reqModel.TransactionType == (int)PayslipTransactionType.SpecialRun);
+            return await _dapper.ExecuteStoredProcedureSingle<int>("SP_SaveActualBatchPayslip", parameters); 
+
         }
     }
 }

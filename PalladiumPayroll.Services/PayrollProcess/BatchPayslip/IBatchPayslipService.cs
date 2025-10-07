@@ -12,5 +12,6 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
         Task<JsonResult> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel);
         Task<JsonResult> BatchTransactionDeleteBulk(BatchPayslipBulkInsert reqModel);
         Task<JsonResult> UpdateTransactionDetail(BatchTransactionUpdate reqModel);
+        Task<JsonResult> SaveBatchPayslip(BatchPayslipInsert reqModel);
     }
 }

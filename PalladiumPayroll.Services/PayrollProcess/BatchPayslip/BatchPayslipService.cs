@@ -26,19 +26,19 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
 
         public async Task<JsonResult> LoadPayslipTransaction(BatchPayslipInsert reqModel)
         {
-            int? batchId = 0;
+            int batchId = 0;
             if(reqModel.BatchId == null || reqModel.BatchId == 0)
             {
                 batchId = await _batchPayslipRepository.BatchPayslipTransactionDetailInsert(reqModel);
             }
-            if(batchId != null && batchId > 0)
+            if(batchId > 0)
             {
-                var transaction = await _batchPayslipRepository.LoadPayslipTransaction(batchId ?? 0, reqModel.Mode?? false);
-                var leaves = await _batchPayslipRepository.LoadPayslipEmployeeLeave(batchId ?? 0, reqModel.Mode ?? false);
+                var transaction = await _batchPayslipRepository.LoadPayslipTransaction(batchId, reqModel.Mode ?? false);
+                var leaves = await _batchPayslipRepository.LoadPayslipEmployeeLeave(batchId, reqModel.Mode ?? false);
                 var data = new { transactionList = transaction , leaveList = leaves };
                 return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "Batch payslip Detail", "load"));
             }
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch payslip Detail", "load"));
         }
 
 
@@ -58,17 +58,30 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
         {
             var isDeleted = await _batchPayslipRepository.BatchTransactionDeleteBulk(reqModel);
             if (isDeleted)
+            {
                 return HttpStatusCodeResponse.SuccessResponse(isDeleted, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Deleted));
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch Transaction", ActionType.Deleted));
         }
 
         public async Task<JsonResult> UpdateTransactionDetail(BatchTransactionUpdate reqModel)
         {
             var transaction = await _batchPayslipRepository.UpdateTransactionDetail(reqModel);
             if (transaction != null)
+            {
                 return HttpStatusCodeResponse.SuccessResponse(transaction, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Updated));
-            return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch Transaction", ActionType.Updated));
         }
 
+        public async Task<JsonResult> SaveBatchPayslip(BatchPayslipInsert reqModel)
+        {
+            var batchId = await _batchPayslipRepository.SaveBatchPayslip(reqModel);
+            if (batchId > 0)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(batchId, string.Format(ResponseMessages.Success, "Batch Payslip", ActionType.Saved));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch Payslip", ActionType.Saved));
+        }
     }
 }
