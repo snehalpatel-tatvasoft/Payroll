@@ -38,7 +38,7 @@ public class TransactionListModelForPayslip
 
 public class SinglePayslipDetailsResponseDTO
 {
-      public long? EmployeePayslipPreviewDtlId { get; set; }
+    public long? EmployeePayslipPreviewDtlId { get; set; }
     public string? Description { get; set; }
     public decimal? Amount { get; set; }
     public decimal? Hours { get; set; }
@@ -48,3 +48,12 @@ public class SinglePayslipDetailsResponseDTO
     public int FixedAmount { get; set; }
 
 }
+ public class EmployeeLeaveDetailResponseDTO
+    {
+        public long EmployeeLeaveDetailId { get; set; }
+        public long EmployeeId { get; set; }
+        public string? LeaveType { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public decimal? Duration { get; set; }
+    }
