@@ -7,6 +7,7 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
         public int BatchTransactionId { get; set; }
         public int BatchId { get; set; }
         public int EmployeeId { get; set; }
+        public string? EmployeeName { get; set; }
         public string TransactionName { get; set; } = string.Empty;
         public int? PayrollTransactionId { get; set; }
         public BigInteger? TransactionOrder { get; set; }
