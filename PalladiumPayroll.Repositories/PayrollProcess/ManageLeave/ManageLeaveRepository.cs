@@ -143,11 +143,11 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.ManageLeave
             return await _dapper.ExecuteStoredProcedureSingle<int>("usp_UpsertBatchSingleLeave", parameters);
         }
 
-        public async Task<List<BatchLeave>> GetExistingBatchList(long companyId)
+        public async Task<List<BatchData>> GetExistingBatchList(long companyId)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@CompanyId", companyId);
-            return await _dapper.ExecuteStoredProcedure<BatchLeave>("usp_GetExistingBatch", parameters);
+            return await _dapper.ExecuteStoredProcedure<BatchData>("usp_GetExistingBatch", parameters);
         }
 
         public async Task<List<BatchLeaveImportData>> GetImportBatchLeave(BatchInfoRequest reqModal)

@@ -13,7 +13,7 @@
         public int TotalCount { get; set; }
     }
     
-    public class BatchLeave
+    public class BatchData
     {
         public int BatchId { get; set; }
         public string BatchNumber { get; set; } = null!;

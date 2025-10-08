@@ -15,6 +15,7 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
         public decimal? Rate { get; set; }
         public decimal? Unit { get; set; }
         public int? TransactionTypeId { get; set; }
+        public bool? IsRecurring { get; set; } = false;
         public bool IsValid { get; set; } = false;
         public string? ValidateMessage { get; set; }
         public string? CountryCode { get; set; }

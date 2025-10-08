@@ -21,6 +21,13 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<List<BatchData>> GetExistingBatchList(long companyId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@CompanyId", companyId);
+            return await _dapper.ExecuteStoredProcedure<BatchData>("usp_GetExistingBatchPayslipList", parameters);
+        }
+
         public async Task<int> UpdateBatchDetail(BatchInfoRequest reqModel)
         {
             var parameters = new DynamicParameters();
@@ -46,7 +53,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
             parameters.Add("@IsRecurring", reqModel.IsRecurring);
             parameters.Add("@IsSpecialRun", reqModel.TransactionType == (int)PayslipTransactionType.SpecialRun);
-            parameters.Add("@IsLeavePay", reqModel.TransactionType == (int)PayslipTransactionType.LeavePay);
+            parameters.Add("@IsLeavePay", reqModel.TransactionType == (int)PayslipTransactionType.LeavePay);    
             return await _dapper.ExecuteStoredProcedureFirst<int>("BatchPayslipTransactionDetailsInsert", parameters);
         }
 
@@ -164,6 +171,13 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             return await _dapper.ExecuteStoredProcedureSingle<BatchPayslipTransaction>("SP_UpadteTransactionDetailsForBulk", parameters);
         }
 
+        public async Task<bool> DeleteBatchTransaction(long transactionId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", transactionId);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("SP_DeleteTransactionDetails", parameters);
+        }
+
         public async Task<int> SaveBatchPayslip(BatchPayslipInsert reqModel)
         {
             var parameters = new DynamicParameters();
@@ -178,11 +192,9 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             return await _dapper.ExecuteStoredProcedureSingle<int>("SP_SaveActualBatchPayslip", parameters); 
         }
 
-        public async Task<bool> DeleteBatchTransaction(long transactionId)
+        public async Task<int> ProcessBatchPayslip(BatchPayslipInsert reqModel)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@Id", transactionId);
-            return await _dapper.ExecuteStoredProcedureSingle<bool>("SP_DeleteTransactionDetails", parameters);
+            return 0;
         }
     }
 }

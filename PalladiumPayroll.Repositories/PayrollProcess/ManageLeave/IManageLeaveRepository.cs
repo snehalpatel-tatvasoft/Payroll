@@ -15,7 +15,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.ManageLeave
         Task<int> UpdateBatchDetail(BatchInfoRequest reqModel);
         Task<bool> BatchLeaveImport(BatchLeaveImport reqModel, DataTable batchLeaveTable);
         Task<int> UpsertBatchSingleLeave(BatchLeaveDetail reqModel);
-        Task<List<BatchLeave>> GetExistingBatchList(long companyId);
+        Task<List<BatchData>> GetExistingBatchList(long companyId);
         Task<List<BatchLeaveImportData>> GetImportBatchLeave(BatchInfoRequest reqModal);
         Task<bool> SaveImportBatchLeave(int batchId);
         Task<List<BatchLeaveImportActualData>> GetImportActualBatchLeave(int batchId);

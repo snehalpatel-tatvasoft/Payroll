@@ -18,6 +18,12 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
             _batchPayslipRepository = batchPayslipRepository;
         }
 
+        public async Task<JsonResult> GetExistingBatchList(long companyId)
+        {
+            var batchList = await _batchPayslipRepository.GetExistingBatchList(companyId);
+            return HttpStatusCodeResponse.SuccessResponse(batchList, string.Format(ResponseMessages.Success, "Batch List", "load"));
+        }
+
         public async Task<JsonResult> UpdateBatchDetail(BatchInfoRequest reqModel)
         {
             var batchId = await _batchPayslipRepository.UpdateBatchDetail(reqModel);

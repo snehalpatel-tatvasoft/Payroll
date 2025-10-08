@@ -19,12 +19,11 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
 
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> GetExistingBatch(int companyId)
+        public async Task<ActionResult> GetExistingBatch(long companyId)
         {
             try
             {
-                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
-                //return await _batchPayslipService.GetExistingBatch(companyId);
+                return await _batchPayslipService.GetExistingBatchList(companyId);
             }
             catch (Exception)
             {
