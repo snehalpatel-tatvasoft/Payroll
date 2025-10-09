@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave;
 using PalladiumPayroll.DTOs.Miscellaneous;

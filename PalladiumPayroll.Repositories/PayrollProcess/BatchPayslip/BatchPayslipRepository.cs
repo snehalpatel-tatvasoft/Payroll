@@ -54,7 +54,8 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
             parameters.Add("@IsRecurring", reqModel.IsRecurring);
             parameters.Add("@IsSpecialRun", reqModel.TransactionType == (int)PayslipTransactionType.SpecialRun);
-            parameters.Add("@IsLeavePay", reqModel.TransactionType == (int)PayslipTransactionType.LeavePay);    
+            parameters.Add("@IsLeavePay", reqModel.TransactionType == (int)PayslipTransactionType.LeavePay);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value);
             return await _dapper.ExecuteStoredProcedureFirst<int>("BatchPayslipTransactionDetailsInsert", parameters);
         }
 
