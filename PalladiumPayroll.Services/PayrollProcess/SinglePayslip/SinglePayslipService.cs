@@ -134,4 +134,22 @@ public class SinglePayslipService : ISinglePayslipService
 
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Deleted));
     }
+    public async Task<JsonResult> GetEmployeeLeaveDetails(long employeeId, long processingCyclePeriodId)
+    {
+        var leaves = await _singlePayslipRepository.GetEmployeeLeaveDetails(employeeId, processingCyclePeriodId);
+
+        if (leaves.Any())
+        {
+            return HttpStatusCodeResponse.SuccessResponse(
+                leaves,
+                string.Format(ResponseMessages.Success, "Employee Leave Details", ActionType.Retrieved)
+            );
+        }
+
+        return HttpStatusCodeResponse.SuccessResponse(
+            new List<EmployeeLeaveDetailResponseDTO>(),
+            "No leave records found for the given employee and period."
+        );
+    }
+
 }

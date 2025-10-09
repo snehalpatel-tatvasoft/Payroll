@@ -261,5 +261,18 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return true;
     }
+    public async Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveDetails(long employeeId, long processingCyclePeriodId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@EmployeeId", employeeId);
+        parameters.Add("@ProcessingCyclePeriodId", processingCyclePeriodId);
+
+        var result = await _dapper.ExecuteStoredProcedure<EmployeeLeaveDetailResponseDTO>(
+            "usp_GetEmployeeLeaveDetailsForPayslip",
+            parameters
+        );
+
+        return result?.ToList() ?? new List<EmployeeLeaveDetailResponseDTO>();
+    }
 
 }
