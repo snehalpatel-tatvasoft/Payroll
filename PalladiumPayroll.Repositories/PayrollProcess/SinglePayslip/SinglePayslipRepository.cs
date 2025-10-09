@@ -94,6 +94,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@ProcessingCyclePeriodId", request.ProcessingCyclePeriodId);
         parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@PayslipType", request.PayslipType);
+        parameters.Add("@StdTrans", request.StdTrans);
 
         DataTable? dt = new DataTable();
         dt.Columns.Add("TransactionID", typeof(int));
