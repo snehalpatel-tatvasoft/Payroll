@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PalladiumPayroll.DataContext;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave;
 using PalladiumPayroll.DTOs.Miscellaneous.Constants;
@@ -166,6 +167,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@TransactionType", reqModel.TransactionType);
             parameters.Add("@TransactionName", reqModel.TransactionName);
             parameters.Add("@Unit", reqModel.Unit);
+            parameters.Add("@IsRecurring", reqModel.IsRecurring ?? false);
             parameters.Add("@TransactionValues", reqModel.TransactionValues);
             parameters.Add("@CompanyId", reqModel.CompanyId);
             return await _dapper.ExecuteStoredProcedureSingle<BatchPayslipTransaction>("SP_UpadteTransactionDetailsForBulk", parameters);
@@ -192,9 +194,15 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             return await _dapper.ExecuteStoredProcedureSingle<int>("SP_SaveActualBatchPayslip", parameters); 
         }
 
-        public async Task<int> ProcessBatchPayslip(BatchPayslipInsert reqModel)
+        public async Task<SPResultMessage> ProcessBatchPayslip(BatchPayslipProcess reqModel)
         {
-            return 0;
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", reqModel.BatchId);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value);
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@IsAppend", reqModel.IsAppend);
+            parameters.Add("@PayslipType", reqModel.TransactionType);
+            return await _dapper.ExecuteStoredProcedureFirst<SPResultMessage>("BatchPayslipProcess", parameters);
         }
     }
 }

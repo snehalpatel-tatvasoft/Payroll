@@ -58,7 +58,7 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> MultiTransactionLoad([FromQuery]MultiTransactionGet reqModel)
+        public async Task<ActionResult> MultiTransactionLoad([FromQuery] MultiTransactionGet reqModel)
         {
             try
             {
@@ -128,6 +128,19 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
             try
             {
                 return await _batchPayslipService.DeleteBatchTransaction(transactionId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> ProcessBatchPayslip(BatchPayslipProcess reqModel)
+        {
+            try
+            {
+                return await _batchPayslipService.ProcessBatchPayslip(reqModel);
             }
             catch (Exception ex)
             {

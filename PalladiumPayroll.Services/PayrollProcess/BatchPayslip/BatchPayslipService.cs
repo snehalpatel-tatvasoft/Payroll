@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.AspNetCore.Mvc;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave;
 using PalladiumPayroll.DTOs.Miscellaneous;
@@ -98,6 +99,16 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
                 return HttpStatusCodeResponse.SuccessResponse(isDeleted, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Deleted));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch Transaction", ActionType.Deleted));
+        }
+
+        public async Task<JsonResult> ProcessBatchPayslip(BatchPayslipProcess reqModel)
+        {
+            var res = await _batchPayslipRepository.ProcessBatchPayslip(reqModel);
+            if (res.Result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Batch Payslip", ActionType.Processed));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch Transaction", ActionType.Processing));
         }
     }
 }

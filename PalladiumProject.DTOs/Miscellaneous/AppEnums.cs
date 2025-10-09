@@ -12,12 +12,14 @@
             Retrieved,
             Imported,
             Exported,
+            Processed,
             Saving,
             Retrieving,
             Updating,
             Deleting,
             Importing,
-            Exporting
+            Exporting,
+            Processing
         }
 
         public enum PositiveNumbers

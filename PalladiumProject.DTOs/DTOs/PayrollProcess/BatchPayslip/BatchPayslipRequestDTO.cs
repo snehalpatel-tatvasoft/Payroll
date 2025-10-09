@@ -27,6 +27,7 @@
         public int TransactionType { get; set; }
         public string? TransactionName { get; set; }
         public decimal Unit { get; set; } = 0.00M;
+        public bool? IsRecurring { get; set; } = false;
         public decimal TransactionValues { get; set; } = 0.00M;
         public int CompanyId { get; set; }
     }
@@ -42,5 +43,14 @@
 	    public string TransactionName { get; set; }
         public decimal Amount { get; set; }
         public decimal Hours { get; set; }
+    }
+
+    public class BatchPayslipProcess
+    {
+        public int BatchId { get; set; }
+        public long CompanyId { get; set; }
+        public bool IsAppend { get; set; }
+        public int TransactionType { get; set; }
+
     }
 }
