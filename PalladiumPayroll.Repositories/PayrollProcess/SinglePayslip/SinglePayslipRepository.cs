@@ -93,26 +93,39 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
         parameters.Add("@ProcessingCyclePeriodId", request.ProcessingCyclePeriodId);
         parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+        parameters.Add("@PayslipType", request.PayslipType);
 
         DataTable? dt = new DataTable();
-        dt.Columns.Add("PayrollCycleId", typeof(long));
-        dt.Columns.Add("Description", typeof(string));
-        dt.Columns.Add("Amount", typeof(decimal));
-        dt.Columns.Add("IsRecurring", typeof(bool));
-        dt.Columns.Add("Hours", typeof(decimal));
+        dt.Columns.Add("TransactionID", typeof(int));
+        dt.Columns.Add("TransactionType", typeof(string));
+        dt.Columns.Add("TransactionName", typeof(string));
+        dt.Columns.Add("TransactionValue", typeof(decimal));
+        dt.Columns.Add("ETI", typeof(string));
+        dt.Columns.Add("Recurring", typeof(bool));
+        dt.Columns.Add("TransactionHours", typeof(decimal));
 
         foreach (var item in request.PayslipDetails)
         {
-            dt.Rows.Add(item.PayrollProcessId, item.Description, item.Amount, item.IsRecurring, item.Hours);
+            dt.Rows.Add(
+                item.PayrollProcessId,
+                item.TransactionType ?? string.Empty,
+                item.Description ?? string.Empty,
+                item.Amount,
+                item.ETI ?? string.Empty,
+                item.IsRecurring,
+                item.Hours
+            );
         }
 
-        parameters.Add("@PayslipDetails", dt.AsTableValuedParameter("dbo.PayslipDetailType"));
+        parameters.Add("@PayslipDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails"));
 
         long result = await _dapper.ExecuteStoredProcedureSingle<long>(
             "usp_ProcessSinglePayslip", parameters);
 
         return result;
     }
+
+    
 
     public async Task<List<SinglePayslipDetailsResponseDTO>> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
     {

@@ -46,7 +46,6 @@ public class SinglePayslipDetailsResponseDTO
     public bool IsRecurring { get; set; }
     public string? CalculationType { get; set; }
     public int FixedAmount { get; set; }
-
 }
 public class EmployeeLeaveDetailResponseDTO
 {

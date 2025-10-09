@@ -1,8 +1,5 @@
 namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.SinglePayslip;
 
-public class SinglePayslipRequestDTO
-{
-}
 public class GetEmployeesForProcessingRequestDTO
 {
     public long PayrollCycleId { get; set; }
@@ -16,6 +13,7 @@ public class ProcessSinglePayslipRequestDTO
     public long EmployeeId { get; set; }
     public long CompanyPayrollId { get; set; }
     public long ProcessingCyclePeriodId { get; set; }
+    public int PayslipType { get; set; }
     public List<PayslipDetailDTO> PayslipDetails { get; set; } = new List<PayslipDetailDTO>();
 }
 
@@ -26,7 +24,10 @@ public class PayslipDetailDTO
     public decimal Amount { get; set; }
     public bool IsRecurring { get; set; }
     public decimal? Hours { get; set; }
+    public string? ETI{get; set;}
+    public string? TransactionType{get; set;}
 }
+
 public class TransactionDetailDTO
 {
     public long TransactionID { get; set; }
@@ -34,6 +35,7 @@ public class TransactionDetailDTO
     public decimal TransactionValue { get; set; }
     public string? TransactionType { get; set; }
 }
+
 public class GetSinglePayslipDetailsRequestDTO
 {
     public long EmployeeId { get; set; }
@@ -43,8 +45,8 @@ public class GetSinglePayslipDetailsRequestDTO
     public int? NoOfDaysWorked { get; set; }
     public decimal? RatePerHour { get; set; }
     public List<TransactionDetailDTO> TransactionDetails { get; set; } = new();
-
 }
+
 public class PayslipDeleteTransactionDTO
 {
     public int EmployeePayslipPreviewDtlId { get; set; }
