@@ -95,6 +95,8 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@PayslipType", request.PayslipType);
         parameters.Add("@StdTrans", request.StdTrans);
+        parameters.Add("@TotalLeaveDays", request.TotalLeaveDays);
+        parameters.Add("@TotalPresentDays", request.TotalPresentDays);
 
         DataTable? dt = new DataTable();
         dt.Columns.Add("TransactionID", typeof(int));

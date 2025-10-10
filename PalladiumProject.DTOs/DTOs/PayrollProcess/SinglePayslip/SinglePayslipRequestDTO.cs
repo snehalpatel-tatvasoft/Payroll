@@ -15,6 +15,8 @@ public class ProcessSinglePayslipRequestDTO
     public long ProcessingCyclePeriodId { get; set; }
     public int PayslipType { get; set; }
     public int StdTrans { get; set; }
+    public decimal TotalLeaveDays { get; set; }
+    public decimal TotalPresentDays { get; set; }
     public List<PayslipDetailDTO> PayslipDetails { get; set; } = new List<PayslipDetailDTO>();
 }
 
