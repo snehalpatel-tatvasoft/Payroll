@@ -104,9 +104,10 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             transTbl.Columns.Add("TransactionName", typeof(string));
             transTbl.Columns.Add("Amount", typeof(decimal));
             transTbl.Columns.Add("Hours", typeof(decimal));
+            transTbl.Columns.Add("IsRecuring", typeof(bool));
             foreach (var transaction in reqModel.BatchTransaction)
             {
-                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchNumber, reqModel.BatchDescription, reqModel.CycleId, reqModel.ProcessPriod, transaction.TransactionName, transaction.Amount, transaction.Hours);
+                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchNumber, reqModel.BatchDescription, reqModel.CycleId, reqModel.ProcessPriod, transaction.TransactionName, transaction.Amount, transaction.Hours, transaction.IsRecurring);
             }
 
             var parameters = new DynamicParameters();
@@ -141,9 +142,10 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             transTbl.Columns.Add("TransactionName", typeof(string));
             transTbl.Columns.Add("Amount", typeof(decimal));
             transTbl.Columns.Add("Hours", typeof(decimal));
+            transTbl.Columns.Add("IsRecuring", typeof(bool));
             foreach (var transaction in reqModel.BatchTransaction)
             {
-                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchNumber, reqModel.BatchDescription, reqModel.CycleId, reqModel.ProcessPriod, transaction.TransactionName, transaction.Amount, transaction.Hours);
+                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchNumber, reqModel.BatchDescription, reqModel.CycleId, reqModel.ProcessPriod, transaction.TransactionName, transaction.Amount, transaction.Hours, transaction.IsRecurring);
             }
 
             var parameters = new DynamicParameters();
