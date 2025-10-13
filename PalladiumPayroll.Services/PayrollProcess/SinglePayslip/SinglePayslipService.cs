@@ -151,5 +151,23 @@ public class SinglePayslipService : ISinglePayslipService
             "No leave records found for the given employee and period."
         );
     }
+    public async Task<JsonResult> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId, long companyId)
+    {
+        var leaves = await _singlePayslipRepository.GetEmployeeLeaveHistory(employeeId, processingCyclePeriodId,companyId);
+
+        if (leaves.Any())
+        {
+            return HttpStatusCodeResponse.SuccessResponse(
+                leaves,
+                string.Format(ResponseMessages.Success, "Employee Leave History", ActionType.Retrieved)
+            );
+        }
+
+        return HttpStatusCodeResponse.SuccessResponse(
+            new List<EmployeeLeaveDetailResponseDTO>(),
+            "No leave records found for the given employee and period."
+        );
+    }
+
 
 }
