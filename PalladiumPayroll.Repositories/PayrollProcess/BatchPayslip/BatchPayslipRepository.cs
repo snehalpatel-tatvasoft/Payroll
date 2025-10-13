@@ -77,14 +77,24 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
 
 
         #region MultiTransaction
-        public async Task<List<SpecialTransaction>> GetSpecialRunTransaction(MultiTransactionGet reqModel)
+
+        public async Task<List<DropDownViewModel>> GetEmployeeBaseOnPeriod(int periodId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@ProcessPeriodId", periodId);
+            return await _dapper.ExecuteStoredProcedure<DropDownViewModel>("usp_LoadEmployeesBasedOnPeroid", parameters);
+        }
+
+        public async Task<MultiTransaction> GetMultiTransaction(MultiTransactionGet reqModel)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@ProcessPreiodId", reqModel.ProcessPreiodId);
             parameters.Add("@CompanyId", reqModel.CompanyId);
             parameters.Add("@TransactionType", reqModel.TransactionType);
-            return await _dapper.ExecuteStoredProcedure<SpecialTransaction>("SP_GetSpecialRunTransactions", parameters);
-        } 
+            List<DropDownViewModel> employeeList = await GetEmployeeBaseOnPeriod(reqModel.ProcessPreiodId);
+            List<SpecialTransaction> transaction = await _dapper.ExecuteStoredProcedure<SpecialTransaction>("SP_GetSpecialRunTransactions", parameters);
+            return new MultiTransaction() { Employees = employeeList, Transactions = transaction };
+        }
 
         public async Task<List<BatchPayslipTransaction>> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel)
         {
@@ -194,7 +204,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
             parameters.Add("@IsRecurring", reqModel.IsRecurring);
             parameters.Add("@IsSpecialRun", reqModel.TransactionType == (int)PayslipTransactionType.SpecialRun);
-            return await _dapper.ExecuteStoredProcedureSingle<int>("SP_SaveActualBatchPayslip", parameters); 
+            return await _dapper.ExecuteStoredProcedureSingle<int>("SP_SaveActualBatchPayslip", parameters);
         }
 
         public async Task<SPResultMessage> ProcessBatchPayslip(BatchPayslipProcess reqModel)

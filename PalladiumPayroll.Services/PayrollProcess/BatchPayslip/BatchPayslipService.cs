@@ -51,11 +51,10 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch payslip Detail", "load"));
         }
 
-
         public async Task<JsonResult> MultiTransactionLoad(MultiTransactionGet reqModel)
         {
-            var transaction = await _batchPayslipRepository.GetSpecialRunTransaction(reqModel);
-            return HttpStatusCodeResponse.SuccessResponse(transaction, string.Format(ResponseMessages.Success, "multi Transaction", "load"));
+            var data = await _batchPayslipRepository.GetMultiTransaction(reqModel);
+            return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "multi Transaction", "load"));
         }
 
         public async Task<JsonResult> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel)

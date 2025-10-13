@@ -11,7 +11,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
         Task<List<BatchPayslipTransaction>> LoadPayslipTransaction(int batchId, bool mode);
         Task<List<BatchPayslipLeave>> LoadPayslipEmployeeLeave(int batchId, bool mode);
         Task<int> BatchPayslipTransactionDetailInsert(BatchPayslipInsert reqModel);
-        Task<List<SpecialTransaction>> GetSpecialRunTransaction(MultiTransactionGet reqModel);
+        Task<MultiTransaction> GetMultiTransaction(MultiTransactionGet reqModel);
         Task<List<BatchPayslipTransaction>> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel);
         Task<bool> BatchTransactionDeleteBulk(BatchPayslipBulkInsert reqModel);
         Task<BatchPayslipTransaction?> UpdateTransactionDetail(BatchTransactionUpdate reqModel);

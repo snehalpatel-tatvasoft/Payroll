@@ -82,7 +82,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.ManageLeave
             var parameters = new DynamicParameters();
             parameters.Add("@ProcessPeriodId", periodId);
 
-            var data = await _dapper.ExecuteStoredProcedureMultipleAsync("usp_LoadEmployeesBasedOnPeroid", parameters, async (multi) =>
+            var data = await _dapper.ExecuteStoredProcedureMultipleAsync("usp_LoadEmployeesBasedOnPeroidWithDueDays", parameters, async (multi) =>
             {
                 var employeeList = await multi.ReadAsync<DropDownViewModel>();
                 var employeeDueDays = await multi.ReadAsync<EmployeeDueDays>();

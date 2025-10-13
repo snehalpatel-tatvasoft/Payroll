@@ -1,4 +1,6 @@
-﻿namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
+﻿using PalladiumPayroll.DTOs.DTOs.Common;
+
+namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
 {
     public class BatchPayslipTransaction
     {
@@ -45,6 +47,12 @@
     {
         public int BatchTransactionId { get; set; }
         public int BatchId { get; set; }
+    }
+
+    public class MultiTransaction
+    {
+        public List<DropDownViewModel> Employees { get; set; }
+        public List<SpecialTransaction> Transactions { get; set; }
     }
 
     public class SpecialTransaction
