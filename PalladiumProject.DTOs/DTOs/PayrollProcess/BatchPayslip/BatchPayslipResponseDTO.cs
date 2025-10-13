@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
+﻿namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
 {
     public class BatchPayslipTransaction
     {
@@ -10,7 +8,7 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
         public string? EmployeeName { get; set; }
         public string TransactionName { get; set; } = string.Empty;
         public int? PayrollTransactionId { get; set; }
-        public BigInteger? TransactionOrder { get; set; }
+        public long? TransactionOrder { get; set; }
         public decimal? TransactionValues { get; set; }
         public bool? IsUnit { get; set; } = false;
         public decimal? Rate { get; set; }

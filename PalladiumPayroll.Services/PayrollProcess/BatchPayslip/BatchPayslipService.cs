@@ -37,6 +37,10 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
             {
                 batchId = await _batchPayslipRepository.BatchPayslipTransactionDetailInsert(reqModel);
             }
+            else
+            {
+                batchId = reqModel.BatchId ?? 0;
+            }
             if(batchId > 0)
             {
                 var transaction = await _batchPayslipRepository.LoadPayslipTransaction(batchId, reqModel.Mode ?? false);
