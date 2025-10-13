@@ -120,7 +120,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@IsRecurring", reqModel.IsRecurring);
             parameters.Add("@tblEmployees", empTbl.AsTableValuedParameter("dbo.tblEmployee"));
             parameters.Add("@tblBatchTransaction", transTbl.AsTableValuedParameter("dbo.tblBatchTransaction"));
-            parameters.Add("@IsSpecialRun", reqModel.IsRecurring);
+            parameters.Add("@IsSpecialRun", reqModel.TransactionType == (int)PayslipTransactionType.SpecialRun);
             parameters.Add("@IsLeavePay", reqModel.TransactionType == (int)PayslipTransactionType.LeavePay);
             return await _dapper.ExecuteStoredProcedure<BatchPayslipTransaction>("BatchPayslipTransactionDetailsInsertORUpdate", parameters);
         }
