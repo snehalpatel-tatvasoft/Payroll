@@ -185,6 +185,25 @@ public class SinglePayslipController : ControllerBase
             );
         }
     }
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId,long companyId)
+    {
+        try
+        {
+            if (employeeId <= 0)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse("Invalid employee or processing period ID.");
+            }
+
+            return await _singlePayslipService.GetEmployeeLeaveHistory(employeeId, processingCyclePeriodId,companyId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Employee Leave Details")
+            );
+        }
+    }
 
     [HttpGet("[action]")]
     public async Task<ActionResult> GetPayslipPreviewDetails(int payslipPreviewId)

@@ -15,6 +15,9 @@ public interface ISinglePayslipRepository
     Task<(decimal UIFCal, decimal UIFIncome)> GetUIFCalculation(GetSinglePayslipDetailsRequestDTO request);
     Task<bool> DeleteSinglePayslipTransactions(List<PayslipDeleteTransactionDTO> transactions);
     Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveDetails(long employeeId, long processingCyclePeriodId);
+    Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId,long companyId);
+
+    
     Task<PayslipPreviewHeaderDTO?> GetPayslipPreviewDetails(int payslipPreviewId);
 
 }
