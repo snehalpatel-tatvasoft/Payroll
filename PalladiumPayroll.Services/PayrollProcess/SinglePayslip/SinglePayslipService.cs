@@ -134,6 +134,7 @@ public class SinglePayslipService : ISinglePayslipService
 
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Deleted));
     }
+
     public async Task<JsonResult> GetEmployeeLeaveDetails(long employeeId, long processingCyclePeriodId)
     {
         var leaves = await _singlePayslipRepository.GetEmployeeLeaveDetails(employeeId, processingCyclePeriodId);
@@ -152,4 +153,13 @@ public class SinglePayslipService : ISinglePayslipService
         );
     }
 
+    public async Task<JsonResult> GetPayslipPreviewDetails(int payslipPreviewId)
+    {
+        PayslipPreviewHeaderDTO? header = await _singlePayslipRepository.GetPayslipPreviewDetails(payslipPreviewId);
+
+        return HttpStatusCodeResponse.SuccessResponse(
+            header,
+            string.Format(ResponseMessages.Success, "Employee Preview Details", ActionType.Retrieved)
+        );
+    }
 }

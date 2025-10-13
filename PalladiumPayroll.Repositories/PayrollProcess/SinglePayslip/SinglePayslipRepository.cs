@@ -128,7 +128,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         return result;
     }
 
-    
+
 
     public async Task<List<SinglePayslipDetailsResponseDTO>> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
     {
@@ -275,6 +275,27 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         );
 
         return result?.ToList() ?? new List<EmployeeLeaveDetailResponseDTO>();
+    }
+
+    public async Task<PayslipPreviewHeaderDTO?> GetPayslipPreviewDetails(int payslipPreviewId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@PayslipPreviewId", payslipPreviewId);
+
+        return await _dapper.ExecuteStoredProcedureMultipleAsync(
+            "LoadPayslipPreviewDetails",
+            parameters,
+            async multi =>
+            {
+                PayslipPreviewHeaderDTO? header = await multi.ReadFirstOrDefaultAsync<PayslipPreviewHeaderDTO>();
+
+                List<PayslipPreviewDetailDTO>? details = (await multi.ReadAsync<PayslipPreviewDetailDTO>()).ToList();
+
+                if (header != null)
+                    header.Details = details;
+
+                return header;
+            });
     }
 
 }
