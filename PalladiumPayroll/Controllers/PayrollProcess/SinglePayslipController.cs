@@ -223,4 +223,18 @@ public class SinglePayslipController : ControllerBase
             );
         }
     }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> SaveSinglePayslip( long employeePayslipPreviewId)
+    {
+        try
+        {
+            return await _singlePayslipService.SaveSinglePayslip(employeePayslipPreviewId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, "Payslip"));
+        }
+    }
 }

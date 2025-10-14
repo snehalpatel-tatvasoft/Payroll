@@ -19,5 +19,6 @@ public interface ISinglePayslipService
     Task<JsonResult> GetEmployeeLeaveDetails(long employeeId, long processingCyclePeriodId);
     Task<JsonResult> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId,long companyId);
     Task<JsonResult> GetPayslipPreviewDetails(int payslipPreviewId);
+    Task<JsonResult> SaveSinglePayslip(long payslipPreviewId);
 
 }

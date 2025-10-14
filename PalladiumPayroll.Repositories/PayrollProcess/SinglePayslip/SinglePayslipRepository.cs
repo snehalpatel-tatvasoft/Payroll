@@ -276,7 +276,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return result?.ToList() ?? new List<EmployeeLeaveDetailResponseDTO>();
     }
-    public async Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId,long companyId)
+    public async Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId, long companyId)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@EmployeeId", employeeId);
@@ -310,6 +310,19 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
                 return header;
             });
+    }
+
+     public async Task<long> SaveSinglePayslip(long employeePayslipPreviewId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@EmployeePayslipPreviewId", employeePayslipPreviewId);
+        parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+       
+
+        long result = await _dapper.ExecuteStoredProcedureSingle<long>(
+            "usp_SaveSinglePayslip", parameters);
+
+        return result;
     }
 
 }
