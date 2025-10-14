@@ -56,5 +56,7 @@ public class EmployeeLeaveDetailResponseDTO
     public DateTime? EndDate { get; set; }
     public decimal? Duration { get; set; }
     public int LeaveTypeId { get; set; }
+    public int DaysAccrued { get; set; }
+    public int DaysDue { get; set; }
         
 }
