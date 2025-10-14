@@ -19,7 +19,7 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
 
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> GetExistingBatch(long companyId)
+        public async Task<ActionResult> GetExistingBatchList(long companyId)
         {
             try
             {
