@@ -170,6 +170,32 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("BatchPayslipTransactionDetailsDelete", parameters);
             return result;
         }
+
+        public async Task<bool> ImportBatchTransactionUpsert(BatchPayslipInsert reqModel, DataTable importTransactionData, string fileName)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@BatchId", reqModel.BatchId);
+                parameters.Add("@BatchName", reqModel.BatchNumber);
+                parameters.Add("@BatchDescription", reqModel.BatchDescription);
+                parameters.Add("@CompanyId", reqModel.CompanyId);
+                parameters.Add("@CycleId", reqModel.CycleId);
+                parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
+                parameters.Add("@IsRecurring", reqModel.IsRecurring);
+                parameters.Add("@CompanyId", reqModel.CompanyId);
+                parameters.Add("@TemplateName", "Batch Transaction");
+                parameters.Add("@ImportFileName", fileName);
+                parameters.Add("@ActualTableName", "BatchPayslipTransaction");
+                parameters.Add("@tblMultiTrancsaction", importTransactionData.AsTableValuedParameter("dbo.[ImportMultiTransaction]"));
+                var result = await _dapper.ExecuteStoredProcedureSingle<bool>("SP_ImportMultiTransactions", parameters);
+                return result;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
         #endregion
 
         public async Task<BatchPayslipTransaction?> UpdateTransactionDetail(BatchTransactionUpdate reqModel)

@@ -1,6 +1,7 @@
 ﻿using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave;
+using System.Data;
 
 namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
 {
@@ -14,6 +15,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
         Task<MultiTransaction> GetMultiTransaction(MultiTransactionGet reqModel);
         Task<List<BatchPayslipTransaction>> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel);
         Task<bool> BatchTransactionDeleteBulk(BatchPayslipBulkInsert reqModel);
+        Task<bool> ImportBatchTransactionUpsert(BatchPayslipInsert reqModel, DataTable importTransactionData, string fileName);
         Task<BatchPayslipTransaction?> UpdateTransactionDetail(BatchTransactionUpdate reqModel);
         Task<int> SaveBatchPayslip(BatchPayslipInsert reqModel);
         Task<bool> DeleteBatchTransaction(long transactionId);

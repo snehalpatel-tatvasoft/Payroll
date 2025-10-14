@@ -2,7 +2,9 @@
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave;
 using PalladiumPayroll.DTOs.Miscellaneous;
+using PalladiumPayroll.Helper.ImportExport;
 using PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip;
+using System.Data;
 using static PalladiumPayroll.Helper.Constants.AppConstants;
 using static PalladiumPayroll.Helper.Constants.AppEnums;
 
@@ -71,6 +73,27 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
                 return HttpStatusCodeResponse.SuccessResponse(isDeleted, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Deleted));
             }
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch Transaction", ActionType.Deleted));
+        }
+
+        public async Task<JsonResult> ImportBatchTransactionUpsert(ImportBatchPayslipBulkInsert reqModel)
+        {
+            var headerColumn = new DataColumn[]
+            {
+                new DataColumn("EmployeeCode", typeof(string)), new DataColumn("TransactionType", typeof(string)),
+                new DataColumn("TransactionName", typeof(string)), new DataColumn("Unit", typeof(decimal)),
+                new DataColumn("Value", typeof(decimal)), new DataColumn("IsRecurring", typeof(bool))
+            };
+            var excelData = ExcelHelper.ImportFromExcel(reqModel.BatchTransaction, true, headerColumn);
+            if (excelData.Rows.Count > 0)
+            {
+                var isImported = await _batchPayslipRepository.ImportBatchTransactionUpsert(reqModel, excelData, reqModel.BatchTransaction.FileName);
+                if (isImported)
+                {
+                    return HttpStatusCodeResponse.SuccessResponse(isImported, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Imported));
+                }
+                return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch Transaction", ActionType.Importing));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.NotFound, "Transaction"));
         }
 
         public async Task<JsonResult> UpdateTransactionDetail(BatchTransactionUpdate reqModel)

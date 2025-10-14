@@ -1,4 +1,6 @@
-﻿namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
+﻿using Microsoft.AspNetCore.Http;
+
+namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
 {
     public class BatchPayslipInsert
     {
@@ -36,6 +38,11 @@
     {
         public List<int> EmployeeIds { get; set; }
         public List<BatchTransactionTbl> BatchTransaction { get; set; }
+    }
+
+    public class ImportBatchPayslipBulkInsert : BatchPayslipInsert
+    {
+        public IFormFile BatchTransaction { get; set; }
     }
 
     public class BatchTransactionTbl

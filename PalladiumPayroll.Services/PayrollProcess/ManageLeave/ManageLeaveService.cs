@@ -72,10 +72,6 @@ namespace PalladiumPayroll.Services.PayrollProcess.ManageLeave
                 new DataColumn("DueDays", typeof(decimal)), new DataColumn("Comment", typeof(string))
             };
             var excelData = ExcelHelper.ImportFromExcel(reqModel.File, true, headerColumn);
-            excelData.Rows.RemoveAt(2);
-            excelData.Rows.RemoveAt(1);
-
-
             var res = await _manageLeaveRepository.BatchLeaveImport(reqModel, excelData);
             if (res)
             {

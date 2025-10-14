@@ -97,6 +97,19 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
         }
 
         [HttpPost("[action]")]
+        public async Task<ActionResult> ImportBatchTransactionUpsert([FromForm]ImportBatchPayslipBulkInsert reqModel)
+        {
+            try
+            {
+                return await _batchPayslipService.ImportBatchTransactionUpsert(reqModel);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
         public async Task<ActionResult> UpdateTransactionDetail(BatchTransactionUpdate reqModel)
         {
             try
