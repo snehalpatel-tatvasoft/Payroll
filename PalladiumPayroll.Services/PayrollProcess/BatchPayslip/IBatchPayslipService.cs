@@ -7,6 +7,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
     public interface IBatchPayslipService
     {
         Task<JsonResult> GetExistingBatchList(long companyId);
+        Task<JsonResult> DeleteExistingBatch(int batchId);
         Task<JsonResult> UpdateBatchDetail(BatchInfoRequest reqModel);
         Task<JsonResult> LoadPayslipTransaction(BatchPayslipInsert reqModel);
         Task<JsonResult> MultiTransactionLoad(MultiTransactionGet reqModel);

@@ -8,6 +8,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
     public interface IBatchPayslipRepository
     {
         Task<List<BatchData>> GetExistingBatchList(long companyId);
+        Task<bool> DeleteExistingBatch(int batchId);
         Task<int> UpdateBatchDetail(BatchInfoRequest reqModel);
         Task<List<BatchPayslipTransaction>> LoadPayslipTransaction(int batchId, bool mode);
         Task<List<BatchPayslipLeave>> LoadPayslipEmployeeLeave(int batchId, bool mode);

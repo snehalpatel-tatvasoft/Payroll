@@ -29,6 +29,13 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             return await _dapper.ExecuteStoredProcedure<BatchData>("usp_GetExistingBatchPayslipList", parameters);
         }
 
+        public async Task<bool> DeleteExistingBatch(int batchId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", batchId);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteBatchForPayslip", parameters);
+        }
+
         public async Task<int> UpdateBatchDetail(BatchInfoRequest reqModel)
         {
             var parameters = new DynamicParameters();
