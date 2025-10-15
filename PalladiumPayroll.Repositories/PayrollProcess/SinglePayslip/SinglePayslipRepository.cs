@@ -94,6 +94,9 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@ProcessingCyclePeriodId", request.ProcessingCyclePeriodId);
         parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
         parameters.Add("@PayslipType", request.PayslipType);
+        parameters.Add("@StdTrans", request.StdTrans);
+        parameters.Add("@TotalLeaveDays", request.TotalLeaveDays);
+        parameters.Add("@TotalPresentDays", request.TotalPresentDays);
 
         DataTable? dt = new DataTable();
         dt.Columns.Add("TransactionID", typeof(int));
@@ -125,8 +128,6 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         return result;
     }
 
-
-
     public async Task<List<SinglePayslipDetailsResponseDTO>> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
     {
         var parameters = new DynamicParameters();
@@ -155,16 +156,19 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
             DataTable? dt = new DataTable();
             dt.Columns.Add("TransactionID", typeof(long));
+            dt.Columns.Add("TransactionType", typeof(string));
             dt.Columns.Add("TransactionName", typeof(string));
             dt.Columns.Add("TransactionValue", typeof(decimal));
-            dt.Columns.Add("TransactionType", typeof(string));
+            dt.Columns.Add("ETI", typeof(string));
+            dt.Columns.Add("Recurring", typeof(bool));
+            dt.Columns.Add("TransactionHours", typeof(decimal));
 
             foreach (var item in request.TransactionDetails)
             {
-                dt.Rows.Add(item.TransactionID, item.TransactionName, item.TransactionValue, item.TransactionType);
+                dt.Rows.Add(item.TransactionID, item.TransactionType, item.TransactionName, item.TransactionValue, string.Empty, 0, 0);
             }
 
-            parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails_UIF"));
+            parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails"));
 
             List<SinglePayslipDetailsResponseDTO>? result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
                 "usp_DeductionGetSinglePayslipDetails",
@@ -179,17 +183,20 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
             DataTable? dt = new DataTable();
             dt.Columns.Add("TransactionID", typeof(long));
+            dt.Columns.Add("TransactionType", typeof(string));
             dt.Columns.Add("TransactionName", typeof(string));
             dt.Columns.Add("TransactionValue", typeof(decimal));
-            dt.Columns.Add("TransactionType", typeof(string));
+            dt.Columns.Add("ETI", typeof(string));
+            dt.Columns.Add("Recurring", typeof(bool));
+            dt.Columns.Add("TransactionHours", typeof(decimal));
 
 
             foreach (var item in request.TransactionDetails)
             {
-                dt.Rows.Add(item.TransactionID, item.TransactionName, item.TransactionValue, item.TransactionType);
+                dt.Rows.Add(item.TransactionID, item.TransactionType, item.TransactionName, item.TransactionValue, string.Empty, 0, 0);
             }
 
-            parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails_UIF"));
+            parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails"));
 
             List<SinglePayslipDetailsResponseDTO>? result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
                 "usp_CompanyContributionGetSinglePayslipDetails",
@@ -210,6 +217,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             return new List<SinglePayslipDetailsResponseDTO>();
         }
     }
+
     public async Task<(decimal UIFCal, decimal UIFIncome)> GetUIFCalculation(GetSinglePayslipDetailsRequestDTO request)
     {
         var parameters = new DynamicParameters();
@@ -220,16 +228,19 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         DataTable dt = new DataTable();
         dt.Columns.Add("TransactionID", typeof(long));
+        dt.Columns.Add("TransactionType", typeof(string));
         dt.Columns.Add("TransactionName", typeof(string));
         dt.Columns.Add("TransactionValue", typeof(decimal));
-        dt.Columns.Add("TransactionType", typeof(string));
+        dt.Columns.Add("ETI", typeof(string));
+        dt.Columns.Add("Recurring", typeof(bool));
+        dt.Columns.Add("TransactionHours", typeof(decimal));
 
         foreach (var item in request.TransactionDetails)
         {
-            dt.Rows.Add(item.TransactionID, item.TransactionName ?? "", item.TransactionValue, item.TransactionType ?? "");
+            dt.Rows.Add(item.TransactionID, item.TransactionType ?? "", item.TransactionName ?? "", item.TransactionValue, string.Empty, 0, 0);
         }
 
-        parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails_UIF"));
+        parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails"));
 
         parameters.Add("@UIFCal", dbType: DbType.Decimal, direction: ParameterDirection.Output);
         parameters.Add("@UIFIncome", dbType: DbType.Decimal, direction: ParameterDirection.Output);
@@ -260,6 +271,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return true;
     }
+    
     public async Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveDetails(long employeeId, long processingCyclePeriodId)
     {
         var parameters = new DynamicParameters();
@@ -273,7 +285,8 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return result?.ToList() ?? new List<EmployeeLeaveDetailResponseDTO>();
     }
-    public async Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId,long companyId)
+    
+    public async Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId, long companyId)
     {
         var parameters = new DynamicParameters();
         parameters.Add("@EmployeeId", employeeId);
@@ -286,6 +299,40 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         );
 
         return result?.ToList() ?? new List<EmployeeLeaveDetailResponseDTO>();
+    }
+
+    public async Task<PayslipPreviewHeaderDTO?> GetPayslipPreviewDetails(int payslipPreviewId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@PayslipPreviewId", payslipPreviewId);
+
+        return await _dapper.ExecuteStoredProcedureMultipleAsync(
+            "LoadPayslipPreviewDetails",
+            parameters,
+            async multi =>
+            {
+                PayslipPreviewHeaderDTO? header = await multi.ReadFirstOrDefaultAsync<PayslipPreviewHeaderDTO>();
+
+                List<PayslipPreviewDetailDTO>? details = (await multi.ReadAsync<PayslipPreviewDetailDTO>()).ToList();
+
+                if (header != null)
+                    header.Details = details;
+
+                return header;
+            });
+    }
+
+    public async Task<long> SaveSinglePayslip(long employeePayslipPreviewId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@EmployeePayslipPreviewId", employeePayslipPreviewId);
+        parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+
+
+        long result = await _dapper.ExecuteStoredProcedureSingle<long>(
+            "usp_SaveSinglePayslip", parameters);
+
+        return result;
     }
 
 }

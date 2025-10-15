@@ -134,6 +134,7 @@ public class SinglePayslipService : ISinglePayslipService
 
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Deleted));
     }
+
     public async Task<JsonResult> GetEmployeeLeaveDetails(long employeeId, long processingCyclePeriodId)
     {
         var leaves = await _singlePayslipRepository.GetEmployeeLeaveDetails(employeeId, processingCyclePeriodId);
@@ -153,7 +154,7 @@ public class SinglePayslipService : ISinglePayslipService
     }
     public async Task<JsonResult> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId, long companyId)
     {
-        var leaves = await _singlePayslipRepository.GetEmployeeLeaveHistory(employeeId, processingCyclePeriodId,companyId);
+        var leaves = await _singlePayslipRepository.GetEmployeeLeaveHistory(employeeId, processingCyclePeriodId, companyId);
 
         if (leaves.Any())
         {
@@ -170,4 +171,23 @@ public class SinglePayslipService : ISinglePayslipService
     }
 
 
+    public async Task<JsonResult> GetPayslipPreviewDetails(int payslipPreviewId)
+    {
+        PayslipPreviewHeaderDTO? header = await _singlePayslipRepository.GetPayslipPreviewDetails(payslipPreviewId);
+
+        return HttpStatusCodeResponse.SuccessResponse(
+            header,
+            string.Format(ResponseMessages.Success, "Employee Preview Details", ActionType.Retrieved)
+        );
+    }
+
+    public async Task<JsonResult> SaveSinglePayslip(long payslipPreviewId)
+    {
+        long payslipId = await _singlePayslipRepository.SaveSinglePayslip(payslipPreviewId);
+
+        return HttpStatusCodeResponse.SuccessResponse(
+            new { EmployeePayslipPreviewId = payslipId },
+            string.Format(ResponseMessages.Success, "Payslip Data", ActionType.Saved)
+        );
+    }
 }

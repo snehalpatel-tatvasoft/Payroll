@@ -106,6 +106,7 @@ public class SinglePayslipController : ControllerBase
         }
     }
     #endregion
+
     [HttpPost("[action]")]
     public async Task<ActionResult> ProcessSinglePayslip([FromBody] ProcessSinglePayslipRequestDTO request)
     {
@@ -119,6 +120,7 @@ public class SinglePayslipController : ControllerBase
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, "Payslip"));
         }
     }
+
     [HttpPost("[action]")]
     public async Task<ActionResult> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
     {
@@ -163,6 +165,7 @@ public class SinglePayslipController : ControllerBase
             );
         }
     }
+
     [HttpGet("[action]")]
     public async Task<ActionResult> GetEmployeeLeaveDetails(long employeeId, long processingCyclePeriodId)
     {
@@ -202,4 +205,36 @@ public class SinglePayslipController : ControllerBase
         }
     }
 
-}  
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetPayslipPreviewDetails(int payslipPreviewId)
+    {
+        try
+        {
+            if (payslipPreviewId <= 0)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse("Invalid payslip preview Id.");
+            }
+            return await _singlePayslipService.GetPayslipPreviewDetails(payslipPreviewId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Employee preview Details")
+            );
+        }
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> SaveSinglePayslip( long employeePayslipPreviewId)
+    {
+        try
+        {
+            return await _singlePayslipService.SaveSinglePayslip(employeePayslipPreviewId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, "Payslip"));
+        }
+    }
+}

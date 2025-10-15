@@ -3,9 +3,9 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.SinglePayslip;
 public class EmployeeForProcessingResponseDTO
 {
     public long EmployeeId { get; set; }
-    public string EmployeeCode { get; set; }= string.Empty;
-    public string EmployeeName { get; set; }= string.Empty;
-    public string EmployeeSurname { get; set; }= string.Empty;
+    public string EmployeeCode { get; set; } = string.Empty;
+    public string EmployeeName { get; set; } = string.Empty;
+    public string EmployeeSurname { get; set; } = string.Empty;
 }
 
 public class PayrollCycleDropdownDTO
@@ -27,7 +27,7 @@ public class ProcessingPeriodDTO
 }
 
 public class TransactionListModelForPayslip
-{     
+{
     public int PayrollProcessId { get; set; }
     public string Description { get; set; } = string.Empty;
     public string AllowanceType { get; set; } = string.Empty;
@@ -47,6 +47,7 @@ public class SinglePayslipDetailsResponseDTO
     public string? CalculationType { get; set; }
     public int FixedAmount { get; set; }
 }
+
 public class EmployeeLeaveDetailResponseDTO
 {
     public long EmployeeLeaveDetailId { get; set; }
@@ -60,3 +61,33 @@ public class EmployeeLeaveDetailResponseDTO
     public int DaysDue { get; set; }
         
 }
+
+public class PayslipPreviewHeaderDTO
+{
+    public string CompanyName { get; set; } = string.Empty;
+    public string CompanyAddress { get; set; } = string.Empty;
+    public string EmployeeCode { get; set; } = string.Empty;
+    public string EmployeeFullName { get; set; } = string.Empty;
+    public string JobDesignation { get; set; } = string.Empty;
+    public string EmployeeAddress { get; set; } = string.Empty;
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public DateTime PayPeriod { get; set; }
+    public string PayType { get; set; } = string.Empty;
+    public decimal? TotalEarnings { get; set; }
+    public decimal? TotalDeduction { get; set; }
+    public decimal? NetPAYE { get; set; }
+    public List<PayslipPreviewDetailDTO> Details { get; set; } = new List<PayslipPreviewDetailDTO>();
+}
+
+
+public class PayslipPreviewDetailDTO
+{
+    public int EmployeePayslipPreviewDtlId { get; set; }
+    public int EmployeePayslipPreviewId { get; set; }
+    public int AllowanceTypeId { get; set; }
+    public string AllowanceTypeName { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public decimal Amount { get; set; }
+}
+
