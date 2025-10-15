@@ -110,10 +110,10 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
         public async Task<MultiTransaction> GetMultiTransaction(MultiTransactionGet reqModel)
         {
             var parameters = new DynamicParameters();
-            parameters.Add("@ProcessPreiodId", reqModel.ProcessPreiodId);
+            parameters.Add("@ProcessPreiodId", reqModel.ProcessPeriodId);
             parameters.Add("@CompanyId", reqModel.CompanyId);
             parameters.Add("@TransactionType", reqModel.TransactionType);
-            List<DropDownViewModel> employeeList = await GetEmployeeBaseOnPeriod(reqModel.ProcessPreiodId);
+            List<DropDownViewModel> employeeList = await GetEmployeeBaseOnPeriod(reqModel.ProcessPeriodId);
             List<SpecialTransaction> transaction = await _dapper.ExecuteStoredProcedure<SpecialTransaction>("SP_GetSpecialRunTransactions", parameters);
             return new MultiTransaction() { Employees = employeeList, Transactions = transaction };
         }

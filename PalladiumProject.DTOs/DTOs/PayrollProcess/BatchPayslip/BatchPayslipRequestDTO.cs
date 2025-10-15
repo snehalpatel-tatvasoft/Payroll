@@ -17,7 +17,7 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
 
     public class MultiTransactionGet
     {
-        public int ProcessPreiodId { get; set; }
+        public int ProcessPeriodId { get; set; }
         public int CompanyId { get; set; }
         public int TransactionType { get; set; }
     }
