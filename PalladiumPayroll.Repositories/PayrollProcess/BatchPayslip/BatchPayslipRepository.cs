@@ -72,8 +72,8 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@BatchName", reqModel.BatchNumber);
             parameters.Add("@BatchDescription", reqModel.BatchDescription);
             parameters.Add("@CompanyId", reqModel.CompanyId);
-            parameters.Add("@CycleId", reqModel.CycleId);
-            parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
+            parameters.Add("@CycleId", reqModel.PayrollCycle);
+            parameters.Add("@ProcessPriod", reqModel.ProcessPeriod);
             parameters.Add("@IsRecurring", reqModel.IsRecurring);
             parameters.Add("@IsSpecialRun", reqModel.TransactionType == (int)PayslipTransactionType.SpecialRun);
             parameters.Add("@IsLeavePay", reqModel.TransactionType == (int)PayslipTransactionType.LeavePay);
@@ -110,10 +110,10 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
         public async Task<MultiTransaction> GetMultiTransaction(MultiTransactionGet reqModel)
         {
             var parameters = new DynamicParameters();
-            parameters.Add("@ProcessPreiodId", reqModel.ProcessPeriodId);
+            parameters.Add("@ProcessPreiodId", reqModel.ProcessPeriod);
             parameters.Add("@CompanyId", reqModel.CompanyId);
             parameters.Add("@TransactionType", reqModel.TransactionType);
-            List<DropDownViewModel> employeeList = await GetEmployeeBaseOnPeriod(reqModel.ProcessPeriodId);
+            List<DropDownViewModel> employeeList = await GetEmployeeBaseOnPeriod(reqModel.ProcessPeriod);
             List<SpecialTransaction> transaction = await _dapper.ExecuteStoredProcedure<SpecialTransaction>("SP_GetSpecialRunTransactions", parameters);
             return new MultiTransaction() { Employees = employeeList, Transactions = transaction };
         }
@@ -139,7 +139,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             transTbl.Columns.Add("IsRecuring", typeof(bool));
             foreach (var transaction in reqModel.BatchTransaction)
             {
-                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchNumber, reqModel.BatchDescription, reqModel.CycleId, reqModel.ProcessPriod, transaction.TransactionName, transaction.Amount, transaction.Hours, transaction.IsRecurring);
+                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchNumber, reqModel.BatchDescription, reqModel.PayrollCycle, reqModel.ProcessPeriod, transaction.TransactionName, transaction.Amount, transaction.Hours, transaction.IsRecurring);
             }
 
             var parameters = new DynamicParameters();
@@ -147,8 +147,8 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@BatchName", reqModel.BatchNumber);
             parameters.Add("@BatchDescription", reqModel.BatchDescription);
             parameters.Add("@CompanyId", reqModel.CompanyId);
-            parameters.Add("@CycleId", reqModel.CycleId);
-            parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
+            parameters.Add("@CycleId", reqModel.PayrollCycle);
+            parameters.Add("@ProcessPriod", reqModel.ProcessPeriod);
             parameters.Add("@IsRecurring", reqModel.IsRecurring);
             parameters.Add("@tblEmployees", empTbl.AsTableValuedParameter("dbo.tblEmployee"));
             parameters.Add("@tblBatchTransaction", transTbl.AsTableValuedParameter("dbo.tblBatchTransaction"));
@@ -177,7 +177,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             transTbl.Columns.Add("IsRecuring", typeof(bool));
             foreach (var transaction in reqModel.BatchTransaction)
             {
-                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchNumber, reqModel.BatchDescription, reqModel.CycleId, reqModel.ProcessPriod, transaction.TransactionName, transaction.Amount, transaction.Hours, transaction.IsRecurring);
+                transTbl.Rows.Add(reqModel.BatchId, reqModel.BatchNumber, reqModel.BatchDescription, reqModel.PayrollCycle, reqModel.ProcessPeriod, transaction.TransactionName, transaction.Amount, transaction.Hours, transaction.IsRecurring);
             }
 
             var parameters = new DynamicParameters();
@@ -185,8 +185,8 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@BatchName", reqModel.BatchNumber);
             parameters.Add("@BatchDescription", reqModel.BatchDescription);
             parameters.Add("@CompanyId", reqModel.CompanyId);
-            parameters.Add("@CycleId", reqModel.CycleId);
-            parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
+            parameters.Add("@CycleId", reqModel.PayrollCycle);
+            parameters.Add("@ProcessPriod", reqModel.ProcessPeriod);
             parameters.Add("@tblEmployees", empTbl.AsTableValuedParameter("dbo.tblEmployee"));
             parameters.Add("@tblBatchTransaction", transTbl.AsTableValuedParameter("dbo.tblBatchTransaction"));
             var result = await _dapper.ExecuteStoredProcedureSingle<bool>("BatchPayslipTransactionDetailsDelete", parameters);
@@ -202,8 +202,8 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
                 parameters.Add("@BatchName", reqModel.BatchNumber);
                 parameters.Add("@BatchDescription", reqModel.BatchDescription);
                 parameters.Add("@CompanyId", reqModel.CompanyId);
-                parameters.Add("@CycleId", reqModel.CycleId);
-                parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
+                parameters.Add("@CycleId", reqModel.PayrollCycle);
+                parameters.Add("@ProcessPriod", reqModel.ProcessPeriod);
                 parameters.Add("@IsRecurring", reqModel.IsRecurring);
                 parameters.Add("@CompanyId", reqModel.CompanyId);
                 parameters.Add("@TemplateName", "Batch Transaction");
@@ -248,8 +248,8 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@BatchName", reqModel.BatchNumber);
             parameters.Add("@BatchDescription", reqModel.BatchDescription);
             parameters.Add("@CompanyId", reqModel.CompanyId);
-            parameters.Add("@CycleId", reqModel.CycleId);
-            parameters.Add("@ProcessPriod", reqModel.ProcessPriod);
+            parameters.Add("@CycleId", reqModel.PayrollCycle);
+            parameters.Add("@ProcessPriod", reqModel.ProcessPeriod);
             parameters.Add("@IsRecurring", reqModel.IsRecurring);
             parameters.Add("@IsSpecialRun", reqModel.TransactionType == (int)PayslipTransactionType.SpecialRun);
             return await _dapper.ExecuteStoredProcedureSingle<int>("SP_SaveActualBatchPayslip", parameters);

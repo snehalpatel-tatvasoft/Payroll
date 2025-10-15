@@ -10,14 +10,14 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
         public string? BatchDescription { get; set; }
         public int TransactionType { get; set; }
         public int CompanyId { get; set; }
-        public int CycleId { get; set; }
-        public int ProcessPriod { get; set; }
+        public int PayrollCycle { get; set; }
+        public int ProcessPeriod { get; set; }
         public bool? IsRecurring { get; set; }
     }
 
     public class MultiTransactionGet
     {
-        public int ProcessPeriodId { get; set; }
+        public int ProcessPeriod { get; set; }
         public int CompanyId { get; set; }
         public int TransactionType { get; set; }
     }
