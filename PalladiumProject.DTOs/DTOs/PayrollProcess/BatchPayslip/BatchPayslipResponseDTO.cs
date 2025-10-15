@@ -2,6 +2,14 @@
 
 namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
 {
+    public class BatchInfoWithBatchData
+    {
+        public BatchPayslipInsert BatchInfo { get; set; }
+        public List<DropDownViewModel> PeriodList { get; set; }
+        public List<BatchPayslipTransaction> PayslipTransactions { get; set; }
+        public List<BatchPayslipLeave> PayslipLeaves { get; set; }
+    }
+
     public class BatchPayslipTransaction
     {
         public int BatchTransactionId { get; set; }

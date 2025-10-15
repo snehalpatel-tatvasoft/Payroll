@@ -31,6 +31,19 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetBatchInfoDetail(int batchId)
+        {
+            try
+            {
+                return await _batchPayslipService.GetBatchInfo(batchId);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
         [HttpDelete("[action]")]
         public async Task<ActionResult> DeleteExistingBatch(int batchId)
         {

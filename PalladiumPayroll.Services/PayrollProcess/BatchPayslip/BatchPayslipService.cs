@@ -26,6 +26,16 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
             return HttpStatusCodeResponse.SuccessResponse(batchList, string.Format(ResponseMessages.Success, "Batch List", "load"));
         }
 
+        public async Task<JsonResult> GetBatchInfo(int batchId)
+        {
+            var batchInfo = await _batchPayslipRepository.GetBatchInfo(batchId);
+            if (batchInfo != null)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(batchInfo, string.Format(ResponseMessages.Success, "Batch Info", "load"));
+            }
+            return HttpStatusCodeResponse.NotFoundResponse("Batch Info");
+        }
+
         public async Task<JsonResult> DeleteExistingBatch(int batchId)
         {
             var isDeleted = await _batchPayslipRepository.DeleteExistingBatch(batchId);
