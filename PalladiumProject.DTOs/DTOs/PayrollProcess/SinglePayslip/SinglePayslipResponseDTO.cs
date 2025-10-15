@@ -87,3 +87,10 @@ public class PayslipPreviewDetailDTO
     public string Description { get; set; } = string.Empty;
     public decimal Amount { get; set; }
 }
+
+public class TerminationReasonDropdownDTO
+{
+    public int EmpStatusId { get; set; }
+    public string EmpStatusCode { get; set; }=string.Empty;
+    public string EmpStatusName { get; set; }=string.Empty;
+}

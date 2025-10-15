@@ -271,7 +271,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return true;
     }
-    
+
     public async Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveDetails(long employeeId, long processingCyclePeriodId)
     {
         var parameters = new DynamicParameters();
@@ -285,7 +285,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return result?.ToList() ?? new List<EmployeeLeaveDetailResponseDTO>();
     }
-    
+
     public async Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId, long companyId)
     {
         var parameters = new DynamicParameters();
@@ -333,6 +333,16 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             "usp_SaveSinglePayslip", parameters);
 
         return result;
+    }
+
+    public async Task<List<TerminationReasonDropdownDTO>> GetTerminationResons()
+    {
+
+        List<TerminationReasonDropdownDTO>? result = await _dapper.ExecuteStoredProcedure<TerminationReasonDropdownDTO>(
+            "usp_GetEmpStatusDropdown"
+        );
+
+        return result ?? new List<TerminationReasonDropdownDTO>();
     }
 
 }

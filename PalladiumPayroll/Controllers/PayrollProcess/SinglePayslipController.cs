@@ -237,4 +237,19 @@ public class SinglePayslipController : ControllerBase
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, "Payslip"));
         }
     }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> GetTerminationResons()
+    {
+        try
+        {
+            return await _singlePayslipService.GetTerminationResons();
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving,"Transaction reasons")
+            );
+        }
+    }
 }
