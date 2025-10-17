@@ -241,6 +241,21 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             return await _dapper.ExecuteStoredProcedureSingle<bool>("SP_DeleteTransactionDetails", parameters);
         }
 
+        public async Task<SPResultMessage> UpdateEmployeeLeaveDetail(PayslipLeave payslipLeave)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", payslipLeave.Id);
+            parameters.Add("@EmployeeId", payslipLeave.EmployeeId);
+            parameters.Add("@LeaveType", payslipLeave.LeaveType);
+            parameters.Add("@FromDate", payslipLeave.FromDate);
+            parameters.Add("@ToDate", payslipLeave.ToDate);
+            parameters.Add("@Duration", payslipLeave.Duration);
+            parameters.Add("@UnPaidLeave", payslipLeave.UnPaidLeave);
+            parameters.Add("@LeaveStatusId",payslipLeave.LeaveStatusId);
+            parameters.Add("@Comment", payslipLeave.Comment);
+            return await _dapper.ExecuteStoredProcedureFirst<SPResultMessage>("usp_BatchUpadteEmployeeLeaveDetailsPreview", parameters);
+        }
+
         public async Task<int> SaveBatchPayslip(BatchPayslipInsert reqModel)
         {
             var parameters = new DynamicParameters();

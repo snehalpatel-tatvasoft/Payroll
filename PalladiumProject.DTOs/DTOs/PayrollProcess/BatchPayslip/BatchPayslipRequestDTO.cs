@@ -53,6 +53,19 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
         public bool IsRecurring { get; set; }
     }
 
+    public class PayslipLeave
+    {
+        public long Id { get; set; }
+        public long EmployeeId { get; set; }
+        public int LeaveType { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public decimal Duration { get; set; }
+        public decimal? UnPaidLeave { get; set; }
+        public int? LeaveStatusId { get; set; }
+        public string? Comment { get; set; }
+    }
+
     public class BatchPayslipProcess
     {
         public int BatchId { get; set; }

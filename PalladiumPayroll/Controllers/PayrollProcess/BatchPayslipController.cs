@@ -149,6 +149,19 @@ namespace PalladiumPayroll.Controllers.PayrollProcess
         }
 
         [HttpPost("[action]")]
+        public async Task<ActionResult> UpdateEmployeeLeaveDetail(PayslipLeave payslipLeave)
+        {
+            try
+            {
+                return await _batchPayslipService.UpdateEmployeeLeaveDetail(payslipLeave);
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse(ResponseMessages.UnexpectedError);
+            }
+        }
+
+        [HttpPost("[action]")]
         public async Task<ActionResult> SaveBatchPayslip(BatchPayslipInsert reqModel)
         {
             try

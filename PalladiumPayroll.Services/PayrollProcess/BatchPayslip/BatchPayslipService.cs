@@ -126,6 +126,16 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
             return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch Transaction", ActionType.Updated));
         }
 
+        public async Task<JsonResult> UpdateEmployeeLeaveDetail(PayslipLeave payslipLeave)
+        {
+            var res = await _batchPayslipRepository.UpdateEmployeeLeaveDetail(payslipLeave);
+            if (res.Result)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(res, string.Format(ResponseMessages.Success, "Employee Leave", ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(res.Message ?? string.Format(ResponseMessages.Failed, "Employee Leave", ActionType.Updated));
+        }
+
         public async Task<JsonResult> SaveBatchPayslip(BatchPayslipInsert reqModel)
         {
             var batchId = await _batchPayslipRepository.SaveBatchPayslip(reqModel);
