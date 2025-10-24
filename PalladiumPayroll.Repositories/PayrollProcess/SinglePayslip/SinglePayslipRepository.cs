@@ -335,14 +335,4 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         return result;
     }
 
-    public async Task<List<TerminationReasonDropdownDTO>> GetTerminationResons()
-    {
-
-        List<TerminationReasonDropdownDTO>? result = await _dapper.ExecuteStoredProcedure<TerminationReasonDropdownDTO>(
-            "usp_GetEmpStatusDropdown"
-        );
-
-        return result ?? new List<TerminationReasonDropdownDTO>();
-    }
-
 }

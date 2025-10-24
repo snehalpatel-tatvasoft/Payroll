@@ -191,10 +191,4 @@ public class SinglePayslipService : ISinglePayslipService
         );
     }
 
-    public async Task<JsonResult> GetTerminationResons()
-    {
-        List<TerminationReasonDropdownDTO> result = await _singlePayslipRepository.GetTerminationResons();
-
-        return HttpStatusCodeResponse.SuccessResponse(result, string.Format(ResponseMessages.Success, "Ternination reasons", ActionType.Retrieved));
-    }
 }
