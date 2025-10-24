@@ -335,4 +335,22 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         return result;
     }
 
+    public async Task<EndEmploymentResultDto?> ManageEndEmploymentAndReinstate(EndEmploymentDTO request)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
+        parameters.Add("@EmpId", request.EmpId);
+        parameters.Add("@Mode", request.Mode);
+        parameters.Add("@EndEmpmntDate", request.EndEmpmntDate);
+        parameters.Add("@PeriodId", request.PeriodId);
+        parameters.Add("@LeavePaidOutAmt", request.LeavePaidOutAmt);
+        parameters.Add("@EmpStatus", request.EmpStatus);
+        parameters.Add("@ReinstateType", request.ReinstateType);
+
+        var resultList = await _dapper.ExecuteStoredProcedure<EndEmploymentResultDto>(
+            "usp_ManageEndEmploymentAndReinstate", parameters);
+
+        return resultList.FirstOrDefault();
+    }
 }
+

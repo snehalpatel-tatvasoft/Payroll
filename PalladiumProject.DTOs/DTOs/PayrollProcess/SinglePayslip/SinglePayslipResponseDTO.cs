@@ -77,7 +77,6 @@ public class PayslipPreviewHeaderDTO
     public List<PayslipPreviewDetailDTO> Details { get; set; } = new List<PayslipPreviewDetailDTO>();
 }
 
-
 public class PayslipPreviewDetailDTO
 {
     public int EmployeePayslipPreviewDtlId { get; set; }
@@ -86,4 +85,18 @@ public class PayslipPreviewDetailDTO
     public string AllowanceTypeName { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public decimal Amount { get; set; }
+}
+
+public class EndEmploymentResultDto
+{
+    public int? Result { get; set; }                  // For Mode 2 & 3
+    public decimal? TotalAnnualLeave { get; set; }    // For Mode 1
+    public decimal? LeaveDue { get; set; }            // For Mode 1
+    public string ProcessPeriod { get; set; } = string.Empty;       // For Mode 4
+    public DateTime? ProcessStartDate { get; set; }   // For Mode 4
+    public DateTime? ProcessEndDate { get; set; }     // For Mode 4 
+    public int? FlagEndEmployment { get; set; }      // For Mode 5
+    public DateTime? StartDate { get; set; }         // For Mode 5
+    public DateTime? PayFor { get; set; }            // For Mode 5
+    public DateTime? EndEmploymentDate { get; set; } // For Mode 5
 }

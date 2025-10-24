@@ -191,4 +191,22 @@ public class SinglePayslipService : ISinglePayslipService
         );
     }
 
+    public async Task<JsonResult> ManageEndEmploymentAndReinstate(EndEmploymentDTO request)
+    {
+        var result = await _singlePayslipRepository.ManageEndEmploymentAndReinstate(request);
+
+        if (result == null)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                "Failed to process end employment/reinstate operation."
+            );
+        }
+
+        return HttpStatusCodeResponse.SuccessResponse(
+            new { Result = result.Result },  
+            string.Format("End Employment/Reinstate processed successfully.")
+        );
+    }
+
+
 }
