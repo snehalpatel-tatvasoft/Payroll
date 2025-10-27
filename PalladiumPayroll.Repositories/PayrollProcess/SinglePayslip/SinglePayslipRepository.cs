@@ -343,7 +343,6 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@Mode", request.Mode);
         parameters.Add("@EndEmpmntDate", request.EndEmpmntDate);
         parameters.Add("@PeriodId", request.PeriodId);
-        parameters.Add("@LeavePaidOutAmt", request.LeavePaidOutAmt);
         parameters.Add("@EmpStatus", request.EmpStatus);
         parameters.Add("@ReinstateType", request.ReinstateType);
 
@@ -352,5 +351,21 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return resultList.FirstOrDefault();
     }
+
+    public async Task<CalculateLeavePayoutResultDTO?> CalculateLeavePayout(int empId, int companyPayrollId, int periodId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@EmpId", empId);
+        parameters.Add("@CompanyPayrollId", companyPayrollId);
+        parameters.Add("@PeriodId", periodId);
+
+        var resultList = await _dapper.ExecuteStoredProcedureSingle<CalculateLeavePayoutResultDTO>(
+            "usp_CalculateLeavePayout",
+            parameters
+        );
+
+        return resultList;
+    }
+
 }
 

@@ -258,5 +258,18 @@ public class SinglePayslipController : ControllerBase
 
     }
 
+    [HttpGet("[action]")]
+    public async Task<ActionResult> CalculateLeavePayout(int empId, int companyPayrollId, int periodId)
+    {
+        try
+        {
+            return await _singlePayslipService.CalculateLeavePayout(empId,companyPayrollId,periodId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Leave paid amount"));
+        }
+    }
 
 }

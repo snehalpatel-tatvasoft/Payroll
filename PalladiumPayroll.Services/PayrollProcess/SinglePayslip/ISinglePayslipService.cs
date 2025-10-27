@@ -21,4 +21,5 @@ public interface ISinglePayslipService
     Task<JsonResult> GetPayslipPreviewDetails(int payslipPreviewId);
     Task<JsonResult> SaveSinglePayslip(long payslipPreviewId);
     Task<JsonResult> ManageEndEmploymentAndReinstate(EndEmploymentDTO request);
+    Task<JsonResult> CalculateLeavePayout(int empId, int companyPayrollId, int periodId);
 }

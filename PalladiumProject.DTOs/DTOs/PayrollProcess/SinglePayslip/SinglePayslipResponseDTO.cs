@@ -100,3 +100,20 @@ public class EndEmploymentResultDto
     public DateTime? PayFor { get; set; }            // For Mode 5
     public DateTime? EndEmploymentDate { get; set; } // For Mode 5
 }
+
+
+public class CalculateLeavePayoutResultDTO
+{
+    public int EmployeeId { get; set; }
+    public int? PayslipId { get; set; }
+    public string PayrollCycleType { get; set; } = string.Empty;
+    public decimal RatePerDay { get; set; }
+    public decimal AnnualLeave { get; set; }
+    public decimal DaysDue { get; set; }
+    public decimal TotalPresentDays { get; set; }
+    public decimal LeavePayoutAmount { get; set; }
+    public decimal DueAmountEncashed { get; set; }
+    public decimal DueHourEncashed { get; set; }
+    public DateTime PeriodStart { get; set; }
+    public DateTime PeriodEnd { get; set; }
+}

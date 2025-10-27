@@ -18,4 +18,5 @@ public interface ISinglePayslipRepository
     Task<PayslipPreviewHeaderDTO?> GetPayslipPreviewDetails(int payslipPreviewId);
     Task<long> SaveSinglePayslip(long employeePayslipPreviewId);
     Task<EndEmploymentResultDto?> ManageEndEmploymentAndReinstate(EndEmploymentDTO request);
+    Task<CalculateLeavePayoutResultDTO?> CalculateLeavePayout(int empId, int companyPayrollId, int periodId);
 }
