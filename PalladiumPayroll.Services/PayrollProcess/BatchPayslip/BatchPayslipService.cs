@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PalladiumPayroll.DTOs.DTOs.Common;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip;
 using PalladiumPayroll.DTOs.DTOs.PayrollProcess.MangeLeave;
 using PalladiumPayroll.DTOs.Miscellaneous;
@@ -22,13 +23,13 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
 
         public async Task<JsonResult> GetExistingBatchList(long companyId)
         {
-            var batchList = await _batchPayslipRepository.GetExistingBatchList(companyId);
+            List<BatchData> batchList = await _batchPayslipRepository.GetExistingBatchList(companyId);
             return HttpStatusCodeResponse.SuccessResponse(batchList, string.Format(ResponseMessages.Success, "Batch List", "load"));
         }
 
         public async Task<JsonResult> GetBatchInfo(int batchId)
         {
-            var batchInfo = await _batchPayslipRepository.GetBatchInfo(batchId);
+            BatchInfoWithBatchData batchInfo = await _batchPayslipRepository.GetBatchInfo(batchId);
             if (batchInfo != null)
             {
                 return HttpStatusCodeResponse.SuccessResponse(batchInfo, string.Format(ResponseMessages.Success, "Batch Info", "load"));
@@ -38,7 +39,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
 
         public async Task<JsonResult> DeleteExistingBatch(int batchId)
         {
-            var isDeleted = await _batchPayslipRepository.DeleteExistingBatch(batchId);
+            bool isDeleted = await _batchPayslipRepository.DeleteExistingBatch(batchId);
             if (isDeleted)
             {
                 return HttpStatusCodeResponse.SuccessResponse(isDeleted, string.Format(ResponseMessages.Success, "Batch", ActionType.Deleted));
@@ -48,7 +49,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
 
         public async Task<JsonResult> UpdateBatchDetail(BatchInfoRequest reqModel)
         {
-            var batchId = await _batchPayslipRepository.UpdateBatchDetail(reqModel);
+            int batchId = await _batchPayslipRepository.UpdateBatchDetail(reqModel);
             return HttpStatusCodeResponse.SuccessResponse(batchId, string.Format(ResponseMessages.Success, "Batch pyaslip Detail", ActionType.Updated));
         }
 
@@ -75,19 +76,23 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
 
         public async Task<JsonResult> MultiTransactionLoad(MultiTransactionGet reqModel)
         {
-            var data = await _batchPayslipRepository.GetMultiTransaction(reqModel);
+            MultiTransaction data = await _batchPayslipRepository.GetMultiTransaction(reqModel);
             return HttpStatusCodeResponse.SuccessResponse(data, string.Format(ResponseMessages.Success, "multi Transaction", "load"));
         }
 
         public async Task<JsonResult> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel)
         {
-            var transaction = await _batchPayslipRepository.BatchTransactionUpsertBulk(reqModel);
-            return HttpStatusCodeResponse.SuccessResponse(transaction, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Updated));
+            bool isUpserted = await _batchPayslipRepository.BatchTransactionUpsertBulk(reqModel);
+            if (isUpserted)
+            {
+                return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Updated));
+            }
+            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Failed, "Batch Transaction", ActionType.Updating));
         }
 
         public async Task<JsonResult> BatchTransactionDeleteBulk(BatchPayslipBulkInsert reqModel)
         {
-            var isDeleted = await _batchPayslipRepository.BatchTransactionDeleteBulk(reqModel);
+            bool isDeleted = await _batchPayslipRepository.BatchTransactionDeleteBulk(reqModel);
             if (isDeleted)
             {
                 return HttpStatusCodeResponse.SuccessResponse(isDeleted, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Deleted));
@@ -103,10 +108,10 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
                 new DataColumn("TransactionName", typeof(string)), new DataColumn("Unit", typeof(decimal)),
                 new DataColumn("Value", typeof(decimal)), new DataColumn("IsRecurring", typeof(bool))
             };
-            var excelData = ExcelHelper.ImportFromExcel(reqModel.BatchTransaction, true, headerColumn);
+            DataTable excelData = ExcelHelper.ImportFromExcel(reqModel.BatchTransaction, true, headerColumn);
             if (excelData.Rows.Count > 0)
             {
-                var isImported = await _batchPayslipRepository.ImportBatchTransactionUpsert(reqModel, excelData, reqModel.BatchTransaction.FileName);
+                bool isImported = await _batchPayslipRepository.ImportBatchTransactionUpsert(reqModel, excelData, reqModel.BatchTransaction.FileName);
                 if (isImported)
                 {
                     return HttpStatusCodeResponse.SuccessResponse(isImported, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Imported));
@@ -118,7 +123,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
 
         public async Task<JsonResult> UpdateTransactionDetail(BatchTransactionUpdate reqModel)
         {
-            var transaction = await _batchPayslipRepository.UpdateTransactionDetail(reqModel);
+            BatchPayslipTransaction? transaction = await _batchPayslipRepository.UpdateTransactionDetail(reqModel);
             if (transaction != null)
             {
                 return HttpStatusCodeResponse.SuccessResponse(transaction, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Updated));
@@ -128,7 +133,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
 
         public async Task<JsonResult> UpdateEmployeeLeaveDetail(PayslipLeave payslipLeave)
         {
-            var res = await _batchPayslipRepository.UpdateEmployeeLeaveDetail(payslipLeave);
+            SPResultMessage res = await _batchPayslipRepository.UpdateEmployeeLeaveDetail(payslipLeave);
             if (res.Result)
             {
                 return HttpStatusCodeResponse.SuccessResponse(res, string.Format(ResponseMessages.Success, "Employee Leave", ActionType.Updated));
@@ -138,7 +143,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
 
         public async Task<JsonResult> SaveBatchPayslip(BatchPayslipInsert reqModel)
         {
-            var batchId = await _batchPayslipRepository.SaveBatchPayslip(reqModel);
+            int batchId = await _batchPayslipRepository.SaveBatchPayslip(reqModel);
             if (batchId > 0)
             {
                 return HttpStatusCodeResponse.SuccessResponse(batchId, string.Format(ResponseMessages.Success, "Batch Payslip", ActionType.Saved));
@@ -148,7 +153,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
 
         public async Task<JsonResult> DeleteBatchTransaction(long transactionId)
         {
-            var isDeleted = await _batchPayslipRepository.DeleteBatchTransaction(transactionId);
+            bool isDeleted = await _batchPayslipRepository.DeleteBatchTransaction(transactionId);
             if (isDeleted)
             {
                 return HttpStatusCodeResponse.SuccessResponse(isDeleted, string.Format(ResponseMessages.Success, "Batch Transaction", ActionType.Deleted));
@@ -158,7 +163,7 @@ namespace PalladiumPayroll.Services.PayrollProcess.BatchPayslip
 
         public async Task<JsonResult> ProcessBatchPayslip(BatchPayslipProcess reqModel)
         {
-            var res = await _batchPayslipRepository.ProcessBatchPayslip(reqModel);
+            SPResultMessage res = await _batchPayslipRepository.ProcessBatchPayslip(reqModel);
             if (res.Result)
             {
                 return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, "Batch Payslip", ActionType.Processed));

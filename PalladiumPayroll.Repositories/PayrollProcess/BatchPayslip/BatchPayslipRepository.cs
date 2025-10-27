@@ -118,7 +118,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             return new MultiTransaction() { Employees = employeeList, Transactions = transaction };
         }
 
-        public async Task<List<BatchPayslipTransaction>> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel)
+        public async Task<bool> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel)
         {
             var empTbl = new DataTable();
             empTbl.Columns.Add("Employee", typeof(int));
@@ -154,7 +154,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@tblBatchTransaction", transTbl.AsTableValuedParameter("dbo.tblBatchTransaction"));
             parameters.Add("@IsSpecialRun", reqModel.TransactionType == (int)PayslipTransactionType.SpecialRun);
             parameters.Add("@IsLeavePay", reqModel.TransactionType == (int)PayslipTransactionType.LeavePay);
-            return await _dapper.ExecuteStoredProcedure<BatchPayslipTransaction>("BatchPayslipTransactionDetailsInsertORUpdate", parameters);
+            return await _dapper.ExecuteStoredProcedureSingle<bool>("BatchPayslipTransactionDetailsInsertORUpdate", parameters);
         }
 
         public async Task<bool> BatchTransactionDeleteBulk(BatchPayslipBulkInsert reqModel)

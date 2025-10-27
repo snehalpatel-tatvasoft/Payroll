@@ -69,6 +69,8 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
         public string Description { get; set; }
         public int Type { get; set; }
         public bool IsUnit { get; set; }
+        public decimal Unit { get; set; }
+        public decimal Amount { get; set; }
         public int CouncilOptionsId { get; set; }
     }
 }

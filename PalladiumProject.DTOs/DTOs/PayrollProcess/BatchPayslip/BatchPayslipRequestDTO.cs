@@ -50,7 +50,7 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
 	    public string TransactionName { get; set; }
         public decimal Amount { get; set; }
         public decimal Hours { get; set; }
-        public bool IsRecurring { get; set; }
+        public bool? IsRecurring { get; set; }
     }
 
     public class PayslipLeave
