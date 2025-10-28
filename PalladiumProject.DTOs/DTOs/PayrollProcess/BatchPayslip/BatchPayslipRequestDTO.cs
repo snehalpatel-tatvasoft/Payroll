@@ -36,18 +36,19 @@ namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.BatchPayslip
 
     public class BatchPayslipBulkInsert : BatchPayslipInsert
     {
-        public List<int> EmployeeIds { get; set; }
-        public List<BatchTransactionTbl> BatchTransaction { get; set; }
+        public List<int> EmployeeIds { get; set; } = null!;
+        public List<BatchTransactionTbl> BatchTransaction { get; set; } = null!;
     }
 
-    public class ImportBatchPayslipBulkInsert : BatchPayslipInsert
+    public class ImportBatchPayslipBulkInsert
     {
-        public IFormFile BatchTransaction { get; set; }
+        public IFormFile BatchTransaction { get; set; } = null!;
+        public BatchPayslipInsert BatchPayslipInfo { get; set; } = null!;
     }
 
     public class BatchTransactionTbl
     {
-	    public string TransactionName { get; set; }
+	    public string TransactionName { get; set; } = null!;
         public decimal Amount { get; set; }
         public decimal Hours { get; set; }
         public bool? IsRecurring { get; set; }

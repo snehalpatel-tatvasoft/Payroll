@@ -118,7 +118,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             return new MultiTransaction() { Employees = employeeList, Transactions = transaction };
         }
 
-        public async Task<bool> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel)
+        public async Task<int> BatchTransactionUpsertBulk(BatchPayslipBulkInsert reqModel)
         {
             var empTbl = new DataTable();
             empTbl.Columns.Add("Employee", typeof(int));
@@ -154,7 +154,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@tblBatchTransaction", transTbl.AsTableValuedParameter("dbo.tblBatchTransaction"));
             parameters.Add("@IsSpecialRun", reqModel.TransactionType == (int)PayslipTransactionType.SpecialRun);
             parameters.Add("@IsLeavePay", reqModel.TransactionType == (int)PayslipTransactionType.LeavePay);
-            return await _dapper.ExecuteStoredProcedureSingle<bool>("BatchPayslipTransactionDetailsInsertORUpdate", parameters);
+            return await _dapper.ExecuteStoredProcedureSingle<int>("BatchPayslipTransactionDetailsInsertORUpdate", parameters);
         }
 
         public async Task<bool> BatchTransactionDeleteBulk(BatchPayslipBulkInsert reqModel)
@@ -193,30 +193,23 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             return result;
         }
 
-        public async Task<bool> ImportBatchTransactionUpsert(BatchPayslipInsert reqModel, DataTable importTransactionData, string fileName)
+        public async Task<int> ImportBatchTransactionUpsert(BatchPayslipInsert reqModel, DataTable importTransactionData, string fileName)
         {
-            try
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@BatchId", reqModel.BatchId);
-                parameters.Add("@BatchName", reqModel.BatchNumber);
-                parameters.Add("@BatchDescription", reqModel.BatchDescription);
-                parameters.Add("@CompanyId", reqModel.CompanyId);
-                parameters.Add("@CycleId", reqModel.PayrollCycle);
-                parameters.Add("@ProcessPriod", reqModel.ProcessPeriod);
-                parameters.Add("@IsRecurring", reqModel.IsRecurring);
-                parameters.Add("@CompanyId", reqModel.CompanyId);
-                parameters.Add("@TemplateName", "Batch Transaction");
-                parameters.Add("@ImportFileName", fileName);
-                parameters.Add("@ActualTableName", "BatchPayslipTransaction");
-                parameters.Add("@tblMultiTrancsaction", importTransactionData.AsTableValuedParameter("dbo.[ImportMultiTransaction]"));
-                var result = await _dapper.ExecuteStoredProcedureSingle<bool>("SP_ImportMultiTransactions", parameters);
-                return result;
-            }
-            catch(Exception ex)
-            {
-                return false;
-            }
+            var parameters = new DynamicParameters();
+            parameters.Add("@BatchId", reqModel.BatchId);
+            parameters.Add("@BatchName", reqModel.BatchNumber);
+            parameters.Add("@BatchDescription", reqModel.BatchDescription);
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@CycleId", reqModel.PayrollCycle);
+            parameters.Add("@ProcessPriod", reqModel.ProcessPeriod);
+            parameters.Add("@IsRecurring", reqModel.IsRecurring);
+            parameters.Add("@CompanyId", reqModel.CompanyId);
+            parameters.Add("@TemplateName", "Batch Transaction");
+            parameters.Add("@ImportFileName", fileName);
+            parameters.Add("@ActualTableName", "BatchPayslipTransaction");
+            parameters.Add("@tblMultiTrancsaction", importTransactionData.AsTableValuedParameter("dbo.[ImportMultiTransaction]"));
+            var result = await _dapper.ExecuteStoredProcedureSingle<int>("SP_ImportMultiTransactions", parameters);
+            return result;
         }
         #endregion
 
