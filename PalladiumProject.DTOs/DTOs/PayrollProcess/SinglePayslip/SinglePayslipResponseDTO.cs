@@ -80,7 +80,6 @@ public class PayslipPreviewHeaderDTO
     public List<PayslipPreviewDetailDTO> Details { get; set; } = new List<PayslipPreviewDetailDTO>();
 }
 
-
 public class PayslipPreviewDetailDTO
 {
     public int EmployeePayslipPreviewDtlId { get; set; }
@@ -91,3 +90,34 @@ public class PayslipPreviewDetailDTO
     public decimal Amount { get; set; }
 }
 
+
+public class EndEmploymentResultDto
+{
+    public int? Result { get; set; }                  // For Mode 2 & 3
+    public decimal? TotalAnnualLeave { get; set; }    // For Mode 1
+    public decimal? LeaveDue { get; set; }            // For Mode 1
+    public string ProcessPeriod { get; set; } = string.Empty;       // For Mode 4
+    public DateTime? ProcessStartDate { get; set; }   // For Mode 4
+    public DateTime? ProcessEndDate { get; set; }     // For Mode 4 
+    public int? FlagEndEmployment { get; set; }      // For Mode 5
+    public DateTime? StartDate { get; set; }         // For Mode 5
+    public DateTime? PayFor { get; set; }            // For Mode 5
+    public DateTime? EndEmploymentDate { get; set; } // For Mode 5
+}
+
+
+public class CalculateLeavePayoutResultDTO
+{
+    public int EmployeeId { get; set; }
+    public int? PayslipId { get; set; }
+    public string PayrollCycleType { get; set; } = string.Empty;
+    public decimal RatePerDay { get; set; }
+    public decimal AnnualLeave { get; set; }
+    public decimal DaysDue { get; set; }
+    public decimal TotalPresentDays { get; set; }
+    public decimal LeavePayoutAmount { get; set; }
+    public decimal DueAmountEncashed { get; set; }
+    public decimal DueHourEncashed { get; set; }
+    public DateTime PeriodStart { get; set; }
+    public DateTime PeriodEnd { get; set; }
+}

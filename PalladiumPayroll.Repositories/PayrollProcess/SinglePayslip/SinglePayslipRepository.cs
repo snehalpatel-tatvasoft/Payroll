@@ -271,7 +271,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return true;
     }
-    
+
     public async Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveDetails(long employeeId, long processingCyclePeriodId)
     {
         var parameters = new DynamicParameters();
@@ -285,7 +285,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return result?.ToList() ?? new List<EmployeeLeaveDetailResponseDTO>();
     }
-    
+
     public async Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId, long companyId)
     {
         var parameters = new DynamicParameters();
@@ -335,4 +335,37 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         return result;
     }
 
+    public async Task<EndEmploymentResultDto?> ManageEndEmploymentAndReinstate(EndEmploymentDTO request)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
+        parameters.Add("@EmpId", request.EmpId);
+        parameters.Add("@Mode", request.Mode);
+        parameters.Add("@EndEmpmntDate", request.EndEmpmntDate);
+        parameters.Add("@PeriodId", request.PeriodId);
+        parameters.Add("@EmpStatus", request.EmpStatus);
+        parameters.Add("@ReinstateType", request.ReinstateType);
+
+        var resultList = await _dapper.ExecuteStoredProcedure<EndEmploymentResultDto>(
+            "usp_ManageEndEmploymentAndReinstate", parameters);
+
+        return resultList.FirstOrDefault();
+    }
+
+    public async Task<CalculateLeavePayoutResultDTO?> CalculateLeavePayout(int empId, int companyPayrollId, int periodId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@EmpId", empId);
+        parameters.Add("@CompanyPayrollId", companyPayrollId);
+        parameters.Add("@PeriodId", periodId);
+
+        var resultList = await _dapper.ExecuteStoredProcedureSingle<CalculateLeavePayoutResultDTO>(
+            "usp_CalculateLeavePayout",
+            parameters
+        );
+
+        return resultList;
+    }
+
 }
+

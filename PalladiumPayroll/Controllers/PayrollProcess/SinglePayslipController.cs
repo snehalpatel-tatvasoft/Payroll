@@ -186,7 +186,7 @@ public class SinglePayslipController : ControllerBase
         }
     }
     [HttpGet("[action]")]
-    public async Task<ActionResult> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId,long companyId)
+    public async Task<ActionResult> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId, long companyId)
     {
         try
         {
@@ -195,7 +195,7 @@ public class SinglePayslipController : ControllerBase
                 return HttpStatusCodeResponse.InternalServerErrorResponse("Invalid employee or processing period ID.");
             }
 
-            return await _singlePayslipService.GetEmployeeLeaveHistory(employeeId, processingCyclePeriodId,companyId);
+            return await _singlePayslipService.GetEmployeeLeaveHistory(employeeId, processingCyclePeriodId, companyId);
         }
         catch (Exception)
         {
@@ -225,7 +225,7 @@ public class SinglePayslipController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> SaveSinglePayslip( long employeePayslipPreviewId)
+    public async Task<ActionResult> SaveSinglePayslip(long employeePayslipPreviewId)
     {
         try
         {
@@ -237,4 +237,39 @@ public class SinglePayslipController : ControllerBase
                 string.Format(ResponseMessages.ExceptionMessage, ActionType.Saving, "Payslip"));
         }
     }
+
+
+    [HttpPost("[action]")]
+    public async Task<JsonResult> ManageEndEmployment([FromBody] EndEmploymentDTO request)
+    {
+        try
+        {
+            if (request == null)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse("Request data is missing.");
+            }
+
+            return await _singlePayslipService.ManageEndEmploymentAndReinstate(request);
+        }
+        catch (Exception){
+             return HttpStatusCodeResponse.InternalServerErrorResponse("An Exception occures while process end employment.");
+        }
+
+
+    }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> CalculateLeavePayout(int empId, int companyPayrollId, int periodId)
+    {
+        try
+        {
+            return await _singlePayslipService.CalculateLeavePayout(empId,companyPayrollId,periodId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Leave paid amount"));
+        }
+    }
+
 }
