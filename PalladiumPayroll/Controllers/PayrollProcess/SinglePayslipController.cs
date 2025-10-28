@@ -254,8 +254,6 @@ public class SinglePayslipController : ControllerBase
         catch (Exception){
              return HttpStatusCodeResponse.InternalServerErrorResponse("An Exception occures while process end employment.");
         }
-
-
     }
 
     [HttpGet("[action]")]

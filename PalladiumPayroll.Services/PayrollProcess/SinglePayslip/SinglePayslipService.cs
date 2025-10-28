@@ -203,14 +203,13 @@ public class SinglePayslipService : ISinglePayslipService
         }
 
         return HttpStatusCodeResponse.SuccessResponse(
-            new { Result = result.Result },  
-            string.Format("End Employment/Reinstate processed successfully.")
+         result, string.Format("End Employment/Reinstate processed successfully.")
         );
-    }   
+    }
 
     public async Task<JsonResult> CalculateLeavePayout(int empId, int companyPayrollId, int periodId)
     {
-        CalculateLeavePayoutResultDTO? result = await _singlePayslipRepository.CalculateLeavePayout(empId,companyPayrollId,periodId);
+        CalculateLeavePayoutResultDTO? result = await _singlePayslipRepository.CalculateLeavePayout(empId, companyPayrollId, periodId);
 
         return HttpStatusCodeResponse.SuccessResponse(result,
             string.Format(ResponseMessages.Success, "Leave Paid Amount", ActionType.Retrieved)

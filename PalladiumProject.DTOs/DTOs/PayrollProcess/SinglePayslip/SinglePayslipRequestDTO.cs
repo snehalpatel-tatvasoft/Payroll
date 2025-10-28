@@ -63,6 +63,6 @@ public class EndEmploymentDTO
     public int? Mode { get; set; }             // 1=Leave Payout, 2=End Emp, 3=Reinstate, 4=Get Period, 5=Check Status
     public DateTime? EndEmpmntDate { get; set; }
     public int? PeriodId { get; set; }
-    public string EmpStatus { get; set; } = string.Empty;
+    public int EmpStatus { get; set; }
     public int? ReinstateType { get; set; }    // 0=New Record, 1=Existing
 }
