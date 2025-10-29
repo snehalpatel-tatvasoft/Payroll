@@ -154,6 +154,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@tblBatchTransaction", transTbl.AsTableValuedParameter("dbo.tblBatchTransaction"));
             parameters.Add("@IsSpecialRun", reqModel.TransactionType == (int)PayslipTransactionType.SpecialRun);
             parameters.Add("@IsLeavePay", reqModel.TransactionType == (int)PayslipTransactionType.LeavePay);
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value);
             return await _dapper.ExecuteStoredProcedureSingle<int>("BatchPayslipTransactionDetailsInsertORUpdate", parameters);
         }
 
@@ -208,6 +209,7 @@ namespace PalladiumPayroll.Repositories.PayrollProcess.BatchPayslip
             parameters.Add("@ImportFileName", fileName);
             parameters.Add("@ActualTableName", "BatchPayslipTransaction");
             parameters.Add("@tblMultiTrancsaction", importTransactionData.AsTableValuedParameter("dbo.[ImportMultiTransaction]"));
+            parameters.Add("@UserId", _httpContextAccessor.HttpContext?.User?.FindFirst(JWTClaimTypes.UserId)?.Value);
             var result = await _dapper.ExecuteStoredProcedureSingle<int>("SP_ImportMultiTransactions", parameters);
             return result;
         }
