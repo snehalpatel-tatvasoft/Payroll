@@ -337,7 +337,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
     public async Task<EndEmploymentResultDto?> ManageEndEmploymentAndReinstate(EndEmploymentDTO request)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters?  parameters = new DynamicParameters();
         parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
         parameters.Add("@EmpId", request.EmpId);
         parameters.Add("@Mode", request.Mode);
@@ -345,6 +345,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@PeriodId", request.PeriodId);
         parameters.Add("@EmpStatus", request.EmpStatus);
         parameters.Add("@ReinstateType", request.ReinstateType);
+         parameters.Add("@LeavePaidOutAmt", request.LeavePaidAmount);  
 
         var resultList = await _dapper.ExecuteStoredProcedure<EndEmploymentResultDto>(
             "usp_ManageEndEmploymentAndReinstate", parameters);
@@ -354,12 +355,12 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
     public async Task<CalculateLeavePayoutResultDTO?> CalculateLeavePayout(int empId, int companyPayrollId, int periodId)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmpId", empId);
         parameters.Add("@CompanyPayrollId", companyPayrollId);
         parameters.Add("@PeriodId", periodId);
 
-        var resultList = await _dapper.ExecuteStoredProcedureSingle<CalculateLeavePayoutResultDTO>(
+        CalculateLeavePayoutResultDTO? resultList = await _dapper.ExecuteStoredProcedureSingle<CalculateLeavePayoutResultDTO>(
             "usp_CalculateLeavePayout",
             parameters
         );

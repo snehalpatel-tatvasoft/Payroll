@@ -60,9 +60,10 @@ public class EndEmploymentDTO
 {
     public int? CompanyPayrollId { get; set; }
     public int? EmpId { get; set; }
-    public int? Mode { get; set; }             // 1=Leave Payout, 2=End Emp, 3=Reinstate, 4=Get Period, 5=Check Status
+    public int? Mode { get; set; }          
     public DateTime? EndEmpmntDate { get; set; }
     public int? PeriodId { get; set; }
     public int EmpStatus { get; set; }
-    public int? ReinstateType { get; set; }    // 0=New Record, 1=Existing
+    public int? ReinstateType { get; set; }   
+    public decimal? LeavePaidAmount { get; set; }  
 }
