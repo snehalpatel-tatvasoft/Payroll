@@ -87,21 +87,6 @@ public class PayslipPreviewDetailDTO
     public decimal Amount { get; set; }
 }
 
-public class EndEmploymentResultDto
-{
-    public int? Result { get; set; }                  // For Mode 2 & 3
-    public decimal? TotalAnnualLeave { get; set; }    // For Mode 1
-    public decimal? LeaveDue { get; set; }            // For Mode 1
-    public string ProcessPeriod { get; set; } = string.Empty;       // For Mode 4
-    public DateTime? ProcessStartDate { get; set; }   // For Mode 4
-    public DateTime? ProcessEndDate { get; set; }     // For Mode 4 
-    public int? FlagEndEmployment { get; set; }      // For Mode 5
-    public DateTime? StartDate { get; set; }         // For Mode 5
-    public DateTime? PayFor { get; set; }            // For Mode 5
-    public DateTime? EndEmploymentDate { get; set; } // For Mode 5
-}
-
-
 public class CalculateLeavePayoutResultDTO
 {
     public int EmployeeId { get; set; }
@@ -116,4 +101,10 @@ public class CalculateLeavePayoutResultDTO
     public decimal DueHourEncashed { get; set; }
     public DateTime PeriodStart { get; set; }
     public DateTime PeriodEnd { get; set; }
+}
+
+public class ManageEmploymentStatusResult
+{
+    public int Result { get; set; }
+    public string? ErrorMessage { get; set; }
 }

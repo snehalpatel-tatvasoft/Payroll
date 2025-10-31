@@ -239,29 +239,12 @@ public class SinglePayslipController : ControllerBase
     }
 
 
-    [HttpPost("[action]")]
-    public async Task<JsonResult> ManageEndEmployment([FromBody] EndEmploymentDTO request)
-    {
-        try
-        {
-            if (request == null)
-            {
-                return HttpStatusCodeResponse.InternalServerErrorResponse("Request data is missing.");
-            }
-
-            return await _singlePayslipService.ManageEndEmploymentAndReinstate(request);
-        }
-        catch (Exception){
-             return HttpStatusCodeResponse.InternalServerErrorResponse("An Exception occures while process end employment.");
-        }
-    }
-
     [HttpGet("[action]")]
     public async Task<ActionResult> CalculateLeavePayout(int empId, int companyPayrollId, int periodId)
     {
         try
         {
-            return await _singlePayslipService.CalculateLeavePayout(empId,companyPayrollId,periodId);
+            return await _singlePayslipService.CalculateLeavePayout(empId, companyPayrollId, periodId);
         }
         catch (Exception)
         {
@@ -270,4 +253,59 @@ public class SinglePayslipController : ControllerBase
         }
     }
 
+
+    [HttpPost("[action]")]
+    public async Task<JsonResult> ManageEndEmployment([FromBody] ManageEndEmploymentDTO request)
+    {
+        try
+        {
+            if (request == null)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse("Request data is missing.");
+            }
+
+            return await _singlePayslipService.ManageEndEmployment(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse("An Exception occures while process end employment.");
+        }
+    }
+
+    [HttpPost("[action]")]
+    public async Task<JsonResult> ReinstateEmployee([FromBody] ReinstateEmployeeDTO request)
+    {
+        try
+        {
+            if (request == null)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse("Request data is missing.");
+            }
+
+            return await _singlePayslipService.ReinstateEmployee(request);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse("An Exception occures while reinstate the employee.");
+        }
+    }
+
+    
+    [HttpGet("[action]")]
+    public async Task<JsonResult> CheckEndEmploymentStatus(int employeeId)
+    {
+        try
+        {
+            if (employeeId <= 0)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse("Invalid Employee Id.");
+            }
+
+            return await _singlePayslipService.CheckEndEmploymentStatus(employeeId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse("An Exception occures while retrieving employment status.");
+        }
+    }
 }

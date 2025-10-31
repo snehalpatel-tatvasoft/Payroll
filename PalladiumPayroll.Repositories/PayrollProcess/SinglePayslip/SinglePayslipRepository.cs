@@ -335,23 +335,6 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         return result;
     }
 
-    public async Task<EndEmploymentResultDto?> ManageEndEmploymentAndReinstate(EndEmploymentDTO request)
-    {
-        DynamicParameters?  parameters = new DynamicParameters();
-        parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
-        parameters.Add("@EmpId", request.EmpId);
-        parameters.Add("@Mode", request.Mode);
-        parameters.Add("@EndEmpmntDate", request.EndEmpmntDate);
-        parameters.Add("@PeriodId", request.PeriodId);
-        parameters.Add("@EmpStatus", request.EmpStatus);
-        parameters.Add("@ReinstateType", request.ReinstateType);
-         parameters.Add("@LeavePaidOutAmt", request.LeavePaidAmount);  
-
-        var resultList = await _dapper.ExecuteStoredProcedure<EndEmploymentResultDto>(
-            "usp_ManageEndEmploymentAndReinstate", parameters);
-
-        return resultList.FirstOrDefault();
-    }
 
     public async Task<CalculateLeavePayoutResultDTO?> CalculateLeavePayout(int empId, int companyPayrollId, int periodId)
     {
@@ -368,5 +351,59 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         return resultList;
     }
 
+    public async Task<ManageEmploymentStatusResult?> ManageEndEmployment(ManageEndEmploymentDTO dto)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@CompanyPayrollId", dto.CompanyPayrollId);
+        parameters.Add("@EmpId", dto.EmpId);
+        parameters.Add("@EndEmpmntDate", dto.EndEmploymentDate);
+        parameters.Add("@PeriodId", dto.PeriodId);
+        parameters.Add("@EmpStatus", dto.EmpStatus);
+        parameters.Add("@LeavePaidOutAmt", dto.LeavePaidOutAmt);
+
+        ManageEmploymentStatusResult? result = await _dapper.ExecuteStoredProcedureSingle<ManageEmploymentStatusResult>(
+            "usp_ManageEndEmployment",
+            parameters
+        );
+
+        return result ?? new ManageEmploymentStatusResult
+        {
+            Result = -1,
+            ErrorMessage = "No response from stored procedure."
+        };
+    }
+
+    public async Task<ManageEmploymentStatusResult?> ReinstateEmployee(ReinstateEmployeeDTO dto)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@CompanyPayrollId", dto.CompanyPayrollId);
+        parameters.Add("@EmpId", dto.EmpId);
+        parameters.Add("@PeriodId", dto.PeriodId);
+        parameters.Add("@ReinstateType", dto.ReinstateType);
+
+        ManageEmploymentStatusResult? result = await _dapper.ExecuteStoredProcedureSingle<ManageEmploymentStatusResult>(
+            "usp_ManageReinstateEmployee",
+            parameters
+        );
+
+        return result ?? new ManageEmploymentStatusResult
+        {
+            Result = -1,
+            ErrorMessage = "No response from stored procedure."
+        };
+    }
+
+    public async Task<int?> CheckEndEmploymentStatus(int employeeId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@EmpId",employeeId);
+
+        int? result = await _dapper.ExecuteStoredProcedureSingle<int>(
+            "usp_CheckEndEmploymentStatus",
+            parameters
+        );
+
+        return result ;
+    }
 }
 

@@ -191,22 +191,6 @@ public class SinglePayslipService : ISinglePayslipService
         );
     }
 
-    public async Task<JsonResult> ManageEndEmploymentAndReinstate(EndEmploymentDTO request)
-    {
-        var result = await _singlePayslipRepository.ManageEndEmploymentAndReinstate(request);
-
-        if (result == null)
-        {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(
-                "Failed to process end employment/reinstate operation."
-            );
-        }
-
-        return HttpStatusCodeResponse.SuccessResponse(
-         result, string.Format("End Employment/Reinstate processed successfully.")
-        );
-    }
-
     public async Task<JsonResult> CalculateLeavePayout(int empId, int companyPayrollId, int periodId)
     {
         CalculateLeavePayoutResultDTO? result = await _singlePayslipRepository.CalculateLeavePayout(empId, companyPayrollId, periodId);
@@ -215,4 +199,46 @@ public class SinglePayslipService : ISinglePayslipService
             string.Format(ResponseMessages.Success, "Leave Paid Amount", ActionType.Retrieved)
         );
     }
+
+    public async Task<JsonResult> ManageEndEmployment(ManageEndEmploymentDTO request)
+    {
+        ManageEmploymentStatusResult? res = await _singlePayslipRepository.ManageEndEmployment(request);
+
+        if (res == null || res.Result != 1)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                "Failed to process end employment operation."
+            );
+        }
+
+        return HttpStatusCodeResponse.SuccessResponse(
+         res, string.Format("End Employment processed successfully.")
+        );
+    }
+
+    public async Task<JsonResult> ReinstateEmployee(ReinstateEmployeeDTO request)
+    {
+        ManageEmploymentStatusResult? res = await _singlePayslipRepository.ReinstateEmployee(request);
+
+        if (res == null || res.Result != 1)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(
+                "Failed to reinstate the employee."
+            );
+        }
+
+        return HttpStatusCodeResponse.SuccessResponse(
+         res, string.Format("Employee reinstated successfully.")
+        );
+    }
+
+    public async Task<JsonResult> CheckEndEmploymentStatus(int employeeId)
+    {
+        int? res = await _singlePayslipRepository.CheckEndEmploymentStatus(employeeId);
+
+        return HttpStatusCodeResponse.SuccessResponse(
+         res, string.Format("Employeement status retrived successfully.")
+        );
+    }
+
 }

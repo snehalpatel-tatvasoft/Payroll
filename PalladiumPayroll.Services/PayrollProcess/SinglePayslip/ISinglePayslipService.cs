@@ -20,6 +20,9 @@ public interface ISinglePayslipService
     Task<JsonResult> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId,long companyId);
     Task<JsonResult> GetPayslipPreviewDetails(int payslipPreviewId);
     Task<JsonResult> SaveSinglePayslip(long payslipPreviewId);
-    Task<JsonResult> ManageEndEmploymentAndReinstate(EndEmploymentDTO request);
     Task<JsonResult> CalculateLeavePayout(int empId, int companyPayrollId, int periodId);
+
+    Task<JsonResult> ManageEndEmployment(ManageEndEmploymentDTO request);
+    Task<JsonResult> ReinstateEmployee(ReinstateEmployeeDTO request);
+    Task<JsonResult> CheckEndEmploymentStatus(int employeeId);
 }

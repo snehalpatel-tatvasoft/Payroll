@@ -55,15 +55,21 @@ public class PayslipDeleteTransactionDTO
     public int EmployeePayslipPreviewDtlId { get; set; }
 }
 
-
-public class EndEmploymentDTO
+public class ManageEndEmploymentDTO
 {
     public int? CompanyPayrollId { get; set; }
     public int? EmpId { get; set; }
-    public int? Mode { get; set; }          
-    public DateTime? EndEmpmntDate { get; set; }
+    public DateTime? EndEmploymentDate { get; set; }
     public int? PeriodId { get; set; }
-    public int EmpStatus { get; set; }
-    public int? ReinstateType { get; set; }   
-    public decimal? LeavePaidAmount { get; set; }  
+    public int? EmpStatus { get; set; }
+    public decimal? LeavePaidOutAmt { get; set; }
 }
+
+public class ReinstateEmployeeDTO
+{
+    public int? CompanyPayrollId { get; set; }
+    public int? EmpId { get; set; }
+    public int? PeriodId { get; set; }
+    public int? ReinstateType { get; set; }
+}
+
