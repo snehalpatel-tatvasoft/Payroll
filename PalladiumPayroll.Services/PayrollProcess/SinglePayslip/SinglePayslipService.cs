@@ -18,52 +18,39 @@ public class SinglePayslipService : ISinglePayslipService
 
     public async Task<JsonResult> GetEmployeesForProcessing(GetEmployeesForProcessingRequestDTO request)
     {
-        var employees = await _singlePayslipRepository.GetEmployeesForProcessing(request);
+        List<EmployeeForProcessingResponseDTO>? employees = await _singlePayslipRepository.GetEmployeesForProcessing(request);
         return HttpStatusCodeResponse.SuccessResponse(employees,
             string.Format(ResponseMessages.Success, "Employees for processing", ActionType.Retrieved));
     }
 
-
     public async Task<JsonResult> GetPayrollCycleDropdown(long companyId)
     {
         List<PayrollCycleDropdownDTO> payrollCycle = await _singlePayslipRepository.GetPayrollCycleDropdown(companyId);
-
         return HttpStatusCodeResponse.SuccessResponse(payrollCycle, string.Format(ResponseMessages.Success, ResponseMessages.PayrollCycle, ActionType.Retrieved));
     }
 
     public async Task<JsonResult> GetNextUnprocessedPeriods(long companyId, long companyPayrollId)
     {
-        var processPeriod = await _singlePayslipRepository.GetNextUnprocessedPeriods(companyId, companyPayrollId);
-
+        List<ProcessingPeriodDTO>? processPeriod = await _singlePayslipRepository.GetNextUnprocessedPeriods(companyId, companyPayrollId);
         return HttpStatusCodeResponse.SuccessResponse(processPeriod, string.Format(ResponseMessages.Success, "Process Period", ActionType.Retrieved));
     }
 
     public async Task<JsonResult> GetEmployeeRateAndDaysWorked(long employeeId, long processingPeriodId)
     {
-        var result = await _singlePayslipRepository.GetEmployeeRateAndDaysWorked(employeeId, processingPeriodId);
-
+        EmployeeRateAndDaysWorkedDto? result = await _singlePayslipRepository.GetEmployeeRateAndDaysWorked(employeeId, processingPeriodId);
         return HttpStatusCodeResponse.SuccessResponse(
-            result,
-            string.Format(ResponseMessages.Success, "Rate And Days Worked", ActionType.Retrieved)
+            result, string.Format(ResponseMessages.Success, "Rate And Days Worked", ActionType.Retrieved)
         );
     }
 
     public async Task<JsonResult> GetModalTransactionsListForPayslip(int transactionId, int companyId)
     {
-        try
+        List<TransactionListModelForPayslip>? transactions = await _singlePayslipRepository.GetModalTransactionsListForPayslip(transactionId, companyId);
+        if (transactions.Any())
         {
-            var transactions = await _singlePayslipRepository.GetModalTransactionsListForPayslip(transactionId, companyId);
-            if (transactions.Any())
-            {
-                return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, "Transaction list", ActionType.Retrieved));
-            }
-
-            return HttpStatusCodeResponse.SuccessResponse(new List<TransactionListModelForPayslip>(), "No transactions found for the provided ID.");
+            return HttpStatusCodeResponse.SuccessResponse(transactions, string.Format(ResponseMessages.Success, "Transaction list", ActionType.Retrieved));
         }
-        catch (Exception ex)
-        {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(string.Format(ResponseMessages.Exception, "Transaction list", ActionType.Retrieving, ex.Message));
-        }
+        return HttpStatusCodeResponse.SuccessResponse(new List<TransactionListModelForPayslip>(), "No transactions found for the provided ID.");
     }
 
     public async Task<JsonResult> ProcessSinglePayslip(ProcessSinglePayslipRequestDTO request)
@@ -78,106 +65,79 @@ public class SinglePayslipService : ISinglePayslipService
 
     public async Task<JsonResult> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
     {
-        try
+        List<SinglePayslipDetailsResponseDTO>? result = await _singlePayslipRepository.GetSinglePayslipDetails(request);
+        if (result == null)
         {
-            var result = await _singlePayslipRepository.GetSinglePayslipDetails(request);
-
-            if (result == null)
-            {
-                return HttpStatusCodeResponse.SuccessResponse(
-                    new SinglePayslipDetailsResponseDTO(),
-                    "No payslip details found for the provided parameters."
-                );
-            }
-
             return HttpStatusCodeResponse.SuccessResponse(
-                result,
-                string.Format(ResponseMessages.Success, "Payslip Details", ActionType.Retrieved)
+                new SinglePayslipDetailsResponseDTO(),
+                "No payslip details found for the provided parameters."
             );
         }
-        catch (Exception ex)
-        {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.ExceptionMessage, ActionType.Retrieving, "Payslip Details", ex.Message)
-            );
-        }
+        return HttpStatusCodeResponse.SuccessResponse(
+            result, string.Format(ResponseMessages.Success, "Payslip Details", ActionType.Retrieved)
+        );
+
     }
 
     public async Task<JsonResult> GetUIFCalculation(GetSinglePayslipDetailsRequestDTO request)
     {
-        try
+        var (uifCal, uifIncome) = await _singlePayslipRepository.GetUIFCalculation(request);
+        var response = new
         {
-            var (uifCal, uifIncome) = await _singlePayslipRepository.GetUIFCalculation(request);
+            UIFCal = uifCal,
+            UIFIncome = uifIncome
+        };
 
-            var response = new
-            {
-                UIFCal = uifCal,
-                UIFIncome = uifIncome
-            };
+        return HttpStatusCodeResponse.SuccessResponse(
+            response, "UIF calculation retrieved successfully."
+        );
 
-            return HttpStatusCodeResponse.SuccessResponse(
-                response,
-                "UIF calculation retrieved successfully."
-            );
-        }
-        catch (Exception ex)
-        {
-            return HttpStatusCodeResponse.InternalServerErrorResponse(
-                string.Format(ResponseMessages.ExceptionMessage, "Calculating", "UIF", ex.Message)
-            );
-        }
     }
 
     public async Task<JsonResult> DeleteSinglePayslipTransactions(List<PayslipDeleteTransactionDTO> transactions)
     {
         await _singlePayslipRepository.DeleteSinglePayslipTransactions(transactions);
-
         return HttpStatusCodeResponse.SuccessResponse(string.Empty, string.Format(ResponseMessages.Success, ResponseMessages.MinimumWage, ActionType.Deleted));
     }
 
     public async Task<JsonResult> GetEmployeeLeaveDetails(long employeeId, long processingCyclePeriodId)
     {
-        var leaves = await _singlePayslipRepository.GetEmployeeLeaveDetails(employeeId, processingCyclePeriodId);
+        List<EmployeeLeaveDetailResponseDTO>? leaves = await _singlePayslipRepository.GetEmployeeLeaveDetails(employeeId, processingCyclePeriodId);
 
         if (leaves.Any())
         {
             return HttpStatusCodeResponse.SuccessResponse(
-                leaves,
-                string.Format(ResponseMessages.Success, "Employee Leave Details", ActionType.Retrieved)
+                leaves, string.Format(ResponseMessages.Success, "Employee Leave Details", ActionType.Retrieved)
             );
         }
-
         return HttpStatusCodeResponse.SuccessResponse(
             new List<EmployeeLeaveDetailResponseDTO>(),
             "No leave records found for the given employee and period."
         );
     }
+
     public async Task<JsonResult> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId, long companyId)
     {
-        var leaves = await _singlePayslipRepository.GetEmployeeLeaveHistory(employeeId, processingCyclePeriodId, companyId);
+        List<EmployeeLeaveDetailResponseDTO>? leaves = await _singlePayslipRepository.GetEmployeeLeaveHistory(employeeId, processingCyclePeriodId, companyId);
 
         if (leaves.Any())
         {
             return HttpStatusCodeResponse.SuccessResponse(
-                leaves,
-                string.Format(ResponseMessages.Success, "Employee Leave History", ActionType.Retrieved)
+                leaves, string.Format(ResponseMessages.Success, "Employee Leave History", ActionType.Retrieved)
             );
         }
-
         return HttpStatusCodeResponse.SuccessResponse(
             new List<EmployeeLeaveDetailResponseDTO>(),
             "No leave records found for the given employee and period."
         );
     }
-
 
     public async Task<JsonResult> GetPayslipPreviewDetails(int payslipPreviewId)
     {
         PayslipPreviewHeaderDTO? header = await _singlePayslipRepository.GetPayslipPreviewDetails(payslipPreviewId);
 
         return HttpStatusCodeResponse.SuccessResponse(
-            header,
-            string.Format(ResponseMessages.Success, "Employee Preview Details", ActionType.Retrieved)
+            header, string.Format(ResponseMessages.Success, "Employee Preview Details", ActionType.Retrieved)
         );
     }
 
@@ -203,14 +163,12 @@ public class SinglePayslipService : ISinglePayslipService
     public async Task<JsonResult> ManageEndEmployment(ManageEndEmploymentDTO request)
     {
         ManageEmploymentStatusResult? res = await _singlePayslipRepository.ManageEndEmployment(request);
-
         if (res == null || res.Result != 1)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 "Failed to process end employment operation."
             );
         }
-
         return HttpStatusCodeResponse.SuccessResponse(
          res, string.Format("End Employment processed successfully.")
         );
@@ -219,14 +177,12 @@ public class SinglePayslipService : ISinglePayslipService
     public async Task<JsonResult> ReinstateEmployee(ReinstateEmployeeDTO request)
     {
         ManageEmploymentStatusResult? res = await _singlePayslipRepository.ReinstateEmployee(request);
-
         if (res == null || res.Result != 1)
         {
             return HttpStatusCodeResponse.InternalServerErrorResponse(
                 "Failed to reinstate the employee."
             );
         }
-
         return HttpStatusCodeResponse.SuccessResponse(
          res, string.Format("Employee reinstated successfully.")
         );

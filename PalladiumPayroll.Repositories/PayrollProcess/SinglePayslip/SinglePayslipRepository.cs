@@ -19,13 +19,13 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
     public async Task<List<EmployeeForProcessingResponseDTO>> GetEmployeesForProcessing(GetEmployeesForProcessingRequestDTO request)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@PayrollCycleId", request.PayrollCycleId);
         parameters.Add("@EmployeeStatusId", request.EmployeeStatusId);
         parameters.Add("@TransactionTypeId", request.TransactionTypeId);
         parameters.Add("@ProcessingCyclePeriodId", request.ProcessPeriodId);
 
-        var result = await _dapper.ExecuteStoredProcedure<EmployeeForProcessingResponseDTO>(
+        List<EmployeeForProcessingResponseDTO>? result = await _dapper.ExecuteStoredProcedure<EmployeeForProcessingResponseDTO>(
             "usp_GetEmployeesForProcessing", parameters);
         return result.ToList();
     }
@@ -39,7 +39,6 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             "usp_GetSinglePayslipPayrollCycleDropdown",
             parameters
         );
-
         return result ?? new List<PayrollCycleDropdownDTO>();
     }
 
@@ -53,21 +52,19 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             "usp_GetNextProcessingPeriod",
             parameters
         );
-
         return result ?? new List<ProcessingPeriodDTO>();
     }
 
     public async Task<EmployeeRateAndDaysWorkedDto?> GetEmployeeRateAndDaysWorked(long employeeId, long processingPeriodId)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmployeeId", employeeId);
         parameters.Add("@ProcessingPeriodId", processingPeriodId);
 
-        var result = await _dapper.ExecuteStoredProcedureSingle<EmployeeRateAndDaysWorkedDto>(
+        EmployeeRateAndDaysWorkedDto? result = await _dapper.ExecuteStoredProcedureSingle<EmployeeRateAndDaysWorkedDto>(
             "usp_GetEmployeeRateAndDaysWorked",
             parameters
         );
-
         return result;
     }
 
@@ -77,18 +74,16 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@TransactionId", transactionId);
         parameters.Add("@CompanyId", companyId);
 
-
         List<TransactionListModelForPayslip>? transactions = await _dapper.ExecuteStoredProcedure<TransactionListModelForPayslip>(
             "usp_GetTransactionsListForPayslip",
             parameters
         );
-
         return transactions ?? new List<TransactionListModelForPayslip>();
     }
 
     public async Task<long> ProcessSinglePayslip(ProcessSinglePayslipRequestDTO request)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmployeeId", request.EmployeeId);
         parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
         parameters.Add("@ProcessingCyclePeriodId", request.ProcessingCyclePeriodId);
@@ -107,7 +102,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         dt.Columns.Add("Recurring", typeof(bool));
         dt.Columns.Add("TransactionHours", typeof(decimal));
 
-        foreach (var item in request.PayslipDetails)
+        foreach (PayslipDetailDTO? item in request.PayslipDetails)
         {
             dt.Rows.Add(
                 item.PayrollProcessId,
@@ -124,19 +119,16 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         long result = await _dapper.ExecuteStoredProcedureSingle<long>(
             "usp_ProcessSinglePayslip", parameters);
-
         return result;
     }
 
     public async Task<List<SinglePayslipDetailsResponseDTO>> GetSinglePayslipDetails(GetSinglePayslipDetailsRequestDTO request)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmployeeId", request.EmployeeId);
         parameters.Add("@CompanyPayrollId", request.CompanyPayrollId);
         parameters.Add("@PayrollPeriodId", request.PayrollPeriodId);
         parameters.Add("@TransactionTypeId", request.TransactionTypeId);
-
-
 
         if (request.TransactionTypeId == 1)
         {
@@ -163,11 +155,10 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             dt.Columns.Add("Recurring", typeof(bool));
             dt.Columns.Add("TransactionHours", typeof(decimal));
 
-            foreach (var item in request.TransactionDetails)
+            foreach (TransactionDetailDTO? item in request.TransactionDetails)
             {
                 dt.Rows.Add(item.TransactionID, item.TransactionType, item.TransactionName, item.TransactionValue, string.Empty, 0, 0);
             }
-
             parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails"));
 
             List<SinglePayslipDetailsResponseDTO>? result = await _dapper.ExecuteStoredProcedure<SinglePayslipDetailsResponseDTO>(
@@ -190,8 +181,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             dt.Columns.Add("Recurring", typeof(bool));
             dt.Columns.Add("TransactionHours", typeof(decimal));
 
-
-            foreach (var item in request.TransactionDetails)
+            foreach (TransactionDetailDTO? item in request.TransactionDetails)
             {
                 dt.Rows.Add(item.TransactionID, item.TransactionType, item.TransactionName, item.TransactionValue, string.Empty, 0, 0);
             }
@@ -220,7 +210,7 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
     public async Task<(decimal UIFCal, decimal UIFIncome)> GetUIFCalculation(GetSinglePayslipDetailsRequestDTO request)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
 
         parameters.Add("@EmployeeId", request.EmployeeId);
         parameters.Add("@ProcessingCyclePeriodId", request.PayrollPeriodId);
@@ -235,13 +225,12 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         dt.Columns.Add("Recurring", typeof(bool));
         dt.Columns.Add("TransactionHours", typeof(decimal));
 
-        foreach (var item in request.TransactionDetails)
+        foreach (TransactionDetailDTO? item in request.TransactionDetails)
         {
             dt.Rows.Add(item.TransactionID, item.TransactionType ?? "", item.TransactionName ?? "", item.TransactionValue, string.Empty, 0, 0);
         }
 
         parameters.Add("@TransactionDetails", dt.AsTableValuedParameter("dbo.NewPayrollDetails"));
-
         parameters.Add("@UIFCal", dbType: DbType.Decimal, direction: ParameterDirection.Output);
         parameters.Add("@UIFIncome", dbType: DbType.Decimal, direction: ParameterDirection.Output);
 
@@ -256,48 +245,43 @@ public class SinglePayslipRepository : ISinglePayslipRepository
     public async Task<bool> DeleteSinglePayslipTransactions(List<PayslipDeleteTransactionDTO> transactions)
     {
         DynamicParameters? parameters = new DynamicParameters();
-
         DataTable dt = new DataTable();
         dt.Columns.Add("EmployeePayslipPreviewDtlId", typeof(int));
 
-        foreach (var item in transactions)
+        foreach (PayslipDeleteTransactionDTO? item in transactions)
         {
             dt.Rows.Add(item.EmployeePayslipPreviewDtlId);
         }
-
         parameters.Add("@Transactions", dt.AsTableValuedParameter("dbo.PayslipDeleteTransactionType"));
 
         await _dapper.ExecuteStoredProcedureSingle<bool>("usp_DeleteSinglePayslipTransactions", parameters);
-
         return true;
     }
 
     public async Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveDetails(long employeeId, long processingCyclePeriodId)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmployeeId", employeeId);
         parameters.Add("@ProcessingCyclePeriodId", processingCyclePeriodId);
 
-        var result = await _dapper.ExecuteStoredProcedure<EmployeeLeaveDetailResponseDTO>(
+        List<EmployeeLeaveDetailResponseDTO>? result = await _dapper.ExecuteStoredProcedure<EmployeeLeaveDetailResponseDTO>(
             "usp_GetEmployeeLeaveDetailsForPayslip",
             parameters
         );
-
         return result?.ToList() ?? new List<EmployeeLeaveDetailResponseDTO>();
     }
 
     public async Task<List<EmployeeLeaveDetailResponseDTO>> GetEmployeeLeaveHistory(long employeeId, long processingCyclePeriodId, long companyId)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmployeeId", employeeId);
         parameters.Add("@ProcessingCyclePeriodId", processingCyclePeriodId);
         parameters.Add("@CompanyId", companyId);
 
-        var result = await _dapper.ExecuteStoredProcedure<EmployeeLeaveDetailResponseDTO>(
+        List<EmployeeLeaveDetailResponseDTO>? result = await _dapper.ExecuteStoredProcedure<EmployeeLeaveDetailResponseDTO>(
             "usp_GetEmployeeLeaveHistoryForPayslip",
             parameters
         );
-
         return result?.ToList() ?? new List<EmployeeLeaveDetailResponseDTO>();
     }
 
@@ -312,7 +296,6 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             async multi =>
             {
                 PayslipPreviewHeaderDTO? header = await multi.ReadFirstOrDefaultAsync<PayslipPreviewHeaderDTO>();
-
                 List<PayslipPreviewDetailDTO>? details = (await multi.ReadAsync<PayslipPreviewDetailDTO>()).ToList();
 
                 if (header != null)
@@ -324,14 +307,13 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
     public async Task<long> SaveSinglePayslip(long employeePayslipPreviewId)
     {
-        var parameters = new DynamicParameters();
+        DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmployeePayslipPreviewId", employeePayslipPreviewId);
         parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
 
         long result = await _dapper.ExecuteStoredProcedureSingle<long>(
             "usp_SaveSinglePayslip", parameters);
-
         return result;
     }
 
@@ -347,7 +329,6 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             "usp_CalculateLeavePayout",
             parameters
         );
-
         return resultList;
     }
 
@@ -402,7 +383,6 @@ public class SinglePayslipRepository : ISinglePayslipRepository
             "usp_CheckEndEmploymentStatus",
             parameters
         );
-
         return result ;
     }
 }
