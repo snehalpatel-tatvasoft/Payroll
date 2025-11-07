@@ -290,7 +290,7 @@ public class SinglePayslipController : ControllerBase
         }
     }
 
-    
+
     [HttpGet("[action]")]
     public async Task<JsonResult> CheckEndEmploymentStatus(int employeeId)
     {
@@ -308,4 +308,40 @@ public class SinglePayslipController : ControllerBase
             return HttpStatusCodeResponse.InternalServerErrorResponse("An Exception occures while retrieving employment status.");
         }
     }
+
+    [HttpPost("[action]")]
+    public async Task<JsonResult> UndoEmployeeSinglePayslip(long employeeId)
+    {
+        try
+        {
+            if (employeeId <= 0)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse("Invalid Employee Id.");
+            }  
+            return await _singlePayslipService.UndoEmployeeSinglePayslip(employeeId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse("An exception occurred while undoing the employee payslip.");
+        }
+    }
+
+    [HttpGet("[action]")]
+    public async Task<JsonResult> CheckUndoAvailability(long employeeId)
+    {
+        try
+        {
+            if (employeeId <= 0)
+            {
+                return HttpStatusCodeResponse.InternalServerErrorResponse("Invalid Employee Id.");
+            }
+
+            return await _singlePayslipService.CheckUndoAvailability(employeeId);
+        }
+        catch (Exception)
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse("An Exception occures while retrieving undo availability.");
+        }
+    }
+
 }

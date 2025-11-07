@@ -197,4 +197,29 @@ public class SinglePayslipService : ISinglePayslipService
         );
     }
 
+    public async Task<JsonResult> UndoEmployeeSinglePayslip(long employeeId)
+    {
+        UndoPayslipResult result = await _singlePayslipRepository.UndoEmployeeSinglePayslip(employeeId);
+
+        if (result.Result == "Success")
+        {
+            return HttpStatusCodeResponse.SuccessResponse(
+                result, "Payslip undo operation completed successfully."
+            );
+        }
+        else
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(result.Message ?? "Payslip undo operation failed.");
+        }
+    }
+
+    public async Task<JsonResult> CheckUndoAvailability(long employeeId)
+    {
+        int? res = await _singlePayslipRepository.CheckUndoAvailability (employeeId);
+
+        return HttpStatusCodeResponse.SuccessResponse(
+         res, string.Format("Undo operation avaibility checked successfully.")
+        );
+    }
+
 }

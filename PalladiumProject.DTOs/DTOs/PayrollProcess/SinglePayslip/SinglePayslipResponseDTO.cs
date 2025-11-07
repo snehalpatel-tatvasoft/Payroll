@@ -108,3 +108,9 @@ public class ManageEmploymentStatusResult
     public int Result { get; set; }
     public string? ErrorMessage { get; set; }
 }
+
+public class UndoPayslipResult
+{
+    public string? Result { get; set; } = string.Empty;
+    public string? Message { get; set; } = string.Empty;
+}

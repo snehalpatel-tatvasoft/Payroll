@@ -25,4 +25,7 @@ public interface ISinglePayslipService
     Task<JsonResult> ManageEndEmployment(ManageEndEmploymentDTO request);
     Task<JsonResult> ReinstateEmployee(ReinstateEmployeeDTO request);
     Task<JsonResult> CheckEndEmploymentStatus(int employeeId);
+
+    Task<JsonResult> UndoEmployeeSinglePayslip(long employeeId);
+    Task<JsonResult> CheckUndoAvailability(long employeeId);
 }

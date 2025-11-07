@@ -377,13 +377,43 @@ public class SinglePayslipRepository : ISinglePayslipRepository
     public async Task<int?> CheckEndEmploymentStatus(int employeeId)
     {
         DynamicParameters? parameters = new DynamicParameters();
-        parameters.Add("@EmpId",employeeId);
+        parameters.Add("@EmpId", employeeId);
 
         int? result = await _dapper.ExecuteStoredProcedureSingle<int>(
             "usp_CheckEndEmploymentStatus",
             parameters
         );
-        return result ;
+        return result;
     }
+
+    public async Task<UndoPayslipResult> UndoEmployeeSinglePayslip(long employeeId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@EmployeeId", employeeId);
+        parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+
+        UndoPayslipResult? result = await _dapper.ExecuteStoredProcedureSingle<UndoPayslipResult>(
+            "usp_UndoEmployeeSinglePayslip", parameters
+        );
+
+        return result ?? new UndoPayslipResult
+        {
+            Result = "Failure",
+            Message = "No response from stored procedure."
+        };
+    }
+
+    public async Task<int> CheckUndoAvailability(long employeeId)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@EmployeeId", employeeId);
+
+        int? result = await _dapper.ExecuteStoredProcedureSingle<int>(
+            "usp_CheckUndoAvailability",
+            parameters
+        );
+        return result ?? 0;
+    }
+
 }
 
