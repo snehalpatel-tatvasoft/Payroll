@@ -1,3 +1,5 @@
+using System.Formats.Tar;
+
 namespace PalladiumPayroll.DTOs.DTOs.PayrollProcess.SinglePayslip;
 
 public class GetEmployeesForProcessingRequestDTO
@@ -73,3 +75,6 @@ public class ReinstateEmployeeDTO
     public int? ReinstateType { get; set; }
 }
 
+public class UndoPayslipRequestDTO{
+    public long EmployeeId { get; set; }
+}

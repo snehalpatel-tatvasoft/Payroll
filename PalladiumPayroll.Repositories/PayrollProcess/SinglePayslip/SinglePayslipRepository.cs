@@ -386,10 +386,10 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         return result;
     }
 
-    public async Task<UndoPayslipResult> UndoEmployeeSinglePayslip(long employeeId)
+    public async Task<UndoPayslipResult> UndoEmployeeSinglePayslip(UndoPayslipRequestDTO request)
     {
         DynamicParameters? parameters = new DynamicParameters();
-        parameters.Add("@EmployeeId", employeeId);
+        parameters.Add("@EmployeeId", request.EmployeeId);
         parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
         UndoPayslipResult? result = await _dapper.ExecuteStoredProcedureSingle<UndoPayslipResult>(
@@ -403,16 +403,16 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         };
     }
 
-    public async Task<int> CheckUndoAvailability(long employeeId)
+    public async Task<UndoRedoAvailabilityResult?> CheckUndoRedoAvailability(long employeeId)
     {
         DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmployeeId", employeeId);
 
-        int? result = await _dapper.ExecuteStoredProcedureSingle<int>(
-            "usp_CheckUndoAvailability",
-            parameters
+        UndoRedoAvailabilityResult? result = await _dapper.ExecuteStoredProcedureSingle<UndoRedoAvailabilityResult>(
+            "usp_CheckUndoRedoAvailability", parameters
         );
-        return result ?? 0;
+
+        return result;
     }
 
 }

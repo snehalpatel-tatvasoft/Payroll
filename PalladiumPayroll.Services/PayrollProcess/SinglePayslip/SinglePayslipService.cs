@@ -197,9 +197,9 @@ public class SinglePayslipService : ISinglePayslipService
         );
     }
 
-    public async Task<JsonResult> UndoEmployeeSinglePayslip(long employeeId)
+    public async Task<JsonResult> UndoEmployeeSinglePayslip([FromBody] UndoPayslipRequestDTO request)
     {
-        UndoPayslipResult result = await _singlePayslipRepository.UndoEmployeeSinglePayslip(employeeId);
+        UndoPayslipResult result = await _singlePayslipRepository.UndoEmployeeSinglePayslip(request);
 
         if (result.Result == "Success")
         {
@@ -213,12 +213,12 @@ public class SinglePayslipService : ISinglePayslipService
         }
     }
 
-    public async Task<JsonResult> CheckUndoAvailability(long employeeId)
+    public async Task<JsonResult> CheckUndoRedoAvailability(long employeeId)
     {
-        int? res = await _singlePayslipRepository.CheckUndoAvailability (employeeId);
+        UndoRedoAvailabilityResult? res = await _singlePayslipRepository.CheckUndoRedoAvailability(employeeId);
 
         return HttpStatusCodeResponse.SuccessResponse(
-         res, string.Format("Undo operation avaibility checked successfully.")
+         res, string.Format("Undo/Redo operation avaibility checked successfully.")
         );
     }
 

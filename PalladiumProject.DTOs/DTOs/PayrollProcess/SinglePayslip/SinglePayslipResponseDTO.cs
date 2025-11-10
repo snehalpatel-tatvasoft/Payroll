@@ -114,3 +114,10 @@ public class UndoPayslipResult
     public string? Result { get; set; } = string.Empty;
     public string? Message { get; set; } = string.Empty;
 }
+
+public class UndoRedoAvailabilityResult
+{
+    public bool UndoAvailable { get; set; }
+    public bool RedoAvailable { get; set; }
+    public long? RedoPayslipId { get; set; }
+}
