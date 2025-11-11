@@ -311,7 +311,6 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         parameters.Add("@EmployeePayslipPreviewId", employeePayslipPreviewId);
         parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
-
         long result = await _dapper.ExecuteStoredProcedureSingle<long>(
             "usp_SaveSinglePayslip", parameters);
         return result;
@@ -386,17 +385,17 @@ public class SinglePayslipRepository : ISinglePayslipRepository
         return result;
     }
 
-    public async Task<UndoPayslipResult> UndoEmployeeSinglePayslip(UndoPayslipRequestDTO request)
+    public async Task<UndoRedoPayslipResult> UndoEmployeeSinglePayslip(UndoPayslipRequestDTO request)
     {
         DynamicParameters? parameters = new DynamicParameters();
         parameters.Add("@EmployeeId", request.EmployeeId);
         parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
 
-        UndoPayslipResult? result = await _dapper.ExecuteStoredProcedureSingle<UndoPayslipResult>(
+        UndoRedoPayslipResult? result = await _dapper.ExecuteStoredProcedureSingle<UndoRedoPayslipResult>(
             "usp_UndoEmployeeSinglePayslip", parameters
         );
 
-        return result ?? new UndoPayslipResult
+        return result ?? new UndoRedoPayslipResult
         {
             Result = "Failure",
             Message = "No response from stored procedure."
@@ -414,6 +413,24 @@ public class SinglePayslipRepository : ISinglePayslipRepository
 
         return result;
     }
+
+    public async Task<UndoRedoPayslipResult> RedoEmployeeSinglePayslip(RedoPayslipRequestDTO request)
+    {
+        DynamicParameters? parameters = new DynamicParameters();
+        parameters.Add("@RedoPayslipId", request.RedoPayslipId);
+        parameters.Add("@CreatedBy", _httpContextAccessor.HttpContext?.User?.FindFirst("user_id")?.Value);
+
+        UndoRedoPayslipResult? result = await _dapper.ExecuteStoredProcedureSingle<UndoRedoPayslipResult>(
+            "usp_RedoEmployeeSinglePayslip", parameters
+        );
+
+        return result ?? new UndoRedoPayslipResult
+        {
+            Result = "Failure",
+            Message = "No response from stored procedure."
+        };
+    }
+
 
 }
 

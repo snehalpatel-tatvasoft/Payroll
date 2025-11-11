@@ -28,4 +28,5 @@ public interface ISinglePayslipService
 
     Task<JsonResult> UndoEmployeeSinglePayslip(UndoPayslipRequestDTO request);
     Task<JsonResult> CheckUndoRedoAvailability(long employeeId);
+    Task<JsonResult> RedoEmployeeSinglePayslip( RedoPayslipRequestDTO request);
 }

@@ -197,9 +197,9 @@ public class SinglePayslipService : ISinglePayslipService
         );
     }
 
-    public async Task<JsonResult> UndoEmployeeSinglePayslip([FromBody] UndoPayslipRequestDTO request)
+    public async Task<JsonResult> UndoEmployeeSinglePayslip(UndoPayslipRequestDTO request)
     {
-        UndoPayslipResult result = await _singlePayslipRepository.UndoEmployeeSinglePayslip(request);
+        UndoRedoPayslipResult result = await _singlePayslipRepository.UndoEmployeeSinglePayslip(request);
 
         if (result.Result == "Success")
         {
@@ -220,6 +220,22 @@ public class SinglePayslipService : ISinglePayslipService
         return HttpStatusCodeResponse.SuccessResponse(
          res, string.Format("Undo/Redo operation avaibility checked successfully.")
         );
+    }
+
+    public async Task<JsonResult> RedoEmployeeSinglePayslip(RedoPayslipRequestDTO request)
+    {
+        UndoRedoPayslipResult result = await _singlePayslipRepository.RedoEmployeeSinglePayslip(request);
+
+        if (result.Result == "Success")
+        {
+            return HttpStatusCodeResponse.SuccessResponse(
+                result, "Payslip redo operation completed successfully."
+            );
+        }
+        else
+        {
+            return HttpStatusCodeResponse.InternalServerErrorResponse(result.Message ?? "Payslip redo operation failed.");
+        }
     }
 
 }

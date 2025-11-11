@@ -78,3 +78,7 @@ public class ReinstateEmployeeDTO
 public class UndoPayslipRequestDTO{
     public long EmployeeId { get; set; }
 }
+
+public class RedoPayslipRequestDTO{
+    public long RedoPayslipId { get; set; }
+}

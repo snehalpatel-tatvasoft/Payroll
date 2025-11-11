@@ -21,7 +21,8 @@ public interface ISinglePayslipRepository
     Task<ManageEmploymentStatusResult?> ManageEndEmployment(ManageEndEmploymentDTO dto);
     Task<ManageEmploymentStatusResult?> ReinstateEmployee(ReinstateEmployeeDTO dto);
     Task<int?> CheckEndEmploymentStatus(int employeeId);
-    Task<UndoPayslipResult> UndoEmployeeSinglePayslip(UndoPayslipRequestDTO request);
+    Task<UndoRedoPayslipResult> UndoEmployeeSinglePayslip(UndoPayslipRequestDTO request);
     Task<UndoRedoAvailabilityResult?> CheckUndoRedoAvailability(long employeeId);
+    Task<UndoRedoPayslipResult> RedoEmployeeSinglePayslip(RedoPayslipRequestDTO request);
     
 }
